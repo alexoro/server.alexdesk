@@ -33,12 +33,12 @@ describe('Interface', function() {
         assert.isFunction(i.system_getTime, 'system_getTime must be a function');
         assert.equal(i.system_getTime.length, 2, 'system_getTime must receive 2 arguments only');
 
-        assert.isDefined(i.user_init, 'user_init function is not exists');
-        assert.isFunction(i.user_init, 'user_init must be a function');
-        assert.equal(i.user_init.length, 2, 'user_init must receive 2 arguments only');
+        assert.isDefined(i.users_init, 'users_init function is not exists');
+        assert.isFunction(i.users_init, 'users_init must be a function');
+        assert.equal(i.users_init.length, 2, 'users_init must receive 2 arguments only');
 
-        assert.isDefined(i.user_register, 'user_register function is not exists');
-        assert.isFunction(i.user_register, 'user_register must be a function');
-        assert.equal(i.user_register.length, 2, 'user_register must receive 2 arguments only');
+        assert.isDefined(i.users_register, 'users_register function is not exists');
+        assert.isFunction(i.users_register, 'users_register must be a function');
+        assert.equal(i.users_register.length, 2, 'users_register must receive 2 arguments only');
     });
 });
