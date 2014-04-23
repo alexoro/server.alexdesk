@@ -2,15 +2,13 @@
  * Created by UAS on 24.04.2014.
  */
 
-function getResult() {
-    return [];
-}
-
-
 module.exports = function(args, next) {
     next(null, getResult());
 };
 
+function getResult() {
+    return [];
+}
 
 //var pg = require('pg');
 //var RpcErrors = require('./_RpcErrors');
