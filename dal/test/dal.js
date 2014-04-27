@@ -112,19 +112,19 @@ describe('DAL API', function() {
         async.series(
             fnStack,
             function(err) {
-                doneTest();
+                doneTest(err);
             }
         );
     });
 
     it('Smth', function() {
-
+        // проверь с new Error + иконка теста какая будет? Кирпич или знак?
     });
 
     after(function(doneTest) {
         destroyTestDatabase(function(err) {
             assert.notOk(err, 'Unable to destroy the test database: ' + err);
-            doneTest();
+            doneTest(err);
         });
     });
 });
