@@ -1,11 +1,12 @@
 /**
- * Created by UAS on 23.04.14.
+ * Created by UAS on 27.04.2014.
  */
+
+"use strict";
 
 var assert = require('chai').assert;
 var qeFn = require('../src/QueryExecutor');
-
-var dsn = "postgres://uas:488098@192.168.127.129:5432/test";
+var dsn = require('./_cfg').dsn;
 
 
 describe('Connection logic', function() {
