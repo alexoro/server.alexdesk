@@ -49,11 +49,10 @@ describe('DAL API', function() {
         async.series(
             fnStack,
             function(err) {
-                assert.notOk(err, '1111');
                 if (gDoneClient) {
                     gDoneClient(gClient);
                 }
-                doneFn();
+                doneFn(err);
             }
         );
     };
