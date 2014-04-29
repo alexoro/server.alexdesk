@@ -39,12 +39,33 @@ describe('DAL API', function() {
             }
         ];
 
-        var tablesSqls = fs.readFileSync(__dirname + '/_db_schema.sql').toString().split(';');
-        tablesSqls.forEach(function(item) {
-            fnStack.push(function(cb) {
-                gClient.query(item, cb);
+        try {
+            var tablesSqls = fs.readFileSync(__dirname + '/_db_schema.sql').toString().split(';');
+            tablesSqls.forEach(function(item) {
+                fnStack.push(function(cb) {
+                    gClient.query(item, cb);
+                });
             });
-        });
+        } catch (err) {
+            if (gDoneClient) {
+                gDoneClient(gClient);
+            }
+            return doneFn(err);
+        }
+
+        try {
+            var testSqls = fs.readFileSync(__dirname + '/_db_test.sql').toString().split(';');
+            testSqls.forEach(function(item) {
+                fnStack.push(function(cb) {
+                    gClient.query(item, cb);
+                });
+            });
+        } catch (err) {
+            if (gDoneClient) {
+                gDoneClient(gClient);
+            }
+            return doneFn(err);
+        }
 
         async.series(
             fnStack,
