@@ -209,7 +209,6 @@ module.exports = {
             return 0;
         }
     },
-
     getCodeById: function(id) {
         var r = id2code[id];
         if (r) {
