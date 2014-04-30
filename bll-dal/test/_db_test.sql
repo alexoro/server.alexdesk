@@ -8,8 +8,8 @@ INSERT INTO system_access_tokens(id, user_id, expires)
 -- Apps
 
 INSERT INTO apps(id, platform_type, title, created, is_approved, is_blocked, is_deleted)
-    VALUES('0fd44c33-951a-4f2c-8fb3-6faf41970cb1', 2, 'Example App', NOW(), true, false, false);
-INSERT INTO app_info_extra_android(app_id, package) VALUES('0fd44c33-951a-4f2c-8fb3-6faf41970cb1', 'com.example');
+    VALUES('0fd44c33-951a-4f2c-8fb3-6faf41970cb1', 2, 'Test App', TIMESTAMPTZ '2012-04-30 12:00:00 +04:00', true, false, false);
+INSERT INTO app_info_extra_android(app_id, package) VALUES('0fd44c33-951a-4f2c-8fb3-6faf41970cb1', 'com.testapp');
 INSERT INTO app_acl(app_id, user_id, is_owner)
     VALUES('0fd44c33-951a-4f2c-8fb3-6faf41970cb1', '7026e148-fabe-48cf-8d31-378ab00d5a75', true);
 

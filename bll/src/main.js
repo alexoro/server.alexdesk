@@ -11,41 +11,41 @@ var __system_getTime = require('./__system_getTime');
 var __users_init = require('./__users_init');
 var __users_register = require('./__users_register');
 
-var Wrapper = function(DAL) {
+var Methods = function(DAL) {
     this.dal = DAL;
 };
 
-Wrapper.prototype.apps_list = function(args, next) {
+Methods.prototype.apps_list = function(args, next) {
     __apps_list(args, next);
 };
 
-Wrapper.prototype.hd_conversationsList = function(args, next) {
+Methods.prototype.hd_conversationsList = function(args, next) {
     __hd_conversationsList(args, next);
 };
 
-Wrapper.prototype.hd_messageCreate = function(args, next) {
+Methods.prototype.hd_messageCreate = function(args, next) {
     __hd_messageCreate(args, next);
 };
 
-Wrapper.prototype.hd_messagesList = function(args, next) {
+Methods.prototype.hd_messagesList = function(args, next) {
     __hd_messagesList(args, next);
 };
 
-Wrapper.prototype.security_createAuthToken = function(args, next) {
+Methods.prototype.security_createAuthToken = function(args, next) {
     __security_createAuthToken(args, next);
 };
 
-Wrapper.prototype.system_getTime = function(args, next) {
+Methods.prototype.system_getTime = function(args, next) {
     __system_getTime(args, next);
 };
 
-Wrapper.prototype.users_init = function(args, next) {
+Methods.prototype.users_init = function(args, next) {
     __users_init(args, next);
 };
 
-Wrapper.prototype.users_register = function(args, next) {
+Methods.prototype.users_register = function(args, next) {
     __users_register(args, next);
 };
 
 
-module.exports = Wrapper;
+module.exports = Methods;

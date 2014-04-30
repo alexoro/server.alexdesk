@@ -74,3 +74,11 @@ describe('Method calls', function() {
         });
     });
 });
+
+describe.skip('Debug', function() {
+    it('Debug purpose', function() {
+        var req = require('../');
+        var Methods = new req(null);
+        console.log(Methods['apps.list']());
+    });
+});

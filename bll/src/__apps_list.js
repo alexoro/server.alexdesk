@@ -2,6 +2,31 @@
  * Created by UAS on 24.04.2014.
  */
 
+/*
+---- Input data:
+{
+    access_token: "142b2b49-75f2-456f-9533-435bd0ef94c0"
+}
+
+---- Output data:
+[
+    {
+        id: "0fd44c33-951a-4f2c-8fb3-6faf41970cb1",
+        title: "Test App",
+        created: "2012-04-30 12:00:00 +04:00",
+        number_of_conversations: 3,
+        number_of_all_messages: 8
+        number_of_unread_messages: 1,
+        platform_type: 2,
+        extra: {
+            package: 'com.testapp'
+        }
+    },
+    ...
+]
+*/
+
+
 module.exports = function(args, next) {
     next(null, getResult());
 };
