@@ -2,7 +2,8 @@
 
 INSERT INTO users(id, email, password, name, registered, last_visit)
 	VALUES('7026e148-fabe-48cf-8d31-378ab00d5a75', 'test@test.com', 'b642b4217b34b1e8d3bd915fc65c4452', 'Test', NOW(), NOW());
-
+INSERT INTO system_access_tokens(id, user_id, expires)
+    VALUES('142b2b49-75f2-456f-9533-435bd0ef94c0', '7026e148-fabe-48cf-8d31-378ab00d5a75', TIMESTAMPTZ '2020-01-01 00:00:00 +00:00');
 
 -- Apps
 
