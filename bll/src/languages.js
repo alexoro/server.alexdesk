@@ -192,8 +192,8 @@ var data = [
 ];
 
 
-var code2id = null;
-var id2code = null;
+var code2id = {};
+var id2code = {};
 
 for(var i in data) {
     code2id[data[i][0]] = data[i][1];
