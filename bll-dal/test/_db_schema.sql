@@ -95,6 +95,13 @@ CREATE TABLE chat_extra_android (
   meta_data TEXT NOT NULL
 );
 
+CREATE TABLE chat_participants (
+  chat_id UUID NOT NULL,
+  user_type SMALLINT NOT NULL,
+  user_id UUID NOT NULL,
+  last_visit TIMESTAMPTZ NOT NULL
+);
+
 CREATE TABLE chat_messages (
   id UUID NOT NULL,
   app_id UUID NOT NULL,

@@ -47,6 +47,22 @@ INSERT INTO chat_extra_android(chat_id, app_id, country_id, lang_id, api, api_te
         'LG', 'Nexus 4', 720, 1280, 240, true, '');
 
 
+INSERT INTO chat_participants(chat_id, user_type, user_id, last_visit)
+    VALUES('00c33874-2fbd-4b13-82fe-f1a623875a99', 1, '7026e148-fabe-48cf-8d31-378ab00d5a75', NOW());
+INSERT INTO chat_participants(chat_id, user_type, user_id, last_visit)
+    VALUES('00c33874-2fbd-4b13-82fe-f1a623875a99', 2, '6779c315-bc1e-44ff-892c-8420cf16c82d', NOW());
+
+INSERT INTO chat_participants(chat_id, user_type, user_id, last_visit)
+    VALUES('8aa5740e-d220-40a5-b846-7191b7dd6637', 1, '7026e148-fabe-48cf-8d31-378ab00d5a75', NOW());
+INSERT INTO chat_participants(chat_id, user_type, user_id, last_visit)
+    VALUES('8aa5740e-d220-40a5-b846-7191b7dd6637', 2, '6779c315-bc1e-44ff-892c-8420cf16c82d', NOW());
+
+INSERT INTO chat_participants(chat_id, user_type, user_id, last_visit)
+    VALUES('757dbaca-55ed-4c51-ba2f-f8f0aa62f44b', 1, '7026e148-fabe-48cf-8d31-378ab00d5a75', NOW());
+INSERT INTO chat_participants(chat_id, user_type, user_id, last_visit)
+    VALUES('757dbaca-55ed-4c51-ba2f-f8f0aa62f44b', 2, '0fd44c33-951a-4f2c-8fb3-6faf41970cb1', NOW());
+
+
 -- Messages
 
 INSERT INTO chat_messages(id, app_id, chat_id, user_creator_id, user_creator_type, created, content)
