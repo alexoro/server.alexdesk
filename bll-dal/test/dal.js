@@ -10,9 +10,11 @@ var assert = require('chai').assert;
 var qeFn = require('../src/QueryExecutor');
 var dsn = require('./_cfg').dsn;
 
+
 process.on('uncaughtException', function (err) {
     console.log('Caught exception: ' + err);
 });
+
 
 describe('DAL API', function() {
     var qe = new qeFn(dsn);
@@ -119,7 +121,7 @@ describe('DAL API', function() {
                 createTestDatabase(function(err) {
                     if (err) {
                         destroyTestDatabase(function(err2) {
-                            assert.notOk(err, 'Unable to destroy the test database after failure of it\'s creation: ' + err);
+                            assert.notOk(err, 'Unable to destroy the test database after failure of it\'s creation: ' + err2);
                             return cb(err);
                         });
                         assert.notOk(err, 'Unable to create test database: ' + err);

@@ -1,3 +1,9 @@
+/**
+ * Created by UAS on 23.04.14.
+ */
+
+"use strict";
+
 var pg = require('pg');
 
 
