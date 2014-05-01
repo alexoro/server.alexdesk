@@ -2,6 +2,8 @@
  * Created by UAS on 24.04.2014.
  */
 
+"use strict";
+
 /*
 ---- Input data:
 {
@@ -25,6 +27,35 @@
     ...
 ]
 */
+
+var AppsList = function(DAL) {
+    this.dal = DAL;
+};
+
+AppsList.prototype.execute = function(done) {
+
+};
+
+AppsList.prototype._getUserIdByToken = function(accessToken, done) {
+
+};
+
+AppsList.prototype._getAppsList = function(userId, done) {
+
+};
+
+AppsList.prototype._getNumberOfConversations = function(appIds, done) {
+
+};
+
+AppsList.prototype._getNumberOfAllMessages = function(appIds, done) {
+
+};
+
+AppsList.prototype._getNumberOfUnreadMessages = function(userId, appIds, done) {
+
+};
+
 
 
 module.exports = function(args, next) {

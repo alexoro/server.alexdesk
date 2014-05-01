@@ -248,12 +248,14 @@ for(var i in data) {
 }
 
 module.exports = {
+    ID_FOR_UNKNOWN_CODE: 0,
+
     getIdByCode: function(code2) {
         var r = code2id[code2];
         if (r) {
             return r;
         } else {
-            return 0;
+            return this.ID_FOR_UNKNOWN_CODE;
         }
     },
     getCodeById: function(id) {
