@@ -71,7 +71,7 @@ INSERT INTO chat_messages(id, app_id, chat_id, user_creator_id, user_creator_typ
     VALUES('79d3ebb6-c72c-460c-92cb-79a6a19cd169', '0fd44c33-951a-4f2c-8fb3-6faf41970cb1', '00c33874-2fbd-4b13-82fe-f1a623875a99', '7026e148-fabe-48cf-8d31-378ab00d5a75', 1, NOW(), 'I have answer #1');
 
 INSERT INTO chat_messages(id, app_id, chat_id, user_creator_id, user_creator_type, created, content)
-    VALUES('a30c00f1-828f-4f7a-b694-cb9b90f70ade', '0fd44c33-951a-4f2c-8fb3-6faf41970cb1', '8aa5740e-d220-40a5-b846-7191b7dd6637', '6779c315-bc1e-44ff-892c-8420cf16c82d', 2, NOW(), 'I have answer #1 again');
+    VALUES('a30c00f1-828f-4f7a-b694-cb9b90f70ade', '0fd44c33-951a-4f2c-8fb3-6faf41970cb1', '8aa5740e-d220-40a5-b846-7191b7dd6637', '6779c315-bc1e-44ff-892c-8420cf16c82d', 2, NOW(), 'I have question #1 again');
 INSERT INTO chat_messages(id, app_id, chat_id, user_creator_id, user_creator_type, created, content)
     VALUES('dce9e7fc-c562-4566-9c87-7288e86e3a5e', '0fd44c33-951a-4f2c-8fb3-6faf41970cb1', '8aa5740e-d220-40a5-b846-7191b7dd6637', '6779c315-bc1e-44ff-892c-8420cf16c82d', 2, NOW(), 'Hey you');
 INSERT INTO chat_messages(id, app_id, chat_id, user_creator_id, user_creator_type, created, content)

@@ -8,8 +8,6 @@ var assert = require('chai').assert;
 
 describe('Interface', function() {
     var bllApi;
-    var bllCountries;
-    var bllLanguages;
 
     before(function() {
         var bll = require('../');
@@ -19,19 +17,6 @@ describe('Interface', function() {
             bllApi = new bllApiDef(null);
         } catch (err) {
             assert.fail('Unable to instantiate BLL API definition from module: ' + err);
-        }
-
-        try {
-            bllCountries = bll.countries;
-        } catch (err) {
-            assert.fail('Unable to instantiate BLL countries definition from module: ' + err);
-            return;
-        }
-
-        try {
-            bllLanguages = bll.languages;
-        } catch (err) {
-            assert.fail('Unable to instantiate BLL languages definition from module: ' + err);
         }
     });
 
@@ -67,20 +52,6 @@ describe('Interface', function() {
         assert.isDefined(bllApi.users_register, 'users_register function is not exists');
         assert.isFunction(bllApi.users_register, 'users_register must be a function');
         assert.equal(bllApi.users_register.length, 2, 'users_register must receive 2 arguments only');
-    });
-
-    it('Check countries', function() {
-        assert.notOk(bllCountries.getIdByCode('RU'), 'Country id did retrieved via invalid code');
-        assert.ok(bllCountries.getIdByCode('ru'), 'Country id did not retrieved via valid code');
-        assert.notOk(bllCountries.getCodeById(-1), 'Country code is retrieved via invalid id');
-        assert.ok(bllCountries.getCodeById(1), 'Country code is not retrieved via valid id');
-    });
-
-    it('Check languages', function() {
-        assert.notOk(bllLanguages.getIdByCode('RU'), 'Language id did retrieved via invalid code');
-        assert.ok(bllLanguages.getIdByCode('ru'), 'Language id did not retrieved via valid code');
-        assert.notOk(bllLanguages.getCodeById(-1), 'Language code is retrieved via invalid id');
-        assert.ok(bllLanguages.getCodeById(1), 'Language code is not retrieved via valid id');
     });
 
 });

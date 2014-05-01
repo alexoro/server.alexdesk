@@ -4,16 +4,9 @@
 
 "use strict";
 
-var bll = require('../');
-var platforms = bll.platforms;
-var userTypes = bll.userTypes;
-var chatTypes = bll.chatTypes;
-var chatStatuses = bll.chatStatuses;
-var countries = bll.countries;
-var languages = bll.languages;
+var bllInterface = require('../../bll-interface');
 
-
-module.exports = {
+var mock = {
     users: [
         {
             id: '7026e148-fabe-48cf-8d31-378ab00d5a75',
@@ -37,7 +30,7 @@ module.exports = {
     apps: [
         {
             id: '0fd44c33-951a-4f2c-8fb3-6faf41970cb1',
-            platform_type: platforms.ANDROID,
+            platform_type: bllInterface.platforms.ANDROID,
             title: 'Test App',
             created: '2014-05-01 13:00:00 +04:00',
             is_approved: true,
@@ -102,33 +95,33 @@ module.exports = {
             id: '00c33874-2fbd-4b13-82fe-f1a623875a99',
             app_id: '0fd44c33-951a-4f2c-8fb3-6faf41970cb1',
             user_creator_id: '6779c315-bc1e-44ff-892c-8420cf16c82d',
-            user_creator_type: userTypes.APP_USER,
+            user_creator_type: bllInterface.userTypes.APP_USER,
             created: '2012-05-01 13:20:00 +00:00',
             title: '',
-            type: chatTypes.UNKNOWN,
-            status: chatStatuses.UNKNOWN,
+            type: bllInterface.chatTypes.UNKNOWN,
+            status: bllInterface.chatStatuses.UNKNOWN,
             last_update: '2012-05-01 13:10:05 +00:00'
         },
         {
             id: '8aa5740e-d220-40a5-b846-7191b7dd6637',
             app_id: '0fd44c33-951a-4f2c-8fb3-6faf41970cb1',
             user_creator_id: '6779c315-bc1e-44ff-892c-8420cf16c82d',
-            user_creator_type: userTypes.APP_USER,
+            user_creator_type: bllInterface.userTypes.APP_USER,
             created: '2012-05-01 13:20:00 +00:00',
             title: '',
-            type: chatTypes.UNKNOWN,
-            status: chatStatuses.UNKNOWN,
+            type: bllInterface.chatTypes.UNKNOWN,
+            status: bllInterface.chatStatuses.UNKNOWN,
             last_update: '2012-05-01 13:26:00 +00:00'
         },
         {
             id: '757dbaca-55ed-4c51-ba2f-f8f0aa62f44b',
             app_id: '0fd44c33-951a-4f2c-8fb3-6faf41970cb1',
             user_creator_id: 'f3357dcb-ab92-4420-a682-7d255031f17a',
-            user_creator_type: userTypes.APP_USER,
+            user_creator_type: bllInterface.userTypes.APP_USER,
             created: '2012-05-01 13:20:00 +00:00',
             title: '',
-            type: chatTypes.UNKNOWN,
-            status: chatStatuses.UNKNOWN,
+            type: bllInterface.chatTypes.UNKNOWN,
+            status: bllInterface.chatStatuses.UNKNOWN,
             last_update: '2012-05-01 13:50:00 +00:00'
         }
     ],
@@ -137,8 +130,8 @@ module.exports = {
         {
             chat_id: '00c33874-2fbd-4b13-82fe-f1a623875a99',
             app_id: '0fd44c33-951a-4f2c-8fb3-6faf41970cb1',
-            country_id: countries.getIdByCode('ru'),
-            lang_id: languages.getIdByCode('ru'),
+            country_id: bllInterface.countries.getIdByCode('ru'),
+            lang_id: bllInterface.languages.getIdByCode('ru'),
             api: 10,
             api_text_value: 'Gingerbird',
             app_build: 1,
@@ -154,8 +147,8 @@ module.exports = {
         {
             chat_id: '8aa5740e-d220-40a5-b846-7191b7dd6637',
             app_id: '0fd44c33-951a-4f2c-8fb3-6faf41970cb1',
-            country_id: countries.getIdByCode('ru'),
-            lang_id: languages.getIdByCode('ru'),
+            country_id: bllInterface.countries.getIdByCode('ru'),
+            lang_id: bllInterface.languages.getIdByCode('ru'),
             api: 10,
             api_text_value: 'Gingerbird',
             app_build: 1,
@@ -171,8 +164,8 @@ module.exports = {
         {
             chat_id: '757dbaca-55ed-4c51-ba2f-f8f0aa62f44b',
             app_id: '0fd44c33-951a-4f2c-8fb3-6faf41970cb1',
-            country_id: countries.getIdByCode('ru'),
-            lang_id: languages.getIdByCode('ru'),
+            country_id: bllInterface.countries.getIdByCode('ru'),
+            lang_id: bllInterface.languages.getIdByCode('ru'),
             api: 17,
             api_text_value: 'KitKat',
             app_build: 1,
@@ -188,14 +181,14 @@ module.exports = {
     ],
 
     chat_participants: [
-        {chat_id: '00c33874-2fbd-4b13-82fe-f1a623875a99', user_type: userTypes.SERVICE_USER, user_id: '7026e148-fabe-48cf-8d31-378ab00d5a75', last_visit: '2012-05-01 13:10:05 +00:00'},
-        {chat_id: '00c33874-2fbd-4b13-82fe-f1a623875a99', user_type: userTypes.APP_USER, user_id: '6779c315-bc1e-44ff-892c-8420cf16c82d', last_visit: '2012-05-01 13:12:00 +00:00'},
+        {chat_id: '00c33874-2fbd-4b13-82fe-f1a623875a99', user_type: bllInterface.userTypes.SERVICE_USER, user_id: '7026e148-fabe-48cf-8d31-378ab00d5a75', last_visit: '2012-05-01 13:10:05 +00:00'},
+        {chat_id: '00c33874-2fbd-4b13-82fe-f1a623875a99', user_type: bllInterface.userTypes.APP_USER, user_id: '6779c315-bc1e-44ff-892c-8420cf16c82d', last_visit: '2012-05-01 13:12:00 +00:00'},
 
-        {chat_id: '8aa5740e-d220-40a5-b846-7191b7dd6637', user_type: userTypes.SERVICE_USER, user_id: '7026e148-fabe-48cf-8d31-378ab00d5a75', last_visit: '2012-05-01 13:25:00 +00:00'},
-        {chat_id: '8aa5740e-d220-40a5-b846-7191b7dd6637', user_type: userTypes.APP_USER, user_id: '6779c315-bc1e-44ff-892c-8420cf16c82d', last_visit: '2012-05-01 13:26:00 +00:00'},
+        {chat_id: '8aa5740e-d220-40a5-b846-7191b7dd6637', user_type: bllInterface.userTypes.SERVICE_USER, user_id: '7026e148-fabe-48cf-8d31-378ab00d5a75', last_visit: '2012-05-01 13:25:00 +00:00'},
+        {chat_id: '8aa5740e-d220-40a5-b846-7191b7dd6637', user_type: bllInterface.userTypes.APP_USER, user_id: '6779c315-bc1e-44ff-892c-8420cf16c82d', last_visit: '2012-05-01 13:26:00 +00:00'},
 
-        {chat_id: '757dbaca-55ed-4c51-ba2f-f8f0aa62f44b', user_type: userTypes.SERVICE_USER, user_id: '7026e148-fabe-48cf-8d31-378ab00d5a75', last_visit: '2012-05-01 13:50:00 +00:00'},
-        {chat_id: '757dbaca-55ed-4c51-ba2f-f8f0aa62f44b', user_type: userTypes.APP_USER, user_id: '0fd44c33-951a-4f2c-8fb3-6faf41970cb1', last_visit: '2012-05-01 13:40:00 +00:00'}
+        {chat_id: '757dbaca-55ed-4c51-ba2f-f8f0aa62f44b', user_type: bllInterface.userTypes.SERVICE_USER, user_id: '7026e148-fabe-48cf-8d31-378ab00d5a75', last_visit: '2012-05-01 13:50:00 +00:00'},
+        {chat_id: '757dbaca-55ed-4c51-ba2f-f8f0aa62f44b', user_type: bllInterface.userTypes.APP_USER, user_id: '0fd44c33-951a-4f2c-8fb3-6faf41970cb1', last_visit: '2012-05-01 13:40:00 +00:00'}
     ],
 
 
@@ -205,7 +198,7 @@ module.exports = {
             app_id: '0fd44c33-951a-4f2c-8fb3-6faf41970cb1',
             chat_id: '00c33874-2fbd-4b13-82fe-f1a623875a99',
             user_creator_id: '6779c315-bc1e-44ff-892c-8420cf16c82d',
-            user_creator_type: userTypes.APP_USER,
+            user_creator_type: bllInterface.userTypes.APP_USER,
             created: '2012-05-01 13:10:00 +00:00',
             content: 'I have question #1'
         },
@@ -214,7 +207,7 @@ module.exports = {
             app_id: '0fd44c33-951a-4f2c-8fb3-6faf41970cb1',
             chat_id: '00c33874-2fbd-4b13-82fe-f1a623875a99',
             user_creator_id: '7026e148-fabe-48cf-8d31-378ab00d5a75',
-            user_creator_type: userTypes.SERVICE_USER,
+            user_creator_type: bllInterface.userTypes.SERVICE_USER,
             created: '2012-05-01 13:10:05 +00:00',
             content: 'I have answer #1'
         },
@@ -224,7 +217,7 @@ module.exports = {
             app_id: '0fd44c33-951a-4f2c-8fb3-6faf41970cb1',
             chat_id: '8aa5740e-d220-40a5-b846-7191b7dd6637',
             user_creator_id: '6779c315-bc1e-44ff-892c-8420cf16c82d',
-            user_creator_type: userTypes.APP_USER,
+            user_creator_type: bllInterface.userTypes.APP_USER,
             created: '2012-05-01 13:20:00 +00:00',
             content: 'I have question #1 again'
         },
@@ -233,7 +226,7 @@ module.exports = {
             app_id: '0fd44c33-951a-4f2c-8fb3-6faf41970cb1',
             chat_id: '8aa5740e-d220-40a5-b846-7191b7dd6637',
             user_creator_id: '6779c315-bc1e-44ff-892c-8420cf16c82d',
-            user_creator_type: userTypes.APP_USER,
+            user_creator_type: bllInterface.userTypes.APP_USER,
             created: '2012-05-01 13:22:00 +00:00',
             content: 'Hey you'
         },
@@ -242,7 +235,7 @@ module.exports = {
             app_id: '0fd44c33-951a-4f2c-8fb3-6faf41970cb1',
             chat_id: '8aa5740e-d220-40a5-b846-7191b7dd6637',
             user_creator_id: '7026e148-fabe-48cf-8d31-378ab00d5a75',
-            user_creator_type: userTypes.SERVICE_USER,
+            user_creator_type: bllInterface.userTypes.SERVICE_USER,
             created: '2012-05-01 13:25:00 +00:00',
             content: 'Wait a minute. Here it is'
         },
@@ -251,7 +244,7 @@ module.exports = {
             app_id: '0fd44c33-951a-4f2c-8fb3-6faf41970cb1',
             chat_id: '8aa5740e-d220-40a5-b846-7191b7dd6637',
             user_creator_id: '6779c315-bc1e-44ff-892c-8420cf16c82d',
-            user_creator_type: userTypes.APP_USER,
+            user_creator_type: bllInterface.userTypes.APP_USER,
             created: '2012-05-01 13:26:00 +00:00',
             content: 'Oh! Thanks'
         },
@@ -261,7 +254,7 @@ module.exports = {
             app_id: '0fd44c33-951a-4f2c-8fb3-6faf41970cb1',
             chat_id: '757dbaca-55ed-4c51-ba2f-f8f0aa62f44b',
             user_creator_id: '0fd44c33-951a-4f2c-8fb3-6faf41970cb1',
-            user_creator_type: userTypes.APP_USER,
+            user_creator_type: bllInterface.userTypes.APP_USER,
             created: '2012-05-01 13:40:00 +00:00',
             content: 'I have a question #2'
         },
@@ -270,10 +263,16 @@ module.exports = {
             app_id: '0fd44c33-951a-4f2c-8fb3-6faf41970cb1',
             chat_id: '757dbaca-55ed-4c51-ba2f-f8f0aa62f44b',
             user_creator_id: '7026e148-fabe-48cf-8d31-378ab00d5a75',
-            user_creator_type: userTypes.SERVICE_USER,
+            user_creator_type: bllInterface.userTypes.SERVICE_USER,
             created: '2012-05-01 13:50:00 +00:00',
             content: 'I have answer #2'
         }
     ]
 
 };
+
+module.exports = {
+    getCopy: function() {
+        return Object.create(mock);
+    }
+}

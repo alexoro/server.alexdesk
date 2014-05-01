@@ -6,8 +6,8 @@
 
 var _ = require('underscore');
 
-var bll = require('../');
-var platforms = bll.platforms;
+var bllInterface = require('../../bll-interface');
+var platforms = bllInterface.platforms;
 
 var utils = require('./_utils');
 var mockData =  require('./_mockData');
