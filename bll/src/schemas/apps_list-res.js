@@ -13,7 +13,7 @@ module.exports = {
             "id": common.guid,
             "title": common.appName,
             "created": common.timestampTz,
-            "number_of_conversations": common.positiveInt,
+            "number_of_chats": common.positiveInt,
             "number_of_all_messages": common.positiveInt,
             "number_of_unread_messages": common.positiveInt,
             "platform_type": common.platformType,

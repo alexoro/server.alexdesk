@@ -16,7 +16,7 @@
         id: "0fd44c33-951a-4f2c-8fb3-6faf41970cb1",
         title: "Test App",
         created: "2012-04-30 12:00:00 +04:00",
-        number_of_conversations: 3,
+        number_of_chats: 3,
         number_of_all_messages: 8
         number_of_unread_messages: 1,
         platform_type: 2,

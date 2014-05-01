@@ -73,13 +73,39 @@ DAL.prototype.getAppsList = function(userId, done) {
 };
 
 DAL.prototype.getNumberOfConversations = function(appIds, done) {
-
+    var r = 0;
+    utils.forEach(appIds, function(item) {
+        r += _.where(mockData.chats, {app_id: item}).length;
+    });
+    done(null, r);
 };
 
 DAL.prototype.getNumberOfAllMessages = function(appIds, done) {
-
+    var r = 0;
+    utils.forEach(appIds, function(item) {
+        r += _.where(mockData.chat_messages, {app_id: item}).length;
+    });
+    done(null, r);
 };
 
-DAL.prototype.getNumberOfUnreadMessages = function(userId, appIds, done) {
+DAL.prototype.getNumberOfUnreadMessages = function(appIds, userType, userId, done) {
+    var chatParticipant = _.findWhere(mockData.chat_participants, {user_type: userType, user_id: userId});
+    if (!chatParticipant) {
+        return done(new Error('Specified user is declared as chat participant'), null);
+    }
+    var userLastVisit = new Date(chatParticipant.last_visit);
 
+    var r = 0;
+    utils.forEach(mockData.chat_messages, function(message) {
+        utils.forEach(appIds, function(appId) {
+            if (message.app_id === appId &&
+                message.user_creator_type === userType &&
+                message.user_creator_id === userId &&
+                userLastVisit.getTime() <= message.created) {
+                r++;
+            }
+        });
+    });
+
+    return done(null, r);
 };
