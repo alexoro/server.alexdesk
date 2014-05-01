@@ -2,6 +2,9 @@
  * Created by UAS on 01.05.2014.
  */
 
+"use strict";
+
+
 module.exports = {
 
     guid:  {

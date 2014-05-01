@@ -2,6 +2,8 @@
  * Created by UAS on 23.04.2014.
  */
 
+"use strict";
+
 var __apps_list = require('./__apps_list');
 var __hd_conversationsList = require('./__hd_conversationsList');
 var __hd_messageCreate = require('./__hd_messageCreate');
@@ -10,6 +12,7 @@ var __security_createAuthToken = require('./__security_createAuthToken');
 var __system_getTime = require('./__system_getTime');
 var __users_init = require('./__users_init');
 var __users_register = require('./__users_register');
+
 
 var Api = function(DAL) {
     this.dal = DAL;
