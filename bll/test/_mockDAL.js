@@ -10,16 +10,15 @@ var bllInterface = require('../../bll-interface');
 var platforms = bllInterface.platforms;
 
 var utils = require('./_utils');
-var mockData =  require('./_mockData');
 
 
 var DAL = function() {
-
+    this.mock = require('./_mockData').getCopy();
 };
 
 
 DAL.prototype.getUserIdByToken = function(accessToken, done) {
-    var r = _.findWhere(mockData.system_access_tokens, {id: accessToken});
+    var r = _.findWhere(this.mock.system_access_tokens, {id: accessToken});
     if (r) {
         var dateNow = new Date();
         var dateUser = new Date(r.expires);
@@ -34,13 +33,14 @@ DAL.prototype.getUserIdByToken = function(accessToken, done) {
 };
 
 DAL.prototype.getAppsList = function(userId, done) {
+    var self = this;
     var err;
 
-    var appsIds = _.where(mockData.app_acl, {user_id: userId});
+    var appsIds = _.where(this.mock.app_acl, {user_id: userId});
     var apps = [];
 
     utils.forEach(appsIds, function(item) {
-        var app = _.findWhere(mockData.apps, {id: item.app_id});
+        var app = _.findWhere(self.mock.apps, {id: item.app_id});
         if (!app) {
             err = new Error('We found owner for application, but this application is not exists');
             return false;
@@ -54,7 +54,7 @@ DAL.prototype.getAppsList = function(userId, done) {
 
     utils.forEach(apps, function(app) {
         if (app.platform_type === platforms.ANDROID) {
-            var extra = _.findWhere(mockData, {app_id: app.id});
+            var extra = _.findWhere(self.mock, {app_id: app.id});
             if (!extra) {
                 err = new Error('We found the android application, but extra information did not found');
                 return false;
@@ -73,30 +73,32 @@ DAL.prototype.getAppsList = function(userId, done) {
 };
 
 DAL.prototype.getNumberOfConversations = function(appIds, done) {
+    var self = this;
     var r = 0;
     utils.forEach(appIds, function(item) {
-        r += _.where(mockData.chats, {app_id: item}).length;
+        r += _.where(self.mock.chats, {app_id: item}).length;
     });
     done(null, r);
 };
 
 DAL.prototype.getNumberOfAllMessages = function(appIds, done) {
+    var self = this;
     var r = 0;
     utils.forEach(appIds, function(item) {
-        r += _.where(mockData.chat_messages, {app_id: item}).length;
+        r += _.where(self.mock.chat_messages, {app_id: item}).length;
     });
     done(null, r);
 };
 
 DAL.prototype.getNumberOfUnreadMessages = function(appIds, userType, userId, done) {
-    var chatParticipant = _.findWhere(mockData.chat_participants, {user_type: userType, user_id: userId});
+    var chatParticipant = _.findWhere(this.mock.chat_participants, {user_type: userType, user_id: userId});
     if (!chatParticipant) {
         return done(new Error('Specified user is declared as chat participant'), null);
     }
     var userLastVisit = new Date(chatParticipant.last_visit);
 
     var r = 0;
-    utils.forEach(mockData.chat_messages, function(message) {
+    utils.forEach(this.mock.chat_messages, function(message) {
         utils.forEach(appIds, function(appId) {
             if (message.app_id === appId &&
                 message.user_creator_type === userType &&
