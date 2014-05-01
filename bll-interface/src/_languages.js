@@ -195,10 +195,10 @@ var data = [
 var code2id = {};
 var id2code = {};
 
-for(var i in data) {
-    code2id[data[i][0]] = data[i][1];
-    id2code[data[i][1]] = data[i][0];
-}
+data.forEach(function (item) {
+    code2id[item[0]] = item[1];
+    id2code[item[1]] = item[0];
+});
 
 module.exports = {
     ID_FOR_UNKNOWN_CODE: 0,
