@@ -11,7 +11,8 @@ describe('API methods', function() {
 
     before(function() {
         try {
-            mockDal = require('./_mockDAL');
+            var mockDalDef = require('./_mockDal');
+            mockDal = new mockDalDef(require('./_mockData').getCopy());
         } catch(err) {
             assert.fail('Unable to instantiate mock data and DAL: ' + err);
         }

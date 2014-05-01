@@ -12,8 +12,8 @@ var platforms = bllInterface.platforms;
 var utils = require('./_utils');
 
 
-var DAL = function() {
-    this.mock = require('./_mockData').getCopy();
+var DAL = function(mockData) {
+    this.mock = mockData;
 };
 
 
@@ -111,3 +111,6 @@ DAL.prototype.getNumberOfUnreadMessages = function(appIds, userType, userId, don
 
     return done(null, r);
 };
+
+
+module.exports = DAL;
