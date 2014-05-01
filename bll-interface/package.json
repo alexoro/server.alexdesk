@@ -1,5 +1,5 @@
 {
-    "name": "api.alexdesk.com--bll-dal",
+    "name": "api.alexdesk.com--bll-interface",
     "version": "0.1.0",
     "main": "./src/main.js",
 
