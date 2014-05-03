@@ -15,7 +15,7 @@ module.exports = {
         "properties": {
             "id": common.guid,
             "title": common.appName,
-            "created": common.timestampTz,
+//            "created": common.timestampTz,
             "is_approved": common.boolean,
             "is_blocked": common.boolean,
             "is_deleted": common.boolean,
