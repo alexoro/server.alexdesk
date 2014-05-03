@@ -17,7 +17,7 @@ var DAL = function(mockData) {
 };
 
 
-DAL.prototype.getUserIdByToken = function(accessToken, done) {
+DAL.prototype.getUserMainInfoByToken = function(accessToken, done) {
     var r = _.findWhere(this.mock.system_access_tokens, {id: accessToken});
     if (r) {
         var dateNow = new Date();

@@ -24,7 +24,7 @@ AppsList.prototype.execute = function(args, done) {
 
     var fnStack = [
         function(cb) {
-            self.dal.getUserIdByToken(args.access_token, function(err, result) {
+            self.dal.getUserMainInfoByToken(args.access_token, function(err, result) {
                 if (!err && !result) {
                     err = bllErrBuilder(bllErr.INVALID_OR_EXPIRED_TOKEN, 'Specified access token "' + args.access_token + '" is expired or invalid');
                 }
