@@ -72,39 +72,41 @@ DAL.prototype.getAppsList = function(userId, done) {
     return done(null, apps);
 };
 
-DAL.prototype.getNumberOfConversations = function(appIds, done) {
+DAL.prototype.getNumberOfChats = function(appIds, done) {
     var self = this;
-    var r = 0;
+    var r = {};
     utils.forEach(appIds, function(item) {
-        r += _.where(self.mock.chats, {app_id: item}).length;
+        r[item] = _.where(self.mock.chats, {app_id: item}).length;
     });
     done(null, r);
 };
 
 DAL.prototype.getNumberOfAllMessages = function(appIds, done) {
     var self = this;
-    var r = 0;
+    var r = {};
     utils.forEach(appIds, function(item) {
-        r += _.where(self.mock.chat_messages, {app_id: item}).length;
+        r[item] = _.where(self.mock.chat_messages, {app_id: item}).length;
     });
     done(null, r);
 };
 
 DAL.prototype.getNumberOfUnreadMessages = function(appIds, userType, userId, done) {
+    var self = this;
     var chatParticipant = _.findWhere(this.mock.chat_participants, {user_type: userType, user_id: userId});
     if (!chatParticipant) {
         return done(new Error('Specified user is declared as chat participant'), null);
     }
     var userLastVisit = new Date(chatParticipant.last_visit);
 
-    var r = 0;
-    utils.forEach(this.mock.chat_messages, function(message) {
-        utils.forEach(appIds, function(appId) {
+    var r = {};
+    utils.forEach(appIds, function(appId) {
+        r[appId] = 0;
+        utils.forEach(self.mock.chat_messages, function(message) {
             if (message.app_id === appId &&
                 message.user_creator_type === userType &&
                 message.user_creator_id === userId &&
                 userLastVisit.getTime() <= message.created) {
-                r++;
+                r[appId]++;
             }
         });
     });
