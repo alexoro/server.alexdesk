@@ -2,8 +2,13 @@
 
 INSERT INTO users(id, email, password, name, registered, last_visit)
 	VALUES('7026e148-fabe-48cf-8d31-378ab00d5a75', 'test@test.com', 'b642b4217b34b1e8d3bd915fc65c4452', 'Test', NOW(), NOW());
-INSERT INTO system_access_tokens(id, user_id, expires)
-    VALUES('142b2b49-75f2-456f-9533-435bd0ef94c0', '7026e148-fabe-48cf-8d31-378ab00d5a75', TIMESTAMPTZ '2020-01-01 00:00:00 +00:00');
+
+INSERT INTO system_access_tokens(id, user_type, user_id, expires)
+    VALUES('142b2b49-75f2-456f-9533-435bd0ef94c0', 1, '7026e148-fabe-48cf-8d31-378ab00d5a75', TIMESTAMPTZ '2020-01-01 00:00:00 +00:00');
+INSERT INTO system_access_tokens(id, user_type, user_id, expires)
+    VALUES('302a1baa-78b0-4a4d-ae1f-ebb5a147c71a', 2, '6779c315-bc1e-44ff-892c-8420cf16c82d', TIMESTAMPTZ '2020-01-01 00:00:00 +00:00');
+INSERT INTO system_access_tokens(id, user_type, user_id, expires)
+    VALUES('390582c6-a59b-4ab2-a8e1-87fdbb291b97', 2, 'f3357dcb-ab92-4420-a682-7d255031f17a', TIMESTAMPTZ '2012-05-01 13:50:00 +00:00');
 
 -- Apps
 

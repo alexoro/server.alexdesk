@@ -8,6 +8,7 @@ CREATE TABLE system_captchas (
 
 CREATE TABLE system_access_tokens (
   id UUID NOT NULL,
+  user_type SMALLINT NOT NULL,
   user_id UUID NOT NULL,
   expires TIMESTAMPTZ NOT NULL,
   PRIMARY KEY(id)

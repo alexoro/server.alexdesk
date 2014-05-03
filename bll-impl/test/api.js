@@ -21,7 +21,7 @@ describe('API methods', function() {
         }
     });
 
-    it('apps_list', function(doneTest) {
+    it('apps_list', function() {
 //        api.apps_list(
 //            {access_token: '142b2b49-75f2-456f-9533-435bd0ef94c0'},
 //            function(err, result) {

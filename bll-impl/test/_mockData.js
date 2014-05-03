@@ -21,8 +21,21 @@ var mock = {
     system_access_tokens: [
         {
             id: '142b2b49-75f2-456f-9533-435bd0ef94c0',
+            user_type: bllInterface.userTypes.SERVICE_USER,
             user_id: '7026e148-fabe-48cf-8d31-378ab00d5a75',
             expires: '2020-01-01 00:00:00 +00:00'
+        },
+        {
+            id: '302a1baa-78b0-4a4d-ae1f-ebb5a147c71a',
+            user_type: bllInterface.userTypes.APP_USER,
+            user_id: '6779c315-bc1e-44ff-892c-8420cf16c82d',
+            expires: '2020-01-01 00:00:00 +00:00'
+        },
+        {
+            id: '390582c6-a59b-4ab2-a8e1-87fdbb291b97',
+            user_type: bllInterface.userTypes.APP_USER,
+            user_id: 'f3357dcb-ab92-4420-a682-7d255031f17a',
+            expires: '2012-05-01 13:50:00 +00:00'
         }
     ],
 
