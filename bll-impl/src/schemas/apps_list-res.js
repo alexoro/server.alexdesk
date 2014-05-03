@@ -16,6 +16,9 @@ module.exports = {
             "id": common.guid,
             "title": common.appName,
             "created": common.timestampTz,
+            "is_approved": common.boolean,
+            "is_blocked": common.boolean,
+            "is_deleted": common.boolean,
             "number_of_chats": common.positiveInt,
             "number_of_all_messages": common.positiveInt,
             "number_of_unread_messages": common.positiveInt,
@@ -23,10 +26,10 @@ module.exports = {
             "extra": {
                 "type": "object",
                 "oneOf": [
-                    {},
                     {
                         "properties": {
-                            "package": common.appExtraAndroid
+                            "type": common.appExtraTypeAndroid,
+                            "package": common.appExtraAndroidPackage
                         }
                     }
                 ]

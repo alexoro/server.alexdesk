@@ -5,9 +5,10 @@
 "use strict";
 
 var assert = require('chai').assert;
-var async = require('async');
+var tv4 = require('tv4');
 
 var bllIntf = require('../../bll-interface');
+var bllErrors = bllIntf.errors;
 
 
 function failUnknownError(err) {
@@ -18,6 +19,7 @@ function failUnknownError(err) {
 describe('API methods', function() {
     var mockDal;
     var api;
+    var appsListResponseSchema = require('../src/schemas/apps_list-res');
 
     before(function() {
         try {
@@ -67,7 +69,7 @@ describe('API methods', function() {
             {access_token: '390582c6-a59b-4ab2-a8e1-87fdbb291b97'},
             function(err, result) {
                 if (err) {
-                    if (err.number !== bllIntf.errors.INVALID_OR_EXPIRED_TOKEN) {
+                    if (err.number !== bllErrors.INVALID_OR_EXPIRED_TOKEN) {
                         failUnknownError(err);
                     }
                 } else {
@@ -78,54 +80,70 @@ describe('API methods', function() {
         );
     });
 
-
-//        bllIntf.errorBuilder(bllIntf.errors.USER_NOT_FOUND, 'No user is found for access token: ' + accessToken)
-    it.skip('Check users are accessible via access token', function(doneTest) {
-        async.series(
-            [
-                function(cb) {
-                    api.apps_list(
-                        {access_token: '142b2b49-75f2-456f-9533-435bd0ef94c0!!'},
-                        function(err, result) {
-                            if (err) {
-                                assert.fail('Service user did not retrieved via valid token');
-                            }
-                            cb(err);
-                        }
-                    );
-                },
-                function(cb) {
-                    api.apps_list(
-                        {access_token: '142b2b49-75f2-456f-9533-435bd0ef94c0!'},
-                        function(err, result) {
-                            if (err) {
-                                assert.fail('Service user did not retrieved via valid token');
-                            }
-                            cb(err);
-                        }
-                    );
+    it('Service user must have access to applications list method', function(doneTest) {
+        api.apps_list(
+            {access_token: '142b2b49-75f2-456f-9533-435bd0ef94c0'},
+            function(err, result) {
+                if (err && err.number && err.number === bllErrors.ACCESS_DENIED) {
+                    assert.fail('Access denied to applications list method for valid user');
+                    doneTest();
+                } else {
+                    doneTest(err);
                 }
-            ],
-            function(err) {
+            }
+        );
+    });
+
+    it('Application user must not have access to applications list method', function(doneTest) {
+        api.apps_list(
+            {access_token: '302a1baa-78b0-4a4d-ae1f-ebb5a147c71a'},
+            function(err, result) {
+                if (err && err.number && err.number === bllErrors.ACCESS_DENIED) {
+                    doneTest();
+                } else if (err) {
+                    doneTest(err);
+                } else {
+                    assert.fail('Application user get access to applications list method');
+                    doneTest();
+                }
+            }
+        );
+    });
+
+    it('Check applications list response', function(doneTest) {
+        api.apps_list(
+            {access_token: '142b2b49-75f2-456f-9533-435bd0ef94c0'},
+            function(err, apps) {
+                if (err) {
+                    return doneTest(err);
+                }
+
+                var validateResponse = tv4.validateResult(apps, appsListResponseSchema);
+                assert.notOk(validateResponse.error, 'Apps list response do not match the response schema');
+
+                assert.equal(apps.length, 1, 'Invalid number of applications');
+
+                var matchApp = {
+                    id: '0fd44c33-951a-4f2c-8fb3-6faf41970cb1',
+                    platform_type: bllIntf.platforms.ANDROID,
+                    title: 'Test App',
+                    created: new Date('2014-05-01 13:00:00 +04:00'),
+                    is_approved: true,
+                    is_blocked: false,
+                    is_deleted: false,
+                    extra: {
+                        package: 'com.testapp'
+                    },
+                    number_of_chats: 3,
+                    number_of_all_messages: 8,
+                    number_of_unread_messages: 1
+                };
+
+                assert.deepEqual(apps[0], matchApp, 'Expected application information and application in response did not match');
+
                 doneTest();
             }
         );
-
-
-    });
-
-    it('apps_list', function() {
-//        api.apps_list(
-//            {access_token: '142b2b49-75f2-456f-9533-435bd0ef94c0'},
-//            function(err, result) {
-//                if (err) {
-//                    assert.fail('Apps_list error: ' + err);
-//                }
-//                doneTest(err);
-//            }
-//        );
-//
-//        var apps;
     });
 
 });

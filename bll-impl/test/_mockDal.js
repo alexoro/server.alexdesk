@@ -21,11 +21,11 @@ DAL.prototype.getUserIdByToken = function(accessToken, done) {
     var r = _.findWhere(this.mock.system_access_tokens, {id: accessToken});
     if (r) {
         var dateNow = new Date();
-        var dateUser = new Date(r.expires);
+        var dateUser = r.expires;
         if (dateNow.getTime() >= dateUser.getTime()) {
             return done(null, null);
         } else {
-            return done(null, r.user_id);
+            return done(null, {type: r.user_type, id: r.user_id});
         }
     } else {
         return done(null, null);
@@ -59,7 +59,9 @@ DAL.prototype.getAppsList = function(userId, done) {
                 err = bllIntf.errorBuilder(bllIntf.errors.LOGIC_ERROR, 'We found the android application, but extra information did not found');
                 return false;
             } else {
-                app.extra = extra;
+                app.extra = {
+                    package: extra.package
+                };
             }
         } else {
             app.extra = {};
@@ -103,9 +105,9 @@ DAL.prototype.getNumberOfUnreadMessages = function(appIds, userType, userId, don
         r[appId] = 0;
         utils.forEach(self.mock.chat_messages, function(message) {
             if (message.app_id === appId &&
-                message.user_creator_type === userType &&
-                message.user_creator_id === userId &&
-                chatsLastVisit[message.chat_id].getTime() < message.created) {
+                message.user_creator_type !== userType &&
+                message.user_creator_id !== userId &&
+                chatsLastVisit[message.chat_id].getTime() < message.created.getTime()) {
                 r[appId]++;
             }
         });

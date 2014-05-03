@@ -9,31 +9,9 @@ var async = require('async');
 var tv4 = require('tv4');
 
 var bllIntf = require('../../bll-interface');
+var bllErr = bllIntf.errors;
+var bllErrBuilder = bllIntf.errorBuilder;
 
-
-/*
----- Input data:
-{
-    access_token: "142b2b49-75f2-456f-9533-435bd0ef94c0"
-}
-
----- Output data:
-[
-    {
-        id: "0fd44c33-951a-4f2c-8fb3-6faf41970cb1",
-        title: "Test App",
-        created: "2012-04-30 12:00:00 +04:00",
-        number_of_chats: 3,
-        number_of_all_messages: 8
-        number_of_unread_messages: 1,
-        platform_type: 2,
-        extra: {
-            package: 'com.testapp'
-        }
-    },
-    ...
-]
-*/
 
 var AppsList = function(DAL) {
     this.dal = DAL;
@@ -42,20 +20,28 @@ var AppsList = function(DAL) {
 AppsList.prototype.execute = function(args, done) {
     var self = this;
     var apps = {};
-    var userId;
+    var user;
 
     var fnStack = [
         function(cb) {
             self.dal.getUserIdByToken(args.access_token, function(err, result) {
                 if (!err && !result) {
-                    err = bllIntf.errorBuilder(bllIntf.errors.INVALID_OR_EXPIRED_TOKEN, 'Specified access token "' + args.access_token + '" is expired or invalid');
+                    err = bllErrBuilder(bllErr.INVALID_OR_EXPIRED_TOKEN, 'Specified access token "' + args.access_token + '" is expired or invalid');
                 }
-                userId = result;
+                user = result;
                 cb(err);
             });
         },
         function(cb) {
-            self.dal.getAppsList(userId, function(err, result) {
+            if (user.type !== bllIntf.userTypes.SERVICE_USER) {
+                cb(bllErrBuilder(bllErr.ACCESS_DENIED, 'Only service user has access to this command. Given access token is: ' + args.access_token));
+            } else {
+                cb();
+            }
+        },
+
+        function(cb) {
+            self.dal.getAppsList(user.id, function(err, result) {
                 if (err) {
                     cb(err);
                 } else {
@@ -88,7 +74,7 @@ AppsList.prototype.execute = function(args, done) {
             });
         },
         function(cb) {
-            self.dal.getNumberOfUnreadMessages(_.keys(apps), bllIntf.userTypes.SERVICE_USER, userId, function(err, result) {
+            self.dal.getNumberOfUnreadMessages(_.keys(apps), user.type, user.id, function(err, result) {
                 if (!err) {
                     _.keys(result).forEach(function(item) {
                         apps[item].number_of_unread_messages = result[item];

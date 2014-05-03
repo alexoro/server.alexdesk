@@ -4,6 +4,8 @@
 
 "use strict";
 
+var bllIntf = require('../../../bll-interface');
+
 
 module.exports = {
 
@@ -31,19 +33,28 @@ module.exports = {
     },
 
     platformType: {
-        "type": "integer",
-        "minimum": 1,
-        "maximum": 100
+        "enum": [bllIntf.platforms.ANDROID]
     },
 
-    appExtraAndroid: {
+    appExtraAndroidPackage: {
         "type": "string",
         "minlength": 1,
         "maxlength": 50
     },
 
+    appExtraTypeAndroid: {
+        "type": "integer",
+        "minimum": bllIntf.platforms.ANDROID,
+        "maximum": bllIntf.platforms.ANDROID
+    },
+
     timestampTz: {
         "type": "string",
         "pattern": "^20[1-3][0-9]\\-[0-1][0-9]\\-[0-3][0-9] [0-2][0-9]:[0-5][0-9]:[0-5][0-9] \\+[0-5][0-9]:[0-5][0-9]$"
+    },
+
+    boolean: {
+        "enum": [true, false]
     }
+
 };
