@@ -41,10 +41,6 @@ describe('Interface', function() {
         assert.isFunction(bllApi.security_createAuthToken, 'security_createAuthToken must be a function');
         assert.equal(bllApi.security_createAuthToken.length, 2, 'security_createAuthToken must receive 2 arguments only');
 
-        assert.isDefined(bllApi.system_getTime, 'system_getTime function is not exists');
-        assert.isFunction(bllApi.system_getTime, 'system_getTime must be a function');
-        assert.equal(bllApi.system_getTime.length, 2, 'system_getTime must receive 2 arguments only');
-
         assert.isDefined(bllApi.users_init, 'users_init function is not exists');
         assert.isFunction(bllApi.users_init, 'users_init must be a function');
         assert.equal(bllApi.users_init.length, 2, 'users_init must receive 2 arguments only');

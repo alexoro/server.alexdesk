@@ -31,10 +31,6 @@ Api.prototype.security_createAuthToken = function(args, next) {
     next(null, null);
 };
 
-Api.prototype.system_getTime = function(args, next) {
-    next(null, null);
-};
-
 Api.prototype.users_init = function(args, next) {
     next(null, null);
 };
