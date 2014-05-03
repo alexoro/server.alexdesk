@@ -7,6 +7,7 @@
 var consts = require('./_consts');
 var countries = require('./_countries');
 var languages = require('./_languages');
+var errors = require('./_errors');
 
 module.exports = {
 
@@ -16,6 +17,8 @@ module.exports = {
     chatStatuses: consts.ChatStatuses,
 
     countries: countries,
-    languages: languages
+    languages: languages,
+
+    errors: errors
 
 };
