@@ -8,7 +8,7 @@ INSERT INTO system_access_tokens(id, user_type, user_id, expires)
 INSERT INTO system_access_tokens(id, user_type, user_id, expires)
     VALUES('302a1baa-78b0-4a4d-ae1f-ebb5a147c71a', 2, '6779c315-bc1e-44ff-892c-8420cf16c82d', TIMESTAMPTZ '2020-01-01 00:00:00 +00:00');
 INSERT INTO system_access_tokens(id, user_type, user_id, expires)
-    VALUES('390582c6-a59b-4ab2-a8e1-87fdbb291b97', 2, 'f3357dcb-ab92-4420-a682-7d255031f17a', TIMESTAMPTZ '2012-05-01 13:50:00 +00:00');
+    VALUES('390582c6-a59b-4ab2-a8e1-87fdbb291b97', 2, 'f3357dcb-ab92-4420-a682-7d255031f17a', TIMESTAMPTZ '1970-01-01 00:00:00 +00:00');
 
 -- Apps
 

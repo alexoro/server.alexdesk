@@ -35,7 +35,7 @@ var mock = {
             id: '390582c6-a59b-4ab2-a8e1-87fdbb291b97',
             user_type: bllInterface.userTypes.APP_USER,
             user_id: 'f3357dcb-ab92-4420-a682-7d255031f17a',
-            expires: '2012-05-01 13:50:00 +00:00'
+            expires: '1970-01-01 00:00:00 +00:00'
         }
     ],
 
