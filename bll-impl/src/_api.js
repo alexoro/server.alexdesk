@@ -19,7 +19,7 @@ var Api = function(DAL) {
 };
 
 Api.prototype.apps_list = function(args, next) {
-    __apps_list(args, next);
+    __apps_list(this.dal, args, next);
 };
 
 Api.prototype.hd_conversationsList = function(args, next) {

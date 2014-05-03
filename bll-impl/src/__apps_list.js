@@ -6,6 +6,9 @@
 
 var _ = require('underscore');
 var async = require('async');
+var tv4 = require('tv4');
+
+var bllIntf = require('../../bll-interface');
 
 
 /*
@@ -82,7 +85,7 @@ AppsList.prototype.execute = function(args, done) {
             });
         },
         function(cb) {
-            self.dal.getNumberOfUnreadMessages(_.keys(apps), function(err, result) {
+            self.dal.getNumberOfUnreadMessages(_.keys(apps), bllIntf.userTypes.SERVICE_USER, userId, function(err, result) {
                 if (!err) {
                     _.keys(result).forEach(function(item) {
                         apps[item].number_of_unread_messages = result[item];
@@ -106,10 +109,22 @@ AppsList.prototype.execute = function(args, done) {
 };
 
 
-module.exports = function(args, next) {
-    next(null, getResult());
+var argsSchema = require('./schemas/apps_list-req');
+var validateArgsHasErrors = function(args) {
+    var result = tv4.validateResult(args, argsSchema);
+    if (!result.valid) {
+        return bllIntf.errorBuilder(bllIntf.errors.INVALID_PARAMS, result.error);
+    } else {
+        return null;
+    }
 };
 
-function getResult() {
-    return [];
-}
+module.exports = function(dal, args, next) {
+    var argsError = validateArgsHasErrors(args);
+    if (argsError) {
+        next(argsError, null);
+    } else {
+        var inst = new AppsList(dal);
+        inst.execute(args, next);
+    }
+};

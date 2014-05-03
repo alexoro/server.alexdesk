@@ -42,7 +42,7 @@ DAL.prototype.getAppsList = function(userId, done) {
     utils.forEach(appsIds, function(item) {
         var app = _.findWhere(self.mock.apps, {id: item.app_id});
         if (!app) {
-            err = new Error('We found owner for application, but this application is not exists');
+            err = bllInterface.errorBuilder(bllInterface.errors.LOGIC_ERROR, 'We found owner for application, but this application is not exists');
             return false;
         } else {
             apps.push(app);
@@ -54,9 +54,9 @@ DAL.prototype.getAppsList = function(userId, done) {
 
     utils.forEach(apps, function(app) {
         if (app.platform_type === platforms.ANDROID) {
-            var extra = _.findWhere(self.mock, {app_id: app.id});
+            var extra = _.findWhere(self.mock.app_info_extra_android, {app_id: app.id});
             if (!extra) {
-                err = new Error('We found the android application, but extra information did not found');
+                err = bllInterface.errorBuilder(bllInterface.errors.LOGIC_ERROR, 'We found the android application, but extra information did not found');
                 return false;
             } else {
                 app.extra = extra;
@@ -92,11 +92,11 @@ DAL.prototype.getNumberOfAllMessages = function(appIds, done) {
 
 DAL.prototype.getNumberOfUnreadMessages = function(appIds, userType, userId, done) {
     var self = this;
-    var chatParticipant = _.findWhere(this.mock.chat_participants, {user_type: userType, user_id: userId});
-    if (!chatParticipant) {
-        return done(new Error('Specified user is declared as chat participant'), null);
-    }
-    var userLastVisit = new Date(chatParticipant.last_visit);
+
+    var chatsLastVisit = {};
+    _.where(this.mock.chat_participants, {user_type: userType, user_id: userId}).forEach(function(item) {
+        chatsLastVisit[item.chat_id] = new Date(item.last_visit);
+    });
 
     var r = {};
     utils.forEach(appIds, function(appId) {
@@ -105,7 +105,7 @@ DAL.prototype.getNumberOfUnreadMessages = function(appIds, userType, userId, don
             if (message.app_id === appId &&
                 message.user_creator_type === userType &&
                 message.user_creator_id === userId &&
-                userLastVisit.getTime() <= message.created) {
+                chatsLastVisit[message.chat_id].getTime() < message.created) {
                 r[appId]++;
             }
         });
