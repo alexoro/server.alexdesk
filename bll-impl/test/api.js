@@ -70,6 +70,37 @@ describe('API methods', function() {
             }
         });
 
+        it('Check token is missed or invalid args', function(doneTest) {
+            var fnStack = [
+                function(cb) {
+                    api.apps_list(null, cb);
+                },
+                function(cb) {
+                    api.apps_list({}, cb);
+                },
+                function(cb) {
+                    api.apps_list(new Date(), cb);
+                },
+                function(cb) {
+                    api.apps_list('', cb);
+                }
+            ];
+
+            async.series(
+                fnStack,
+                function(err) {
+                    if (err && err.number && err.number === bllErrors.INVALID_PARAMS) {
+                        doneTest();
+                    } else if (err) {
+                        doneTest(err);
+                    } else {
+                        assert.fail('app_list passed invalid arguments');
+                        doneTest();
+                    }
+                }
+            );
+        });
+
         it('Check valid access token', function(doneTest) {
             var args = {access_token: '142b2b49-75f2-456f-9533-435bd0ef94c0'};
             api.apps_list(args, cbCheckValidAccessToken(doneTest));
@@ -149,7 +180,7 @@ describe('API methods', function() {
         });
     });
 
-    describe('security_createAuthToken', function() {
+    describe.skip('security_createAuthToken', function() {
         var mockDal;
         var api;
 

@@ -15,6 +15,12 @@ var validate = require('./_validation');
 
 
 var _validateArgsHasErrors = function(args) {
+    if (!args) {
+        return bllIntf.errorBuilder(bllIntf.errors.INVALID_PARAMS, 'Arguments are not defined');
+    }
+    if (typeof args !== 'object') {
+        return bllIntf.errorBuilder(bllIntf.errors.INVALID_PARAMS, 'Arguments is not a object');
+    }
     if (args.access_token === undefined) {
         return bllIntf.errorBuilder(bllIntf.errors.INVALID_PARAMS, 'Access token is not defined');
     }
