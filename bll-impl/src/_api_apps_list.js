@@ -12,6 +12,8 @@ var bllIntf = require('../../bll-interface');
 var bllErr = bllIntf.errors;
 var bllErrBuilder = bllIntf.errorBuilder;
 
+var validate = require('./_validation');
+
 
 var AppsList = function(DAL) {
     this.dal = DAL;
@@ -98,13 +100,12 @@ AppsList.prototype.execute = function(args, done) {
 };
 
 
-var argsSchema = require('./schemas/apps_list-req');
 var validateArgsHasErrors = function(args) {
-    var result = tv4.validateResult(args, argsSchema);
-    if (!result.valid) {
-        return bllIntf.errorBuilder(bllIntf.errors.INVALID_PARAMS, result.error);
-    } else {
-        return null;
+    if (args.access_token === undefined) {
+        return bllIntf.errorBuilder(bllIntf.errors.INVALID_PARAMS, 'Access token is not defined');
+    }
+    if (!validate.accessToken(args.access_token)) {
+        return bllIntf.errorBuilder(bllIntf.errors.INVALID_PARAMS, 'Incorrect access token value: ' + args.access_token);
     }
 };
 

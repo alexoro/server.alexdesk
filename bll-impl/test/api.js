@@ -5,7 +5,6 @@
 "use strict";
 
 var assert = require('chai').assert;
-var tv4 = require('tv4');
 
 var bllIntf = require('../../bll-interface');
 var bllErrors = bllIntf.errors;
@@ -56,7 +55,6 @@ describe('API methods', function() {
     describe('apps_list', function() {
         var mockDal;
         var api;
-        var appsListResponseSchema = require('../src/schemas/apps_list-res');
 
         before(function() {
             try {
@@ -122,9 +120,6 @@ describe('API methods', function() {
                         return doneTest(err);
                     }
 
-                    var validateResponse = tv4.validateResult(apps, appsListResponseSchema);
-                    assert.notOk(validateResponse.error, 'Apps list response do not match the response schema');
-
                     assert.equal(apps.length, 1, 'Invalid number of applications');
 
                     var matchApp = {
@@ -143,7 +138,7 @@ describe('API methods', function() {
                         number_of_unread_messages: 1
                     };
 
-                    assert.deepEqual(apps[0], matchApp, 'Expected application information and application in response did not match');
+                    assert.deepEqual(apps[0], matchApp, 'Expected application information and application in response is not match');
 
                     doneTest();
                 }
