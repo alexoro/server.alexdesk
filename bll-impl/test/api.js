@@ -180,7 +180,7 @@ describe('API methods', function() {
         });
     });
 
-    describe.skip('security_createAuthToken', function() {
+    describe('security_createAuthToken', function() {
         var mockDal;
         var api;
 
@@ -295,23 +295,23 @@ describe('API methods', function() {
             async.series(fnStack, fnStackInvalidArgsCallback(doneTest));
         });
 
-        it('Check invalid service user request', function(doneTest) {
-            var args = args(bllIntf.userTypes.SERVICE_USER, 'test@test.com', '1');
-            api.security_createAuthToken(args, function(err, result) {
+        it('Token must not be created for unknown/not registered user', function(doneTest) {
+            var reqArgs = args(bllIntf.userTypes.SERVICE_USER, 'test@test.com', '1');
+            api.security_createAuthToken(reqArgs, function(err, result) {
                 if (err && err.number && err.number === bllErrors.USER_NOT_FOUND) {
                     doneTest();
                 } else if (err) {
                     doneTest(err);
                 } else {
-                    assert.fail('Token was successfully created for invalid service user');
+                    assert.fail('Token was successfully created for unknown/not registered service user');
                     doneTest();
                 }
             });
         });
 
         it('Check invalid app user request', function(doneTest) {
-            var args = args(bllIntf.userTypes.APP_USER, 'test1', '1');
-            api.security_createAuthToken(args, function(err, result) {
+            var reqArgs = args(bllIntf.userTypes.APP_USER, 'test1', '1');
+            api.security_createAuthToken(reqArgs, function(err, result) {
                 if (err && err.number && err.number === bllErrors.USER_NOT_FOUND) {
                     doneTest();
                 } else if (err) {
@@ -324,8 +324,8 @@ describe('API methods', function() {
         });
 
         it('Check valid service user request', function(doneTest) {
-            var args = args(bllIntf.userTypes.SERVICE_USER, 'test@test.com', 'test@test.com');
-            api.security_createAuthToken(args, function(err, result) {
+            var reqArgs = args(bllIntf.userTypes.SERVICE_USER, 'test@test.com', 'test@test.com');
+            api.security_createAuthToken(reqArgs, function(err, result) {
                 if (err) {
                     return doneTest(err);
                 }
