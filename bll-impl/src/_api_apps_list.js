@@ -6,7 +6,6 @@
 
 var _ = require('underscore');
 var async = require('async');
-var tv4 = require('tv4');
 
 var bllIntf = require('../../bll-interface');
 var bllErr = bllIntf.errors;
@@ -15,18 +14,22 @@ var bllErrBuilder = bllIntf.errorBuilder;
 var validate = require('./_validation');
 
 
-var AppsList = function(DAL) {
-    this.dal = DAL;
+var _validateArgsHasErrors = function(args) {
+    if (args.access_token === undefined) {
+        return bllIntf.errorBuilder(bllIntf.errors.INVALID_PARAMS, 'Access token is not defined');
+    }
+    if (!validate.accessToken(args.access_token)) {
+        return bllIntf.errorBuilder(bllIntf.errors.INVALID_PARAMS, 'Incorrect access token value: ' + args.access_token);
+    }
 };
 
-AppsList.prototype.execute = function(args, done) {
-    var self = this;
+var _appsFetching = function(dal, args, next) {
     var apps = {};
     var user;
 
     var fnStack = [
         function(cb) {
-            self.dal.getUserMainInfoByToken(args.access_token, function(err, result) {
+            dal.getUserMainInfoByToken(args.access_token, function(err, result) {
                 if (!err && !result) {
                     err = bllErrBuilder(bllErr.INVALID_OR_EXPIRED_TOKEN, 'Specified access token "' + args.access_token + '" is expired or invalid');
                 }
@@ -43,7 +46,7 @@ AppsList.prototype.execute = function(args, done) {
         },
 
         function(cb) {
-            self.dal.getAppsList(user.id, function(err, result) {
+            dal.getAppsList(user.id, function(err, result) {
                 if (err) {
                     cb(err);
                 } else {
@@ -56,7 +59,7 @@ AppsList.prototype.execute = function(args, done) {
         },
 
         function(cb) {
-            self.dal.getNumberOfChats(_.keys(apps), function(err, result) {
+            dal.getNumberOfChats(_.keys(apps), function(err, result) {
                 if (!err) {
                     _.keys(result).forEach(function(item) {
                         apps[item].number_of_chats = result[item];
@@ -66,7 +69,7 @@ AppsList.prototype.execute = function(args, done) {
             });
         },
         function(cb) {
-            self.dal.getNumberOfAllMessages(_.keys(apps), function(err, result) {
+            dal.getNumberOfAllMessages(_.keys(apps), function(err, result) {
                 if (!err) {
                     _.keys(result).forEach(function(item) {
                         apps[item].number_of_all_messages = result[item];
@@ -76,7 +79,7 @@ AppsList.prototype.execute = function(args, done) {
             });
         },
         function(cb) {
-            self.dal.getNumberOfUnreadMessages(_.keys(apps), user.type, user.id, function(err, result) {
+            dal.getNumberOfUnreadMessages(_.keys(apps), user.type, user.id, function(err, result) {
                 if (!err) {
                     _.keys(result).forEach(function(item) {
                         apps[item].number_of_unread_messages = result[item];
@@ -91,30 +94,20 @@ AppsList.prototype.execute = function(args, done) {
         fnStack,
         function(err) {
             if (err) {
-                done(err, null);
+                next(err, null);
             } else {
-                done(null, _.values(apps));
+                next(null, _.values(apps));
             }
         }
     );
 };
 
 
-var validateArgsHasErrors = function(args) {
-    if (args.access_token === undefined) {
-        return bllIntf.errorBuilder(bllIntf.errors.INVALID_PARAMS, 'Access token is not defined');
-    }
-    if (!validate.accessToken(args.access_token)) {
-        return bllIntf.errorBuilder(bllIntf.errors.INVALID_PARAMS, 'Incorrect access token value: ' + args.access_token);
-    }
-};
-
 module.exports = function(dal, args, next) {
-    var argsError = validateArgsHasErrors(args);
+    var argsError = _validateArgsHasErrors(args);
     if (argsError) {
         next(argsError, null);
     } else {
-        var inst = new AppsList(dal);
-        inst.execute(args, next);
+        _appsFetching(dal, args, next);
     }
 };
