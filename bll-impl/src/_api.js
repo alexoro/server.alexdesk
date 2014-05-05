@@ -5,6 +5,7 @@
 "use strict";
 
 var api_apps_list = require('./_api_apps_list');
+var api_security_createAuthToken = require('./_api_security_createAuthToken');
 
 
 var Api = function(DAL) {
@@ -28,7 +29,7 @@ Api.prototype.hd_messagesList = function(args, next) {
 };
 
 Api.prototype.security_createAuthToken = function(args, next) {
-    next(null, null);
+    api_security_createAuthToken(this.dal, args, next);
 };
 
 Api.prototype.users_init = function(args, next) {
