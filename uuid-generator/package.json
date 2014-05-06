@@ -1,0 +1,18 @@
+{
+    "name": "api.alexdesk.com--uuid-generator",
+    "version": "0.1.0",
+    "main": "./src/main.js",
+
+    "dependencies": {
+        "bignumber.js": "1.0.0",
+        "node-uuid": "1.4.1"
+    },
+    "devDependencies": {
+        "chai": "^1.9.1",
+        "mocha": "^1.18.2"
+    },
+    "engines": {
+        "node": "0.10.26",
+        "npm": "1.3.8"
+    }
+}
