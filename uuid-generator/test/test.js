@@ -110,9 +110,26 @@ describe('Logic', function() {
                 doneTest();
             });
         });
+
+        it('Check result', function(doneTest) {
+            var gen = new genDef();
+            gen.init(gen.minNodeId, function(errInit) {
+                if (errInit) {
+                    return doneTest(errInit);
+                }
+                gen.newBigInt(function(err, result) {
+                    if (err) {
+                        return doneTest(err);
+                    }
+                    assert.typeOf(result, 'string', 'The result of #newBigInt must be a string');
+                    assert.operator(result.length, '>', 0, 'The length of result for #newBigInt must be a greater than 0');
+                    doneTest();
+                });
+            });
+        });
     });
 
-    describe('#newGuid', function() {
+    describe.only('#newGuid', function() {
         it('Should not be working before call of #init', function(doneTest) {
             var gen = new genDef();
             gen.newGuid(function(err, result) {
@@ -120,6 +137,23 @@ describe('Logic', function() {
                     assert.fail('#newBigInt() must not work if #init did not called');
                 }
                 doneTest();
+            });
+        });
+
+        it('Check result', function(doneTest) {
+            var gen = new genDef();
+            gen.init(gen.minNodeId, function(errInit) {
+                if (errInit) {
+                    return doneTest(errInit);
+                }
+                gen.newGuid(function(err, result) {
+                    if (err) {
+                        return doneTest(err);
+                    }
+                    assert.typeOf(result, 'string', 'The result of #newGuid must be a string');
+                    assert.operator(result.length, '>', 0, 'The length of result for #newGuid must be a greater than 0');
+                    doneTest();
+                });
             });
         });
     });

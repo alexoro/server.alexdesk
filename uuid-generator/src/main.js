@@ -15,6 +15,8 @@ var Generator = function() {
     var _nodeId = -1;
     var _self = this;
     var _isInited = false;
+    var _inc = 0;
+    var _mod = 1024;
 
     this.init = function(nodeId, done) {
         if (_isInited) {
@@ -42,14 +44,16 @@ var Generator = function() {
         if (!_isInited) {
             return done(new Error('#init did not called'));
         }
-        return done(null);
+
+        _inc = (_inc + 1) % _mod;
+        return done(null, _inc);
     };
 
     this.newGuid = function(done) {
         if (!_isInited) {
             return done(new Error('#init did not called'));
         }
-        done(null);
+        done(null, '');
     };
 };
 
