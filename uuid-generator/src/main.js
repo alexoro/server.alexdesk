@@ -83,9 +83,13 @@ var Generator = function() {
 
         var millis = _pad(_getTimeMillisFunction().toString(2), 42);
         var incAsStr = _pad(_inc.toString(2), 10);
-        var r = new BigNumber(millis + _reserved + _nodeIdAsString + incAsStr, 2);
 
-        return done(null, r.toString(10));
+        try {
+            var r = new BigNumber(millis + _reserved + _nodeIdAsString + incAsStr, 2);
+            return done(null, r.toString(10));
+        } catch (err) {
+            return done(new Error('Some invalid params. Cannot generate the ID: ' + err));
+        }
     };
 
     this.newGuid = function(done) {

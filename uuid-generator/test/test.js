@@ -168,6 +168,27 @@ describe('Logic', function() {
             });
         });
 
+        it('Check result is not passing with invalid millis', function(doneTest) {
+            var gen = new genDef();
+            var nodeId = gen.minNodeId;
+
+            gen.overrideGetTimeMillisFunction(function() {
+                return 9999999999999;
+            });
+
+            gen.init(nodeId, function(errInit) {
+                if (errInit) {
+                    return doneTest(errInit);
+                }
+                gen.newBigInt(function(err, result) {
+                    if (!err) {
+                        assert.fail('ID was generated with very large invalid getTime() value ');
+                    }
+                    doneTest();
+                });
+            });
+        });
+
         it('Check result is incrementing', function(doneTest) {
             var gen = new genDef();
             var nodeId = gen.minNodeId;
