@@ -38,12 +38,18 @@ var Generator = function() {
         }, _delayBeforeStart);
     };
 
-    this.newBigInt = function() {
-
+    this.newBigInt = function(done) {
+        if (!_isInited) {
+            return done(new Error('#init did not called'));
+        }
+        return done(null);
     };
 
-    this.newGuid = function() {
-
+    this.newGuid = function(done) {
+        if (!_isInited) {
+            return done(new Error('#init did not called'));
+        }
+        done(null);
     };
 };
 

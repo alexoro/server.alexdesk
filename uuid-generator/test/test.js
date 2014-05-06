@@ -39,10 +39,11 @@ describe('Interface', function() {
 
 
 describe('Logic', function() {
+
     var nodeId = 1;
 
     describe('#init', function() {
-        it('#init should accept only numbers', function(doneTest) {
+        it('Should accept only numbers', function(doneTest) {
             var gen = new genDef();
             gen.init({}, function(err) {
                 if (!err) {
@@ -52,7 +53,7 @@ describe('Logic', function() {
             });
         });
 
-        it('#init should not accept ids < minNodeId', function(doneTest) {
+        it('Should not accept ids < minNodeId', function(doneTest) {
             var gen = new genDef();
             gen.init(gen.minNodeId-1, function(err) {
                 if (!err) {
@@ -62,7 +63,7 @@ describe('Logic', function() {
             });
         });
 
-        it('#init should not accept ids > maxNodeId', function(doneTest) {
+        it('Should not accept ids > maxNodeId', function(doneTest) {
             var gen = new genDef();
             gen.init(gen.maxNodeId+1, function(err) {
                 if (!err) {
@@ -72,7 +73,7 @@ describe('Logic', function() {
             });
         });
 
-        it('#init should pass', function(doneTest) {
+        it('Should work', function(doneTest) {
             var gen = new genDef();
             gen.init(gen.minNodeId, function(err) {
                 if (err) {
@@ -82,7 +83,7 @@ describe('Logic', function() {
             });
         });
 
-        it('#init must be called only once', function(doneTest) {
+        it('Must be called only once', function(doneTest) {
             var gen = new genDef();
             gen.init(gen.minNodeId, function(err) {
                 if (err) {
@@ -98,4 +99,29 @@ describe('Logic', function() {
             });
         });
     });
+
+    describe('#newBigInt', function() {
+        it('Should not be working before call of #init', function(doneTest) {
+            var gen = new genDef();
+            gen.newBigInt(function(err, result) {
+                if (!err) {
+                    assert.fail('#newBigInt() must not work if #init did not called');
+                }
+                doneTest();
+            });
+        });
+    });
+
+    describe('#newGuid', function() {
+        it('Should not be working before call of #init', function(doneTest) {
+            var gen = new genDef();
+            gen.newGuid(function(err, result) {
+                if (!err) {
+                    assert.fail('#newBigInt() must not work if #init did not called');
+                }
+                doneTest();
+            });
+        });
+    });
+
 });
