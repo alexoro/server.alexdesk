@@ -8,6 +8,7 @@
         "node-uuid": "1.4.1"
     },
     "devDependencies": {
+        "async": "0.7.0",
         "chai": "^1.9.1",
         "mocha": "^1.18.2"
     },

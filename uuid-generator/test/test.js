@@ -5,6 +5,7 @@
 "use strict";
 
 var assert = require('chai').assert;
+var async = require('async');
 var BigNumber = require('bignumber.js');
 
 var genDef = require('../');
@@ -240,7 +241,7 @@ describe('Logic', function() {
 
                 var iterationsFinishCallback = function(result) {
                     var inc = parseInt(split(result)[3], 2);
-                    assert.strictEqual(inc, 2, 'After 1026 iterations it is expected that inc will be equal to 1');
+                    assert.strictEqual(inc, 2, 'After 1026 iterations it is expected that inc will be equal to 2');
                     doneTest();
                 };
 
@@ -259,6 +260,48 @@ describe('Logic', function() {
                     });
                 };
                 iteration();
+            });
+        });
+
+        it('Check increment works well with many sequencial calls', function(doneTest) {
+            var gen = new genDef();
+            var nodeId = gen.minNodeId;
+
+            gen.overrideGetTimeMillisFunction(function() {
+                return 1;
+            });
+
+            gen.init(nodeId, function(errInit) {
+                if (errInit) {
+                    return doneTest(errInit);
+                }
+
+                var fnStack = [];
+                for (var i = 1; i <= 8192; i++) {
+                    fnStack.push(function(cb) {
+                        gen.newBigInt(cb);
+                    });
+                }
+
+                async.parallel(
+                    fnStack,
+                    function(errAsync) {
+                        if (errAsync) {
+                            return doneTest(errAsync);
+                        }
+
+                        // 8193 call
+                        gen.newBigInt(function(err, result) {
+                            if (err) {
+                                return doneTest(err);
+                            }
+                            var inc = parseInt(split(result)[3], 2);
+                            assert.strictEqual(inc, 1, 'After 8193 iterations it is expected that inc will be equal to 1');
+                            doneTest();
+                        });
+                    }
+
+                );
             });
         });
     });
