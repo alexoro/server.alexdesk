@@ -7,10 +7,13 @@
 var assert = require('chai').assert;
 var async = require('async');
 
+var uuidDef = require('../../uuid-generator');
 var bllIntf = require('../../bll-interface');
 var bllErrors = bllIntf.errors;
 
+var mockDalDef = require('./_mockDal');
 var validate = require('./_validation');
+var apiDef = require('../').api;
 
 
 describe('API methods', function() {
@@ -61,10 +64,8 @@ describe('API methods', function() {
 
         before(function() {
             try {
-                var mockDalDef = require('./_mockDal');
                 mockDal = new mockDalDef(require('./_mockData').getCopy());
-                var apiDef = require('../').api;
-                api = new apiDef(mockDal);
+                api = new apiDef(mockDal, null); // null is specially here - check that method must work without it
             } catch(err) {
                 assert.fail('Unable to instantiate mock data and DAL: ' + err);
             }
@@ -203,15 +204,21 @@ describe('API methods', function() {
             };
         };
 
-        before(function() {
+        before(function(doneBefore) {
             try {
-                var mockDalDef = require('./_mockDal');
                 mockDal = new mockDalDef(require('./_mockData').getCopy());
-                var apiDef = require('../').api;
-                api = new apiDef(mockDal);
             } catch(err) {
                 assert.fail('Unable to instantiate mock data and DAL: ' + err);
             }
+
+            var uuid = new uuidDef();
+            uuid.init(uuid.minNodeId, function(err) {
+                if (err) {
+                    return doneBefore(err);
+                }
+                api = new apiDef(mockDal, uuid);
+                doneBefore();
+            });
         });
 
         it('Validate invalid arguments: all is invalid', function(doneTest) {
