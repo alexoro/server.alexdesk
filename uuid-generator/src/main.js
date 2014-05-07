@@ -97,7 +97,7 @@ var Generator = function() {
         return done(null, r.toString(10));
     };
 
-    this.newGuid = function(done) {
+    this.newGuid4 = function(done) {
         if (!_isInited) {
             return done(new Error('#init did not called'));
         }

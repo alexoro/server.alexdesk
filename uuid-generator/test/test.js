@@ -34,8 +34,8 @@ describe('Interface', function() {
         assert.property(gen, 'newBigInt', 'newBigInt method is not defined');
         assert.isFunction(gen.newBigInt, 'newBigInt method is not a function');
 
-        assert.property(gen, 'newGuid', 'newGuid method is not defined');
-        assert.isFunction(gen.newGuid, 'newGuid method is not a function');
+        assert.property(gen, 'newGuid4', 'newGuid4 method is not defined');
+        assert.isFunction(gen.newGuid4, 'newGuid4 method is not a function');
 
         assert.property(gen, 'getStartDateMillis', 'getStartDateMillis method is not defined');
         assert.isFunction(gen.getStartDateMillis, 'getStartDateMillis method is not a function');
@@ -48,7 +48,7 @@ describe('Interface', function() {
 
 describe('Logic', function() {
 
-    describe('#init', function() {
+    describe.skip('#init', function() {
         it('Should accept only numbers', function(doneTest) {
             var gen = new genDef();
             gen.init({}, function(err) {
@@ -106,7 +106,7 @@ describe('Logic', function() {
         });
     });
 
-    describe('#newBigInt', function() {
+    describe.skip('#newBigInt', function() {
         it('Should not be working before call of #init', function(doneTest) {
             var gen = new genDef();
             gen.newBigInt(function(err, result) {
@@ -266,7 +266,7 @@ describe('Logic', function() {
             });
         });
 
-        it('Check increment works well with many sequencial calls', function(doneTest) {
+        it('Check increment works well with many sequential calls', function(doneTest) {
             var gen = new genDef();
             var nodeId = gen.minNodeId;
 
@@ -338,12 +338,12 @@ describe('Logic', function() {
         });
     });
 
-    describe('#newGuid', function() {
+    describe('#newGuid4', function() {
         it('Should not be working before call of #init', function(doneTest) {
             var gen = new genDef();
-            gen.newGuid(function(err, result) {
+            gen.newGuid4(function(err, result) {
                 if (!err) {
-                    assert.fail('#newBigInt() must not work if #init did not called');
+                    assert.fail('#newGuid4() must not work if #init did not called');
                 }
                 doneTest();
             });
@@ -351,18 +351,53 @@ describe('Logic', function() {
 
         it('Check result', function(doneTest) {
             var gen = new genDef();
-            gen.init(gen.minNodeId, function(errInit) {
+            var nodeId = gen.minNodeId;
+
+            gen.overrideGetTimeMillisFunction(function() {
+                return 1;
+            });
+
+            gen.init(nodeId, function(errInit) {
                 if (errInit) {
                     return doneTest(errInit);
                 }
-                gen.newGuid(function(err, result) {
+                gen.newGuid4(function(err, result) {
                     if (err) {
                         return doneTest(err);
                     }
-                    assert.typeOf(result, 'string', 'The result of #newGuid must be a string');
-                    assert.operator(result.length, '>', 0, 'The length of result for #newGuid must be a greater than 0');
+                    var pattern = new RegExp("^[a-fA-F0-9]{8}\\-[a-fA-F0-9]{4}\\-[a-fA-F0-9]{4}\\-[a-fA-F0-9]{4}\\-[a-fA-F0-9]{12}$");
+                    assert.typeOf(result, 'string', 'The guid4 must be a string');
+                    assert.match(result, pattern, 'The guid4 must match the format');
                     doneTest();
                 });
+            });
+        });
+
+        it('Check #newGuid4 works well with many sequential calls', function(doneTest) {
+            var gen = new genDef();
+            var nodeId = gen.minNodeId;
+
+            gen.init(nodeId, function(errInit) {
+                if (errInit) {
+                    return doneTest(errInit);
+                }
+
+                var fnStack = [];
+                for (var i = 1; i <= 8192; i++) {
+                    fnStack.push(function(cb) {
+                        gen.newGuid4(cb);
+                    });
+                }
+
+                async.parallel(
+                    fnStack,
+                    function(errAsync) {
+                        if (errAsync) {
+                            assert.fail('Error raised during 8192 calls of #newGuid4');
+                        }
+                        doneTest();
+                    }
+                );
             });
         });
     });
