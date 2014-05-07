@@ -37,6 +37,9 @@ describe('Interface', function() {
         assert.property(gen, 'newGuid', 'newGuid method is not defined');
         assert.isFunction(gen.newGuid, 'newGuid method is not a function');
 
+        assert.property(gen, 'getStartDateMillis', 'getStartDateMillis method is not defined');
+        assert.isFunction(gen.getStartDateMillis, 'getStartDateMillis method is not a function');
+
         assert.property(gen, 'overrideGetTimeMillisFunction', 'overrideGetTimeMillisFunction method is not defined');
         assert.isFunction(gen.overrideGetTimeMillisFunction, 'overrideGetTimeMillisFunction method is not a function');
     });
@@ -302,6 +305,35 @@ describe('Logic', function() {
                     }
 
                 );
+            });
+        });
+
+        it('Optional: test that created id millis part is between 10 seconds', function(doneTest) {
+            var gen = new genDef();
+            var nodeId = gen.minNodeId;
+
+            gen.init(nodeId, function(errInit) {
+                if (errInit) {
+                    return doneTest(errInit);
+                }
+                gen.newBigInt(function(err, result) {
+                    if (err) {
+                        return doneTest(err);
+                    }
+
+                    var splitted = split(result);
+                    var millisBinary = splitted[0];
+
+                    var millis = parseInt(millisBinary ,2);
+                    var before = Date.now() - gen.getStartDateMillis() - 5000;
+                    var after = Date.now() - gen.getStartDateMillis() + 5000;
+
+                    if (millis < before || millis > after) {
+                        assert.fail('The result millis is not in range: ' + before + ' < ' + millis + ' < ' + after);
+                    }
+
+                    doneTest();
+                });
             });
         });
     });

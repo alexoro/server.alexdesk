@@ -36,6 +36,10 @@ var Generator = function() {
         }
     };
 
+    this.getStartDateMillis = function() {
+        return _startDateMillis;
+    };
+
     this.overrideGetTimeMillisFunction = function(fn) {
         _getTimeMillisFunction = fn;
     };
