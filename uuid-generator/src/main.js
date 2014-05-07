@@ -5,6 +5,7 @@
 "use strict";
 
 var BigNumber = require('bignumber.js');
+var uuid = require('node-uuid');
 
 
 var Generator = function() {
@@ -101,7 +102,15 @@ var Generator = function() {
         if (!_isInited) {
             return done(new Error('#init did not called'));
         }
-        done(null, 'x');
+
+        var guid;
+        try {
+            guid = uuid.v4();
+        } catch (err) {
+            done(err);
+        }
+
+        done(null, guid);
     };
 };
 

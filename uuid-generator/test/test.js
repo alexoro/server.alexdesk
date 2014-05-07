@@ -353,10 +353,6 @@ describe('Logic', function() {
             var gen = new genDef();
             var nodeId = gen.minNodeId;
 
-            gen.overrideGetTimeMillisFunction(function() {
-                return 1;
-            });
-
             gen.init(nodeId, function(errInit) {
                 if (errInit) {
                     return doneTest(errInit);
