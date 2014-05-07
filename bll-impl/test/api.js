@@ -157,7 +157,7 @@ describe('API methods', function() {
                     assert.equal(apps.length, 1, 'Invalid number of applications');
 
                     var matchApp = {
-                        id: '0fd44c33-951a-4f2c-8fb3-6faf41970cb1',
+                        id: '1',
                         platform_type: bllIntf.platforms.ANDROID,
                         title: 'Test App',
                         created: new Date('2014-05-01 13:00:00 +04:00'),
