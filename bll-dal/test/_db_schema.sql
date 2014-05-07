@@ -9,13 +9,13 @@ CREATE TABLE system_captchas (
 CREATE TABLE system_access_tokens (
   id UUID NOT NULL,
   user_type SMALLINT NOT NULL,
-  user_id UUID NOT NULL,
+  user_id BIGINT NOT NULL,
   expires TIMESTAMPTZ NOT NULL,
   PRIMARY KEY(id)
 );
 
 CREATE TABLE users (
-  id UUID NOT NULL,
+  id BIGINT NOT NULL,
   email VARCHAR(100) NOT NULL,
   password CHAR(32) NOT NULL,
   name VARCHAR(40) NOT NULL,
@@ -25,7 +25,7 @@ CREATE TABLE users (
 );
 
 CREATE TABLE apps (
-  id UUID NOT NULL,
+  id BIGINT NOT NULL,
   platform_type SMALLINT NOT NULL,
   title VARCHAR(40) NOT NULL,
   created TIMESTAMPTZ NOT NULL,
@@ -36,19 +36,19 @@ CREATE TABLE apps (
 );
 
 CREATE TABLE app_info_extra_android (
-  app_id UUID NOT NULL,
+  app_id BIGINT NOT NULL,
   package VARCHAR(50) NOT NULL
 );
 
 CREATE TABLE app_acl (
-  app_id UUID NOT NULL,
-  user_id UUID NOT NULL,
+  app_id BIGINT NOT NULL,
+  user_id BIGINT NOT NULL,
   is_owner BOOL NOT NULL
 );
 
 CREATE TABLE app_users (
-  app_user_id UUID NOT NULL,
-  app_id UUID NOT NULL,
+  app_user_id BIGINT NOT NULL,
+  app_id BIGINT NOT NULL,
   login VARCHAR(64) NOT NULL,
   password CHAR(32) NOT NULL,
   name VARCHAR(40) NOT NULL,
@@ -58,17 +58,17 @@ CREATE TABLE app_users (
 );
 
 CREATE TABLE app_users_extra_android (
-  app_id UUID NOT NULL,
-  app_user_id UUID NOT NULL,
+  app_id BIGINT NOT NULL,
+  app_user_id BIGINT NOT NULL,
   device_uuid CHAR(32) NOT NULL,
   gcm_token TEXT NOT NULL
 );
 
 
 CREATE TABLE chats (
-  id UUID NOT NULL,
-  app_id UUID NOT NULL,
-  user_creator_id UUID NOT NULL,
+  id BIGINT NOT NULL,
+  app_id BIGINT NOT NULL,
+  user_creator_id BIGINT NOT NULL,
   user_creator_type SMALLINT NOT NULL,
   title VARCHAR(40) NOT NULL,
   type SMALLINT NOT NULL,
@@ -79,8 +79,8 @@ CREATE TABLE chats (
 );
 
 CREATE TABLE chat_extra_android (
-  chat_id UUID NOT NULL,
-  app_id UUID NOT NULL,
+  chat_id BIGINT NOT NULL,
+  app_id BIGINT NOT NULL,
   country_id SMALLINT NOT NULL,
   lang_id SMALLINT NOT NULL,
   api SMALLINT NOT NULL,
@@ -97,17 +97,17 @@ CREATE TABLE chat_extra_android (
 );
 
 CREATE TABLE chat_participants (
-  chat_id UUID NOT NULL,
+  chat_id BIGINT NOT NULL,
   user_type SMALLINT NOT NULL,
-  user_id UUID NOT NULL,
+  user_id BIGINT NOT NULL,
   last_visit TIMESTAMPTZ NOT NULL
 );
 
 CREATE TABLE chat_messages (
-  id UUID NOT NULL,
-  app_id UUID NOT NULL,
-  chat_id UUID NOT NULL,
-  user_creator_id UUID NOT NULL,
+  id BIGINT NOT NULL,
+  app_id BIGINT NOT NULL,
+  chat_id BIGINT NOT NULL,
+  user_creator_id BIGINT NOT NULL,
   user_creator_type SMALLINT NOT NULL,
   created TIMESTAMPTZ NOT NULL,
   content TEXT NOT NULL,
