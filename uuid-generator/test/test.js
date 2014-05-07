@@ -48,7 +48,7 @@ describe('Interface', function() {
 
 describe('Logic', function() {
 
-    describe.skip('#init', function() {
+    describe('#init', function() {
         it('Should accept only numbers', function(doneTest) {
             var gen = new genDef();
             gen.init({}, function(err) {
@@ -106,7 +106,7 @@ describe('Logic', function() {
         });
     });
 
-    describe.skip('#newBigInt', function() {
+    describe('#newBigInt', function() {
         it('Should not be working before call of #init', function(doneTest) {
             var gen = new genDef();
             gen.newBigInt(function(err, result) {
@@ -290,7 +290,8 @@ describe('Logic', function() {
                     fnStack,
                     function(errAsync) {
                         if (errAsync) {
-                            return doneTest(errAsync);
+                            assert.fail('Error was raised during many calls of method #newBigInt: ' + errAsync);
+                            return doneTest();
                         }
 
                         // 8193 call
@@ -303,7 +304,6 @@ describe('Logic', function() {
                             doneTest();
                         });
                     }
-
                 );
             });
         });
@@ -393,7 +393,7 @@ describe('Logic', function() {
                     fnStack,
                     function(errAsync) {
                         if (errAsync) {
-                            assert.fail('Error raised during 8192 calls of #newGuid4');
+                            assert.fail('Error was raised during many calls of method #newGuid4: ' + errAsync);
                         }
                         doneTest();
                     }
