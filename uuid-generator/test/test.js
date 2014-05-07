@@ -396,6 +396,48 @@ describe('Logic', function() {
                 );
             });
         });
+
+        it('Optional: check #newGuid4 for collisions on 1kk calls', function(doneTest) {
+            var gen = new genDef();
+            var nodeId = gen.minNodeId;
+
+            gen.init(nodeId, function(errInit) {
+                if (errInit) {
+                    return doneTest(errInit);
+                }
+
+                var e = {};
+
+                var fnStack = [];
+                for (var i = 1; i <= 1000000; i++) {
+                    fnStack.push(function(cb) {
+                        gen.newGuid4(function (err, result) {
+                            if (!e[result]) {
+                                e[result] = 0;
+                            } else {
+                                e[result]++;
+                            }
+                            cb(err);
+                        });
+                    });
+                }
+
+                async.parallel(
+                    fnStack,
+                    function(errAsync) {
+                        if (errAsync) {
+                            return doneTest(errAsync);
+                        }
+                        for (var i in e) {
+                            if (e[i] && e[i] > 0) {
+                                assert.fail('Collision found for value: ' + i);
+                            }
+                        }
+                        doneTest();
+                    }
+                );
+            });
+        });
     });
 
 });
