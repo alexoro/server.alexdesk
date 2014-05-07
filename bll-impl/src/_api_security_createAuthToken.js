@@ -138,7 +138,10 @@ var _appsFetching = function(dal, args, next) {
 };
 
 
-module.exports = function(dal, args, next) {
+module.exports = function(env, args, next) {
+    var dal = env.dal;
+    var uuid = env.uuid;
+
     var argsError = _validateArgsHasErrors(args);
     if (argsError) {
         next(argsError, null);

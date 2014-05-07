@@ -6,21 +6,26 @@
 
 var assert = require('chai').assert;
 
-describe('Interface', function() {
-    var bllApi;
 
-    before(function() {
-        var bll = require('../');
+describe('Interface', function() {
+
+    var bll = require('../');
+    var bllApiDef = bll.api;
+
+    it('Check constructor', function() {
+        assert.isFunction(bllApiDef, 'Constructor must be a function');
+        assert.lengthOf(bllApiDef, 2, 'Constructor must accept 2 arguments');
 
         try {
-            var bllApiDef = bll.api;
-            bllApi = new bllApiDef(null);
+            var bllApi = new bllApiDef(null, null);
         } catch (err) {
-            assert.fail('Unable to instantiate BLL API definition from module: ' + err);
+            assert.fail('Constructor call failed with error: ' + err);
         }
     });
 
     it('Check all interface functions are exists', function() {
+        var bllApi = new bllApiDef(null, null);
+
         assert.isDefined(bllApi.apps_list, 'apps_list function is not exists');
         assert.isFunction(bllApi.apps_list, 'apps_list must be a function');
         assert.equal(bllApi.apps_list.length, 2, 'apps_list must receive 2 arguments only');

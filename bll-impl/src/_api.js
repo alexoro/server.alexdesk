@@ -8,12 +8,23 @@ var api_apps_list = require('./_api_apps_list');
 var api_security_createAuthToken = require('./_api_security_createAuthToken');
 
 
-var Api = function(DAL) {
-    this.dal = DAL;
+var Api = function(dal, uuidGenerator) {
+    this.env = {
+        dal: dal,
+        uuid: uuidGenerator
+    };
+};
+
+Api.prototype._before = function(fn, args, next) {
+    try {
+        fn(this.env, args, next);
+    } catch (err) {
+        next(err);
+    }
 };
 
 Api.prototype.apps_list = function(args, next) {
-    api_apps_list(this.dal, args, next);
+    this._before(api_apps_list, args, next);
 };
 
 Api.prototype.hd_conversationsList = function(args, next) {
@@ -29,7 +40,7 @@ Api.prototype.hd_messagesList = function(args, next) {
 };
 
 Api.prototype.security_createAuthToken = function(args, next) {
-    api_security_createAuthToken(this.dal, args, next);
+    this._before(api_security_createAuthToken, args, next);
 };
 
 Api.prototype.users_init = function(args, next) {
