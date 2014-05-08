@@ -4,7 +4,7 @@
 
 "use strict";
 
-var domain = require('../').domain;
+var domain = require('../../').domain;
 var utils = require('./_utils');
 
 

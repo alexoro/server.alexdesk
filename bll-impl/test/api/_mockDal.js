@@ -6,7 +6,7 @@
 
 var _ = require('underscore');
 
-var domain = require('../').domain;
+var domain = require('../../').domain;
 var dPlatforms = domain.platforms;
 
 var utils = require('./_utils');

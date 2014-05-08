@@ -5,7 +5,7 @@
 "use strict";
 
 var assert = require('chai').assert;
-var Api = require('../').api;
+var Api = require('../../').api;
 
 
 describe('Interface', function() {

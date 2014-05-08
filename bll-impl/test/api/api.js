@@ -7,10 +7,10 @@
 var assert = require('chai').assert;
 var async = require('async');
 
-var uuidDef = require('../../uuid-generator');
+var uuidDef = require('../../../uuid-generator/src/main');
 
-var Api = require('../').api;
-var domain = require('../').domain;
+var Api = require('../../src/index').api;
+var domain = require('../../').domain;
 var dErrors = domain.errors;
 
 var MockDal = require('./_mockDal');
