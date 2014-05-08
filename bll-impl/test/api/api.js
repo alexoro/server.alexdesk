@@ -405,7 +405,9 @@ describe('API methods', function() {
             });
         });
 
-        //TODO update tests with async hash password and expires
+        //TODO make mock uuid
+        //TODO provide password hashing via funcion or bypass the SALT (think about salt version) as cfg
+        //TODO provide expires via function or bypass period as cfg
     });
 
 });
