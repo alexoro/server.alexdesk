@@ -21,6 +21,9 @@ var Api = function(env) {
     if (typeof env.uuid !== 'object' || !env.uuid) {
         throw new Error('UUID generator is not defined or is null or is not a object');
     }
+    if (typeof env.bllInterface !== 'object' || !env.bllInterface) {
+        throw new Error('BLL interface is not defined or is null or is not a object');
+    }
 
     this.env = env;
 };

@@ -8,30 +8,29 @@
 var _ = require('underscore');
 var async = require('async');
 
-var bllIntf = require('../../bll-interface');
-var bllErr = bllIntf.errors;
-var bllErrBuilder = bllIntf.errorBuilder;
-
 var validate = require('./_validation');
 var md5 = require('./_md5');
 
 
-var _validateArgsHasErrors = function(args) {
+var _validateArgsHasErrors = function(env, args) {
+    var bllErr = env.bllInterface.errors;
+    var bllErrBuilder = env.bllInterface.errorBuilder;
+
     if (!args) {
-        return bllIntf.errorBuilder(bllErr.INVALID_PARAMS, 'Arguments is not defined');
+        return bllErrBuilder(bllErr.INVALID_PARAMS, 'Arguments is not defined');
     }
     if (typeof args !== 'object') {
-        return bllIntf.errorBuilder(bllErr.INVALID_PARAMS, 'Arguments is not a object');
+        return bllErrBuilder(bllErr.INVALID_PARAMS, 'Arguments is not a object');
     }
     if (args.login === undefined || args.password === undefined) {
-        return bllIntf.errorBuilder(bllErr.INVALID_PARAMS, 'Not all required fields are set: login or password');
+        return bllErrBuilder(bllErr.INVALID_PARAMS, 'Not all required fields are set: login or password');
     }
 
     if (!validate.email(args.login)) {
-        return bllIntf.errorBuilder(bllErr.INVALID_PARAMS, 'Service user login must be in email format');
+        return bllErrBuilder(bllErr.INVALID_PARAMS, 'Service user login must be in email format');
     }
     if (!validate.app_user_password(args.password)) {
-        return bllIntf.errorBuilder(bllErr.INVALID_PARAMS, 'Password must be a string with length [1, 64]');
+        return bllErrBuilder(bllErr.INVALID_PARAMS, 'Password must be a string with length [1, 64]');
     }
 };
 
@@ -46,6 +45,9 @@ var _generateExpires = function() {
 var _create = function(env, args, next) {
     var dal = env.dal;
     var uuid = env.uuid;
+    var bllUserTypes = env.bllInterface;
+    var bllErr = env.bllInterface.errors;
+    var bllErrBuilder = env.bllInterface.errorBuilder;
 
     var fnStack = [
         function(cb) {
@@ -76,7 +78,7 @@ var _create = function(env, args, next) {
             var expires = _generateExpires();
             var toSave = {
                 token: guid,
-                user_type: bllIntf.userTypes.SERVICE_USER,
+                user_type: bllUserTypes.userTypes.SERVICE_USER,
                 user_id: userId,
                 expires: expires
             };
@@ -104,7 +106,7 @@ var _create = function(env, args, next) {
 
 
 module.exports = function(env, args, next) {
-    var argsError = _validateArgsHasErrors(args);
+    var argsError = _validateArgsHasErrors(env, args);
     if (argsError) {
         next(argsError, null);
     } else {

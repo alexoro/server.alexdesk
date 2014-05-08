@@ -26,8 +26,9 @@ describe('API methods', function() {
                 } else {
                     doneTest(err);
                 }
+            } else {
+                doneTest();
             }
-            doneTest();
         };
     };
 
@@ -65,7 +66,8 @@ describe('API methods', function() {
         before(function() {
             try {
                 mockDal = new mockDalDef(require('./_mockData').getCopy());
-                api = new apiDef({dal: mockDal, uuid: {}}); // null is specially here - check that method must work without it
+                // null is specially here - check that method must work without it
+                api = new apiDef({dal: mockDal, uuid: {}, bllInterface: bllIntf});
             } catch(err) {
                 assert.fail('Unable to instantiate mock data and DAL: ' + err);
             }
@@ -220,7 +222,7 @@ describe('API methods', function() {
                 if (err) {
                     return doneBefore(err);
                 }
-                defaultApi = new apiDef({dal: defaultMockDal, uuid: defaultUuid});
+                defaultApi = new apiDef({dal: defaultMockDal, uuid: defaultUuid, bllInterface: bllIntf});
                 doneBefore();
             });
         });
@@ -280,7 +282,7 @@ describe('API methods', function() {
         it('Token must not be created in case of error', function(doneTest) {
             var customMockData = require('./_mockData').getCopy();
             var customMockDal = new mockDalDef(customMockData);
-            var customApi = new apiDef({dal: customMockDal, uuid: defaultUuid});
+            var customApi = new apiDef({dal: customMockDal, uuid: defaultUuid, bllInterface: bllIntf});
             var currentTokensLength = customMockData.system_access_tokens.length;
 
             var reqArgs = argsBuilder('test@test.com', '1');
@@ -367,7 +369,7 @@ describe('API methods', function() {
 
             var customMockData = require('./_mockData').getCopy();
             var customMockDal = new mockDalDef(customMockData);
-            var customApi = new apiDef({dal: customMockDal, uuid: customUuid});
+            var customApi = new apiDef({dal: customMockDal, uuid: customUuid, bllInterface: bllIntf});
 
             var reqArgs = argsBuilder('test@test.com', 'test@test.com');
             customApi.security_createAuthTokenForServiceUser(reqArgs, function(err, result) {
@@ -391,7 +393,7 @@ describe('API methods', function() {
 
             var customMockData = require('./_mockData').getCopy();
             var customMockDal = new mockDalDef(customMockData);
-            var customApi = new apiDef({dal: customMockDal, uuid: customUuid});
+            var customApi = new apiDef({dal: customMockDal, uuid: customUuid, bllInterface: bllIntf});
 
             var reqArgs = argsBuilder('test@test.com', 'test@test.com');
             customApi.security_createAuthTokenForServiceUser(reqArgs, function(err, result) {
