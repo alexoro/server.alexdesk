@@ -6,8 +6,8 @@
 
 var _ = require('underscore');
 
-var bllIntf = require('../../bll-interface');
-var platforms = bllIntf.platforms;
+var domain = require('../').domain;
+var dPlatforms = domain.platforms;
 
 var utils = require('./_utils');
 
@@ -61,7 +61,7 @@ DAL.prototype.getAppsList = function(userId, done) {
     utils.forEach(appsIds, function(item) {
         var app = _.findWhere(self.mock.apps, {id: item.app_id});
         if (!app) {
-            err = bllIntf.errorBuilder(bllIntf.errors.LOGIC_ERROR, 'We found owner for application, but this application is not exists');
+            err = domain.errorBuilder(domain.errors.LOGIC_ERROR, 'We found owner for application, but this application is not exists');
             return false;
         } else {
             apps.push(app);
@@ -72,10 +72,10 @@ DAL.prototype.getAppsList = function(userId, done) {
     }
 
     utils.forEach(apps, function(app) {
-        if (app.platform_type === platforms.ANDROID) {
+        if (app.platform_type === dPlatforms.ANDROID) {
             var extra = _.findWhere(self.mock.app_info_extra_android, {app_id: app.id});
             if (!extra) {
-                err = bllIntf.errorBuilder(bllIntf.errors.LOGIC_ERROR, 'We found the android application, but extra information did not found');
+                err = domain.errorBuilder(domain.errors.LOGIC_ERROR, 'We found the android application, but extra information did not found');
                 return false;
             } else {
                 app.extra = {

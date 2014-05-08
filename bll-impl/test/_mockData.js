@@ -4,8 +4,7 @@
 
 "use strict";
 
-var bllInterface = require('../../bll-interface');
-
+var domain = require('../').domain;
 var utils = require('./_utils');
 
 
@@ -24,19 +23,19 @@ var mock = {
     system_access_tokens: [
         {
             token: '142b2b49-75f2-456f-9533-435bd0ef94c0',
-            user_type: bllInterface.userTypes.SERVICE_USER,
+            user_type: domain.userTypes.SERVICE_USER,
             user_id: '1',
             expires: new Date('2020-01-01 00:00:00 +00:00').getTime()
         },
         {
             token: '302a1baa-78b0-4a4d-ae1f-ebb5a147c71a',
-            user_type: bllInterface.userTypes.APP_USER,
+            user_type: domain.userTypes.APP_USER,
             user_id: '2',
             expires: new Date('2020-01-01 00:00:00 +00:00').getTime()
         },
         {
             token: '390582c6-a59b-4ab2-a8e1-87fdbb291b97',
-            user_type: bllInterface.userTypes.APP_USER,
+            user_type: domain.userTypes.APP_USER,
             user_id: '3',
             expires: new Date('1970-01-01 00:00:00 +00:00').getTime()
         }
@@ -46,7 +45,7 @@ var mock = {
     apps: [
         {
             id: '1',
-            platform_type: bllInterface.platforms.ANDROID,
+            platform_type: domain.platforms.ANDROID,
             title: 'Test App',
             created: new Date('2014-05-01 13:00:00 +04:00'),
             is_approved: true,
@@ -111,33 +110,33 @@ var mock = {
             id: '1',
             app_id: '1',
             user_creator_id: '2',
-            user_creator_type: bllInterface.userTypes.APP_USER,
+            user_creator_type: domain.userTypes.APP_USER,
             created: new Date('2012-05-01 13:20:00 +00:00'),
             title: '',
-            type: bllInterface.chatTypes.UNKNOWN,
-            status: bllInterface.chatStatuses.UNKNOWN,
+            type: domain.chatTypes.UNKNOWN,
+            status: domain.chatStatuses.UNKNOWN,
             last_update: new Date('2012-05-01 13:10:05 +00:00')
         },
         {
             id: '2',
             app_id: '1',
             user_creator_id: '2',
-            user_creator_type: bllInterface.userTypes.APP_USER,
+            user_creator_type: domain.userTypes.APP_USER,
             created: new Date('2012-05-01 13:20:00 +00:00'),
             title: '',
-            type: bllInterface.chatTypes.UNKNOWN,
-            status: bllInterface.chatStatuses.UNKNOWN,
+            type: domain.chatTypes.UNKNOWN,
+            status: domain.chatStatuses.UNKNOWN,
             last_update: new Date('2012-05-01 13:26:00 +00:00')
         },
         {
             id: '3',
             app_id: '1',
             user_creator_id: '3',
-            user_creator_type: bllInterface.userTypes.APP_USER,
+            user_creator_type: domain.userTypes.APP_USER,
             created: new Date('2012-05-01 13:20:00 +00:00'),
             title: '',
-            type: bllInterface.chatTypes.UNKNOWN,
-            status: bllInterface.chatStatuses.UNKNOWN,
+            type: domain.chatTypes.UNKNOWN,
+            status: domain.chatStatuses.UNKNOWN,
             last_update: new Date('2012-05-01 13:50:00 +00:00')
         }
     ],
@@ -146,8 +145,8 @@ var mock = {
         {
             chat_id: '1',
             app_id: '1',
-            country_id: bllInterface.countries.getIdByCode('ru'),
-            lang_id: bllInterface.languages.getIdByCode('ru'),
+            country_id: domain.countries.getIdByCode('ru'),
+            lang_id: domain.languages.getIdByCode('ru'),
             api: 10,
             api_text_value: 'Gingerbird',
             app_build: 1,
@@ -163,8 +162,8 @@ var mock = {
         {
             chat_id: '2',
             app_id: '1',
-            country_id: bllInterface.countries.getIdByCode('ru'),
-            lang_id: bllInterface.languages.getIdByCode('ru'),
+            country_id: domain.countries.getIdByCode('ru'),
+            lang_id: domain.languages.getIdByCode('ru'),
             api: 10,
             api_text_value: 'Gingerbird',
             app_build: 1,
@@ -180,8 +179,8 @@ var mock = {
         {
             chat_id: '3',
             app_id: '1',
-            country_id: bllInterface.countries.getIdByCode('ru'),
-            lang_id: bllInterface.languages.getIdByCode('ru'),
+            country_id: domain.countries.getIdByCode('ru'),
+            lang_id: domain.languages.getIdByCode('ru'),
             api: 17,
             api_text_value: 'KitKat',
             app_build: 1,
@@ -197,14 +196,14 @@ var mock = {
     ],
 
     chat_participants: [
-        {chat_id: '1', user_type: bllInterface.userTypes.SERVICE_USER, user_id: '1', last_visit: new Date('2012-05-01 13:10:05 +00:00')},
-        {chat_id: '1', user_type: bllInterface.userTypes.APP_USER, user_id: '2', last_visit: new Date('2012-05-01 13:12:00 +00:00')},
+        {chat_id: '1', user_type: domain.userTypes.SERVICE_USER, user_id: '1', last_visit: new Date('2012-05-01 13:10:05 +00:00')},
+        {chat_id: '1', user_type: domain.userTypes.APP_USER, user_id: '2', last_visit: new Date('2012-05-01 13:12:00 +00:00')},
 
-        {chat_id: '2', user_type: bllInterface.userTypes.SERVICE_USER, user_id: '1', last_visit: new Date('2012-05-01 13:25:00 +00:00')},
-        {chat_id: '2', user_type: bllInterface.userTypes.APP_USER, user_id: '2', last_visit: new Date('2012-05-01 13:26:00 +00:00')},
+        {chat_id: '2', user_type: domain.userTypes.SERVICE_USER, user_id: '1', last_visit: new Date('2012-05-01 13:25:00 +00:00')},
+        {chat_id: '2', user_type: domain.userTypes.APP_USER, user_id: '2', last_visit: new Date('2012-05-01 13:26:00 +00:00')},
 
-        {chat_id: '3', user_type: bllInterface.userTypes.SERVICE_USER, user_id: '1', last_visit: new Date('2012-05-01 13:50:00 +00:00')},
-        {chat_id: '3', user_type: bllInterface.userTypes.APP_USER, user_id: '1', last_visit: new Date('2012-05-01 13:40:00 +00:00')}
+        {chat_id: '3', user_type: domain.userTypes.SERVICE_USER, user_id: '1', last_visit: new Date('2012-05-01 13:50:00 +00:00')},
+        {chat_id: '3', user_type: domain.userTypes.APP_USER, user_id: '1', last_visit: new Date('2012-05-01 13:40:00 +00:00')}
     ],
 
 
@@ -214,7 +213,7 @@ var mock = {
             app_id: '1',
             chat_id: '1',
             user_creator_id: '2',
-            user_creator_type: bllInterface.userTypes.APP_USER,
+            user_creator_type: domain.userTypes.APP_USER,
             created: new Date('2012-05-01 13:10:00 +00:00'),
             content: 'I have question #1'
         },
@@ -223,7 +222,7 @@ var mock = {
             app_id: '1',
             chat_id: '1',
             user_creator_id: '1',
-            user_creator_type: bllInterface.userTypes.SERVICE_USER,
+            user_creator_type: domain.userTypes.SERVICE_USER,
             created: new Date('2012-05-01 13:10:05 +00:00'),
             content: 'I have answer #1'
         },
@@ -233,7 +232,7 @@ var mock = {
             app_id: '1',
             chat_id: '2',
             user_creator_id: '2',
-            user_creator_type: bllInterface.userTypes.APP_USER,
+            user_creator_type: domain.userTypes.APP_USER,
             created: new Date('2012-05-01 13:20:00 +00:00'),
             content: 'I have question #1 again'
         },
@@ -242,7 +241,7 @@ var mock = {
             app_id: '1',
             chat_id: '2',
             user_creator_id: '2',
-            user_creator_type: bllInterface.userTypes.APP_USER,
+            user_creator_type: domain.userTypes.APP_USER,
             created: new Date('2012-05-01 13:22:00 +00:00'),
             content: 'Hey you'
         },
@@ -251,7 +250,7 @@ var mock = {
             app_id: '1',
             chat_id: '2',
             user_creator_id: '1',
-            user_creator_type: bllInterface.userTypes.SERVICE_USER,
+            user_creator_type: domain.userTypes.SERVICE_USER,
             created: new Date('2012-05-01 13:25:00 +00:00'),
             content: 'Wait a minute. Here it is'
         },
@@ -260,7 +259,7 @@ var mock = {
             app_id: '1',
             chat_id: '2',
             user_creator_id: '2',
-            user_creator_type: bllInterface.userTypes.APP_USER,
+            user_creator_type: domain.userTypes.APP_USER,
             created: new Date('2012-05-01 13:26:00 +00:00'),
             content: 'Oh! Thanks'
         },
@@ -270,7 +269,7 @@ var mock = {
             app_id: '1',
             chat_id: '3',
             user_creator_id: '1',
-            user_creator_type: bllInterface.userTypes.APP_USER,
+            user_creator_type: domain.userTypes.APP_USER,
             created: new Date('2012-05-01 13:40:00 +00:00'),
             content: 'I have a question #2'
         },
@@ -279,7 +278,7 @@ var mock = {
             app_id: '1',
             chat_id: '3',
             user_creator_id: '1',
-            user_creator_type: bllInterface.userTypes.SERVICE_USER,
+            user_creator_type: domain.userTypes.SERVICE_USER,
             created: new Date('2012-05-01 13:50:00 +00:00'),
             content: 'I have answer #2'
         }

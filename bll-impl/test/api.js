@@ -8,12 +8,13 @@ var assert = require('chai').assert;
 var async = require('async');
 
 var uuidDef = require('../../uuid-generator');
-var bllIntf = require('../../bll-interface');
-var bllErrors = bllIntf.errors;
 
-var mockDalDef = require('./_mockDal');
+var Api = require('../').api;
+var domain = require('../').domain;
+var dErrors = domain.errors;
+
+var MockDal = require('./_mockDal');
 var validate = require('./_validation');
-var apiDef = require('../').api;
 
 
 describe('API methods', function() {
@@ -21,7 +22,7 @@ describe('API methods', function() {
     var cbCheckValidAccessToken = function(doneTest) {
         return function(err, result) {
             if (err) {
-                if (err.number && err.number === bllErrors.INVALID_PARAMS) {
+                if (err.number && err.number === dErrors.INVALID_PARAMS) {
                     assert.fail('Valid access token did processed as invalid');
                 } else {
                     doneTest(err);
@@ -35,7 +36,7 @@ describe('API methods', function() {
     var cbCheckInvalidAccessToken = function(doneTest) {
         return function(err, result) {
             if (err) {
-                if (err.number && err.number !== bllErrors.INVALID_PARAMS) {
+                if (err.number && err.number !== dErrors.INVALID_PARAMS) {
                     assert.fail('Unknown error during checking the valid access token: ' + err);
                 }
             } else {
@@ -48,7 +49,7 @@ describe('API methods', function() {
     var cbCheckExpiredAccessToken = function(doneTest) {
         return function(err, result) {
             if (err) {
-                if (err.number !== bllErrors.INVALID_OR_EXPIRED_TOKEN) {
+                if (err.number !== dErrors.INVALID_OR_EXPIRED_TOKEN) {
                     doneTest(err);
                 }
             } else {
@@ -65,9 +66,9 @@ describe('API methods', function() {
 
         before(function() {
             try {
-                mockDal = new mockDalDef(require('./_mockData').getCopy());
+                mockDal = new MockDal(require('./_mockData').getCopy());
                 // null is specially here - check that method must work without it
-                api = new apiDef({dal: mockDal, uuid: {}, bllInterface: bllIntf});
+                api = new Api({dal: mockDal, uuid: {}});
             } catch(err) {
                 assert.fail('Unable to instantiate mock data and DAL: ' + err);
             }
@@ -92,7 +93,7 @@ describe('API methods', function() {
             async.series(
                 fnStack,
                 function(err) {
-                    if (err && err.number && err.number === bllErrors.INVALID_PARAMS) {
+                    if (err && err.number && err.number === dErrors.INVALID_PARAMS) {
                         doneTest();
                     } else if (err) {
                         doneTest(err);
@@ -123,7 +124,7 @@ describe('API methods', function() {
             api.apps_list(
                 {access_token: '142b2b49-75f2-456f-9533-435bd0ef94c0'},
                 function(err, result) {
-                    if (err && err.number && err.number === bllErrors.ACCESS_DENIED) {
+                    if (err && err.number && err.number === dErrors.ACCESS_DENIED) {
                         assert.fail('Access denied to applications list method for valid user');
                         doneTest();
                     } else {
@@ -137,7 +138,7 @@ describe('API methods', function() {
             api.apps_list(
                 {access_token: '302a1baa-78b0-4a4d-ae1f-ebb5a147c71a'},
                 function(err, result) {
-                    if (err && err.number && err.number === bllErrors.ACCESS_DENIED) {
+                    if (err && err.number && err.number === dErrors.ACCESS_DENIED) {
                         doneTest();
                     } else if (err) {
                         doneTest(err);
@@ -161,7 +162,7 @@ describe('API methods', function() {
 
                     var matchApp = {
                         id: '1',
-                        platform_type: bllIntf.platforms.ANDROID,
+                        platform_type: domain.platforms.ANDROID,
                         title: 'Test App',
                         created: new Date('2014-05-01 13:00:00 +04:00'),
                         is_approved: true,
@@ -197,7 +198,7 @@ describe('API methods', function() {
 
         var fnStackInvalidArgsCallback = function(doneTest) {
             return function(err) {
-                if (err && err.number && err.number === bllErrors.INVALID_PARAMS) {
+                if (err && err.number && err.number === dErrors.INVALID_PARAMS) {
                     doneTest();
                 } else if (err) {
                     doneTest(err);
@@ -212,7 +213,7 @@ describe('API methods', function() {
             defaultMockData = require('./_mockData').getCopy();
 
             try {
-                defaultMockDal = new mockDalDef(defaultMockData);
+                defaultMockDal = new MockDal(defaultMockData);
             } catch(err) {
                 assert.fail('Unable to instantiate mock data and DAL: ' + err);
             }
@@ -222,7 +223,7 @@ describe('API methods', function() {
                 if (err) {
                     return doneBefore(err);
                 }
-                defaultApi = new apiDef({dal: defaultMockDal, uuid: defaultUuid, bllInterface: bllIntf});
+                defaultApi = new Api({dal: defaultMockDal, uuid: defaultUuid});
                 doneBefore();
             });
         });
@@ -281,8 +282,8 @@ describe('API methods', function() {
 
         it('Token must not be created in case of error', function(doneTest) {
             var customMockData = require('./_mockData').getCopy();
-            var customMockDal = new mockDalDef(customMockData);
-            var customApi = new apiDef({dal: customMockDal, uuid: defaultUuid, bllInterface: bllIntf});
+            var customMockDal = new MockDal(customMockData);
+            var customApi = new Api({dal: customMockDal, uuid: defaultUuid});
             var currentTokensLength = customMockData.system_access_tokens.length;
 
             var reqArgs = argsBuilder('test@test.com', '1');
@@ -299,7 +300,7 @@ describe('API methods', function() {
         it('Token must not be created for unknown/not registered user', function(doneTest) {
             var reqArgs = argsBuilder('test@test.com', '1');
             defaultApi.security_createAuthTokenForServiceUser(reqArgs, function(err, result) {
-                if (err && err.number && err.number === bllErrors.USER_NOT_FOUND) {
+                if (err && err.number && err.number === dErrors.USER_NOT_FOUND) {
                     doneTest();
                 } else if (err) {
                     doneTest(err);
@@ -313,7 +314,7 @@ describe('API methods', function() {
         it('Token must be created for valid service user', function(doneTest) {
             var reqArgs = argsBuilder('test@test.com', 'test@test.com');
             defaultApi.security_createAuthTokenForServiceUser(reqArgs, function(err, result) {
-                if (err && err.number && err.number === bllErrors.USER_NOT_FOUND) {
+                if (err && err.number && err.number === dErrors.USER_NOT_FOUND) {
                     assert.fail('Known user was not found with creditionals');
                     return doneTest();
                 } else if (err) {
@@ -348,7 +349,7 @@ describe('API methods', function() {
 
                     var matchUserMainInfo = {
                         id: '1',
-                        type: bllIntf.userTypes.SERVICE_USER
+                        type: domain.userTypes.SERVICE_USER
                     };
                     assert.deepEqual(matchUserMainInfo, resultUser, 'Expected application information and application in response is not match');
                     doneTest();
@@ -368,8 +369,8 @@ describe('API methods', function() {
             };
 
             var customMockData = require('./_mockData').getCopy();
-            var customMockDal = new mockDalDef(customMockData);
-            var customApi = new apiDef({dal: customMockDal, uuid: customUuid, bllInterface: bllIntf});
+            var customMockDal = new MockDal(customMockData);
+            var customApi = new Api({dal: customMockDal, uuid: customUuid});
 
             var reqArgs = argsBuilder('test@test.com', 'test@test.com');
             customApi.security_createAuthTokenForServiceUser(reqArgs, function(err, result) {
@@ -392,12 +393,12 @@ describe('API methods', function() {
             };
 
             var customMockData = require('./_mockData').getCopy();
-            var customMockDal = new mockDalDef(customMockData);
-            var customApi = new apiDef({dal: customMockDal, uuid: customUuid, bllInterface: bllIntf});
+            var customMockDal = new MockDal(customMockData);
+            var customApi = new Api({dal: customMockDal, uuid: customUuid});
 
             var reqArgs = argsBuilder('test@test.com', 'test@test.com');
             customApi.security_createAuthTokenForServiceUser(reqArgs, function(err, result) {
-                if (!err || !err.number || err.number !== bllErrors.INTERNAL_ERROR) {
+                if (!err || !err.number || err.number !== dErrors.INTERNAL_ERROR) {
                     assert.fail('Method did not respond with INTERNAL_ERROR for not error on uuid');
                 }
                 doneTest();
