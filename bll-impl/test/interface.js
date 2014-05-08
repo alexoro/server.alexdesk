@@ -14,17 +14,17 @@ describe('Interface', function() {
 
     it('Check constructor', function() {
         assert.isFunction(bllApiDef, 'Constructor must be a function');
-        assert.lengthOf(bllApiDef, 2, 'Constructor must accept 2 arguments');
+        assert.lengthOf(bllApiDef, 1, 'Constructor must accept 1 arguments');
 
         try {
-            var bllApi = new bllApiDef(null, null);
+            var bllApi = new bllApiDef({dal: null, uuid: null});
         } catch (err) {
             assert.fail('Constructor call failed with error: ' + err);
         }
     });
 
     it('Check all interface functions are exists', function() {
-        var bllApi = new bllApiDef(null, null);
+        var bllApi = new bllApiDef({dal: null, uuid: null});
 
         assert.isDefined(bllApi.apps_list, 'apps_list function is not exists');
         assert.isFunction(bllApi.apps_list, 'apps_list must be a function');

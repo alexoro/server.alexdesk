@@ -8,11 +8,21 @@ var api_apps_list = require('./_api_apps_list');
 var api_security_createAuthTokenForServiceUser = require('./_api_security_createAuthTokenForServiceUser');
 
 
-var Api = function(dal, uuidGenerator) {
-    this.env = {
-        dal: dal,
-        uuid: uuidGenerator
-    };
+var Api = function(env) {
+    if (typeof env !== 'object') {
+        throw new Error('Environment must be a object');
+    }
+    if (!env) {
+        throw new Error('Environment is not defined');
+    }
+    if (env.dal === undefined) {
+        throw new Error('DAL module is not defined');
+    }
+    if (env.uuid === undefined) {
+        throw new Error('UUID generator is not defined');
+    }
+
+    this.env = env;
 };
 
 Api.prototype._before = function(fn, args, next) {
