@@ -182,9 +182,10 @@ describe('API methods', function() {
     });
 
     describe('#security_createAuthTokenForServiceUser', function() {
-        var mockData = require('./_mockData').getCopy();
-        var mockDal;
-        var api;
+        var defaultMockData;
+        var defaultMockDal;
+        var defaultApi;
+        var defaultUuid;
 
         var argsBuilder = function(login, password) {
             return {
@@ -206,18 +207,20 @@ describe('API methods', function() {
         };
 
         before(function(doneBefore) {
+            defaultMockData = require('./_mockData').getCopy();
+
             try {
-                mockDal = new mockDalDef(mockData);
+                defaultMockDal = new mockDalDef(defaultMockData);
             } catch(err) {
                 assert.fail('Unable to instantiate mock data and DAL: ' + err);
             }
 
-            var uuid = new uuidDef();
-            uuid.init(uuid.minNodeId, function(err) {
+            defaultUuid = new uuidDef();
+            defaultUuid.init(defaultUuid.minNodeId, function(err) {
                 if (err) {
                     return doneBefore(err);
                 }
-                api = new apiDef(mockDal, uuid);
+                defaultApi = new apiDef(defaultMockDal, defaultUuid);
                 doneBefore();
             });
         });
@@ -225,13 +228,13 @@ describe('API methods', function() {
         it('Validate invalid arguments: all is invalid', function(doneTest) {
             var fnStack = [
                 function(cb) {
-                    api.security_createAuthTokenForServiceUser(null, cb);
+                    defaultApi.security_createAuthTokenForServiceUser(null, cb);
                 },
                 function(cb) {
-                    api.security_createAuthTokenForServiceUser({}, cb);
+                    defaultApi.security_createAuthTokenForServiceUser({}, cb);
                 },
                 function(cb) {
-                    api.security_createAuthTokenForServiceUser(-1, cb);
+                    defaultApi.security_createAuthTokenForServiceUser(-1, cb);
                 }
             ];
             async.series(fnStack, fnStackInvalidArgsCallback(doneTest));
@@ -240,20 +243,20 @@ describe('API methods', function() {
         it('Validate invalid arguments: email is invalid', function(doneTest) {
             var fnStack = [
                 function(cb) {
-                    api.security_createAuthTokenForServiceUser(argsBuilder(null, null), cb);
+                    defaultApi.security_createAuthTokenForServiceUser(argsBuilder(null, null), cb);
                 },
                 function(cb) {
-                    api.security_createAuthTokenForServiceUser(argsBuilder({}, null), cb);
+                    defaultApi.security_createAuthTokenForServiceUser(argsBuilder({}, null), cb);
                 },
                 function(cb) {
-                    api.security_createAuthTokenForServiceUser(argsBuilder('', null), cb);
+                    defaultApi.security_createAuthTokenForServiceUser(argsBuilder('', null), cb);
                 },
                 function(cb) {
-                    api.security_createAuthTokenForServiceUser(argsBuilder('xxx@xx:com', null), cb);
+                    defaultApi.security_createAuthTokenForServiceUser(argsBuilder('xxx@xx:com', null), cb);
                 },
                 function(cb) {
                     var email = '0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789'
-                    api.security_createAuthTokenForServiceUser(argsBuilder(email, null), cb);
+                    defaultApi.security_createAuthTokenForServiceUser(argsBuilder(email, null), cb);
                 }
             ];
             async.series(fnStack, fnStackInvalidArgsCallback(doneTest));
@@ -262,21 +265,38 @@ describe('API methods', function() {
         it('Validate invalid arguments: password is invalid', function(doneTest) {
             var fnStack = [
                 function(cb) {
-                    api.security_createAuthTokenForServiceUser(argsBuilder('zzzzz', null), cb);
+                    defaultApi.security_createAuthTokenForServiceUser(argsBuilder('zzzzz', null), cb);
                 },
                 function(cb) {
-                    api.security_createAuthTokenForServiceUser(argsBuilder('xxx@xxx.com', {}), cb);
+                    defaultApi.security_createAuthTokenForServiceUser(argsBuilder('xxx@xxx.com', {}), cb);
                 },
                 function(cb) {
-                    api.security_createAuthTokenForServiceUser(argsBuilder('xxx@xxx.com', ''), cb);
+                    defaultApi.security_createAuthTokenForServiceUser(argsBuilder('xxx@xxx.com', ''), cb);
                 }
             ];
             async.series(fnStack, fnStackInvalidArgsCallback(doneTest));
         });
 
+        it('Token must not be created in case of error', function(doneTest) {
+            var customMockData = require('./_mockData').getCopy();
+            var customMockDal = new mockDalDef(customMockData);
+            var customApi = new apiDef(customMockDal, defaultUuid);
+            var currentTokensLength = customMockData.system_access_tokens.length;
+
+            var reqArgs = argsBuilder('test@test.com', '1');
+            customApi.security_createAuthTokenForServiceUser(reqArgs, function(err, result) {
+                if (err) {
+                    assert.strictEqual(customMockData.system_access_tokens.length, currentTokensLength, 'In case of error token must not be created');
+                    doneTest();
+                } else {
+                    doneTest(err);
+                }
+            });
+        });
+
         it('Token must not be created for unknown/not registered user', function(doneTest) {
             var reqArgs = argsBuilder('test@test.com', '1');
-            api.security_createAuthTokenForServiceUser(reqArgs, function(err, result) {
+            defaultApi.security_createAuthTokenForServiceUser(reqArgs, function(err, result) {
                 if (err && err.number && err.number === bllErrors.USER_NOT_FOUND) {
                     doneTest();
                 } else if (err) {
@@ -290,7 +310,7 @@ describe('API methods', function() {
 
         it('Token must be created for valid service user', function(doneTest) {
             var reqArgs = argsBuilder('test@test.com', 'test@test.com');
-            api.security_createAuthTokenForServiceUser(reqArgs, function(err, result) {
+            defaultApi.security_createAuthTokenForServiceUser(reqArgs, function(err, result) {
                 if (err && err.number && err.number === bllErrors.USER_NOT_FOUND) {
                     assert.fail('Known user was not found with creditionals');
                     return doneTest();
@@ -315,11 +335,11 @@ describe('API methods', function() {
 
         it('Token must be written to DAL with valid type and id', function(doneTest) {
             var reqArgs = argsBuilder('test@test.com', 'test@test.com');
-            api.security_createAuthTokenForServiceUser(reqArgs, function(err, result) {
+            defaultApi.security_createAuthTokenForServiceUser(reqArgs, function(err, result) {
                 if (err) {
                     return doneTest(err);
                 }
-                mockDal.getUserMainInfoByToken(result.token, function(errUser, resultUser) {
+                defaultMockDal.getUserMainInfoByToken(result.token, function(errUser, resultUser) {
                     if (errUser) {
                         return doneTest(errUser);
                     }
@@ -334,8 +354,31 @@ describe('API methods', function() {
             });
         });
 
-        //TODO test with custom uuid
-        //TODO test that number of tokens must not be incremented on errors
+        it('Check token is used from uuid-generator', function(doneTest) {
+            var customToken = '6c1bd09f-ca96-438d-adee-ff4c7c1694ba';
+            var customUuid = {
+                newBigInt: function(done) {
+                    done(null, '1');
+                },
+                newGuid4: function(done) {
+                    done(null, customToken);
+                }
+            };
+
+            var customMockData = require('./_mockData').getCopy();
+            var customMockDal = new mockDalDef(customMockData);
+            var customApi = new apiDef(customMockDal, customUuid);
+
+            var reqArgs = argsBuilder('test@test.com', 'test@test.com');
+            customApi.security_createAuthTokenForServiceUser(reqArgs, function(err, result) {
+                if (err) {
+                    return doneTest(err);
+                }
+                assert.strictEqual(result.token, customToken, 'Module must use uuid generator. Provided token and result are not match');
+                doneTest();
+            });
+        });
+
         //TODO update tests with async hash password and expires
     });
 
