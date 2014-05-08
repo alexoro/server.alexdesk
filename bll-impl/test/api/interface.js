@@ -8,7 +8,7 @@ var assert = require('chai').assert;
 var Api = require('../../').api;
 
 
-describe('Interface', function() {
+describe('API Interface', function() {
 
 
     it('Check constructor', function() {

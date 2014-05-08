@@ -5,23 +5,24 @@
 "use strict";
 
 var assert = require('chai').assert;
+var domain = require('../../').domain;
 
-describe('Interface', function() {
+
+describe('Domain Interface', function() {
     var iCountries;
     var iLanguages;
 
     before(function() {
-        var main = require('../');
 
         try {
-            iCountries = main.countries;
+            iCountries = domain.countries;
         } catch (err) {
             assert.fail('Unable to instantiate countries definition from module: ' + err);
             return;
         }
 
         try {
-            iLanguages = main.languages;
+            iLanguages = domain.languages;
         } catch (err) {
             assert.fail('Unable to instantiate languages definition from module: ' + err);
         }
