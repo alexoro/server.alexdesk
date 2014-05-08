@@ -42,9 +42,13 @@ describe('Interface', function() {
         assert.isFunction(bllApi.hd_messagesList, 'hd_messagesList must be a function');
         assert.equal(bllApi.hd_messagesList.length, 2, 'hd_messagesList must receive 2 arguments only');
 
-        assert.isDefined(bllApi.security_createAuthToken, 'security_createAuthToken function is not exists');
-        assert.isFunction(bllApi.security_createAuthToken, 'security_createAuthToken must be a function');
-        assert.equal(bllApi.security_createAuthToken.length, 2, 'security_createAuthToken must receive 2 arguments only');
+        assert.isDefined(bllApi.security_createAuthTokenForServiceUser, 'security_createAuthTokenForServiceUser function is not exists');
+        assert.isFunction(bllApi.security_createAuthTokenForServiceUser, 'security_createAuthTokenForServiceUser must be a function');
+        assert.equal(bllApi.security_createAuthTokenForServiceUser.length, 2, 'security_createAuthTokenForServiceUser must receive 2 arguments only');
+
+        assert.isDefined(bllApi.security_createAuthTokenForServiceUser, 'security_createAuthTokenForAppUser function is not exists');
+        assert.isFunction(bllApi.security_createAuthTokenForServiceUser, 'security_createAuthTokenForAppUser must be a function');
+        assert.equal(bllApi.security_createAuthTokenForServiceUser.length, 2, 'security_createAuthTokenForAppUser must receive 2 arguments only');
 
         assert.isDefined(bllApi.users_init, 'users_init function is not exists');
         assert.isFunction(bllApi.users_init, 'users_init must be a function');
