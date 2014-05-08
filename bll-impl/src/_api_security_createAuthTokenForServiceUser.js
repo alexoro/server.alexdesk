@@ -66,7 +66,7 @@ var _create = function(env, args, next) {
         function(userId, cb) {
             uuid.newGuid4(function(err, guid) {
                 if (err) {
-                    cb(err);
+                    cb(bllErrBuilder(bllErr.INTERNAL_ERROR, err));
                 } else {
                     cb(null, userId, guid);
                 }

@@ -379,6 +379,29 @@ describe('API methods', function() {
             });
         });
 
+        it('Check that not working uuid forces code to return INTERNAL_ERROR', function(doneTest) {
+            var customUuid = {
+                newBigInt: function(done) {
+                    done(null, '1');
+                },
+                newGuid4: function(done) {
+                    done(new Error('Not implemented yet'));
+                }
+            };
+
+            var customMockData = require('./_mockData').getCopy();
+            var customMockDal = new mockDalDef(customMockData);
+            var customApi = new apiDef(customMockDal, customUuid);
+
+            var reqArgs = argsBuilder('test@test.com', 'test@test.com');
+            customApi.security_createAuthTokenForServiceUser(reqArgs, function(err, result) {
+                if (!err || !err.number || err.number !== bllErrors.INTERNAL_ERROR) {
+                    assert.fail('Method did not respond with INTERNAL_ERROR for not error on uuid');
+                }
+                doneTest();
+            });
+        });
+
         //TODO update tests with async hash password and expires
     });
 
