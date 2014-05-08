@@ -182,10 +182,11 @@ describe('API methods', function() {
     });
 
     describe('#security_createAuthTokenForServiceUser', function() {
+        var mockData = require('./_mockData').getCopy();
         var mockDal;
         var api;
 
-        var argsBuilder = function(userType, login, password) {
+        var argsBuilder = function(login, password) {
             return {
                 login: login, password: password
             };
@@ -206,7 +207,7 @@ describe('API methods', function() {
 
         before(function(doneBefore) {
             try {
-                mockDal = new mockDalDef(require('./_mockData').getCopy());
+                mockDal = new mockDalDef(mockData);
             } catch(err) {
                 assert.fail('Unable to instantiate mock data and DAL: ' + err);
             }
@@ -290,12 +291,14 @@ describe('API methods', function() {
         it('Token must be created for valid service user', function(doneTest) {
             var reqArgs = argsBuilder('test@test.com', 'test@test.com');
             api.security_createAuthTokenForServiceUser(reqArgs, function(err, result) {
-                if (err) {
+                if (err && err.number && err.number === bllErrors.USER_NOT_FOUND) {
+                    assert.fail('Known user was not found with creditionals');
+                    return doneTest();
+                } else if (err) {
                     return doneTest(err);
                 }
 
                 assert.isObject(result, 'The result is not a object');
-                assert.lengthOf(result.length, 2, 'The result object must contain only two fields');
                 assert.isDefined(result.token, 'Token field is not defined');
                 assert.isDefined(result.expires, 'Expires field is not defined');
 
@@ -303,8 +306,8 @@ describe('API methods', function() {
                     assert.fail('Token is not a string or not in guid format. Given: ' + result.token);
                 }
 
-                assert.instanceOf(result.expires, Date, 'Expires is not a date');
-                assert.operator(result.expires.getTime(), '>', new Date().getTime(), 'Expire time should be greater than current time');
+                assert.typeOf(result.expires, 'number', 'Expires is not a timestamp');
+                assert.operator(result.expires, '>', Date.now(), 'Expire time should be greater than current time');
 
                 doneTest();
             });
@@ -321,13 +324,19 @@ describe('API methods', function() {
                         return doneTest(errUser);
                     }
 
-                    assert.isNotNull(resultUser, 'User must be found by created access token');
-                    assert.strictEqual(resultUser.type, bllIntf.userTypes.SERVICE_USER, 'The type of created auth token must be for a service user');
-                    assert.strictEqual(resultUser.id, '1', 'The user id is not matches with just created token');
+                    var matchUserMainInfo = {
+                        id: '1',
+                        type: bllIntf.userTypes.SERVICE_USER
+                    };
+                    assert.deepEqual(matchUserMainInfo, resultUser, 'Expected application information and application in response is not match');
                     doneTest();
                 });
             });
         });
+
+        //TODO test with custom uuid
+        //TODO test that number of tokens must not be incremented on errors
+        //TODO update tests with async hash password and expires
     });
 
 });

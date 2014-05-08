@@ -16,13 +16,32 @@ var DAL = function(mockData) {
     this.mock = mockData;
 };
 
+DAL.prototype.getServiceUserIdByCreditionals = function(creditionals, done) {
+    var r = _.findWhere(this.mock.users, creditionals);
+    if (!r) {
+        done(null, null);
+    } else {
+        done(null, r.id);
+    }
+};
+
+DAL.prototype.createAuthToken = function(args, done) {
+    var obj = {
+        token: args.token,
+        user_type: args.user_type,
+        user_id: args.user_id,
+        expires: args.expires
+    };
+    this.mock.system_access_tokens.push(obj);
+    done(null);
+};
 
 DAL.prototype.getUserMainInfoByToken = function(accessToken, done) {
-    var r = _.findWhere(this.mock.system_access_tokens, {id: accessToken});
+    var r = _.findWhere(this.mock.system_access_tokens, {token: accessToken});
     if (r) {
         var dateNow = new Date();
         var dateUser = r.expires;
-        if (dateNow.getTime() >= dateUser.getTime()) {
+        if (dateNow.getTime() >= dateUser) {
             return done(null, null);
         } else {
             return done(null, {type: r.user_type, id: r.user_id});

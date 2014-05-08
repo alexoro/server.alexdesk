@@ -4,23 +4,6 @@
 
 "use strict";
 
-/* DEBUG REQUEST
- /v1/
- {
- "jsonrpc": "2.0",
- "method": "security.createAuthToken",
- "id": 1,
- "params": {
- "email": "abcdef@app1.tracid.net",
- "password": "random"
- }}
- ----
- {
- "token": "0123456789abcdef0123456789abcdef",
- "expires": 1375053875
- }
- */
-
 
 var _ = require('underscore');
 var async = require('async');
@@ -30,108 +13,90 @@ var bllErr = bllIntf.errors;
 var bllErrBuilder = bllIntf.errorBuilder;
 
 var validate = require('./_validation');
+var md5 = require('./_md5');
 
 
 var _validateArgsHasErrors = function(args) {
     if (!args) {
-        return bllIntf.errorBuilder(bllIntf.errors.INVALID_PARAMS, 'Arguments are not defined');
+        return bllIntf.errorBuilder(bllErr.INVALID_PARAMS, 'Arguments is not defined');
     }
     if (typeof args !== 'object') {
-        return bllIntf.errorBuilder(bllIntf.errors.INVALID_PARAMS, 'Arguments is not a object');
+        return bllIntf.errorBuilder(bllErr.INVALID_PARAMS, 'Arguments is not a object');
     }
-    if (args.user_type === undefined || args.login === undefined || args.password === undefined) {
-        return bllIntf.errorBuilder(bllIntf.errors.INVALID_PARAMS, 'Not all required fields are set');
-    }
-    if (args.user_type !== bllIntf.userTypes.SERVICE_USER && args.user_type !== bllIntf.userTypes.APP_USER) {
-        return bllIntf.errorBuilder(bllIntf.errors.INVALID_PARAMS, 'User type is not a service user or application user');
+    if (args.login === undefined || args.password === undefined) {
+        return bllIntf.errorBuilder(bllErr.INVALID_PARAMS, 'Not all required fields are set: login or password');
     }
 
-    if (args.user_type === bllIntf.userTypes.SERVICE_USER && !validate.email(args.login)) {
-        return bllIntf.errorBuilder(bllIntf.errors.INVALID_PARAMS, 'Service user login must be in email format');
+    if (!validate.email(args.login)) {
+        return bllIntf.errorBuilder(bllErr.INVALID_PARAMS, 'Service user login must be in email format');
     }
-    if (args.user_type === bllIntf.userTypes.APP_USER && !validate.app_user_login(args.login)) {
-        return bllIntf.errorBuilder(bllIntf.errors.INVALID_PARAMS, 'Application user login must be a string with length [1, 64]');
-    }
-
     if (!validate.app_user_password(args.password)) {
-        return bllIntf.errorBuilder(bllIntf.errors.INVALID_PARAMS, 'Password must be a string with length [1, 64]');
+        return bllIntf.errorBuilder(bllErr.INVALID_PARAMS, 'Password must be a string with length [1, 64]');
     }
 };
 
-var _appsFetching = function(dal, args, next) {
-    var apps = {};
-    var user;
+var _hashPassword = function(password) {
+    return md5(password);
+};
+
+var _generateExpires = function() {
+    return Date.now() + 1000 * 60 * 60 * 24 * 30 * 12;
+};
+
+var _create = function(env, args, next) {
+    var dal = env.dal;
+    var uuid = env.uuid;
 
     var fnStack = [
         function(cb) {
-            dal.getUserMainInfoByToken(args.access_token, function(err, result) {
-                if (!err && !result) {
-                    err = bllErrBuilder(bllErr.INVALID_OR_EXPIRED_TOKEN, 'Specified access token "' + args.access_token + '" is expired or invalid');
+            var creditionals = {
+                login: args.login,
+                passwordHash: _hashPassword(args.password)
+            };
+            dal.getServiceUserIdByCreditionals(creditionals, function(err, userId) {
+                if (err) {
+                    cb(err);
+                } else if (!userId) {
+                    cb(bllErrBuilder(bllErr.USER_NOT_FOUND, 'User with specified creditionals is not found'));
+                } else {
+                    cb(null, userId);
                 }
-                user = result;
-                cb(err);
             });
         },
-        function(cb) {
-            if (user.type !== bllIntf.userTypes.SERVICE_USER) {
-                cb(bllErrBuilder(bllErr.ACCESS_DENIED, 'Only service user has access to this command. Given access token is: ' + args.access_token));
-            } else {
-                cb();
-            }
-        },
-
-        function(cb) {
-            dal.getAppsList(user.id, function(err, result) {
+        function(userId, cb) {
+            uuid.newGuid4(function(err, guid) {
                 if (err) {
                     cb(err);
                 } else {
-                    for (var i = 0; i < result.length; i++) {
-                        apps[result[i].id] = result[i];
-                    }
-                    cb();
+                    cb(null, userId, guid);
                 }
             });
         },
-
-        function(cb) {
-            dal.getNumberOfChats(_.keys(apps), function(err, result) {
-                if (!err) {
-                    _.keys(result).forEach(function(item) {
-                        apps[item].number_of_chats = result[item];
-                    });
+        function(userId, guid, cb) {
+            var expires = _generateExpires();
+            var toSave = {
+                token: guid,
+                user_type: bllIntf.userTypes.SERVICE_USER,
+                user_id: userId,
+                expires: expires
+            };
+            dal.createAuthToken(toSave, function(err) {
+                if (err) {
+                    cb(err);
+                } else {
+                    cb(null, guid, expires);
                 }
-                cb(err);
-            });
-        },
-        function(cb) {
-            dal.getNumberOfAllMessages(_.keys(apps), function(err, result) {
-                if (!err) {
-                    _.keys(result).forEach(function(item) {
-                        apps[item].number_of_all_messages = result[item];
-                    });
-                }
-                cb(err);
-            });
-        },
-        function(cb) {
-            dal.getNumberOfUnreadMessages(_.keys(apps), user.type, user.id, function(err, result) {
-                if (!err) {
-                    _.keys(result).forEach(function(item) {
-                        apps[item].number_of_unread_messages = result[item];
-                    });
-                }
-                cb(err);
             });
         }
     ];
 
-    async.series(
+    async.waterfall(
         fnStack,
-        function(err) {
+        function(err, guid, expires) {
             if (err) {
-                next(err, null);
+                return next(err);
             } else {
-                next(null, _.values(apps));
+                next(null, {token: guid, expires: expires});
             }
         }
     );
@@ -139,14 +104,10 @@ var _appsFetching = function(dal, args, next) {
 
 
 module.exports = function(env, args, next) {
-    var dal = env.dal;
-    var uuid = env.uuid;
-
     var argsError = _validateArgsHasErrors(args);
     if (argsError) {
         next(argsError, null);
     } else {
-        next(null, null);
-        //_appsFetching(dal, args, next);
+        _create(env, args, next);
     }
 };

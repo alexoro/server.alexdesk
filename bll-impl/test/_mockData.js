@@ -13,8 +13,8 @@ var mock = {
     users: [
         {
             id: '1',
-            email: 'test@test.com',
-            password: 'b642b4217b34b1e8d3bd915fc65c4452', // md5 of 'test@test.com'
+            login: 'test@test.com',
+            passwordHash: 'b642b4217b34b1e8d3bd915fc65c4452', // md5 of 'test@test.com'
             name: 'Test',
             registered: new Date('2014-05-01 12:00:00 +04:00'),
             last_visit: new Date('2014-05-01 14:00:00 +04:00')
@@ -23,22 +23,22 @@ var mock = {
 
     system_access_tokens: [
         {
-            id: '142b2b49-75f2-456f-9533-435bd0ef94c0',
+            token: '142b2b49-75f2-456f-9533-435bd0ef94c0',
             user_type: bllInterface.userTypes.SERVICE_USER,
             user_id: '1',
-            expires: new Date('2020-01-01 00:00:00 +00:00')
+            expires: new Date('2020-01-01 00:00:00 +00:00').getTime()
         },
         {
-            id: '302a1baa-78b0-4a4d-ae1f-ebb5a147c71a',
+            token: '302a1baa-78b0-4a4d-ae1f-ebb5a147c71a',
             user_type: bllInterface.userTypes.APP_USER,
             user_id: '2',
-            expires: new Date('2020-01-01 00:00:00 +00:00')
+            expires: new Date('2020-01-01 00:00:00 +00:00').getTime()
         },
         {
-            id: '390582c6-a59b-4ab2-a8e1-87fdbb291b97',
+            token: '390582c6-a59b-4ab2-a8e1-87fdbb291b97',
             user_type: bllInterface.userTypes.APP_USER,
             user_id: '3',
-            expires: new Date('1970-01-01 00:00:00 +00:00')
+            expires: new Date('1970-01-01 00:00:00 +00:00').getTime()
         }
     ],
 
