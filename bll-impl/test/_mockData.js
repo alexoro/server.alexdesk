@@ -14,7 +14,7 @@ var mock = {
         {
             id: '1',
             email: 'test@test.com',
-            password: 'b642b4217b34b1e8d3bd915fc65c4452',
+            password: 'b642b4217b34b1e8d3bd915fc65c4452', // md5 of 'test@test.com'
             name: 'Test',
             registered: new Date('2014-05-01 12:00:00 +04:00'),
             last_visit: new Date('2014-05-01 14:00:00 +04:00')

@@ -302,7 +302,7 @@ describe('API methods', function() {
             async.series(fnStack, fnStackInvalidArgsCallback(doneTest));
         });
 
-        it('Token must not be created for unknown/not registered user', function(doneTest) {
+        it('Token must not be created for unknown/not registered service user', function(doneTest) {
             var reqArgs = args(bllIntf.userTypes.SERVICE_USER, 'test@test.com', '1');
             api.security_createAuthToken(reqArgs, function(err, result) {
                 if (err && err.number && err.number === bllErrors.USER_NOT_FOUND) {
@@ -316,7 +316,7 @@ describe('API methods', function() {
             });
         });
 
-        it('Check invalid app user request', function(doneTest) {
+        it('Token must not be created for unknown/not registered application user', function(doneTest) {
             var reqArgs = args(bllIntf.userTypes.APP_USER, 'test1', '1');
             api.security_createAuthToken(reqArgs, function(err, result) {
                 if (err && err.number && err.number === bllErrors.USER_NOT_FOUND) {
@@ -330,7 +330,7 @@ describe('API methods', function() {
             });
         });
 
-        it('Check valid service user request', function(doneTest) {
+        it('Check token is created for valid service user', function(doneTest) {
             var reqArgs = args(bllIntf.userTypes.SERVICE_USER, 'test@test.com', 'test@test.com');
             api.security_createAuthToken(reqArgs, function(err, result) {
                 if (err) {
