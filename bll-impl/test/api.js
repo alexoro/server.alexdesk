@@ -65,7 +65,7 @@ describe('API methods', function() {
         before(function() {
             try {
                 mockDal = new mockDalDef(require('./_mockData').getCopy());
-                api = new apiDef({dal: mockDal, uuid: null}); // null is specially here - check that method must work without it
+                api = new apiDef({dal: mockDal, uuid: {}}); // null is specially here - check that method must work without it
             } catch(err) {
                 assert.fail('Unable to instantiate mock data and DAL: ' + err);
             }

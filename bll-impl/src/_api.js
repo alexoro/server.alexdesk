@@ -15,11 +15,11 @@ var Api = function(env) {
     if (!env) {
         throw new Error('Environment is not defined');
     }
-    if (env.dal === undefined) {
-        throw new Error('DAL module is not defined');
+    if (typeof env.dal !== 'object' || !env.dal) {
+        throw new Error('DAL module is not defined or is null or is not a object');
     }
-    if (env.uuid === undefined) {
-        throw new Error('UUID generator is not defined');
+    if (typeof env.uuid !== 'object' || !env.uuid) {
+        throw new Error('UUID generator is not defined or is null or is not a object');
     }
 
     this.env = env;
