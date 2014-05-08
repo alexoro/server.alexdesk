@@ -55,7 +55,7 @@ var _create = function(env, args, next) {
             };
             dal.getServiceUserIdByCreditionals(creditionals, function(err, userId) {
                 if (err) {
-                    cb(err);
+                    cb(bllErrBuilder(bllErr.INTERNAL_ERROR, err));
                 } else if (!userId) {
                     cb(bllErrBuilder(bllErr.USER_NOT_FOUND, 'User with specified creditionals is not found'));
                 } else {
@@ -82,7 +82,7 @@ var _create = function(env, args, next) {
             };
             dal.createAuthToken(toSave, function(err) {
                 if (err) {
-                    cb(err);
+                    cb(bllErrBuilder(bllErr.INTERNAL_ERROR, err));
                 } else {
                     cb(null, guid, expires);
                 }

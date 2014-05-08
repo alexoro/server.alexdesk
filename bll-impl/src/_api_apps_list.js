@@ -36,11 +36,14 @@ var _appsFetching = function(dal, args, next) {
     var fnStack = [
         function(cb) {
             dal.getUserMainInfoByToken(args.access_token, function(err, result) {
-                if (!err && !result) {
-                    err = bllErrBuilder(bllErr.INVALID_OR_EXPIRED_TOKEN, 'Specified access token "' + args.access_token + '" is expired or invalid');
+                if (err) {
+                    cb(bllErrBuilder(bllErr.INTERNAL_ERROR, err));
+                } else if (!result) {
+                    cb(bllErrBuilder(bllErr.INVALID_OR_EXPIRED_TOKEN, 'Specified access token "' + args.access_token + '" is expired or invalid'));
+                } else {
+                    user = result;
+                    cb();
                 }
-                user = result;
-                cb(err);
             });
         },
         function(cb) {
@@ -54,7 +57,7 @@ var _appsFetching = function(dal, args, next) {
         function(cb) {
             dal.getAppsList(user.id, function(err, result) {
                 if (err) {
-                    cb(err);
+                    cb(bllErrBuilder(bllErr.INTERNAL_ERROR, err));
                 } else {
                     for (var i = 0; i < result.length; i++) {
                         apps[result[i].id] = result[i];
@@ -66,32 +69,38 @@ var _appsFetching = function(dal, args, next) {
 
         function(cb) {
             dal.getNumberOfChats(_.keys(apps), function(err, result) {
-                if (!err) {
+                if (err) {
+                    cb(bllErrBuilder(bllErr.INTERNAL_ERROR, err));
+                } else {
                     _.keys(result).forEach(function(item) {
                         apps[item].number_of_chats = result[item];
                     });
+                    cb();
                 }
-                cb(err);
             });
         },
         function(cb) {
             dal.getNumberOfAllMessages(_.keys(apps), function(err, result) {
-                if (!err) {
+                if (err) {
+                    cb(bllErrBuilder(bllErr.INTERNAL_ERROR, err));
+                } else {
                     _.keys(result).forEach(function(item) {
                         apps[item].number_of_all_messages = result[item];
                     });
+                    cb();
                 }
-                cb(err);
             });
         },
         function(cb) {
             dal.getNumberOfUnreadMessages(_.keys(apps), user.type, user.id, function(err, result) {
-                if (!err) {
+                if (err) {
+                    cb(bllErrBuilder(bllErr.INTERNAL_ERROR, err));
+                } else {
                     _.keys(result).forEach(function(item) {
                         apps[item].number_of_unread_messages = result[item];
                     });
+                    cb();
                 }
-                cb(err);
             });
         }
     ];
