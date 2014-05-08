@@ -58,7 +58,7 @@ describe('API methods', function() {
     };
 
 
-    describe('apps_list', function() {
+    describe('#apps_list', function() {
         var mockDal;
         var api;
 
@@ -181,13 +181,13 @@ describe('API methods', function() {
         });
     });
 
-    describe('security_createAuthToken', function() {
+    describe('#security_createAuthTokenForServiceUser', function() {
         var mockDal;
         var api;
 
-        var args = function(userType, login, password) {
+        var argsBuilder = function(userType, login, password) {
             return {
-                user_type: userType, login: login, password: password
+                login: login, password: password
             };
         };
 
@@ -224,55 +224,35 @@ describe('API methods', function() {
         it('Validate invalid arguments: all is invalid', function(doneTest) {
             var fnStack = [
                 function(cb) {
-                    api.security_createAuthToken(null, cb);
+                    api.security_createAuthTokenForServiceUser(null, cb);
                 },
                 function(cb) {
-                    api.security_createAuthToken({}, cb);
+                    api.security_createAuthTokenForServiceUser({}, cb);
                 },
                 function(cb) {
-                    api.security_createAuthToken(-1, cb);
+                    api.security_createAuthTokenForServiceUser(-1, cb);
                 }
             ];
             async.series(fnStack, fnStackInvalidArgsCallback(doneTest));
         });
 
-        it('Validate invalid arguments: user type is invalid', function(doneTest) {
+        it('Validate invalid arguments: email is invalid', function(doneTest) {
             var fnStack = [
                 function(cb) {
-                    api.security_createAuthToken(args(null, null, null), cb);
+                    api.security_createAuthTokenForServiceUser(argsBuilder(null, null), cb);
                 },
                 function(cb) {
-                    api.security_createAuthToken(args(-1, null, null), cb);
+                    api.security_createAuthTokenForServiceUser(argsBuilder({}, null), cb);
                 },
                 function(cb) {
-                    api.security_createAuthToken(args({}, null, null), cb);
-                }
-            ];
-            async.series(fnStack, fnStackInvalidArgsCallback(doneTest));
-        });
-
-        it('Validate invalid arguments: login/email is invalid', function(doneTest) {
-            var fnStack = [
-                function(cb) {
-                    api.security_createAuthToken(args(bllIntf.userTypes.SERVICE_USER, null, null), cb);
+                    api.security_createAuthTokenForServiceUser(argsBuilder('', null), cb);
                 },
                 function(cb) {
-                    api.security_createAuthToken(args(bllIntf.userTypes.APP_USER, null, null), cb);
-                },
-
-                function(cb) {
-                    api.security_createAuthToken(args(bllIntf.userTypes.SERVICE_USER, {}, null), cb);
+                    api.security_createAuthTokenForServiceUser(argsBuilder('xxx@xx:com', null), cb);
                 },
                 function(cb) {
-                    api.security_createAuthToken(args(bllIntf.userTypes.SERVICE_USER, '', null), cb);
-                },
-                function(cb) {
-                    api.security_createAuthToken(args(bllIntf.userTypes.SERVICE_USER, 'xxx@xx:com', null), cb);
-                },
-                function(cb) {
-                    api.security_createAuthToken(
-                        args(bllIntf.userTypes.APP_USER, '0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789', null),
-                        cb);
+                    var email = '0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789'
+                    api.security_createAuthTokenForServiceUser(argsBuilder(email, null), cb);
                 }
             ];
             async.series(fnStack, fnStackInvalidArgsCallback(doneTest));
@@ -281,58 +261,35 @@ describe('API methods', function() {
         it('Validate invalid arguments: password is invalid', function(doneTest) {
             var fnStack = [
                 function(cb) {
-                    api.security_createAuthToken(args(bllIntf.userTypes.SERVICE_USER, 'xxx@xxx.com', null), cb);
+                    api.security_createAuthTokenForServiceUser(argsBuilder('zzzzz', null), cb);
                 },
                 function(cb) {
-                    api.security_createAuthToken(args(bllIntf.userTypes.SERVICE_USER, 'xxx@xxx.com', {}), cb);
+                    api.security_createAuthTokenForServiceUser(argsBuilder('xxx@xxx.com', {}), cb);
                 },
                 function(cb) {
-                    api.security_createAuthToken(args(bllIntf.userTypes.SERVICE_USER, 'xxx@xxx.com', ''), cb);
-                },
-                function(cb) {
-                    api.security_createAuthToken(args(bllIntf.userTypes.APP_USER, 'zzzzz', null), cb);
-                },
-                function(cb) {
-                    api.security_createAuthToken(args(bllIntf.userTypes.APP_USER, 'zzzzz', {}), cb);
-                },
-                function(cb) {
-                    api.security_createAuthToken(args(bllIntf.userTypes.APP_USER, 'zzzzz', ''), cb);
+                    api.security_createAuthTokenForServiceUser(argsBuilder('xxx@xxx.com', ''), cb);
                 }
             ];
             async.series(fnStack, fnStackInvalidArgsCallback(doneTest));
         });
 
-        it('Token must not be created for unknown/not registered service user', function(doneTest) {
-            var reqArgs = args(bllIntf.userTypes.SERVICE_USER, 'test@test.com', '1');
-            api.security_createAuthToken(reqArgs, function(err, result) {
+        it('Token must not be created for unknown/not registered user', function(doneTest) {
+            var reqArgs = argsBuilder('test@test.com', '1');
+            api.security_createAuthTokenForServiceUser(reqArgs, function(err, result) {
                 if (err && err.number && err.number === bllErrors.USER_NOT_FOUND) {
                     doneTest();
                 } else if (err) {
                     doneTest(err);
                 } else {
-                    assert.fail('Token was successfully created for unknown/not registered service user');
+                    assert.fail('Token was successfully created for unknown/not registered user');
                     doneTest();
                 }
             });
         });
 
-        it('Token must not be created for unknown/not registered application user', function(doneTest) {
-            var reqArgs = args(bllIntf.userTypes.APP_USER, 'test1', '1');
-            api.security_createAuthToken(reqArgs, function(err, result) {
-                if (err && err.number && err.number === bllErrors.USER_NOT_FOUND) {
-                    doneTest();
-                } else if (err) {
-                    doneTest(err);
-                } else {
-                    assert.fail('Token was successfully created for invalid application user');
-                    doneTest();
-                }
-            });
-        });
-
-        it('Check token is created for valid service user', function(doneTest) {
-            var reqArgs = args(bllIntf.userTypes.SERVICE_USER, 'test@test.com', 'test@test.com');
-            api.security_createAuthToken(reqArgs, function(err, result) {
+        it('Token must be created for valid service user', function(doneTest) {
+            var reqArgs = argsBuilder('test@test.com', 'test@test.com');
+            api.security_createAuthTokenForServiceUser(reqArgs, function(err, result) {
                 if (err) {
                     return doneTest(err);
                 }
@@ -350,6 +307,25 @@ describe('API methods', function() {
                 assert.operator(result.expires.getTime(), '>', new Date().getTime(), 'Expire time should be greater than current time');
 
                 doneTest();
+            });
+        });
+
+        it('Token must be written to DAL with valid type and id', function(doneTest) {
+            var reqArgs = argsBuilder('test@test.com', 'test@test.com');
+            api.security_createAuthTokenForServiceUser(reqArgs, function(err, result) {
+                if (err) {
+                    return doneTest(err);
+                }
+                mockDal.getUserMainInfoByToken(result.token, function(errUser, resultUser) {
+                    if (errUser) {
+                        return doneTest(errUser);
+                    }
+
+                    assert.isNotNull(resultUser, 'User must be found by created access token');
+                    assert.strictEqual(resultUser.type, bllIntf.userTypes.SERVICE_USER, 'The type of created auth token must be for a service user');
+                    assert.strictEqual(resultUser.id, '1', 'The user id is not matches with just created token');
+                    doneTest();
+                });
             });
         });
     });
