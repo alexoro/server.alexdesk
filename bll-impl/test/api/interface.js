@@ -6,26 +6,24 @@
 
 var assert = require('chai').assert;
 var Api = require('../../').api;
-
-var mockCfg = require('./_mockCfg');
+var mock = require('./mock/');
 
 
 describe('API Interface', function() {
-
 
     it('Check constructor', function() {
         assert.isFunction(Api, 'Constructor must be a function');
         assert.lengthOf(Api, 1, 'Constructor must accept 1 arguments');
 
         try {
-            var api = new Api({dal: {}, uuid: {}, config: mockCfg});
+            var api = mock.newApiWithMock().api;
         } catch (err) {
             assert.fail('Constructor call failed with error: ' + err);
         }
     });
 
     it('Check all interface functions are exists', function() {
-        var api = new Api({dal: {}, uuid: {}, config: mockCfg});
+        var api = mock.newApiWithMock().api;
 
         assert.isDefined(api.apps_list, 'apps_list function is not exists');
         assert.isFunction(api.apps_list, 'apps_list must be a function');

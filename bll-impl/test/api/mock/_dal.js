@@ -6,10 +6,10 @@
 
 var _ = require('underscore');
 
-var domain = require('../../').domain;
+var domain = require('../../../src/index').domain;
 var dPlatforms = domain.platforms;
 
-var utils = require('./_utils');
+var utils = require('./../_utils');
 
 
 var DAL = function(mockData) {

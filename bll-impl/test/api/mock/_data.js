@@ -4,8 +4,8 @@
 
 "use strict";
 
-var domain = require('../../').domain;
-var utils = require('./_utils');
+var domain = require('../../../src/index').domain;
+var utils = require('./../_utils');
 
 
 var mock = {

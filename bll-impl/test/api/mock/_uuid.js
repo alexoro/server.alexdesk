@@ -7,9 +7,9 @@
 
 module.exports = {
     newBigInt: function(done) {
-        done(new Error('Not implemented yet'));
+        done(null, '1');
     },
     newGuid4: function(done) {
-        done(new Error('Not implemented yet'));
+        done(null, '6c1bd09f-ca96-438d-adee-ff4c7c1694ba');
     }
 };
