@@ -15,6 +15,8 @@ var mockDataDef = require('./_mockData');
 var MockDal = require('./_mockDal');
 var mockUuidWorking = require('./_mockUuidWorking');
 var mockUuidError = require('./_mockUuidError');
+var mockCfg = require('./_mockCfg');
+
 var validate = require('./_validation');
 
 
@@ -68,8 +70,8 @@ describe('API methods', function() {
         before(function() {
             try {
                 mockDal = new MockDal(require('./_mockData').getCopy());
-                // null is specially here - check that method must work without it
-                api = new Api({dal: mockDal, uuid: {}});
+                // empty is specially here - check that method must work without it
+                api = new Api({dal: mockDal, uuid: {}, config: mockCfg});
             } catch(err) {
                 assert.fail('Unable to instantiate mock data and DAL: ' + err);
             }
@@ -220,7 +222,7 @@ describe('API methods', function() {
             }
 
             defaultUuid = mockUuidWorking;
-            defaultApi = new Api({dal: defaultMockDal, uuid: defaultUuid});
+            defaultApi = new Api({dal: defaultMockDal, uuid: defaultUuid, config: mockCfg});
         });
 
         it('Validate invalid arguments: all is invalid', function(doneTest) {
@@ -278,7 +280,7 @@ describe('API methods', function() {
         it('Token must not be created in case of error', function(doneTest) {
             var customMockData = mockDataDef.getCopy();
             var customMockDal = new MockDal(customMockData);
-            var customApi = new Api({dal: customMockDal, uuid: defaultUuid});
+            var customApi = new Api({dal: customMockDal, uuid: defaultUuid, config: mockCfg});
             var currentTokensLength = customMockData.system_access_tokens.length;
 
             var reqArgs = argsBuilder('test@test.com', '1');
@@ -355,7 +357,7 @@ describe('API methods', function() {
         it('Check token is used from uuid-generator', function(doneTest) {
             var customMockData = mockDataDef.getCopy();
             var customMockDal = new MockDal(customMockData);
-            var customApi = new Api({dal: customMockDal, uuid: mockUuidWorking});
+            var customApi = new Api({dal: customMockDal, uuid: mockUuidWorking, config: mockCfg});
 
             var reqArgs = argsBuilder('test@test.com', 'test@test.com');
             customApi.security_createAuthTokenForServiceUser(reqArgs, function(err, result) {
@@ -370,7 +372,7 @@ describe('API methods', function() {
         it('Check that not working uuid forces code to return INTERNAL_ERROR', function(doneTest) {
             var customMockData = mockDataDef.getCopy();
             var customMockDal = new MockDal(customMockData);
-            var customApi = new Api({dal: customMockDal, uuid: mockUuidError});
+            var customApi = new Api({dal: customMockDal, uuid: mockUuidError, config: mockCfg});
 
             var reqArgs = argsBuilder('test@test.com', 'test@test.com');
             customApi.security_createAuthTokenForServiceUser(reqArgs, function(err, result) {
@@ -380,9 +382,6 @@ describe('API methods', function() {
                 doneTest();
             });
         });
-
-        //TODO provide password hashing via funcion or bypass the SALT (think about salt version) as cfg
-        //TODO provide expires via function or bypass period as cfg
     });
 
 });
