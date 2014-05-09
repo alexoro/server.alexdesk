@@ -8,7 +8,6 @@ var consts = require('./_consts');
 var countries = require('./_countries');
 var languages = require('./_languages');
 var errors = require('./_errors');
-var errorBuilder = require('./_errorBuilder');
 
 module.exports = {
 
@@ -20,7 +19,6 @@ module.exports = {
     countries: countries,
     languages: languages,
 
-    errors: errors,
-    errorBuilder: errorBuilder
+    errors: errors
 
 };

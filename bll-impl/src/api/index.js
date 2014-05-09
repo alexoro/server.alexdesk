@@ -4,6 +4,9 @@
 
 "use strict";
 
+var domain = require('../domain');
+
+var errBuilder = require('./_errorBuilder');
 var api_apps_list = require('./_api_apps_list');
 var api_security_createAuthTokenForServiceUser = require('./_api_security_createAuthTokenForServiceUser');
 
@@ -51,7 +54,7 @@ Api.prototype._before = function(fn, args, next) {
     try {
         fn(this.env, args, next);
     } catch (err) {
-        next(err);
+        next(errBuilder(domain.errors.INTERNAL_ERROR, err));
     }
 };
 

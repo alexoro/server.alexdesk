@@ -10,23 +10,23 @@ var async = require('async');
 var domain = require('../domain');
 
 var validate = require('./_validation');
+var errBuilder = require('./_errorBuilder');
 
 
 var _validateArgsHasErrors = function(env, args) {
     var dErr = domain.errors;
-    var dErrBuilder = domain.errorBuilder;
 
     if (!args) {
-        return dErrBuilder(dErr.INVALID_PARAMS, 'Arguments are not defined');
+        return errBuilder(dErr.INVALID_PARAMS, 'Arguments are not defined');
     }
     if (typeof args !== 'object') {
-        return dErrBuilder(dErr.INVALID_PARAMS, 'Arguments is not a object');
+        return errBuilder(dErr.INVALID_PARAMS, 'Arguments is not a object');
     }
     if (args.access_token === undefined) {
-        return dErrBuilder.errorBuilder(dErr.INVALID_PARAMS, 'Access token is not defined');
+        return errBuilder(dErr.INVALID_PARAMS, 'Access token is not defined');
     }
     if (!validate.accessToken(args.access_token)) {
-        return dErrBuilder.errorBuilder(dErr.INVALID_PARAMS, 'Incorrect access token value: ' + args.access_token);
+        return errBuilder(dErr.INVALID_PARAMS, 'Incorrect access token value: ' + args.access_token);
     }
 };
 
@@ -37,15 +37,14 @@ var _appsFetching = function(env, args, next) {
     var dal = env.dal;
     var dUserTypes = domain.userTypes;
     var dErr = domain.errors;
-    var dErrBuilder = domain.errorBuilder;
 
     var fnStack = [
         function(cb) {
             dal.getUserMainInfoByToken(args.access_token, function(err, result) {
                 if (err) {
-                    cb(dErrBuilder(dErr.INTERNAL_ERROR, err));
+                    cb(errBuilder(dErr.INTERNAL_ERROR, err));
                 } else if (!result) {
-                    cb(dErrBuilder(dErr.INVALID_OR_EXPIRED_TOKEN, 'Specified access token "' + args.access_token + '" is expired or invalid'));
+                    cb(errBuilder(dErr.INVALID_OR_EXPIRED_TOKEN, 'Specified access token "' + args.access_token + '" is expired or invalid'));
                 } else {
                     user = result;
                     cb();
@@ -54,7 +53,7 @@ var _appsFetching = function(env, args, next) {
         },
         function(cb) {
             if (user.type !== dUserTypes.SERVICE_USER) {
-                cb(dErrBuilder(dErr.ACCESS_DENIED, 'Only service user has access to this command. Given access token is: ' + args.access_token));
+                cb(errBuilder(dErr.ACCESS_DENIED, 'Only service user has access to this command. Given access token is: ' + args.access_token));
             } else {
                 cb();
             }
@@ -63,7 +62,7 @@ var _appsFetching = function(env, args, next) {
         function(cb) {
             dal.getAppsList(user.id, function(err, result) {
                 if (err) {
-                    cb(dErrBuilder(dErr.INTERNAL_ERROR, err));
+                    cb(errBuilder(dErr.INTERNAL_ERROR, err));
                 } else {
                     for (var i = 0; i < result.length; i++) {
                         apps[result[i].id] = result[i];
@@ -76,7 +75,7 @@ var _appsFetching = function(env, args, next) {
         function(cb) {
             dal.getNumberOfChats(_.keys(apps), function(err, result) {
                 if (err) {
-                    cb(dErrBuilder(dErr.INTERNAL_ERROR, err));
+                    cb(errBuilder(dErr.INTERNAL_ERROR, err));
                 } else {
                     _.keys(result).forEach(function(item) {
                         apps[item].number_of_chats = result[item];
@@ -88,7 +87,7 @@ var _appsFetching = function(env, args, next) {
         function(cb) {
             dal.getNumberOfAllMessages(_.keys(apps), function(err, result) {
                 if (err) {
-                    cb(dErrBuilder(dErr.INTERNAL_ERROR, err));
+                    cb(errBuilder(dErr.INTERNAL_ERROR, err));
                 } else {
                     _.keys(result).forEach(function(item) {
                         apps[item].number_of_all_messages = result[item];
@@ -100,7 +99,7 @@ var _appsFetching = function(env, args, next) {
         function(cb) {
             dal.getNumberOfUnreadMessages(_.keys(apps), user.type, user.id, function(err, result) {
                 if (err) {
-                    cb(dErrBuilder(dErr.INTERNAL_ERROR, err));
+                    cb(errBuilder(dErr.INTERNAL_ERROR, err));
                 } else {
                     _.keys(result).forEach(function(item) {
                         apps[item].number_of_unread_messages = result[item];

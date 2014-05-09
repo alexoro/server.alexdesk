@@ -10,29 +10,29 @@ var async = require('async');
 
 var domain = require('../domain');
 
+var errBuilder = require('./_errorBuilder');
 var validate = require('./_validation');
 var md5 = require('./_md5');
 
 
 var _validateArgsHasErrors = function(env, args) {
     var dErr = domain.errors;
-    var dErrBuilder = domain.errorBuilder;
 
     if (!args) {
-        return dErrBuilder(dErr.INVALID_PARAMS, 'Arguments is not defined');
+        return errBuilder(dErr.INVALID_PARAMS, 'Arguments is not defined');
     }
     if (typeof args !== 'object') {
-        return dErrBuilder(dErr.INVALID_PARAMS, 'Arguments is not a object');
+        return errBuilder(dErr.INVALID_PARAMS, 'Arguments is not a object');
     }
     if (args.login === undefined || args.password === undefined) {
-        return dErrBuilder(dErr.INVALID_PARAMS, 'Not all required fields are set: login or password');
+        return errBuilder(dErr.INVALID_PARAMS, 'Not all required fields are set: login or password');
     }
 
     if (!validate.email(args.login)) {
-        return dErrBuilder(dErr.INVALID_PARAMS, 'Service user login must be in email format');
+        return errBuilder(dErr.INVALID_PARAMS, 'Service user login must be in email format');
     }
     if (!validate.app_user_password(args.password)) {
-        return dErrBuilder(dErr.INVALID_PARAMS, 'Password must be a string with length [1, 64]');
+        return errBuilder(dErr.INVALID_PARAMS, 'Password must be a string with length [1, 64]');
     }
 };
 
@@ -49,7 +49,6 @@ var _create = function(env, args, next) {
     var uuid = env.uuid;
     var dUserTypes = domain.userTypes;
     var dErr = domain.errors;
-    var dErrBuilder = domain.errorBuilder;
 
     var fnStack = [
         function(cb) {
@@ -59,9 +58,9 @@ var _create = function(env, args, next) {
             };
             dal.getServiceUserIdByCreditionals(creditionals, function(err, userId) {
                 if (err) {
-                    cb(dErrBuilder(dErr.INTERNAL_ERROR, err));
+                    cb(errBuilder(dErr.INTERNAL_ERROR, err));
                 } else if (!userId) {
-                    cb(dErrBuilder(dErr.USER_NOT_FOUND, 'User with specified creditionals is not found'));
+                    cb(errBuilder(dErr.USER_NOT_FOUND, 'User with specified creditionals is not found'));
                 } else {
                     cb(null, userId);
                 }
@@ -70,7 +69,7 @@ var _create = function(env, args, next) {
         function(userId, cb) {
             uuid.newGuid4(function(err, guid) {
                 if (err) {
-                    cb(dErrBuilder(dErr.INTERNAL_ERROR, err));
+                    cb(errBuilder(dErr.INTERNAL_ERROR, err));
                 } else {
                     cb(null, userId, guid);
                 }
@@ -86,7 +85,7 @@ var _create = function(env, args, next) {
             };
             dal.createAuthToken(toSave, function(err) {
                 if (err) {
-                    cb(dErrBuilder(dErr.INTERNAL_ERROR, err));
+                    cb(errBuilder(dErr.INTERNAL_ERROR, err));
                 } else {
                     cb(null, guid, expires);
                 }
