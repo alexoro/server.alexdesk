@@ -12,7 +12,6 @@ var domain = require('../domain');
 
 var errBuilder = require('./_errorBuilder');
 var validate = require('./_validation');
-var md5 = require('./_md5');
 
 
 var _validateArgsHasErrors = function(env, args) {
@@ -44,13 +43,7 @@ var _create = function(env, args, next) {
 
     var fnStack = [
         function(cb) {
-            md5(env.config.serviceUserPasswordSalt + args.password, function(err, passwordHash) {
-                if (err) {
-                    cb(err);
-                } else {
-                    cb(null, passwordHash);
-                }
-            });
+            env.passwordManager.hashServiceUserPassword(args.password, cb);
         },
         function(passwordHash, cb) {
             var creditionals = {
@@ -77,7 +70,15 @@ var _create = function(env, args, next) {
             });
         },
         function(userId, guid, cb) {
-            var expires = Date.now() + env.config.serviceUserTokenLifetime;
+            env.accessTokenConfig.getExpireTimeForServiceUser(function(err, expires) {
+                if (err) {
+                    cb(err);
+                } else {
+                    cb(null, userId, guid, expires);
+                }
+            });
+        },
+        function(userId, guid, expires, cb) {
             var toSave = {
                 token: guid,
                 user_type: dUserTypes.SERVICE_USER,
