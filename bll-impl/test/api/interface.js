@@ -9,7 +9,7 @@ var Api = require('../../').api;
 var mock = require('./mock/');
 
 
-describe('API Interface', function() {
+describe('API::Interface', function() {
 
     it('Check constructor', function() {
         assert.isFunction(Api, 'Constructor must be a function');

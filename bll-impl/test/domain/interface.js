@@ -8,7 +8,7 @@ var assert = require('chai').assert;
 var domain = require('../../').domain;
 
 
-describe('Domain Interface', function() {
+describe('Domain::Interface', function() {
     var iCountries;
     var iLanguages;
 
