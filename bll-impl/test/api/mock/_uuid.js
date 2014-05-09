@@ -5,11 +5,17 @@
 "use strict";
 
 
-module.exports = {
-    newBigInt: function(done) {
-        done(null, '1');
-    },
-    newGuid4: function(done) {
-        done(null, '6c1bd09f-ca96-438d-adee-ff4c7c1694ba');
-    }
+var UUID = function() {
+
 };
+
+UUID.prototype.newBigInt = function(done) {
+    done(null, '1');
+};
+
+UUID.prototype.newGuid4 = function(done) {
+    done(null, 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa');
+};
+
+
+module.exports = UUID;

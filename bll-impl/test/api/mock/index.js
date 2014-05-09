@@ -9,7 +9,7 @@ var Api = bllDef.api;
 
 var Dal = require('./_dal');
 var dataBuilder = require('./_data');
-var uuid = require('./_uuid');
+var Uuid = require('./_uuid');
 var cfg = require('./_cfg');
 
 module.exports = {
@@ -21,6 +21,8 @@ module.exports = {
 
         var data = dataBuilder.getCopy();
         var dal = new Dal(data);
+        var uuid = new Uuid();
+
         var env = {
             dal: override.dal || dal,
             uuid: override.uuid || uuid,

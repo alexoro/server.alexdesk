@@ -174,17 +174,16 @@ describe('API#security_createAuthTokenForServiceUser', function() {
 
     it('Check token is used from uuid-generator', function(doneTest) {
         var guid4 = '6c1bd09f-ca96-438d-adee-ff4c7c1694ba';
-        var uuid = {
-            newBigInt: function (done) {
-                done(null, '1');
-            },
-            newGuid4: function (done) {
-                done(null, guid4);
-            }
+        var UUID = function() {};
+        UUID.prototype.newBigInt = function(done) {
+            done(null, '1');
         };
+        UUID.prototype.newGuid4 = function(done) {
+            done(null, guid4);
+        };
+        var uuid = new UUID();
 
         var api = mockBuilder.newApiWithMock({uuid: uuid}).api;
-
         var reqArgs = argsBuilder('test@test.com', 'test@test.com');
         api.security_createAuthTokenForServiceUser(reqArgs, function(err, result) {
             if (err) {
@@ -196,17 +195,16 @@ describe('API#security_createAuthTokenForServiceUser', function() {
     });
 
     it('Check that not working uuid forces code to return INTERNAL_ERROR', function(doneTest) {
-        var uuid = {
-            newBigInt: function(done) {
-                done(new Error('Not implemented yet'));
-            },
-            newGuid4: function(done) {
-                done(new Error('Not implemented yet'));
-            }
+        var UUID = function() {};
+        UUID.prototype.newBigInt = function(done) {
+            done(new Error('Not implemented yet'));
         };
+        UUID.prototype.newGuid4 = function(done) {
+            done(new Error('Not implemented yet'));
+        };
+        var uuid = new UUID();
 
         var api = mockBuilder.newApiWithMock({uuid: uuid}).api;
-
         var reqArgs = argsBuilder('test@test.com', 'test@test.com');
         api.security_createAuthTokenForServiceUser(reqArgs, function(err, result) {
             if (!err || !err.number || err.number !== dErrors.INTERNAL_ERROR) {
