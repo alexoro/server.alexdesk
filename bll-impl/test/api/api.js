@@ -69,7 +69,7 @@ describe('API methods', function() {
 
         before(function() {
             try {
-                mockDal = new MockDal(require('./_mockData').getCopy());
+                mockDal = new MockDal(mockDataDef.getCopy());
                 // empty is specially here - check that method must work without it
                 api = new Api({dal: mockDal, uuid: {}, config: mockCfg});
             } catch(err) {
@@ -213,10 +213,8 @@ describe('API methods', function() {
         };
 
         before(function() {
-            defaultMockData = require('./_mockData').getCopy();
-
             try {
-                defaultMockDal = new MockDal(defaultMockData);
+                defaultMockDal = new MockDal(mockDataDef.getCopy());
             } catch(err) {
                 assert.fail('Unable to instantiate mock data and DAL: ' + err);
             }
