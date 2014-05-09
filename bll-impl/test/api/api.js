@@ -7,13 +7,14 @@
 var assert = require('chai').assert;
 var async = require('async');
 
-var uuidDef = require('../../../uuid-generator/src/main');
-
 var Api = require('../../src/index').api;
 var domain = require('../../').domain;
 var dErrors = domain.errors;
 
+var mockDataDef = require('./_mockData');
 var MockDal = require('./_mockDal');
+var mockUuidWorking = require('./_mockUuidWorking');
+var mockUuidError = require('./_mockUuidError');
 var validate = require('./_validation');
 
 
@@ -209,7 +210,7 @@ describe('API methods', function() {
             };
         };
 
-        before(function(doneBefore) {
+        before(function() {
             defaultMockData = require('./_mockData').getCopy();
 
             try {
@@ -218,14 +219,8 @@ describe('API methods', function() {
                 assert.fail('Unable to instantiate mock data and DAL: ' + err);
             }
 
-            defaultUuid = new uuidDef();
-            defaultUuid.init(defaultUuid.minNodeId, function(err) {
-                if (err) {
-                    return doneBefore(err);
-                }
-                defaultApi = new Api({dal: defaultMockDal, uuid: defaultUuid});
-                doneBefore();
-            });
+            defaultUuid = mockUuidWorking;
+            defaultApi = new Api({dal: defaultMockDal, uuid: defaultUuid});
         });
 
         it('Validate invalid arguments: all is invalid', function(doneTest) {
@@ -281,7 +276,7 @@ describe('API methods', function() {
         });
 
         it('Token must not be created in case of error', function(doneTest) {
-            var customMockData = require('./_mockData').getCopy();
+            var customMockData = mockDataDef.getCopy();
             var customMockDal = new MockDal(customMockData);
             var customApi = new Api({dal: customMockDal, uuid: defaultUuid});
             var currentTokensLength = customMockData.system_access_tokens.length;
@@ -351,50 +346,31 @@ describe('API methods', function() {
                         id: '1',
                         type: domain.userTypes.SERVICE_USER
                     };
-                    assert.deepEqual(matchUserMainInfo, resultUser, 'Expected application information and application in response is not match');
+                    assert.deepEqual(matchUserMainInfo, resultUser, 'Expected token and token in response are not match');
                     doneTest();
                 });
             });
         });
 
         it('Check token is used from uuid-generator', function(doneTest) {
-            var customToken = '6c1bd09f-ca96-438d-adee-ff4c7c1694ba';
-            var customUuid = {
-                newBigInt: function(done) {
-                    done(null, '1');
-                },
-                newGuid4: function(done) {
-                    done(null, customToken);
-                }
-            };
-
-            var customMockData = require('./_mockData').getCopy();
+            var customMockData = mockDataDef.getCopy();
             var customMockDal = new MockDal(customMockData);
-            var customApi = new Api({dal: customMockDal, uuid: customUuid});
+            var customApi = new Api({dal: customMockDal, uuid: mockUuidWorking});
 
             var reqArgs = argsBuilder('test@test.com', 'test@test.com');
             customApi.security_createAuthTokenForServiceUser(reqArgs, function(err, result) {
                 if (err) {
                     return doneTest(err);
                 }
-                assert.strictEqual(result.token, customToken, 'Module must use uuid generator. Provided token and result are not match');
+                assert.strictEqual(result.token, mockUuidWorking.guid4, 'Module must use uuid generator. Provided token and result are not match');
                 doneTest();
             });
         });
 
         it('Check that not working uuid forces code to return INTERNAL_ERROR', function(doneTest) {
-            var customUuid = {
-                newBigInt: function(done) {
-                    done(null, '1');
-                },
-                newGuid4: function(done) {
-                    done(new Error('Not implemented yet'));
-                }
-            };
-
-            var customMockData = require('./_mockData').getCopy();
+            var customMockData = mockDataDef.getCopy();
             var customMockDal = new MockDal(customMockData);
-            var customApi = new Api({dal: customMockDal, uuid: customUuid});
+            var customApi = new Api({dal: customMockDal, uuid: mockUuidError});
 
             var reqArgs = argsBuilder('test@test.com', 'test@test.com');
             customApi.security_createAuthTokenForServiceUser(reqArgs, function(err, result) {
@@ -405,7 +381,6 @@ describe('API methods', function() {
             });
         });
 
-        //TODO make mock uuid
         //TODO provide password hashing via funcion or bypass the SALT (think about salt version) as cfg
         //TODO provide expires via function or bypass period as cfg
     });
