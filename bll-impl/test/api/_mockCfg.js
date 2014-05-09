@@ -6,8 +6,8 @@
 
 
 module.exports = {
-    serviceUserPasswordSalt: '1',
-    appUserPasswordSalt: '1',
+    serviceUserPasswordSalt: '',
+    appUserPasswordSalt: '',
     serviceUserTokenLifetime: 1000 * 60 * 60 *24,
     appUserTokenLifetime: 1000 * 60 * 60 *24
 };

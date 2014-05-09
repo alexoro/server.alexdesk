@@ -27,24 +27,24 @@ var Api = function(env) {
     if (typeof env.config !== 'object' || !env.config) {
         throw new Error('Config is not defined');
     }
-    if (typeof env.config.serviceUserPasswordSalt !== 'string' || !env.config.serviceUserPasswordSalt) {
+    if (typeof env.config.serviceUserPasswordSalt !== 'string') {
         throw new Error('config:serviceUserPasswordSalt is not defined');
     }
-    if (typeof env.config.appUserPasswordSalt !== 'string' || !env.config.appUserPasswordSalt) {
+    if (typeof env.config.appUserPasswordSalt !== 'string') {
         throw new Error('config:appUserPasswordSalt is not defined');
     }
 
-    if (typeof env.config.serviceUserTokenLifetime !== 'number' || !env.config.serviceUserTokenLifetime) {
+    if (typeof env.config.serviceUserTokenLifetime !== 'number') {
         throw new Error('config:serviceUserTokenLifetime is not defined');
     }
-    if (typeof env.config.serviceUserTokenLifetime < 0) {
-        throw new Error('config:serviceUserTokenLifetime must >= 0');
+    if (env.config.serviceUserTokenLifetime < 0 || !isFinite(env.config.serviceUserTokenLifetime)) {
+        throw new Error('config:serviceUserTokenLifetime must >= 0 and finite');
     }
-    if (typeof env.config.appUserTokenLifetime !== 'number' || !env.config.appUserTokenLifetime) {
+    if (typeof env.config.appUserTokenLifetime !== 'number') {
         throw new Error('config:appUserTokenLifetime is not defined');
     }
-    if (typeof env.config.appUserTokenLifetime < 0) {
-        throw new Error('config:appUserTokenLifetime must >= 0');
+    if (typeof env.config.appUserTokenLifetime < 0 || !isFinite(env.config.appUserTokenLifetime)) {
+        throw new Error('config:appUserTokenLifetime must >= 0 and finite');
     }
 
     this.env = env;

@@ -36,10 +36,6 @@ var _validateArgsHasErrors = function(env, args) {
     }
 };
 
-var _generateExpires = function() {
-    return Date.now() + 1000 * 60 * 60 * 24 * 30 * 12;
-};
-
 var _create = function(env, args, next) {
     var dal = env.dal;
     var uuid = env.uuid;
@@ -48,7 +44,7 @@ var _create = function(env, args, next) {
 
     var fnStack = [
         function(cb) {
-            md5(args.password, function(err, passwordHash) {
+            md5(env.config.serviceUserPasswordSalt + args.password, function(err, passwordHash) {
                 if (err) {
                     cb(err);
                 } else {
@@ -81,7 +77,7 @@ var _create = function(env, args, next) {
             });
         },
         function(userId, guid, cb) {
-            var expires = _generateExpires();
+            var expires = Date.now() + env.config.serviceUserTokenLifetime;
             var toSave = {
                 token: guid,
                 user_type: dUserTypes.SERVICE_USER,
