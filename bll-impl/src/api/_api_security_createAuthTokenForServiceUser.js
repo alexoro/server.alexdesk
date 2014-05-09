@@ -36,10 +36,6 @@ var _validateArgsHasErrors = function(env, args) {
     }
 };
 
-var _hashPassword = function(password) {
-    return md5(password);
-};
-
 var _generateExpires = function() {
     return Date.now() + 1000 * 60 * 60 * 24 * 30 * 12;
 };
@@ -52,9 +48,18 @@ var _create = function(env, args, next) {
 
     var fnStack = [
         function(cb) {
+            md5(args.password, function(err, passwordHash) {
+                if (err) {
+                    cb(err);
+                } else {
+                    cb(null, passwordHash);
+                }
+            });
+        },
+        function(passwordHash, cb) {
             var creditionals = {
                 login: args.login,
-                passwordHash: _hashPassword(args.password)
+                passwordHash: passwordHash
             };
             dal.getServiceUserIdByCreditionals(creditionals, function(err, userId) {
                 if (err) {
