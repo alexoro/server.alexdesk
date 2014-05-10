@@ -1,7 +1,7 @@
 {
     "name": "api.alexdesk.com--uuid-generator",
     "version": "0.1.0",
-    "main": "./src/main.js",
+    "main": "./src/index.js",
 
     "dependencies": {
         "bignumber.js": "1.0.0",
