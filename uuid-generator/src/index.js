@@ -25,6 +25,8 @@ var Generator = function() {
     this._reserved = '0000';
     this._zerofills = {};
     this._nodeIdAsString = '';
+    this._incAsStrings = {};
+    this._reserved_and_nodeIdAsString = '';
 };
 
 Generator.prototype._pad = function(str, padToSize) {
@@ -73,14 +75,20 @@ Generator.prototype.init = function(nodeId, getMillisSinceEpoch, done) {
 
     setTimeout(function() {
         self._isInited = true;
+        var i = 0;
 
         self._zerofills[1] = '0';
-        for (var i = 2; i <= 41; i++) {
+        for (i = 2; i <= 41; i++) {
             self._zerofills[i] = '0' + self._zerofills[i-1];
+        }
+
+        for (i = 0; i < self._mod; i++) {
+            self._incAsStrings[i] = self._pad(i.toString(2), 10);
         }
 
         self._nodeId = nodeId;
         self._nodeIdAsString = self._pad(self._nodeId.toString(2), 8);
+        self._reserved_and_nodeIdAsString = self._reserved + self._nodeIdAsString;
 
         done(null);
     }, this._delayBeforeStart);
@@ -115,11 +123,11 @@ Generator.prototype.newBigInt = function(done) {
 
                 self._inc = (self._inc + 1) % self._mod;
                 var millis = self._pad(binaryResult, 42);
-                var incAsStr = self._pad(self._inc.toString(2), 10);
+//                var incAsStr = self._pad(self._inc.toString(2), 10);
 
                 var r;
                 try {
-                    r = new BigNumber(millis + self._reserved + self._nodeIdAsString + incAsStr, 2);
+                    r = new BigNumber(millis + self._reserved_and_nodeIdAsString + self._incAsStrings[self._inc], 2);
                 } catch (err) {
                     return done(new Error('Some invalid params. Cannot generate the ID: ' + err));
                 }
