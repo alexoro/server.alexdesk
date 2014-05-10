@@ -10,6 +10,6 @@ var common = require('./_common');
 module.exports = {
     "type": "object",
     "properties": {
-        "access_token": common.guid
+        "accessToken": common.guid
     }
 };
