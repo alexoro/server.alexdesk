@@ -23,18 +23,18 @@ var _validateArgsHasErrors = function(env, args) {
     if (typeof args !== 'object') {
         return errBuilder(dErr.INVALID_PARAMS, 'Arguments is not a object');
     }
-    if (args.app_id === undefined || args.login === undefined || args.password === undefined) {
-        return errBuilder(dErr.INVALID_PARAMS, 'Not all required fields are set: app_id or login or password');
+    if (args.appId === undefined || args.login === undefined || args.password === undefined) {
+        return errBuilder(dErr.INVALID_PARAMS, 'Not all required fields are set: appId or login or password');
     }
 
-    if (!validate.appId(args.app_id)) {
-        return errBuilder(dErr.INVALID_PARAMS, 'Invalid application id value: ' + args.app_id);
+    if (!validate.appId(args.appId)) {
+        return errBuilder(dErr.INVALID_PARAMS, 'Invalid application id value: ' + args.appId);
     }
     if (!validate.appUserLogin(args.login)) {
-        return errBuilder(dErr.INVALID_PARAMS, 'App user login must be a string with length [1,64]. Given: ' + args.app_id);
+        return errBuilder(dErr.INVALID_PARAMS, 'App user login must be a string with length [1,64]. Given: ' + args.login);
     }
     if (!validate.appUserPassword(args.password)) {
-        return errBuilder(dErr.INVALID_PARAMS, 'App user password must be a string with length [1, 64]. Given: ' + args.app_id);
+        return errBuilder(dErr.INVALID_PARAMS, 'App user password must be a string with length [1, 64]. Given: ' + args.password);
     }
 };
 
@@ -46,9 +46,9 @@ var _create = function(env, args, next) {
 
     var fnStack = [
         function(cb) {
-            env.dal.isAppExists(args.app_id, function(err, result) {
+            env.dal.isAppExists(args.appId, function(err, result) {
                 if (!result) {
-                    return cb(errBuilder(dErr.APP_NOT_FOUND, 'Application not found. #ID: ' + args.app_id));
+                    return cb(errBuilder(dErr.APP_NOT_FOUND, 'Application not found. #ID: ' + args.appId));
                 }
                 return cb();
             });
@@ -58,7 +58,7 @@ var _create = function(env, args, next) {
         },
         function(passwordHash, cb) {
             var creditionals = {
-                app_id: args.app_id,
+                app_id: args.appId,
                 login: args.login,
                 passwordHash: passwordHash
             };

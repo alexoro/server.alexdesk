@@ -22,11 +22,11 @@ var _validateArgsHasErrors = function(env, args) {
     if (typeof args !== 'object') {
         return errBuilder(dErr.INVALID_PARAMS, 'Arguments is not a object');
     }
-    if (args.access_token === undefined) {
+    if (args.accessToken === undefined) {
         return errBuilder(dErr.INVALID_PARAMS, 'Access token is not defined');
     }
-    if (!validate.accessToken(args.access_token)) {
-        return errBuilder(dErr.INVALID_PARAMS, 'Incorrect access token value: ' + args.access_token);
+    if (!validate.accessToken(args.accessToken)) {
+        return errBuilder(dErr.INVALID_PARAMS, 'Incorrect access token value: ' + args.accessToken);
     }
 };
 
@@ -40,11 +40,11 @@ var _appsFetching = function(env, args, next) {
 
     var fnStack = [
         function(cb) {
-            dal.getUserMainInfoByToken(args.access_token, function(err, result) {
+            dal.getUserMainInfoByToken(args.accessToken, function(err, result) {
                 if (err) {
                     cb(errBuilder(dErr.INTERNAL_ERROR, err));
                 } else if (!result) {
-                    cb(errBuilder(dErr.INVALID_OR_EXPIRED_TOKEN, 'Specified access token "' + args.access_token + '" is expired or invalid'));
+                    cb(errBuilder(dErr.INVALID_OR_EXPIRED_TOKEN, 'Specified access token "' + args.accessToken + '" is expired or invalid'));
                 } else {
                     user = result;
                     cb();
@@ -53,7 +53,7 @@ var _appsFetching = function(env, args, next) {
         },
         function(cb) {
             if (user.type !== dUserTypes.SERVICE_USER) {
-                cb(errBuilder(dErr.ACCESS_DENIED, 'Only service user has access to this command. Given access token is: ' + args.access_token));
+                cb(errBuilder(dErr.ACCESS_DENIED, 'Only service user has access to this command. Given access token is: ' + args.accessToken));
             } else {
                 cb();
             }

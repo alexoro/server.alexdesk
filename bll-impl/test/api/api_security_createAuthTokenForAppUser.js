@@ -16,7 +16,7 @@ var validate = require('./_validation');
 
 var argsBuilder = function(appId, login, password) {
     return {
-        app_id: appId, login: login, password: password
+        appId: appId, login: login, password: password
     };
 };
 

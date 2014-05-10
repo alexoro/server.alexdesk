@@ -35,6 +35,11 @@ DAL.prototype.getServiceUserIdByCreditionals = function(creditionals, done) {
 };
 
 DAL.prototype.getAppUserIdByCreditionals = function(creditionals, done) {
+    creditionals = {
+        app_id: creditionals.app_id,
+        login: creditionals.login,
+        passwordHash: creditionals.passwordHash
+    };
     var r = _.findWhere(this.mock.app_users, creditionals);
     if (!r) {
         done(null, null);
