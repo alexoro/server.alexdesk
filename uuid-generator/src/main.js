@@ -7,6 +7,11 @@
 var BigNumber = require('bignumber.js');
 var uuid = require('node-uuid');
 
+//TODO replace this shit 'overrite' and '_startDateMillis' with constructor arg function getMillisSinceEpoch
+//TODO rewrite tests
+//TODO try to make this class prototype based
+
+//TODO возможно, первый пункт слишком выносит логику класса за его пределы. Может, достотаточно просто начало эпохи и переопределять приватную функцию
 
 var Generator = function() {
     this.minNodeId = 0;
