@@ -47,6 +47,10 @@ Api.prototype.apps_list = function(args, next) {
     this._before(api_apps_list, args, next);
 };
 
+Api.prototype.hd_conversationCreate = function(args, next) {
+    next(null, null);
+};
+
 Api.prototype.hd_conversationsList = function(args, next) {
     next(null, null);
 };
@@ -67,11 +71,11 @@ Api.prototype.security_createAuthTokenForAppUser = function(args, next) {
     this._before(api_security_createAuthTokenForAppUser, args, next);
 };
 
-Api.prototype.users_init = function(args, next) {
+Api.prototype.serviceUsers_register = function(args, next) {
     next(null, null);
 };
 
-Api.prototype.users_register = function(args, next) {
+Api.prototype.appUsers_init = function(args, next) {
     next(null, null);
 };
 

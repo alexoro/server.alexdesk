@@ -33,6 +33,10 @@ describe('API::Interface', function() {
         assert.isFunction(api.hd_conversationsList, 'hd_conversationsList must be a function');
         assert.equal(api.hd_conversationsList.length, 2, 'hd_conversationsList must receive 2 arguments only');
 
+        assert.isDefined(api.hd_conversationCreate, 'hd_conversationCreate function is not exists');
+        assert.isFunction(api.hd_conversationCreate, 'hd_conversationCreate must be a function');
+        assert.equal(api.hd_conversationCreate.length, 2, 'hd_conversationCreate must receive 2 arguments only');
+
         assert.isDefined(api.hd_messageCreate, 'hd_messageCreate function is not exists');
         assert.isFunction(api.hd_messageCreate, 'hd_messageCreate must be a function');
         assert.equal(api.hd_messageCreate.length, 2, 'hd_messageCreate must receive 2 arguments only');
@@ -49,13 +53,13 @@ describe('API::Interface', function() {
         assert.isFunction(api.security_createAuthTokenForServiceUser, 'security_createAuthTokenForAppUser must be a function');
         assert.equal(api.security_createAuthTokenForServiceUser.length, 2, 'security_createAuthTokenForAppUser must receive 2 arguments only');
 
-        assert.isDefined(api.users_init, 'users_init function is not exists');
-        assert.isFunction(api.users_init, 'users_init must be a function');
-        assert.equal(api.users_init.length, 2, 'users_init must receive 2 arguments only');
+        assert.isDefined(api.serviceUsers_register, 'serviceUsers_register function is not exists');
+        assert.isFunction(api.serviceUsers_register, 'serviceUsers_register must be a function');
+        assert.equal(api.serviceUsers_register.length, 2, 'serviceUsers_register must receive 2 arguments only');
 
-        assert.isDefined(api.users_register, 'users_register function is not exists');
-        assert.isFunction(api.users_register, 'users_register must be a function');
-        assert.equal(api.users_register.length, 2, 'users_register must receive 2 arguments only');
+        assert.isDefined(api.appUsers_init, 'appUsers_init function is not exists');
+        assert.isFunction(api.appUsers_init, 'appUsers_init must be a function');
+        assert.equal(api.appUsers_init.length, 2, 'appUsers_init must receive 2 arguments only');
     });
 
 });
