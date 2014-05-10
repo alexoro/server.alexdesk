@@ -11,36 +11,10 @@ var BigNumber = require('bignumber.js');
 var genDef = require('../');
 
 
-describe('Interface', function() {
-    it('Test module interface', function() {
-        assert.isFunction(genDef, 'Module must provide the constructor-function via require');
-
-        var gen = new genDef();
-
-        assert.isFunction(gen.getMinNodeId, '#getMinNodeId is not defined');
-        assert.operator(gen.getMinNodeId(), '>=', 0, '#getMinNodeId must return number greater or equal the 0');
-
-        assert.isFunction(gen.getMaxNodeId, '#getMaxNodeId is not defined');
-        assert.operator(gen.getMaxNodeId(), '>=', 0, '#getMaxNodeId must return number less or equal to the 255');
-
-        assert.operator(gen.getMinNodeId(), '<=', gen.getMaxNodeId(), '#getMinNodeId must be <= #getMaxNodeId');
-
-        assert.isFunction(gen.init, 'init method is not a function');
-        assert.lengthOf(gen.init, 3, 'init method must accept 3 arguments');
-
-        assert.property(gen, 'newBigInt', 'newBigInt method is not defined');
-        assert.isFunction(gen.newBigInt, 'newBigInt method is not a function');
-
-        assert.property(gen, 'newGuid4', 'newGuid4 method is not defined');
-        assert.isFunction(gen.newGuid4, 'newGuid4 method is not a function');
-    });
-});
-
-
-describe('Logic', function() {
+describe('Implementation', function() {
 
     describe('#init', function() {
-        it('Should accept only numbers', function(doneTest) {
+        it('Should accept only numbers as nodeId', function(doneTest) {
             var gen = new genDef();
             gen.init({}, null, function(err) {
                 if (!err) {
@@ -50,7 +24,7 @@ describe('Logic', function() {
             });
         });
 
-        it('Should not accept ids < minNodeId', function(doneTest) {
+        it('Should not accept node ids < minNodeId', function(doneTest) {
             var gen = new genDef();
             gen.init(gen.getMinNodeId()-1, null, function(err) {
                 if (!err) {
@@ -60,21 +34,11 @@ describe('Logic', function() {
             });
         });
 
-        it('Should not accept ids > maxNodeId', function(doneTest) {
+        it('Should not accept node ids > maxNodeId', function(doneTest) {
             var gen = new genDef();
             gen.init(gen.getMaxNodeId()+1, null, function(err) {
                 if (!err) {
                     assert.fail('Init must not process nodeIds which are > maxNodeId');
-                }
-                doneTest();
-            });
-        });
-
-        it('Should work', function(doneTest) {
-            var gen = new genDef();
-            gen.init(gen.getMinNodeId(), null, function(err) {
-                if (err) {
-                    assert.fail('Init failed with valid nodeId');
                 }
                 doneTest();
             });
@@ -95,10 +59,20 @@ describe('Logic', function() {
                 }
             });
         });
+
+        it('Must pass the call', function(doneTest) {
+            var gen = new genDef();
+            gen.init(gen.getMinNodeId(), null, function(err) {
+                if (err) {
+                    assert.fail('Init failed with valid nodeId');
+                }
+                doneTest();
+            });
+        });
     });
 
     describe('#newBigInt', function() {
-        it('Should not be working before call of #init', function(doneTest) {
+        it('Should not work before call of #init', function(doneTest) {
             var gen = new genDef();
             gen.newBigInt(function(err, result) {
                 if (!err) {
@@ -123,7 +97,7 @@ describe('Logic', function() {
             ];
         };
 
-        it('Check result', function(doneTest) {
+        it('Must produce valid result', function(doneTest) {
             var gen = new genDef();
             var nodeId = gen.getMinNodeId();
             var fnGetMillisSinceEpoch = function(done) {
@@ -162,7 +136,7 @@ describe('Logic', function() {
             });
         });
 
-        it('Check result is not passing with invalid millis', function(doneTest) {
+        it('Must not pass with invalid/very big millis', function(doneTest) {
             var gen = new genDef();
             var nodeId = gen.getMinNodeId();
             var fnGetMillisSinceEpoch = function(done) {
@@ -182,7 +156,7 @@ describe('Logic', function() {
             });
         });
 
-        it('Check result is incrementing', function(doneTest) {
+        it('Result must increment', function(doneTest) {
             var gen = new genDef();
             var nodeId = gen.getMinNodeId();
             var fnGetMillisSinceEpoch = function(done) {
@@ -214,7 +188,7 @@ describe('Logic', function() {
             });
         });
 
-        it('Check increment is switched to 0 after 1026 calls', function(doneTest) {
+        it('Increment must switch to 0 after 1024 calls', function(doneTest) {
             var gen = new genDef();
             var nodeId = gen.getMinNodeId();
             var fnGetMillisSinceEpoch = function(done) {
@@ -253,7 +227,7 @@ describe('Logic', function() {
             });
         });
 
-        it('Check increment works well with many sequential calls', function(doneTest) {
+        it('Increment must works well with many sequential calls', function(doneTest) {
             var gen = new genDef();
             var nodeId = gen.getMinNodeId();
             var fnGetMillisSinceEpoch = function(done) {
@@ -338,7 +312,7 @@ describe('Logic', function() {
     });
 
     describe('#newGuid4', function() {
-        it('Should not be working before call of #init', function(doneTest) {
+        it('Must not work before call of #init', function(doneTest) {
             var gen = new genDef();
             gen.newGuid4(function(err, result) {
                 if (!err) {
@@ -348,7 +322,7 @@ describe('Logic', function() {
             });
         });
 
-        it('Check result', function(doneTest) {
+        it('Must return valid result', function(doneTest) {
             var gen = new genDef();
             var nodeId = gen.getMinNodeId();
 
@@ -368,7 +342,7 @@ describe('Logic', function() {
             });
         });
 
-        it('Check #newGuid4 works well with many sequential calls', function(doneTest) {
+        it('Must work well with many sequential calls', function(doneTest) {
             var gen = new genDef();
             var nodeId = gen.getMinNodeId();
 
