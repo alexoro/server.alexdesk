@@ -17,31 +17,22 @@ describe('Interface', function() {
 
         var gen = new genDef();
 
-        assert.property(gen, 'minNodeId', 'minNodeId property is not defined');
-        assert.isNumber(gen.minNodeId, 'minNodeId must be a number');
-        assert.operator(gen.minNodeId, '>=', 0, 'minNodeId must be greater or equal the 0');
+        assert.isFunction(gen.getMinNodeId, '#getMinNodeId is not defined');
+        assert.operator(gen.getMinNodeId(), '>=', 0, '#getMinNodeId must return number greater or equal the 0');
 
-        assert.property(gen, 'maxNodeId', 'maxNodeId property is not defined');
-        assert.isNumber(gen.maxNodeId, 'maxNodeId must be a number');
-        assert.operator(gen.maxNodeId, '>=', 0, 'maxNodeId must be greater or equal the 0');
+        assert.isFunction(gen.getMaxNodeId, '#getMaxNodeId is not defined');
+        assert.operator(gen.getMaxNodeId(), '>=', 0, '#getMaxNodeId must return number less or equal to the 255');
 
-        assert.operator(gen.maxNodeId, '>=', gen.minNodeId, 'maxNodeId must be >= minNodeId');
+        assert.operator(gen.getMinNodeId(), '<=', gen.getMaxNodeId(), '#getMinNodeId must be <= #getMaxNodeId');
 
-        assert.property(gen, 'init', 'init method is not defined');
         assert.isFunction(gen.init, 'init method is not a function');
-        assert.lengthOf(gen.init, 2, 'init method must accept 1 argument');
+        assert.lengthOf(gen.init, 3, 'init method must accept 3 arguments');
 
         assert.property(gen, 'newBigInt', 'newBigInt method is not defined');
         assert.isFunction(gen.newBigInt, 'newBigInt method is not a function');
 
         assert.property(gen, 'newGuid4', 'newGuid4 method is not defined');
         assert.isFunction(gen.newGuid4, 'newGuid4 method is not a function');
-
-        assert.property(gen, 'getStartDateMillis', 'getStartDateMillis method is not defined');
-        assert.isFunction(gen.getStartDateMillis, 'getStartDateMillis method is not a function');
-
-        assert.property(gen, 'overrideGetTimeMillisFunction', 'overrideGetTimeMillisFunction method is not defined');
-        assert.isFunction(gen.overrideGetTimeMillisFunction, 'overrideGetTimeMillisFunction method is not a function');
     });
 });
 
@@ -51,9 +42,9 @@ describe('Logic', function() {
     describe('#init', function() {
         it('Should accept only numbers', function(doneTest) {
             var gen = new genDef();
-            gen.init({}, function(err) {
+            gen.init({}, null, function(err) {
                 if (!err) {
-                    assert.fail('Init must accept only numbers');
+                    assert.fail('Init must accept only numbers in nodeId');
                 }
                 doneTest();
             });
@@ -61,7 +52,7 @@ describe('Logic', function() {
 
         it('Should not accept ids < minNodeId', function(doneTest) {
             var gen = new genDef();
-            gen.init(gen.minNodeId-1, function(err) {
+            gen.init(gen.getMinNodeId()-1, null, function(err) {
                 if (!err) {
                     assert.fail('Init must not process nodeIds which are < minNodeId');
                 }
@@ -71,7 +62,7 @@ describe('Logic', function() {
 
         it('Should not accept ids > maxNodeId', function(doneTest) {
             var gen = new genDef();
-            gen.init(gen.maxNodeId+1, function(err) {
+            gen.init(gen.getMaxNodeId()+1, null, function(err) {
                 if (!err) {
                     assert.fail('Init must not process nodeIds which are > maxNodeId');
                 }
@@ -81,7 +72,7 @@ describe('Logic', function() {
 
         it('Should work', function(doneTest) {
             var gen = new genDef();
-            gen.init(gen.minNodeId, function(err) {
+            gen.init(gen.getMinNodeId(), null, function(err) {
                 if (err) {
                     assert.fail('Init failed with valid nodeId');
                 }
@@ -91,11 +82,11 @@ describe('Logic', function() {
 
         it('Must be called only once', function(doneTest) {
             var gen = new genDef();
-            gen.init(gen.minNodeId, function(err) {
+            gen.init(gen.getMinNodeId(), null, function(err) {
                 if (err) {
                     doneTest(err);
                 } else {
-                    gen.init(gen.minNodeId, function(err) {
+                    gen.init(gen.getMinNodeId(), null, function(err) {
                         if (!err) {
                             assert.fail('Init must not be called twice');
                         }
@@ -134,13 +125,12 @@ describe('Logic', function() {
 
         it('Check result', function(doneTest) {
             var gen = new genDef();
-            var nodeId = gen.minNodeId;
+            var nodeId = gen.getMinNodeId();
+            var fnGetMillisSinceEpoch = function(done) {
+                done(null, 1);
+            };
 
-            gen.overrideGetTimeMillisFunction(function() {
-                return 1;
-            });
-
-            gen.init(nodeId, function(errInit) {
+            gen.init(nodeId, fnGetMillisSinceEpoch, function(errInit) {
                 if (errInit) {
                     return doneTest(errInit);
                 }
@@ -174,13 +164,12 @@ describe('Logic', function() {
 
         it('Check result is not passing with invalid millis', function(doneTest) {
             var gen = new genDef();
-            var nodeId = gen.minNodeId;
+            var nodeId = gen.getMinNodeId();
+            var fnGetMillisSinceEpoch = function(done) {
+                done(null, 99999999999999999999);
+            };
 
-            gen.overrideGetTimeMillisFunction(function() {
-                return 9999999999999;
-            });
-
-            gen.init(nodeId, function(errInit) {
+            gen.init(nodeId, fnGetMillisSinceEpoch, function(errInit) {
                 if (errInit) {
                     return doneTest(errInit);
                 }
@@ -195,13 +184,12 @@ describe('Logic', function() {
 
         it('Check result is incrementing', function(doneTest) {
             var gen = new genDef();
-            var nodeId = gen.minNodeId;
+            var nodeId = gen.getMinNodeId();
+            var fnGetMillisSinceEpoch = function(done) {
+                done(null, 1);
+            };
 
-            gen.overrideGetTimeMillisFunction(function() {
-                return 1;
-            });
-
-            gen.init(nodeId, function(errInit) {
+            gen.init(nodeId, fnGetMillisSinceEpoch, function(errInit) {
                 if (errInit) {
                     return doneTest(errInit);
                 }
@@ -228,13 +216,12 @@ describe('Logic', function() {
 
         it('Check increment is switched to 0 after 1026 calls', function(doneTest) {
             var gen = new genDef();
-            var nodeId = gen.minNodeId;
+            var nodeId = gen.getMinNodeId();
+            var fnGetMillisSinceEpoch = function(done) {
+                done(null, 1);
+            };
 
-            gen.overrideGetTimeMillisFunction(function() {
-                return 1;
-            });
-
-            gen.init(nodeId, function(errInit) {
+            gen.init(nodeId, fnGetMillisSinceEpoch, function(errInit) {
                 if (errInit) {
                     return doneTest(errInit);
                 }
@@ -268,13 +255,12 @@ describe('Logic', function() {
 
         it('Check increment works well with many sequential calls', function(doneTest) {
             var gen = new genDef();
-            var nodeId = gen.minNodeId;
+            var nodeId = gen.getMinNodeId();
+            var fnGetMillisSinceEpoch = function(done) {
+                done(null, 1);
+            };
 
-            gen.overrideGetTimeMillisFunction(function() {
-                return 1;
-            });
-
-            gen.init(nodeId, function(errInit) {
+            gen.init(nodeId, fnGetMillisSinceEpoch, function(errInit) {
                 if (errInit) {
                     return doneTest(errInit);
                 }
@@ -308,40 +294,11 @@ describe('Logic', function() {
             });
         });
 
-        it('Optional: test that created id millis part is between 10 seconds', function(doneTest) {
-            var gen = new genDef();
-            var nodeId = gen.minNodeId;
-
-            gen.init(nodeId, function(errInit) {
-                if (errInit) {
-                    return doneTest(errInit);
-                }
-                gen.newBigInt(function(err, result) {
-                    if (err) {
-                        return doneTest(err);
-                    }
-
-                    var splitted = split(result);
-                    var millisBinary = splitted[0];
-
-                    var millis = parseInt(millisBinary ,2);
-                    var before = Date.now() - gen.getStartDateMillis() - 5000;
-                    var after = Date.now() - gen.getStartDateMillis() + 5000;
-
-                    if (millis < before || millis > after) {
-                        assert.fail('The result millis is not in range: ' + before + ' < ' + millis + ' < ' + after);
-                    }
-
-                    doneTest();
-                });
-            });
-        });
-
         it('Optional: check #newBigInt for collisions on 1kk calls', function(doneTest) {
             var gen = new genDef();
-            var nodeId = gen.minNodeId;
+            var nodeId = gen.getMinNodeId();
 
-            gen.init(nodeId, function(errInit) {
+            gen.init(nodeId, null, function(errInit) {
                 if (errInit) {
                     return doneTest(errInit);
                 }
@@ -393,9 +350,9 @@ describe('Logic', function() {
 
         it('Check result', function(doneTest) {
             var gen = new genDef();
-            var nodeId = gen.minNodeId;
+            var nodeId = gen.getMinNodeId();
 
-            gen.init(nodeId, function(errInit) {
+            gen.init(nodeId, null, function(errInit) {
                 if (errInit) {
                     return doneTest(errInit);
                 }
@@ -413,9 +370,9 @@ describe('Logic', function() {
 
         it('Check #newGuid4 works well with many sequential calls', function(doneTest) {
             var gen = new genDef();
-            var nodeId = gen.minNodeId;
+            var nodeId = gen.getMinNodeId();
 
-            gen.init(nodeId, function(errInit) {
+            gen.init(nodeId, null, function(errInit) {
                 if (errInit) {
                     return doneTest(errInit);
                 }
@@ -441,9 +398,9 @@ describe('Logic', function() {
 
         it('Optional: check #newGuid4 for collisions on 1kk calls', function(doneTest) {
             var gen = new genDef();
-            var nodeId = gen.minNodeId;
+            var nodeId = gen.getMinNodeId();
 
-            gen.init(nodeId, function(errInit) {
+            gen.init(nodeId, null, function(errInit) {
                 if (errInit) {
                     return doneTest(errInit);
                 }
