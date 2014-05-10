@@ -23,15 +23,18 @@ var _validateArgsHasErrors = function(env, args) {
     if (typeof args !== 'object') {
         return errBuilder(dErr.INVALID_PARAMS, 'Arguments is not a object');
     }
-    if (args.login === undefined || args.password === undefined) {
-        return errBuilder(dErr.INVALID_PARAMS, 'Not all required fields are set: login or password');
+    if (args.app_id === undefined || args.login === undefined || args.password === undefined) {
+        return errBuilder(dErr.INVALID_PARAMS, 'Not all required fields are set: app_id or login or password');
     }
 
-    if (!validate.email(args.login)) {
-        return errBuilder(dErr.INVALID_PARAMS, 'Service user login must be in email format');
+    if (!validate.appId(args.app_id)) {
+        return errBuilder(dErr.INVALID_PARAMS, 'Invalid application id value: ' + args.app_id);
     }
-    if (!validate.serviceUserPassword(args.password)) {
-        return errBuilder(dErr.INVALID_PARAMS, 'Password must be a string with length [1, 64]');
+    if (!validate.appUserLogin(args.login)) {
+        return errBuilder(dErr.INVALID_PARAMS, 'App user login must be a string with length [1,64]. Given: ' + args.app_id);
+    }
+    if (!validate.appUserPassword(args.password)) {
+        return errBuilder(dErr.INVALID_PARAMS, 'App user password must be a string with length [1, 64]. Given: ' + args.app_id);
     }
 };
 
@@ -43,14 +46,23 @@ var _create = function(env, args, next) {
 
     var fnStack = [
         function(cb) {
-            env.passwordManager.hashServiceUserPassword(args.password, cb);
+            env.dal.isAppExists(args.app_id, function(err, result) {
+                if (!result) {
+                    return cb(errBuilder(dErr.APP_NOT_FOUND, 'Application not found. #ID: ' + args.app_id));
+                }
+                return cb();
+            });
+        },
+        function(cb) {
+            env.passwordManager.hashAppUserPassword(args.password, cb);
         },
         function(passwordHash, cb) {
             var creditionals = {
+                app_id: args.app_id,
                 login: args.login,
                 passwordHash: passwordHash
             };
-            dal.getServiceUserIdByCreditionals(creditionals, function(err, userId) {
+            dal.getAppUserIdByCreditionals(creditionals, function(err, userId) {
                 if (err) {
                     cb(errBuilder(dErr.INTERNAL_ERROR, err));
                 } else if (!userId) {
@@ -70,7 +82,7 @@ var _create = function(env, args, next) {
             });
         },
         function(userId, guid, cb) {
-            env.accessTokenConfig.getExpireTimeForServiceUser(function(err, expires) {
+            env.accessTokenConfig.getExpireTimeForAppUser(function(err, expires) {
                 if (err) {
                     cb(err);
                 } else {
@@ -81,7 +93,7 @@ var _create = function(env, args, next) {
         function(userId, guid, expires, cb) {
             var toSave = {
                 token: guid,
-                user_type: dUserTypes.SERVICE_USER,
+                user_type: dUserTypes.APP_USER,
                 user_id: userId,
                 expires: expires
             };

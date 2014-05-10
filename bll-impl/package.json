@@ -6,7 +6,7 @@
     "dependencies": {
         "async": "0.7.0",
         "underscore": "1.6.0",
-        "tv4": "1.0.17"
+        "bignumber.js": "1.0.0"
     },
     "devDependencies": {
         "chai": "^1.9.1",

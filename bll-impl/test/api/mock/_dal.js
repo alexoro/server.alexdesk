@@ -16,12 +16,30 @@ var DAL = function(mockData) {
     this.mock = mockData;
 };
 
+DAL.prototype.isAppExists = function(appId, done) {
+    var r = _.findWhere(this.mock.apps, {id: appId});
+    if (!r) {
+        done(null, false);
+    } else {
+        done(null, true);
+    }
+};
+
 DAL.prototype.getServiceUserIdByCreditionals = function(creditionals, done) {
     var r = _.findWhere(this.mock.users, creditionals);
     if (!r) {
         done(null, null);
     } else {
         done(null, r.id);
+    }
+};
+
+DAL.prototype.getAppUserIdByCreditionals = function(creditionals, done) {
+    var r = _.findWhere(this.mock.app_users, creditionals);
+    if (!r) {
+        done(null, null);
+    } else {
+        done(null, r.app_user_id);
     }
 };
 

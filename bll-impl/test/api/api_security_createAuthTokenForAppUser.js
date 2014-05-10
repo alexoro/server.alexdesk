@@ -64,7 +64,7 @@ describe('API#security_createAuthTokenForAppUser', function() {
                 api.security_createAuthTokenForAppUser(argsBuilder('', null, null), cb);
             },
             function(cb) {
-                api.security_createAuthTokenForAppUser(argsBuilder('xxx@xx:com', null), cb);
+                api.security_createAuthTokenForAppUser(argsBuilder('xxx@xx:com', null, null), cb);
             },
             function(cb) {
                 var appId = '0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789';

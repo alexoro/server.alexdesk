@@ -74,7 +74,7 @@ var mock = {
             app_user_id: '2',
             app_id: '1',
             login: 'test1',
-            password: '5a105e8b9d40e1329780d62ea2265d8a',
+            passwordHash: '5a105e8b9d40e1329780d62ea2265d8a',
             name: 'Test user #1',
             registered: new Date('2012-05-01 13:00:00 +00:00'),
             last_visit: new Date('2012-05-01 13:26:00 +00:00')
@@ -83,7 +83,7 @@ var mock = {
             app_user_id: '3',
             app_id: '1',
             login: 'test2',
-            password: 'ad0234829205b9033196ba818f7a872b',
+            passwordHash: 'ad0234829205b9033196ba818f7a872b',
             name: 'Test user #2',
             registered: new Date('2012-05-01 13:05:00 +00:00'),
             last_visit: new Date('2012-05-01 13:50:00 +00:00')

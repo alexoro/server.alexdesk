@@ -9,6 +9,7 @@ var domain = require('../domain');
 var errBuilder = require('./_errorBuilder');
 var api_apps_list = require('./_api_apps_list');
 var api_security_createAuthTokenForServiceUser = require('./_api_security_createAuthTokenForServiceUser');
+var api_security_createAuthTokenForAppUser = require('./_api_security_createAuthTokenForAppUser');
 
 
 var Api = function(env) {
@@ -63,7 +64,7 @@ Api.prototype.security_createAuthTokenForServiceUser = function(args, next) {
 };
 
 Api.prototype.security_createAuthTokenForAppUser = function(args, next) {
-    next(null, null);
+    this._before(api_security_createAuthTokenForAppUser, args, next);
 };
 
 Api.prototype.users_init = function(args, next) {
