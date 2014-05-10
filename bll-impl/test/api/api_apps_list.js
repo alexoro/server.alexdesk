@@ -152,18 +152,18 @@ describe('API#apps_list', function() {
 
                 var matchApp = {
                     id: '1',
-                    platform_type: domain.platforms.ANDROID,
+                    platformType: domain.platforms.ANDROID,
                     title: 'Test App',
                     created: new Date('2014-05-01 13:00:00 +04:00'),
-                    is_approved: true,
-                    is_blocked: false,
-                    is_deleted: false,
+                    isApproved: true,
+                    isBlocked: false,
+                    isDeleted: false,
                     extra: {
                         package: 'com.testapp'
                     },
-                    number_of_chats: 3,
-                    number_of_all_messages: 8,
-                    number_of_unread_messages: 1
+                    numberOfChats: 3,
+                    numberOfAllMessages: 8,
+                    numberOfUnreadMessages: 1
                 };
 
                 assert.deepEqual(apps[0], matchApp, 'Expected application information and application in response is not match');

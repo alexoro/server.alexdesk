@@ -58,7 +58,7 @@ var _create = function(env, args, next) {
         },
         function(passwordHash, cb) {
             var creditionals = {
-                app_id: args.appId,
+                appId: args.appId,
                 login: args.login,
                 passwordHash: passwordHash
             };
@@ -93,8 +93,8 @@ var _create = function(env, args, next) {
         function(userId, guid, expires, cb) {
             var toSave = {
                 token: guid,
-                user_type: dUserTypes.APP_USER,
-                user_id: userId,
+                userType: dUserTypes.APP_USER,
+                userId: userId,
                 expires: expires
             };
             dal.createAuthToken(toSave, function(err) {

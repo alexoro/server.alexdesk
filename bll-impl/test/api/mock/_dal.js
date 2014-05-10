@@ -35,39 +35,28 @@ DAL.prototype.getServiceUserIdByCreditionals = function(creditionals, done) {
 };
 
 DAL.prototype.getAppUserIdByCreditionals = function(creditionals, done) {
-    creditionals = {
-        app_id: creditionals.app_id,
-        login: creditionals.login,
-        passwordHash: creditionals.passwordHash
-    };
     var r = _.findWhere(this.mock.app_users, creditionals);
     if (!r) {
         done(null, null);
     } else {
-        done(null, r.app_user_id);
+        done(null, r.appUserId);
     }
 };
 
 DAL.prototype.createAuthToken = function(args, done) {
-    var obj = {
-        token: args.token,
-        user_type: args.user_type,
-        user_id: args.user_id,
-        expires: args.expires
-    };
-    this.mock.system_access_tokens.push(obj);
+    this.mock.system_access_tokens.push(args);
     done(null);
 };
 
-DAL.prototype.getUserMainInfoByToken = function(accessToken, done) {
-    var r = _.findWhere(this.mock.system_access_tokens, {token: accessToken});
+DAL.prototype.getUserMainInfoByToken = function(token, done) {
+    var r = _.findWhere(this.mock.system_access_tokens, {token: token});
     if (r) {
         var dateNow = new Date();
         var dateUser = r.expires;
         if (dateNow.getTime() >= dateUser) {
             return done(null, null);
         } else {
-            return done(null, {type: r.user_type, id: r.user_id});
+            return done(null, {type: r.userType, id: r.userId});
         }
     } else {
         return done(null, null);
@@ -78,13 +67,13 @@ DAL.prototype.getAppsList = function(userId, done) {
     var self = this;
     var err;
 
-    var appsIds = _.where(this.mock.app_acl, {user_id: userId});
+    var appsIds = _.where(this.mock.app_acl, {userId: userId});
     var apps = [];
 
     utils.forEach(appsIds, function(item) {
-        var app = _.findWhere(self.mock.apps, {id: item.app_id});
+        var app = _.findWhere(self.mock.apps, {id: item.appId});
         if (!app) {
-            err = domain.errorBuilder(domain.errors.LOGIC_ERROR, 'We found owner for application, but this application is not exists');
+            err = new Error('We found owner for application, but this application is not exists');
             return false;
         } else {
             apps.push(app);
@@ -95,10 +84,10 @@ DAL.prototype.getAppsList = function(userId, done) {
     }
 
     utils.forEach(apps, function(app) {
-        if (app.platform_type === dPlatforms.ANDROID) {
-            var extra = _.findWhere(self.mock.app_info_extra_android, {app_id: app.id});
+        if (app.platformType === dPlatforms.ANDROID) {
+            var extra = _.findWhere(self.mock.app_info_extra_android, {appId: app.id});
             if (!extra) {
-                err = domain.errorBuilder(domain.errors.LOGIC_ERROR, 'We found the android application, but extra information did not found');
+                err = new Error('We found the android application, but extra information did not found');
                 return false;
             } else {
                 app.extra = {
@@ -120,7 +109,7 @@ DAL.prototype.getNumberOfChats = function(appIds, done) {
     var self = this;
     var r = {};
     utils.forEach(appIds, function(item) {
-        r[item] = _.where(self.mock.chats, {app_id: item}).length;
+        r[item] = _.where(self.mock.chats, {appId: item}).length;
     });
     done(null, r);
 };
@@ -129,7 +118,7 @@ DAL.prototype.getNumberOfAllMessages = function(appIds, done) {
     var self = this;
     var r = {};
     utils.forEach(appIds, function(item) {
-        r[item] = _.where(self.mock.chat_messages, {app_id: item}).length;
+        r[item] = _.where(self.mock.chat_messages, {appId: item}).length;
     });
     done(null, r);
 };
@@ -138,18 +127,18 @@ DAL.prototype.getNumberOfUnreadMessages = function(appIds, userType, userId, don
     var self = this;
 
     var chatsLastVisit = {};
-    _.where(this.mock.chat_participants, {user_type: userType, user_id: userId}).forEach(function(item) {
-        chatsLastVisit[item.chat_id] = new Date(item.last_visit);
+    _.where(this.mock.chat_participants, {userType: userType, userId: userId}).forEach(function(item) {
+        chatsLastVisit[item.chatId] = new Date(item.lastVisit);
     });
 
     var r = {};
     utils.forEach(appIds, function(appId) {
         r[appId] = 0;
         utils.forEach(self.mock.chat_messages, function(message) {
-            if (message.app_id === appId &&
-                message.user_creator_type !== userType &&
-                message.user_creator_id !== userId &&
-                chatsLastVisit[message.chat_id].getTime() < message.created.getTime()) {
+            if (message.appId === appId &&
+                message.userCreatorType !== userType &&
+                message.userCreatorId !== userId &&
+                chatsLastVisit[message.chatId].getTime() < message.created.getTime()) {
                 r[appId]++;
             }
         });

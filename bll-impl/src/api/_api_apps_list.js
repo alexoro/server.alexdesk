@@ -78,7 +78,7 @@ var _appsFetching = function(env, args, next) {
                     cb(errBuilder(dErr.INTERNAL_ERROR, err));
                 } else {
                     _.keys(result).forEach(function(item) {
-                        apps[item].number_of_chats = result[item];
+                        apps[item].numberOfChats = result[item];
                     });
                     cb();
                 }
@@ -90,7 +90,7 @@ var _appsFetching = function(env, args, next) {
                     cb(errBuilder(dErr.INTERNAL_ERROR, err));
                 } else {
                     _.keys(result).forEach(function(item) {
-                        apps[item].number_of_all_messages = result[item];
+                        apps[item].numberOfAllMessages = result[item];
                     });
                     cb();
                 }
@@ -102,7 +102,7 @@ var _appsFetching = function(env, args, next) {
                     cb(errBuilder(dErr.INTERNAL_ERROR, err));
                 } else {
                     _.keys(result).forEach(function(item) {
-                        apps[item].number_of_unread_messages = result[item];
+                        apps[item].numberOfUnreadMessages = result[item];
                     });
                     cb();
                 }
