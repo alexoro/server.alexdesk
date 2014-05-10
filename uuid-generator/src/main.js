@@ -7,16 +7,10 @@
 var BigNumber = require('bignumber.js');
 var uuid = require('node-uuid');
 
-//TODO replace this shit 'overrite' and '_startDateMillis' with constructor arg function getMillisSinceEpoch
-//TODO rewrite tests
-//TODO try to make this class prototype based
-
-//TODO возможно, первый пункт слишком выносит логику класса за его пределы. Может, достотаточно просто начало эпохи и переопределять приватную функцию
 
 var defaultGetMillisSinceEpoch = function(done) {
     done(null, Date.now());
 };
-
 
 var Generator = function() {
     this._getMillisSinceEpochFn = defaultGetMillisSinceEpoch;
@@ -34,7 +28,7 @@ var Generator = function() {
 };
 
 Generator.prototype._pad = function(str, padToSize) {
-    if (str.length === padToSize) {
+    if (str.length >= padToSize) {
         return str;
     } else {
         return this._zerofills[padToSize - str.length] + str;
@@ -114,8 +108,13 @@ Generator.prototype.newBigInt = function(done) {
                     return done(new Error('getMillisSinceEpoch did a response with negative number: ' + result));
                 }
 
+                var binaryResult = result.toString(2);
+                if (binaryResult.length > 42) {
+                    return done(new Error('getMillisSinceEpoch returned very big response. Result must fit in 42 bits'));
+                }
+
                 self._inc = (self._inc + 1) % self._mod;
-                var millis = self._pad(result.toString(2), 42);
+                var millis = self._pad(binaryResult, 42);
                 var incAsStr = self._pad(self._inc.toString(2), 10);
 
                 var r;
