@@ -29,13 +29,13 @@ describe('API::Interface', function() {
         assert.isFunction(api.apps_list, 'apps_list must be a function');
         assert.equal(api.apps_list.length, 2, 'apps_list must receive 2 arguments only');
 
-        assert.isDefined(api.hd_conversationsList, 'hd_conversationsList function is not exists');
-        assert.isFunction(api.hd_conversationsList, 'hd_conversationsList must be a function');
-        assert.equal(api.hd_conversationsList.length, 2, 'hd_conversationsList must receive 2 arguments only');
+        assert.isDefined(api.hd_chatsList, 'hd_chatsList function is not exists');
+        assert.isFunction(api.hd_chatsList, 'hd_chatsList must be a function');
+        assert.equal(api.hd_chatsList.length, 2, 'hd_chatsList must receive 2 arguments only');
 
-        assert.isDefined(api.hd_conversationCreate, 'hd_conversationCreate function is not exists');
-        assert.isFunction(api.hd_conversationCreate, 'hd_conversationCreate must be a function');
-        assert.equal(api.hd_conversationCreate.length, 2, 'hd_conversationCreate must receive 2 arguments only');
+        assert.isDefined(api.hd_chatCreate, 'hd_chatCreate function is not exists');
+        assert.isFunction(api.hd_chatCreate, 'hd_chatCreate must be a function');
+        assert.equal(api.hd_chatCreate.length, 2, 'hd_chatCreate must receive 2 arguments only');
 
         assert.isDefined(api.hd_messageCreate, 'hd_messageCreate function is not exists');
         assert.isFunction(api.hd_messageCreate, 'hd_messageCreate must be a function');

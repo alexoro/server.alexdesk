@@ -47,11 +47,11 @@ Api.prototype.apps_list = function(args, next) {
     this._before(api_apps_list, args, next);
 };
 
-Api.prototype.hd_conversationCreate = function(args, next) {
+Api.prototype.hd_chatCreate = function(args, next) {
     next(null, null);
 };
 
-Api.prototype.hd_conversationsList = function(args, next) {
+Api.prototype.hd_chatsList = function(args, next) {
     next(null, null);
 };
 
