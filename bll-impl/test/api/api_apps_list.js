@@ -30,14 +30,14 @@ var cbCheckValidAccessToken = function(doneTest) {
 
 var cbCheckInvalidAccessToken = function(doneTest) {
     return function(err, result) {
-        if (err) {
-            if (err.number && err.number !== dErrors.INVALID_PARAMS) {
-                assert.fail('Unknown error during checking the valid access token: ' + err);
-            }
+        if (err.number && err.number === dErrors.INVALID_PARAMS) {
+            doneTest();
+        } else if (err) {
+            doneTest(err);
         } else {
-            return doneTest(err);
+            assert.fail('Invalid token was processed as valid');
+            doneTest();
         }
-        doneTest();
     };
 };
 

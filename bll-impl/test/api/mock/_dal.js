@@ -147,5 +147,9 @@ DAL.prototype.getNumberOfUnreadMessages = function(appIds, userType, userId, don
     return done(null, r);
 };
 
+DAL.prototype.getChatsList = function(done) {
+    done(null, null);
+};
+
 
 module.exports = DAL;
