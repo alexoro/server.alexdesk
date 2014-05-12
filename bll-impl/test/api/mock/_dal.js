@@ -25,6 +25,28 @@ DAL.prototype.isAppExists = function(appId, done) {
     }
 };
 
+DAL.prototype.getAppType = function(appId, done) {
+    var r = _.findWhere(this.mock.apps, {id: appId});
+    if (!r) {
+        done(new Error('Application is not found. Given id: ' + appId));
+    } else {
+        done(null, r.platformType);
+    }
+};
+
+DAL.prototype.userIsAccociatedWithApp = function(appId, userType, userId, done) {
+    var r;
+    if (userType === domain.userTypes.SERVICE_USER) {
+        r = _.findWhere(this.mock.app_acl, {appId: appId, userId: userId, isOwner: true});
+        done(null, !!r);
+    } else if (userType === domain.userTypes.APP_USER) {
+        r = _.findWhere(this.mock.app_users, {appUserId: userId, appId: appId});
+        done(null, !!r);
+    } else {
+        done(new Error('Unknown userType: ' + userType));
+    }
+};
+
 DAL.prototype.getServiceUserIdByCreditionals = function(creditionals, done) {
     var r = _.findWhere(this.mock.users, creditionals);
     if (!r) {
@@ -147,8 +169,48 @@ DAL.prototype.getNumberOfUnreadMessages = function(appIds, userType, userId, don
     return done(null, r);
 };
 
-DAL.prototype.getChatsList = function(done) {
-    done(null, null);
+DAL.prototype.getChatsList = function(args, done) {
+    var chats = !!args.userCreatorId ?
+        _.where(this.mock.chats, {appId: args.appId, userCreatorId: args.userCreatorId})
+        : _.where(this.mock.chats, {appId: args.appId});
+
+    chats = chats.sort(function(a, b) {
+        return a.lastUpdate.getTime() > b.lastUpdate.getTime();
+    });
+
+    chats = chats.slice(args.offset, args.limit);
+
+    var self = this;
+    this.getAppType(args.appId, function(err, appType) {
+        if (err) {
+            return done(err);
+        }
+
+        for (var i = 0; i < chats.length; i++) {
+            if (appType === dPlatforms.ANDROID) {
+                var extra = _.findWhere(self.mock.chat_extra_android, {chatId: chats[i].id});
+                if (!extra) {
+                    return done(new Error('No extra information is found for Android application and chat: ' + chats[i].id));
+                } else {
+                    delete extra.chatId;
+                    delete extra.appId;
+                    chats.extra = extra;
+                }
+            } else {
+                chats.extra = {};
+            }
+        }
+
+        done(null, chats);
+    });
+};
+
+DAL.prototype.getNumberOfUnreadMessagesPerChats = function(chatIds, done) {
+    done(new Error('Not implemented yet'));
+};
+
+DAL.prototype.getLastMessagePerChats = function(chatIds, done) {
+    done(new Error('Not implemented yet'));
 };
 
 

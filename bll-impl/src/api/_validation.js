@@ -46,6 +46,14 @@ module.exports = {
 
     appUserPassword: function(value) {
         return (typeof value === 'string') && value.length >= 1 && value.length <= 64;
+    },
+
+    offset: function(value, minValue) {
+        return typeof value === 'number' && !isNaN(value) && value%1 === 0 && value >= minValue;
+    },
+
+    limit: function(value, minValue, maxValue) {
+        return typeof value === 'number' && !isNaN(value) && value%1 === 0 && value >= minValue && value <= maxValue;
     }
 
 };

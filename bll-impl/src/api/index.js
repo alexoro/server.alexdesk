@@ -10,6 +10,7 @@ var errBuilder = require('./_errorBuilder');
 var api_apps_list = require('./_api_apps_list');
 var api_security_createAuthTokenForServiceUser = require('./_api_security_createAuthTokenForServiceUser');
 var api_security_createAuthTokenForAppUser = require('./_api_security_createAuthTokenForAppUser');
+var api_hd_chatsList = require('./_api_hd_chatsList');
 
 
 var Api = function(env) {
@@ -52,7 +53,7 @@ Api.prototype.hd_chatCreate = function(args, next) {
 };
 
 Api.prototype.hd_chatsList = function(args, next) {
-    next(null, null);
+    this._before(api_hd_chatsList, args, next);
 };
 
 Api.prototype.hd_messageCreate = function(args, next) {

@@ -11,12 +11,11 @@ var domain = require('../../').domain;
 var dErrors = domain.errors;
 
 var mockBuilder = require('./mock/');
-var validate = require('./_validation');
 
 
 var argsBuilder = function(accessToken, appId, offset, limit) {
     return {
-        token: accessToken, appId: appId, offset: offset || 0, password: limit || 50
+        accessToken: accessToken, appId: appId, offset: offset === undefined ? 0 : offset, limit: limit === undefined ? 50 : limit
     };
 };
 
@@ -143,20 +142,20 @@ describe('API#hd_chatsList', function() {
         var api = mockBuilder.newApiWithMock().api;
         var args = argsBuilder('390582c6-a59b-4ab2-a8e1-87fdbb291b97', '1');
         api.hd_chatsList(args, function(err, result) {
-            if (err) {
-                if (err.number !== dErrors.INVALID_OR_EXPIRED_TOKEN) {
-                    return doneTest(err);
-                }
+            if (err && err.number === dErrors.INVALID_OR_EXPIRED_TOKEN) {
+                doneTest();
+            } else if (err) {
+                doneTest(err);
             } else {
                 assert.fail('Expired access token was processed as valid');
+                doneTest();
             }
-            doneTest();
         });
     });
 
     it('Must return INTERNAL_ERROR in case of error in DAL', function(doneTest) {
         var mock = mockBuilder.newApiWithMock();
-        mock.dal.getChatsList = function(done) {
+        mock.dal.getChatsList = function(args, done) {
             done(new Error('Not implemented yet'));
         };
 
@@ -176,7 +175,7 @@ describe('API#hd_chatsList', function() {
 
     it('Must return INTERNAL_ERROR in case of invalid response from DAL', function(doneTest) {
         var mock = mockBuilder.newApiWithMock();
-        mock.dal.getChatsList = function(done) {
+        mock.dal.getChatsList = function(args, done) {
             done(null, null);
         };
 
@@ -296,6 +295,19 @@ describe('API#hd_chatsList', function() {
                 }
             }
 
+            doneTest();
+        });
+    });
+
+    it('Big offset must return empty array', function(doneTest) {
+        var api = mockBuilder.newApiWithMock().api;
+        var reqArgs = argsBuilder('142b2b49-75f2-456f-9533-435bd0ef94c0', '1', 1000, 50);
+        api.hd_chatsList(reqArgs, function(err, result) {
+            if (err) {
+                return doneTest(err);
+            }
+
+            assert.lengthOf(result, 0, 'Offset that bigger the number of entries must return empty list of chats');
             doneTest();
         });
     });

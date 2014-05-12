@@ -43,14 +43,14 @@ var cbCheckInvalidAccessToken = function(doneTest) {
 
 var cbCheckExpiredAccessToken = function(doneTest) {
     return function(err, result) {
-        if (err) {
-            if (err.number !== dErrors.INVALID_OR_EXPIRED_TOKEN) {
-                return doneTest(err);
-            }
+        if (err && err.number === dErrors.INVALID_OR_EXPIRED_TOKEN) {
+            doneTest();
+        } else if (err) {
+            doneTest(err);
         } else {
             assert.fail('Expired access token was processed as valid');
+            doneTest();
         }
-        doneTest();
     };
 };
 
