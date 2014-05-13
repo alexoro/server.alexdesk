@@ -70,6 +70,9 @@ describe('API#hd_chatsList', function() {
                 api.hd_chatsList(argsBuilder(token, '-1'), cb);
             },
             function(cb) {
+                api.hd_chatsList(argsBuilder(token, '1.1'), cb);
+            },
+            function(cb) {
                 var appId = '0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789';
                 api.hd_chatsList(argsBuilder(token, appId), cb);
             }

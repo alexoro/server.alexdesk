@@ -18,7 +18,7 @@ module.exports = {
     appId: function(value) {
         try {
             var val = new BigNumber(value);
-            return val.greaterThanOrEqualTo(appIdMin) && val.lessThanOrEqualTo(appIdMax);
+            return val.isFinite() && val.mod(1).equals(0) && val.greaterThanOrEqualTo(appIdMin) && val.lessThanOrEqualTo(appIdMax);
         } catch (err) {
             return false;
         }
