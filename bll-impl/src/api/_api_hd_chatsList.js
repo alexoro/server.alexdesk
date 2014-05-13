@@ -12,9 +12,6 @@ var domain = require('../domain');
 var validate = require('./_validation');
 var errBuilder = require('./_errorBuilder');
 
-//return {
-//    token: accessToken, appId: appId, offset: offset || 0, password: limit || 50
-//};
 
 var defaultOffset = 0;
 var defaultLimit = 50;
@@ -107,29 +104,33 @@ var _execute = function(env, args, next) {
                 limit: limit
             };
             dal.getChatsList(reqArgs, function(err, chats) {
-                if (err) {
+                if (err || !chats) {
                     cb(errBuilder(dErr.INTERNAL_ERROR, err));
                 } else {
-                    cb(null, chats);
+                    cb(null, user, chats);
                 }
             });
         },
-        function(chats, cb) {
-            var ids = _.map(chats, function(item) {
-                return item.id;
-            });
-            dal.getNumberOfUnreadMessagesPerChats(ids, function(err, result) {
+        function(user, chats, cb) {
+            var reqArgs = {
+                chatIds: _.map(chats, function(item) {
+                    return item.id;
+                }),
+                userType: user.type,
+                userId: user.id
+            };
+            dal.getNumberOfUnreadMessagesPerChats(reqArgs, function(err, result) {
                 if (err) {
                     cb(errBuilder(dErr.INTERNAL_ERROR, err));
                 } else {
                     for (var i = 0; i < chats.length; i++) {
                         chats[i].numberOfUnreadMessages = result[chats[i].id];
                     }
-                    cb(null, chats);
+                    cb(null, user, chats);
                 }
             });
         },
-        function(chats, cb) {
+        function(user, chats, cb) {
             var ids = _.map(chats, function(item) {
                 return item.id;
             });
@@ -145,43 +146,6 @@ var _execute = function(env, args, next) {
             });
         }
     ];
-
-    /*
-     var matchChat = {
-     id: '2',
-     appId: '1',
-     userCreatorId: '2',
-     userCreatorType: domain.userTypes.APP_USER,
-     created: new Date('2012-05-01 13:20:00 +00:00'),
-     title: '',
-     type: domain.chatTypes.UNKNOWN,
-     status: domain.chatStatuses.UNKNOWN,
-     lastUpdate: new Date('2012-05-01 13:26:00 +00:00'),
-     numberOfUnreadMessages: 1,
-     extra: {
-     countryId: domain.countries.getIdByCode('ru'),
-     langId: domain.languages.getIdByCode('ru'),
-     api: 10,
-     apiTextValue: 'Gingerbird',
-     appBuild: 1,
-     appVersion: '1.0',
-     deviceManufacturer: 'Samsung',
-     deviceModel: 'S5',
-     deviceWidthPx: 1280,
-     deviceHeightPx: 1920,
-     deviceDensity: 320,
-     isRooted: false,
-     metaData: ''
-     },
-     lastMessage: {
-     id: '6',
-     userCreatorId: '2',
-     userCreatorType: domain.userTypes.APP_USER,
-     created: new Date('2012-05-01 13:26:00 +00:00'),
-     content: 'Oh! Thanks'
-     }
-     };
-     */
 
     async.waterfall(
         fnStack,

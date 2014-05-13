@@ -17,6 +17,14 @@ var mock = {
             name: 'Test',
             registered: new Date('2014-05-01 12:00:00 +04:00'),
             lastVisit: new Date('2014-05-01 14:00:00 +04:00')
+        },
+        {
+            id: '2',
+            login: '2@2.com',
+            passwordHash: '1e6fd8e56879c84999cd481255530592',
+            name: 'Test #2',
+            registered: new Date('2014-05-01 12:00:00 +04:00'),
+            lastVisit: new Date('2014-05-01 14:00:00 +04:00')
         }
     ],
 
@@ -51,6 +59,15 @@ var mock = {
             isApproved: true,
             isBlocked: false,
             isDeleted: false
+        },
+        {
+            id: '2',
+            platformType: domain.platforms.ANDROID,
+            title: 'Test App #2',
+            created: new Date('2014-05-01 13:00:00 +04:00'),
+            isApproved: true,
+            isBlocked: false,
+            isDeleted: false
         }
     ],
 
@@ -58,6 +75,10 @@ var mock = {
         {
             appId: '1',
             package: 'com.testapp'
+        },
+        {
+            appId: '2',
+            package: 'com.testapp2'
         }
     ],
 
@@ -65,6 +86,11 @@ var mock = {
         {
             appId: '1',
             userId: '1',
+            isOwner: true
+        },
+        {
+            appId: '2',
+            userId: '2',
             isOwner: true
         }
     ],
@@ -268,7 +294,7 @@ var mock = {
             id: '7',
             appId: '1',
             chatId: '3',
-            userCreatorId: '1',
+            userCreatorId: '2',
             userCreatorType: domain.userTypes.APP_USER,
             created: new Date('2012-05-01 13:40:00 +00:00'),
             content: 'I have a question #2'

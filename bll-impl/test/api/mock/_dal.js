@@ -194,7 +194,7 @@ DAL.prototype.getChatsList = function(args, done) {
                 } else {
                     delete extra.chatId;
                     delete extra.appId;
-                    chats.extra = extra;
+                    chats[i].extra = extra;
                 }
             } else {
                 chats.extra = {};
@@ -205,12 +205,50 @@ DAL.prototype.getChatsList = function(args, done) {
     });
 };
 
-DAL.prototype.getNumberOfUnreadMessagesPerChats = function(chatIds, done) {
-    done(new Error('Not implemented yet'));
+DAL.prototype.getNumberOfUnreadMessagesPerChats = function(args, done) {
+    var chatIds = args.chatIds;
+    var userType = args.userType;
+    var userId = args.userId;
+    var i;
+    var item;
+
+    var r = {};
+    _.each(chatIds, function(item) {
+        r[item] = 0;
+    });
+
+    var lastVisits = {};
+    for (i = 0; i < chatIds.length; i++) {
+        item = _.findWhere(this.mock.chat_participants, {userType: userType, userId: userId, chatId: chatIds[i]});
+        lastVisits[chatIds[i]] = item.lastVisit;
+    }
+
+    for (i = 0; i < this.mock.chat_messages.length; i++) {
+        item = this.mock.chat_messages[i];
+        if (_.contains(chatIds, item.chatId) &&
+            !(item.userCreatorType === userType && item.userCreatorId === userId) &&
+            item.created.getTime() > lastVisits[item.chatId].getTime()) {
+            r[item.chatId]++;
+        }
+    }
+
+    return done(null, r);
 };
 
 DAL.prototype.getLastMessagePerChats = function(chatIds, done) {
-    done(new Error('Not implemented yet'));
+    var r = {};
+    _.each(chatIds, function(item) {
+        r[item] = null;
+    });
+
+    for (var i = 0; i < this.mock.chat_messages.length; i++) {
+        var item = this.mock.chat_messages[i];
+        r[item.chatId] = item;
+        delete item.chatId;
+        delete item.appId;
+    }
+
+    done(null, r);
 };
 
 
