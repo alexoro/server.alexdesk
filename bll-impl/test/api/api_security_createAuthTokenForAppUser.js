@@ -69,6 +69,9 @@ describe('API#security_createAuthTokenForAppUser', function() {
             function(cb) {
                 var appId = '0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789';
                 api.security_createAuthTokenForAppUser(argsBuilder(appId, null, null), cb);
+            },
+            function(cb) {
+                api.security_createAuthTokenForAppUser(argsBuilder('-1', null, null), cb);
             }
         ];
         async.series(fnStack, fnStackInvalidArgsCallback(doneTest));
