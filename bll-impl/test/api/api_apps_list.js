@@ -11,45 +11,16 @@ var domain = require('../../').domain;
 var dErrors = domain.errors;
 
 var mockBuilder = require('./mock/');
-var validate = require('./_validation');
 
 
-var cbCheckValidAccessToken = function(doneTest) {
-    return function(err, result) {
-        if (err) {
-            if (err.number && err.number === dErrors.INVALID_PARAMS) {
-                assert.fail('Valid access token did processed as invalid');
-            } else {
-                doneTest(err);
-            }
-        } else {
-            doneTest();
-        }
-    };
-};
-
-var cbCheckInvalidAccessToken = function(doneTest) {
-    return function(err, result) {
-        if (err.number && err.number === dErrors.INVALID_PARAMS) {
-            doneTest();
+var invalidArgsCb = function(cb) {
+    return function(err) {
+        if (err && err.number && err.number === dErrors.INVALID_PARAMS) {
+            cb();
         } else if (err) {
-            doneTest(err);
+            cb(err);
         } else {
-            assert.fail('Invalid token was processed as valid');
-            doneTest();
-        }
-    };
-};
-
-var cbCheckExpiredAccessToken = function(doneTest) {
-    return function(err, result) {
-        if (err && err.number === dErrors.INVALID_OR_EXPIRED_TOKEN) {
-            doneTest();
-        } else if (err) {
-            doneTest(err);
-        } else {
-            assert.fail('Expired access token was processed as valid');
-            doneTest();
+            cb(new Error('Application passed some invalid argument'));
         }
     };
 };
@@ -57,54 +28,50 @@ var cbCheckExpiredAccessToken = function(doneTest) {
 
 describe('API#apps_list', function() {
 
-    it('Check token is missed or invalid args', function(doneTest) {
+    it('Validate invalid arguments: all is invalid', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
         var fnStack = [
             function(cb) {
-                api.apps_list(null, cb);
+                api.hd_chatsList(null, invalidArgsCb(cb));
             },
             function(cb) {
-                api.apps_list({}, cb);
+                api.hd_chatsList({}, invalidArgsCb(cb));
             },
             function(cb) {
-                api.apps_list(new Date(), cb);
-            },
-            function(cb) {
-                api.apps_list('', cb);
+                api.hd_chatsList(-1, invalidArgsCb(cb));
             }
         ];
-
-        async.series(
-            fnStack,
-            function(err) {
-                if (err && err.number && err.number === dErrors.INVALID_PARAMS) {
-                    doneTest();
-                } else if (err) {
-                    doneTest(err);
-                } else {
-                    assert.fail('app_list passed invalid arguments');
-                    doneTest();
-                }
-            }
-        );
-    });
-
-    it('Check valid access token', function(doneTest) {
-        var api = mockBuilder.newApiWithMock().api;
-        var args = {accessToken: '142b2b49-75f2-456f-9533-435bd0ef94c0'};
-        api.apps_list(args, cbCheckValidAccessToken(doneTest));
+        async.series(fnStack, doneTest);
     });
 
     it('Check invalid access token', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
         var args = {accessToken: '142b2b49-75f2-456f-9533-435bd0ef94c0!!'};
-        api.apps_list(args, cbCheckInvalidAccessToken(doneTest));
+        api.apps_list(args, function(err, result) {
+            if (err.number && err.number === dErrors.INVALID_PARAMS) {
+                doneTest();
+            } else if (err) {
+                doneTest(err);
+            } else {
+                assert.fail('Invalid token was processed as valid');
+                doneTest();
+            }
+        });
     });
 
     it('Check expired access token', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
         var args = {accessToken: '390582c6-a59b-4ab2-a8e1-87fdbb291b97'};
-        api.apps_list(args, cbCheckExpiredAccessToken(doneTest));
+        api.apps_list(args, function(err, result) {
+            if (err && err.number === dErrors.INVALID_OR_EXPIRED_TOKEN) {
+                doneTest();
+            } else if (err) {
+                doneTest(err);
+            } else {
+                assert.fail('Expired access token was processed as valid');
+                doneTest();
+            }
+        });
     });
 
     it('Service user must have access to applications list method', function(doneTest) {
