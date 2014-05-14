@@ -13,24 +13,25 @@ var dErrors = domain.errors;
 var mockBuilder = require('./mock/');
 
 
+var invalidArgsCb = function(cb) {
+    return function(err) {
+        if (err && err.number && err.number === dErrors.INVALID_PARAMS) {
+            cb();
+        } else if (err) {
+            cb(err);
+        } else {
+            cb(new Error('Application passed some invalid argument'));
+        }
+    };
+};
+
+
 var argsBuilder = function(accessToken, chatId, offset, limit) {
     return {
         accessToken: accessToken, chatId: chatId, offset: offset === undefined ? 0 : offset, limit: limit === undefined ? 50 : limit
     };
 };
 
-var fnStackInvalidArgsCallback = function(doneTest) {
-    return function(err) {
-        if (err && err.number && err.number === dErrors.INVALID_PARAMS) {
-            doneTest();
-        } else if (err) {
-            doneTest(err);
-        } else {
-            assert.fail('Application passed some invalid argument');
-            doneTest();
-        }
-    };
-};
 
 describe('API#hd_messagesList', function() {
 
@@ -38,16 +39,16 @@ describe('API#hd_messagesList', function() {
         var api = mockBuilder.newApiWithMock().api;
         var fnStack = [
             function(cb) {
-                api.hd_messagesList(null, cb);
+                api.hd_messagesList(null, invalidArgsCb(cb));
             },
             function(cb) {
-                api.hd_messagesList({}, cb);
+                api.hd_messagesList({}, invalidArgsCb(cb));
             },
             function(cb) {
-                api.hd_messagesList(-1, cb);
+                api.hd_messagesList(-1, invalidArgsCb(cb));
             }
         ];
-        async.series(fnStack, fnStackInvalidArgsCallback(doneTest));
+        async.series(fnStack, doneTest);
     });
 
     it('Validate invalid arguments: chat id is invalid', function(doneTest) {
@@ -55,29 +56,29 @@ describe('API#hd_messagesList', function() {
         var token = '142b2b49-75f2-456f-9533-435bd0ef94c0';
         var fnStack = [
             function(cb) {
-                api.hd_messagesList(argsBuilder(token, null), cb);
+                api.hd_messagesList(argsBuilder(token, null), invalidArgsCb(cb));
             },
             function(cb) {
-                api.hd_messagesList(argsBuilder(token, {}), cb);
+                api.hd_messagesList(argsBuilder(token, {}), invalidArgsCb(cb));
             },
             function(cb) {
-                api.hd_messagesList(argsBuilder(token, ''), cb);
+                api.hd_messagesList(argsBuilder(token, ''), invalidArgsCb(cb));
             },
             function(cb) {
-                api.hd_messagesList(argsBuilder(token, 'xxx@xx:com'), cb);
+                api.hd_messagesList(argsBuilder(token, 'xxx@xx:com'), invalidArgsCb(cb));
             },
             function(cb) {
                 var chatId = '0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789';
-                api.hd_messagesList(argsBuilder(token, chatId), cb);
+                api.hd_messagesList(argsBuilder(token, chatId), invalidArgsCb(cb));
             },
             function(cb) {
-                api.hd_messagesList(argsBuilder(token, '-1'), cb);
+                api.hd_messagesList(argsBuilder(token, '-1'), invalidArgsCb(cb));
             },
             function(cb) {
-                api.hd_messagesList(argsBuilder(token, '1.0'), cb);
+                api.hd_messagesList(argsBuilder(token, '1.0'), invalidArgsCb(cb));
             }
         ];
-        async.series(fnStack, fnStackInvalidArgsCallback(doneTest));
+        async.series(fnStack, doneTest);
     });
 
     it('Validate invalid arguments: offset is invalid', function(doneTest) {
@@ -86,28 +87,22 @@ describe('API#hd_messagesList', function() {
         var chatId = '1';
         var fnStack = [
             function(cb) {
-                api.hd_messagesList(argsBuilder(token, chatId, null), cb);
+                api.hd_messagesList(argsBuilder(token, chatId, null), invalidArgsCb(cb));
             },
             function(cb) {
-                api.hd_messagesList(argsBuilder(token, chatId, {}), cb);
+                api.hd_messagesList(argsBuilder(token, chatId, {}), invalidArgsCb(cb));
             },
             function(cb) {
-                api.hd_messagesList(argsBuilder(token, chatId, ''), cb);
+                api.hd_messagesList(argsBuilder(token, chatId, ''), invalidArgsCb(cb));
             },
             function(cb) {
-                api.hd_messagesList(argsBuilder(token, chatId, 'xxx@xx:com'), cb);
+                api.hd_messagesList(argsBuilder(token, chatId, 'xxx@xx:com'), invalidArgsCb(cb));
             },
             function(cb) {
-                api.hd_messagesList(argsBuilder(token, chatId, 1.1), cb);
-            },
-            function(cb) {
-                api.hd_messagesList(argsBuilder(token, chatId, 1.0), cb);
-            },
-            function(cb) {
-                api.hd_messagesList(argsBuilder(token, chatId, 0), cb);
+                api.hd_messagesList(argsBuilder(token, chatId, 1.1), invalidArgsCb(cb));
             }
         ];
-        async.series(fnStack, fnStackInvalidArgsCallback(doneTest));
+        async.series(fnStack, doneTest);
     });
 
     it('Validate invalid arguments: limit is invalid', function(doneTest) {
@@ -117,28 +112,25 @@ describe('API#hd_messagesList', function() {
         var offset = 0;
         var fnStack = [
             function(cb) {
-                api.hd_messagesList(argsBuilder(token, chatId, offset, null), cb);
+                api.hd_messagesList(argsBuilder(token, chatId, offset, null), invalidArgsCb(cb));
             },
             function(cb) {
-                api.hd_messagesList(argsBuilder(token, chatId, offset, {}), cb);
+                api.hd_messagesList(argsBuilder(token, chatId, offset, {}), invalidArgsCb(cb));
             },
             function(cb) {
-                api.hd_messagesList(argsBuilder(token, chatId, offset, 'xxx@xx:com'), cb);
+                api.hd_messagesList(argsBuilder(token, chatId, offset, 'xxx@xx:com'), invalidArgsCb(cb));
             },
             function(cb) {
-                api.hd_messagesList(argsBuilder(token, chatId, offset, -1), cb);
+                api.hd_messagesList(argsBuilder(token, chatId, offset, -1), invalidArgsCb(cb));
             },
             function(cb) {
-                api.hd_messagesList(argsBuilder(token, chatId, offset, 100), cb);
+                api.hd_messagesList(argsBuilder(token, chatId, offset, 100), invalidArgsCb(cb));
             },
             function(cb) {
-                api.hd_messagesList(argsBuilder(token, chatId, offset, 1.1), cb);
-            },
-            function(cb) {
-                api.hd_messagesList(argsBuilder(token, chatId, offset, 1.0), cb);
+                api.hd_messagesList(argsBuilder(token, chatId, offset, 1.1), invalidArgsCb(cb));
             }
         ];
-        async.series(fnStack, fnStackInvalidArgsCallback(doneTest));
+        async.series(fnStack, doneTest);
     });
 
     it('Check invalid access token', function(doneTest) {
