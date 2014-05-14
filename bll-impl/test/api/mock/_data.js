@@ -113,6 +113,15 @@ var mock = {
             name: 'Test user #2',
             registered: new Date('2012-05-01 13:05:00 +00:00'),
             lastVisit: new Date('2012-05-01 13:50:00 +00:00')
+        },
+        {
+            appUserId: '4',
+            appId: '2',
+            login: 'test1_2',
+            passwordHash: '262deb6b64eea95f6502c0604624472f',
+            name: 'Test user #1 for App #2',
+            registered: new Date('2012-05-01 13:05:00 +00:00'),
+            lastVisit: new Date('2012-05-01 13:50:00 +00:00')
         }
     ],
 
@@ -126,6 +135,12 @@ var mock = {
         {
             appId: '1',
             appUserId: '3',
+            deviceUuid: 'ee55941d72dc69392cd8347be701d730',
+            gcmToken: ''
+        },
+        {
+            appId: '2',
+            appUserId: '4',
             deviceUuid: 'ee55941d72dc69392cd8347be701d730',
             gcmToken: ''
         }
@@ -158,6 +173,17 @@ var mock = {
             id: '3',
             appId: '1',
             userCreatorId: '3',
+            userCreatorType: domain.userTypes.APP_USER,
+            created: new Date('2012-05-01 13:20:00 +00:00'),
+            title: '',
+            type: domain.chatTypes.UNKNOWN,
+            status: domain.chatStatuses.UNKNOWN,
+            lastUpdate: new Date('2012-05-01 13:50:00 +00:00')
+        },
+        {
+            id: '4',
+            appId: '2',
+            userCreatorId: '4',
             userCreatorType: domain.userTypes.APP_USER,
             created: new Date('2012-05-01 13:20:00 +00:00'),
             title: '',
@@ -218,6 +244,23 @@ var mock = {
             deviceDensity: 240,
             isRooted: true,
             metaData: ''
+        },
+        {
+            chatId: '4',
+            appId: '2',
+            countryId: domain.countries.getIdByCode('ru'),
+            langId: domain.languages.getIdByCode('ru'),
+            api: 17,
+            apiTextValue: 'KitKat',
+            appBuild: 1,
+            appVersion: '1.0',
+            deviceManufacturer: 'LG',
+            deviceModel: 'Nexus 4',
+            deviceWidthPx: 720,
+            deviceHeightPx: 1280,
+            deviceDensity: 240,
+            isRooted: true,
+            metaData: ''
         }
     ],
 
@@ -229,7 +272,10 @@ var mock = {
         {chatId: '2', userType: domain.userTypes.APP_USER, userId: '2', lastVisit: new Date('2012-05-01 13:26:00 +00:00')},
 
         {chatId: '3', userType: domain.userTypes.SERVICE_USER, userId: '1', lastVisit: new Date('2012-05-01 13:50:00 +00:00')},
-        {chatId: '3', userType: domain.userTypes.APP_USER, userId: '1', lastVisit: new Date('2012-05-01 13:40:00 +00:00')}
+        {chatId: '3', userType: domain.userTypes.APP_USER, userId: '1', lastVisit: new Date('2012-05-01 13:40:00 +00:00')},
+
+        {chatId: '4', userType: domain.userTypes.SERVICE_USER, userId: '2', lastVisit: new Date('2012-05-01 13:50:00 +00:00')},
+        {chatId: '4', userType: domain.userTypes.APP_USER, userId: '4', lastVisit: new Date('1970-01-01 00:00:00 +00:00')}
     ],
 
 
@@ -307,6 +353,16 @@ var mock = {
             userCreatorType: domain.userTypes.SERVICE_USER,
             created: new Date('2012-05-01 13:50:00 +00:00'),
             content: 'I have answer #2'
+        },
+
+        {
+            id: '9',
+            appId: '2',
+            chatId: '4',
+            userCreatorId: '4',
+            userCreatorType: domain.userTypes.APP_USER,
+            created: new Date('2012-05-01 13:50:00 +00:00'),
+            content: 'I have question for app #2'
         }
     ]
 

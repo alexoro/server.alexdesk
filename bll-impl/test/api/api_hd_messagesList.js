@@ -102,6 +102,9 @@ describe('API#hd_messagesList', function() {
             },
             function(cb) {
                 api.hd_messagesList(argsBuilder(token, chatId, 1.0), cb);
+            },
+            function(cb) {
+                api.hd_messagesList(argsBuilder(token, chatId, 0), cb);
             }
         ];
         async.series(fnStack, fnStackInvalidArgsCallback(doneTest));

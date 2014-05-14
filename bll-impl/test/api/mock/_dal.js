@@ -34,7 +34,7 @@ DAL.prototype.getAppType = function(appId, done) {
     }
 };
 
-DAL.prototype.userIsAccociatedWithApp = function(appId, userType, userId, done) {
+DAL.prototype.userIsAssociatedWithApp = function(appId, userType, userId, done) {
     var r;
     if (userType === domain.userTypes.SERVICE_USER) {
         r = _.findWhere(this.mock.app_acl, {appId: appId, userId: userId, isOwner: true});
@@ -205,6 +205,34 @@ DAL.prototype.getChatsList = function(args, done) {
     });
 };
 
+DAL.prototype.isChatExists = function(args, done) {
+    done(null, !!_.findWhere(this.mock.chats, {id: args.chatId}));
+};
+
+DAL.prototype.getAppIdChatBelongsTo = function(args, done) {
+    var chat = _.findWhere(this.mock.chats, {id: args.chatId});
+    if (!chat) {
+        done(new Error('Chat is not found. Given ID: ' + args.chatId));
+    } else {
+        done(null, chat.appId);
+    }
+};
+
+DAL.prototype.isUserTheCreatorOfChat = function(args, done) {
+    done(null, !!_.findWhere(this.mock.chats, {id: args.chatId, userCreatorId: args.userId, userCreatorType: args.userType}));
+};
+
+DAL.prototype.getMessagesList = function(args, done) {
+    var chatId = args.chatId;
+    var offset = args.offset;
+    var limit = args.limit;
+
+    var r = _.where(this.mock.chat_messages, {chatId: chatId})
+        .slice(offset)
+        .splice(0, limit);
+    done(null, r);
+};
+
 DAL.prototype.getNumberOfUnreadMessagesPerChats = function(args, done) {
     var chatIds = args.chatIds;
     var userType = args.userType;
@@ -249,6 +277,15 @@ DAL.prototype.getLastMessagePerChats = function(chatIds, done) {
     }
 
     done(null, r);
+};
+
+DAL.prototype.getLastVisitOfUserToChat = function(args, done) {
+    var r = _.findWhere(this.mock.chat_participants, args);
+    if (!r) {
+        done(null, null);
+    } else {
+        done(null, r.lastVisit);
+    }
 };
 
 

@@ -85,7 +85,7 @@ var _execute = function(env, args, next) {
             });
         },
         function(user, cb) {
-            dal.userIsAccociatedWithApp(args.appId, user.type, user.id, function(err, isOk) {
+            dal.userIsAssociatedWithApp(args.appId, user.type, user.id, function(err, isOk) {
                 if (err) {
                     return cb(errBuilder(dErr.INTERNAL_ERROR, err));
                 } else if (!isOk) {

@@ -11,6 +11,7 @@ var api_apps_list = require('./_api_apps_list');
 var api_security_createAuthTokenForServiceUser = require('./_api_security_createAuthTokenForServiceUser');
 var api_security_createAuthTokenForAppUser = require('./_api_security_createAuthTokenForAppUser');
 var api_hd_chatsList = require('./_api_hd_chatsList');
+var api_hd_messagesList = require('./_api_hd_messagesList');
 
 
 var Api = function(env) {
@@ -61,7 +62,7 @@ Api.prototype.hd_messageCreate = function(args, next) {
 };
 
 Api.prototype.hd_messagesList = function(args, next) {
-    next(null, null);
+    this._before(api_hd_messagesList, args, next);
 };
 
 Api.prototype.security_createAuthTokenForServiceUser = function(args, next) {
