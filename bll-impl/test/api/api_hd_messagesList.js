@@ -83,22 +83,25 @@ describe('API#hd_messagesList', function() {
     it('Validate invalid arguments: offset is invalid', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
         var token = '142b2b49-75f2-456f-9533-435bd0ef94c0';
-        var appId = '1';
+        var chatId = '1';
         var fnStack = [
             function(cb) {
-                api.hd_messagesList(argsBuilder(token, appId, null), cb);
+                api.hd_messagesList(argsBuilder(token, chatId, null), cb);
             },
             function(cb) {
-                api.hd_messagesList(argsBuilder(token, appId, {}), cb);
+                api.hd_messagesList(argsBuilder(token, chatId, {}), cb);
             },
             function(cb) {
-                api.hd_messagesList(argsBuilder(token, appId, ''), cb);
+                api.hd_messagesList(argsBuilder(token, chatId, ''), cb);
             },
             function(cb) {
-                api.hd_messagesList(argsBuilder(token, appId, 'xxx@xx:com'), cb);
+                api.hd_messagesList(argsBuilder(token, chatId, 'xxx@xx:com'), cb);
             },
             function(cb) {
-                api.hd_messagesList(argsBuilder(token, appId, -1.1), cb);
+                api.hd_messagesList(argsBuilder(token, chatId, 1.1), cb);
+            },
+            function(cb) {
+                api.hd_messagesList(argsBuilder(token, chatId, 1.0), cb);
             }
         ];
         async.series(fnStack, fnStackInvalidArgsCallback(doneTest));
@@ -107,23 +110,29 @@ describe('API#hd_messagesList', function() {
     it('Validate invalid arguments: limit is invalid', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
         var token = '142b2b49-75f2-456f-9533-435bd0ef94c0';
-        var appId = '1';
+        var chatId = '1';
         var offset = 0;
         var fnStack = [
             function(cb) {
-                api.hd_messagesList(argsBuilder(token, appId, offset, null), cb);
+                api.hd_messagesList(argsBuilder(token, chatId, offset, null), cb);
             },
             function(cb) {
-                api.hd_messagesList(argsBuilder(token, appId, offset, {}), cb);
+                api.hd_messagesList(argsBuilder(token, chatId, offset, {}), cb);
             },
             function(cb) {
-                api.hd_messagesList(argsBuilder(token, appId, offset, 'xxx@xx:com'), cb);
+                api.hd_messagesList(argsBuilder(token, chatId, offset, 'xxx@xx:com'), cb);
             },
             function(cb) {
-                api.hd_messagesList(argsBuilder(token, appId, offset, -1), cb);
+                api.hd_messagesList(argsBuilder(token, chatId, offset, -1), cb);
             },
             function(cb) {
-                api.hd_messagesList(argsBuilder(token, appId, offset, 100), cb);
+                api.hd_messagesList(argsBuilder(token, chatId, offset, 100), cb);
+            },
+            function(cb) {
+                api.hd_messagesList(argsBuilder(token, chatId, offset, 1.1), cb);
+            },
+            function(cb) {
+                api.hd_messagesList(argsBuilder(token, chatId, offset, 1.0), cb);
             }
         ];
         async.series(fnStack, fnStackInvalidArgsCallback(doneTest));
@@ -161,7 +170,7 @@ describe('API#hd_messagesList', function() {
 
     it('Must return INTERNAL_ERROR in case of error in DAL', function(doneTest) {
         var mock = mockBuilder.newApiWithMock();
-        mock.dal.getChatsList = function(args, done) {
+        mock.dal.getMessagesList = function(args, done) {
             done(new Error('Not implemented yet'));
         };
 
@@ -181,7 +190,7 @@ describe('API#hd_messagesList', function() {
 
     it('Must return INTERNAL_ERROR in case of invalid response from DAL', function(doneTest) {
         var mock = mockBuilder.newApiWithMock();
-        mock.dal.getChatsList = function(args, done) {
+        mock.dal.getMessagesList = function(args, done) {
             done(null, null);
         };
 
@@ -199,11 +208,11 @@ describe('API#hd_messagesList', function() {
         });
     });
 
-    it('Check unknown application for service user', function(doneTest) {
+    it('Check unknown chat for service user', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
         var reqArgs = argsBuilder('142b2b49-75f2-456f-9533-435bd0ef94c0', '10');
         api.hd_messagesList(reqArgs, function(err, result) {
-            if (err && err.number && err.number === dErrors.APP_NOT_FOUND) {
+            if (err && err.number && err.number === dErrors.CHAT_NOT_FOUND) {
                 doneTest();
             } else if (err) {
                 doneTest(err);
@@ -214,11 +223,11 @@ describe('API#hd_messagesList', function() {
         });
     });
 
-    it('Check unknown application for application user', function(doneTest) {
+    it('Check unknown chat for application user', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
         var reqArgs = argsBuilder('302a1baa-78b0-4a4d-ae1f-ebb5a147c71a', '10');
         api.hd_messagesList(reqArgs, function(err, result) {
-            if (err && err.number && err.number === dErrors.APP_NOT_FOUND) {
+            if (err && err.number && err.number === dErrors.CHAT_NOT_FOUND) {
                 doneTest();
             } else if (err) {
                 doneTest(err);
@@ -229,74 +238,74 @@ describe('API#hd_messagesList', function() {
         });
     });
 
-    it('Check access to application for service user that is not associated with him', function(doneTest) {
+    it('Check access to chat for service user that is not associated with him', function(doneTest) {
+        var api = mockBuilder.newApiWithMock().api;
+        var reqArgs = argsBuilder('142b2b49-75f2-456f-9533-435bd0ef94c0', '4');
+        api.hd_messagesList(reqArgs, function(err, result) {
+            if (err && err.number && err.number === dErrors.ACCESS_DENIED) {
+                doneTest();
+            } else if (err) {
+                doneTest(err);
+            } else {
+                assert.fail('Must return ACCESS_DENIED for chat that not belongs to service user');
+                doneTest();
+            }
+        });
+    });
+
+    it('Check access to chat for app user that is not associated with him', function(doneTest) {
+        var api = mockBuilder.newApiWithMock().api;
+        var reqArgs = argsBuilder('302a1baa-78b0-4a4d-ae1f-ebb5a147c71a', '3');
+        api.hd_messagesList(reqArgs, function(err, result) {
+            if (err && err.number && err.number === dErrors.ACCESS_DENIED) {
+                doneTest();
+            } else if (err) {
+                doneTest(err);
+            } else {
+                assert.fail('Must return ACCESS_DENIED for chat that not belongs to app user');
+                doneTest();
+            }
+        });
+    });
+
+    it('Service user must get access to all messages', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
         var reqArgs = argsBuilder('142b2b49-75f2-456f-9533-435bd0ef94c0', '2');
         api.hd_messagesList(reqArgs, function(err, result) {
-            if (err && err.number && err.number === dErrors.ACCESS_DENIED) {
-                doneTest();
-            } else if (err) {
-                doneTest(err);
-            } else {
-                assert.fail('Must return ACCESS_DENIED for application that not belongs to service user');
-                doneTest();
+            if (err) {
+                return doneTest(err);
             }
+            assert.typeOf(result, 'array', 'The conversations list response must be an array');
+            assert.lengthOf(result, 4, 'The messages length must be equal to 4');
+            doneTest();
         });
     });
 
-    it('Check access to application for app user that is not associated with him', function(doneTest) {
+    it('Application user must get access to all messages', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
         var reqArgs = argsBuilder('302a1baa-78b0-4a4d-ae1f-ebb5a147c71a', '2');
         api.hd_messagesList(reqArgs, function(err, result) {
-            if (err && err.number && err.number === dErrors.ACCESS_DENIED) {
-                doneTest();
-            } else if (err) {
-                doneTest(err);
-            } else {
-                assert.fail('Must return ACCESS_DENIED for application that not belongs to app user');
-                doneTest();
-            }
-        });
-    });
-
-    it('Service user must get access to all chats', function(doneTest) {
-        var api = mockBuilder.newApiWithMock().api;
-        var reqArgs = argsBuilder('142b2b49-75f2-456f-9533-435bd0ef94c0', '1');
-        api.hd_messagesList(reqArgs, function(err, result) {
             if (err) {
                 return doneTest(err);
             }
             assert.typeOf(result, 'array', 'The conversations list response must be an array');
-            assert.lengthOf(result, 3, 'The conversations length must be equal to 3');
+            assert.lengthOf(result, 4, 'The messages length must be equal to 4');
             doneTest();
         });
     });
 
-    it('Application user must get access only to his chats', function(doneTest) {
+    it('Chats must be in ASC order by created', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
-        var reqArgs = argsBuilder('302a1baa-78b0-4a4d-ae1f-ebb5a147c71a', '1');
-        api.hd_messagesList(reqArgs, function(err, result) {
-            if (err) {
-                return doneTest(err);
-            }
-            assert.typeOf(result, 'array', 'The conversations list response must be an array');
-            assert.lengthOf(result, 2, 'The conversations length must be equal to 2');
-            doneTest();
-        });
-    });
-
-    it('Chats must be in DESC order by last_update', function(doneTest) {
-        var api = mockBuilder.newApiWithMock().api;
-        var reqArgs = argsBuilder('142b2b49-75f2-456f-9533-435bd0ef94c0', '1');
+        var reqArgs = argsBuilder('142b2b49-75f2-456f-9533-435bd0ef94c0', '2');
         api.hd_messagesList(reqArgs, function(err, result) {
             if (err) {
                 return doneTest(err);
             }
 
-            var prev = result[0].lastUpdate.getTime();
+            var prev = result[0].created.getTime();
             for (var i = 1; i < result.length; i++) {
-                if (result[i].lastUpdate.getTime() < prev) {
-                    assert.fail('Conversations are not in desc order');
+                if (result[i].created.getTime() < prev) {
+                    assert.fail('Messages are not in desc order');
                     break;
                 }
             }
@@ -318,50 +327,37 @@ describe('API#hd_messagesList', function() {
         });
     });
 
-    it('Chats list must return valid objects', function(doneTest) {
+    it('Negative offset must return data from end', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
-        var reqArgs = argsBuilder('142b2b49-75f2-456f-9533-435bd0ef94c0', '1');
+        var reqArgs = argsBuilder('142b2b49-75f2-456f-9533-435bd0ef94c0', '2', -2, 50);
+        api.hd_messagesList(reqArgs, function(err, result) {
+            if (err) {
+                return doneTest(err);
+            }
+
+            assert.lengthOf(result, 2, 'Negative offset 2 must return only last 2 messages');
+            doneTest();
+        });
+    });
+
+    it('Messages list must return valid objects', function(doneTest) {
+        var api = mockBuilder.newApiWithMock().api;
+        var reqArgs = argsBuilder('142b2b49-75f2-456f-9533-435bd0ef94c0', '2');
         api.hd_messagesList(reqArgs, function(err, result) {
             if (err) {
                 return doneTest(err);
             }
 
             var matchChat = {
-                id: '2',
-                appId: '1',
+                id: '6',
                 userCreatorId: '2',
                 userCreatorType: domain.userTypes.APP_USER,
-                created: new Date('2012-05-01 13:20:00 +00:00'),
-                title: '',
-                type: domain.chatTypes.UNKNOWN,
-                status: domain.chatStatuses.UNKNOWN,
-                lastUpdate: new Date('2012-05-01 13:26:00 +00:00'),
-                numberOfUnreadMessages: 1,
-                extra: {
-                    countryId: domain.countries.getIdByCode('ru'),
-                    langId: domain.languages.getIdByCode('ru'),
-                    api: 10,
-                    apiTextValue: 'Gingerbird',
-                    appBuild: 1,
-                    appVersion: '1.0',
-                    deviceManufacturer: 'Samsung',
-                    deviceModel: 'S5',
-                    deviceWidthPx: 1280,
-                    deviceHeightPx: 1920,
-                    deviceDensity: 320,
-                    isRooted: false,
-                    metaData: ''
-                },
-                lastMessage: {
-                    id: '6',
-                    userCreatorId: '2',
-                    userCreatorType: domain.userTypes.APP_USER,
-                    created: new Date('2012-05-01 13:26:00 +00:00'),
-                    content: 'Oh! Thanks'
-                }
+                created: new Date('2012-05-01 13:26:00 +00:00'),
+                content: 'Oh! Thanks',
+                isRead: false
             };
 
-            assert.deepEqual(result[1], matchChat, 'Expected chat and received chat are not match');
+            assert.deepEqual(result[3], matchChat, 'Expected message and received message are not match');
             doneTest();
         });
     });
