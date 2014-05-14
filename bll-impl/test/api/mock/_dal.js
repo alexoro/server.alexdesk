@@ -105,6 +105,7 @@ DAL.prototype.getAppsList = function(userId, done) {
         return done(err, null);
     }
 
+    apps = utils.deepClone(apps);
     utils.forEach(apps, function(app) {
         if (app.platformType === dPlatforms.ANDROID) {
             var extra = _.findWhere(self.mock.app_info_extra_android, {appId: app.id});
@@ -179,6 +180,7 @@ DAL.prototype.getChatsList = function(args, done) {
     });
 
     chats = chats.slice(args.offset, args.limit);
+    chats = utils.deepClone(chats);
 
     var self = this;
     this.getAppType(args.appId, function(err, appType) {
@@ -271,7 +273,7 @@ DAL.prototype.getLastMessagePerChats = function(chatIds, done) {
     });
 
     for (var i = 0; i < this.mock.chat_messages.length; i++) {
-        var item = this.mock.chat_messages[i];
+        var item = utils.deepClone(this.mock.chat_messages[i]);
         r[item.chatId] = item;
         delete item.chatId;
         delete item.appId;
