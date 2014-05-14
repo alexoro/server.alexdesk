@@ -32,13 +32,13 @@ describe('API#apps_list', function() {
         var api = mockBuilder.newApiWithMock().api;
         var fnStack = [
             function(cb) {
-                api.hd_chatsList(null, invalidArgsCb(cb));
+                api.apps_list(null, invalidArgsCb(cb));
             },
             function(cb) {
-                api.hd_chatsList({}, invalidArgsCb(cb));
+                api.apps_list({}, invalidArgsCb(cb));
             },
             function(cb) {
-                api.hd_chatsList(-1, invalidArgsCb(cb));
+                api.apps_list(-1, invalidArgsCb(cb));
             }
         ];
         async.series(fnStack, doneTest);
