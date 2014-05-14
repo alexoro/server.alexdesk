@@ -109,10 +109,6 @@ var _execute = function(env, args, next) {
                 } else if (!(chats instanceof Array)) {
                     cb(errBuilder(dErr.INTERNAL_ERROR, 'It is expected that #getChatsList will be an array. Received: ' + chats));
                 } else {
-                    for (var i = 0; i < chats.length; i++) {
-                        delete chats[i].extra.chatId;
-                        delete chats[i].extra.appId;
-                    }
                     cb(null, user, chats);
                 }
             });

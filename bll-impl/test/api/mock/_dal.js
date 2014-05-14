@@ -194,6 +194,8 @@ DAL.prototype.getChatsList = function(args, done) {
                 if (!extra) {
                     return done(new Error('No extra information is found for Android application and chat: ' + chats[i].id));
                 } else {
+                    delete extra.chatId;
+                    delete extra.appId;
                     chats[i].extra = extra;
                 }
             } else {
