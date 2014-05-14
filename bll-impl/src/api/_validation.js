@@ -17,9 +17,13 @@ var appIdMax = new BigNumber('9223372036854775807');
 var chatIdMin = new BigNumber('0');
 var chatIdMax = new BigNumber('9223372036854775807');
 
+var chatsListOffsetMin = 0;
+var chatsListOffsetMax = 1000000;
+var chatsListLimitMin = 1;
+var chatsListLimitMax = 50;
+
 var messagesListOffsetMin = -100000;
 var messagesListOffsetMax =  100000;
-
 var messagesListLimitMin = 1;
 var messagesListLimitMax = 50;
 
@@ -76,12 +80,14 @@ module.exports = {
         return (typeof value === 'string') && value.length >= 1 && value.length <= 64;
     },
 
-    offset: function(value, minValue) {
-        return typeof value === 'number' && !isNaN(value) && value%1 === 0 && value >= minValue;
+    chatsListOffset: function(value) {
+        return typeof value === 'number' && !isNaN(value) && value.toString().match(regexpInt) &&
+            value >= chatsListOffsetMin && value <= chatsListOffsetMax;
     },
 
-    limit: function(value, minValue, maxValue) {
-        return typeof value === 'number' && !isNaN(value) && value%1 === 0 && value >= minValue && value <= maxValue;
+    chatsListLimit: function(value) {
+        return typeof value === 'number' && !isNaN(value) && value.toString().match(regexpInt) &&
+            value >= chatsListLimitMin && value <= chatsListLimitMax;
     },
 
     messagesListOffset: function(value) {

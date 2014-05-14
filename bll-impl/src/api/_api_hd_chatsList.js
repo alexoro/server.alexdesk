@@ -16,10 +16,6 @@ var errBuilder = require('./_errorBuilder');
 var defaultOffset = 0;
 var defaultLimit = 50;
 
-var minOffset = 0;
-var minLimit = 1;
-var maxLimit = 50;
-
 
 var _validateArgsHasErrors = function(env, args) {
     var dErr = domain.errors;
@@ -45,10 +41,10 @@ var _validateArgsHasErrors = function(env, args) {
         return errBuilder(dErr.INVALID_PARAMS, 'Incorrect api id value: ' + args.appId);
     }
 
-    if (args.offset !== undefined && !validate.offset(args.offset, minOffset)) {
+    if (args.offset !== undefined && !validate.chatsListOffset(args.offset)) {
         return errBuilder(dErr.INVALID_PARAMS, 'Offset is invalid: ' + args.offset);
     }
-    if (args.limit !== undefined && !validate.limit(args.limit, minLimit, maxLimit)) {
+    if (args.limit !== undefined && !validate.chatsListLimit(args.limit)) {
         return errBuilder(dErr.INVALID_PARAMS, 'Limit is invalid: ' + args.limit);
     }
 };
