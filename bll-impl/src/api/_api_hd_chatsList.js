@@ -62,6 +62,8 @@ var _execute = function(env, args, next) {
             dal.isAppExists(args.appId, function(err, exists) {
                 if (err) {
                     cb(errBuilder(dErr.INTERNAL_ERROR, err));
+                } else if (typeof exists !== 'boolean') {
+                    cb(errBuilder(dErr.INTERNAL_ERROR, 'isAppExists returned invalid response. Boolean is expected, result is: ' + exists));
                 } else if (!exists) {
                     cb(errBuilder(dErr.APP_NOT_FOUND, 'Application with specified ID is not found. #ID: ' + args.appId));
                 } else {
@@ -84,6 +86,8 @@ var _execute = function(env, args, next) {
             dal.userIsAssociatedWithApp(args.appId, user.type, user.id, function(err, isOk) {
                 if (err) {
                     return cb(errBuilder(dErr.INTERNAL_ERROR, err));
+                } else if (typeof isOk !== 'boolean') {
+                    cb(errBuilder(dErr.INTERNAL_ERROR, 'userIsAssociatedWithApp returned invalid response. Boolean is expected, result is: ' + isOk));
                 } else if (!isOk) {
                     cb(errBuilder(dErr.ACCESS_DENIED, 'You have no access to this application by given token: ' + args.accessToken));
                 } else {
@@ -100,8 +104,10 @@ var _execute = function(env, args, next) {
                 limit: limit
             };
             dal.getChatsList(reqArgs, function(err, chats) {
-                if (err || !chats) {
+                if (err) {
                     cb(errBuilder(dErr.INTERNAL_ERROR, err));
+                } else if (!(chats instanceof Array)) {
+                    cb(errBuilder(dErr.INTERNAL_ERROR, 'It is expected that #getChatsList will be an array. Received: ' + chats));
                 } else {
                     cb(null, user, chats);
                 }
