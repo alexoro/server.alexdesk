@@ -75,6 +75,9 @@ describe('API#security_createAuthTokenForAppUser', function() {
             },
             function(cb) {
                 api.hd_chatsList(argsBuilder('1.1', null, null), cb);
+            },
+            function(cb) {
+                api.hd_chatsList(argsBuilder('1.0', null, null), cb);
             }
         ];
         async.series(fnStack, fnStackInvalidArgsCallback(doneTest));

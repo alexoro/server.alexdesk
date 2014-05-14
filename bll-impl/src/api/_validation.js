@@ -6,7 +6,7 @@
 
 var BigNumber = require('bignumber.js');
 
-
+var regexpAppId = new RegExp("^[0-9]{1,19}$");
 var regexpGuid = new RegExp("^[a-fA-F0-9]{8}\\-[a-fA-F0-9]{4}\\-[a-fA-F0-9]{4}\\-[a-fA-F0-9]{4}\\-[a-fA-F0-9]{12}$");
 var regexpEmail = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
@@ -17,8 +17,12 @@ module.exports = {
 
     appId: function(value) {
         try {
-            var val = new BigNumber(value);
-            return val.isFinite() && val.mod(1).equals(0) && val.greaterThanOrEqualTo(appIdMin) && val.lessThanOrEqualTo(appIdMax);
+            if (typeof value === 'string' && value.match(regexpAppId)) {
+                var val = new BigNumber(value);
+                return val.greaterThanOrEqualTo(appIdMin) && val.lessThanOrEqualTo(appIdMax);
+            } else {
+                return false;
+            }
         } catch (err) {
             return false;
         }

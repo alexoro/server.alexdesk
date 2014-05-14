@@ -72,6 +72,9 @@ describe('API#hd_messagesList', function() {
             },
             function(cb) {
                 api.hd_messagesList(argsBuilder(token, '-1'), cb);
+            },
+            function(cb) {
+                api.hd_messagesList(argsBuilder(token, '1.0'), cb);
             }
         ];
         async.series(fnStack, fnStackInvalidArgsCallback(doneTest));
