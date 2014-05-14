@@ -14,24 +14,25 @@ var mockBuilder = require('./mock/');
 var validate = require('./_validation');
 
 
+var invalidArgsCb = function(cb) {
+    return function(err) {
+        if (err && err.number && err.number === dErrors.INVALID_PARAMS) {
+            cb();
+        } else if (err) {
+            cb(err);
+        } else {
+            cb(new Error('Application passed some invalid argument'));
+        }
+    };
+};
+
+
 var argsBuilder = function(login, password) {
     return {
         login: login, password: password
     };
 };
 
-var fnStackInvalidArgsCallback = function(doneTest) {
-    return function(err) {
-        if (err && err.number && err.number === dErrors.INVALID_PARAMS) {
-            doneTest();
-        } else if (err) {
-            doneTest(err);
-        } else {
-            assert.fail('Application passed some invalid argument');
-            doneTest();
-        }
-    };
-};
 
 describe('API#security_createAuthTokenForServiceUser', function() {
 
@@ -39,55 +40,55 @@ describe('API#security_createAuthTokenForServiceUser', function() {
         var api = mockBuilder.newApiWithMock().api;
         var fnStack = [
             function(cb) {
-                api.security_createAuthTokenForServiceUser(null, cb);
+                api.security_createAuthTokenForServiceUser(null, invalidArgsCb(cb));
             },
             function(cb) {
-                api.security_createAuthTokenForServiceUser({}, cb);
+                api.security_createAuthTokenForServiceUser({}, invalidArgsCb(cb));
             },
             function(cb) {
-                api.security_createAuthTokenForServiceUser(-1, cb);
+                api.security_createAuthTokenForServiceUser(-1, invalidArgsCb(cb));
             }
         ];
-        async.series(fnStack, fnStackInvalidArgsCallback(doneTest));
+        async.series(fnStack, doneTest);
     });
 
     it('Validate invalid arguments: email is invalid', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
         var fnStack = [
             function(cb) {
-                api.security_createAuthTokenForServiceUser(argsBuilder(null, null), cb);
+                api.security_createAuthTokenForServiceUser(argsBuilder(null, null), invalidArgsCb(cb));
             },
             function(cb) {
-                api.security_createAuthTokenForServiceUser(argsBuilder({}, null), cb);
+                api.security_createAuthTokenForServiceUser(argsBuilder({}, null), invalidArgsCb(cb));
             },
             function(cb) {
-                api.security_createAuthTokenForServiceUser(argsBuilder('', null), cb);
+                api.security_createAuthTokenForServiceUser(argsBuilder('', null), invalidArgsCb(cb));
             },
             function(cb) {
-                api.security_createAuthTokenForServiceUser(argsBuilder('xxx@xx:com', null), cb);
+                api.security_createAuthTokenForServiceUser(argsBuilder('xxx@xx:com', null), invalidArgsCb(cb));
             },
             function(cb) {
                 var email = '0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789';
-                api.security_createAuthTokenForServiceUser(argsBuilder(email, null), cb);
+                api.security_createAuthTokenForServiceUser(argsBuilder(email, null), invalidArgsCb(cb));
             }
         ];
-        async.series(fnStack, fnStackInvalidArgsCallback(doneTest));
+        async.series(fnStack, doneTest);
     });
 
     it('Validate invalid arguments: password is invalid', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
         var fnStack = [
             function(cb) {
-                api.security_createAuthTokenForServiceUser(argsBuilder('zzzzz', null), cb);
+                api.security_createAuthTokenForServiceUser(argsBuilder('zzzzz', null), invalidArgsCb(cb));
             },
             function(cb) {
-                api.security_createAuthTokenForServiceUser(argsBuilder('xxx@xxx.com', {}), cb);
+                api.security_createAuthTokenForServiceUser(argsBuilder('xxx@xxx.com', {}), invalidArgsCb(cb));
             },
             function(cb) {
-                api.security_createAuthTokenForServiceUser(argsBuilder('xxx@xxx.com', ''), cb);
+                api.security_createAuthTokenForServiceUser(argsBuilder('xxx@xxx.com', ''), invalidArgsCb(cb));
             }
         ];
-        async.series(fnStack, fnStackInvalidArgsCallback(doneTest));
+        async.series(fnStack, doneTest);
     });
 
     it('Token must not be created in case of error', function(doneTest) {

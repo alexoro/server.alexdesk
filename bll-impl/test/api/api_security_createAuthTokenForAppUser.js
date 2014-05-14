@@ -14,24 +14,25 @@ var mockBuilder = require('./mock/');
 var validate = require('./_validation');
 
 
+var invalidArgsCb = function(cb) {
+    return function(err) {
+        if (err && err.number && err.number === dErrors.INVALID_PARAMS) {
+            cb();
+        } else if (err) {
+            cb(err);
+        } else {
+            cb(new Error('Application passed some invalid argument'));
+        }
+    };
+};
+
+
 var argsBuilder = function(appId, login, password) {
     return {
         appId: appId, login: login, password: password
     };
 };
 
-var fnStackInvalidArgsCallback = function(doneTest) {
-    return function(err) {
-        if (err && err.number && err.number === dErrors.INVALID_PARAMS) {
-            doneTest();
-        } else if (err) {
-            doneTest(err);
-        } else {
-            assert.fail('Application passed some invalid argument');
-            doneTest();
-        }
-    };
-};
 
 describe('API#security_createAuthTokenForAppUser', function() {
 
@@ -39,84 +40,84 @@ describe('API#security_createAuthTokenForAppUser', function() {
         var api = mockBuilder.newApiWithMock().api;
         var fnStack = [
             function(cb) {
-                api.security_createAuthTokenForAppUser(null, cb);
+                api.security_createAuthTokenForAppUser(null, invalidArgsCb(cb));
             },
             function(cb) {
-                api.security_createAuthTokenForAppUser({}, cb);
+                api.security_createAuthTokenForAppUser({}, invalidArgsCb(cb));
             },
             function(cb) {
-                api.security_createAuthTokenForAppUser(-1, cb);
+                api.security_createAuthTokenForAppUser(-1, invalidArgsCb(cb));
             }
         ];
-        async.series(fnStack, fnStackInvalidArgsCallback(doneTest));
+        async.series(fnStack, doneTest);
     });
 
     it('Validate invalid arguments: app id is invalid', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
         var fnStack = [
             function(cb) {
-                api.security_createAuthTokenForAppUser(argsBuilder(null, null, null), cb);
+                api.security_createAuthTokenForAppUser(argsBuilder(null, null, null), invalidArgsCb(cb));
             },
             function(cb) {
-                api.security_createAuthTokenForAppUser(argsBuilder({}, null, null), cb);
+                api.security_createAuthTokenForAppUser(argsBuilder({}, null, null), invalidArgsCb(cb));
             },
             function(cb) {
-                api.security_createAuthTokenForAppUser(argsBuilder('', null, null), cb);
+                api.security_createAuthTokenForAppUser(argsBuilder('', null, null), invalidArgsCb(cb));
             },
             function(cb) {
-                api.security_createAuthTokenForAppUser(argsBuilder('xxx@xx:com', null, null), cb);
+                api.security_createAuthTokenForAppUser(argsBuilder('xxx@xx:com', null, null), invalidArgsCb(cb));
             },
             function(cb) {
                 var appId = '0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789';
-                api.security_createAuthTokenForAppUser(argsBuilder(appId, null, null), cb);
+                api.security_createAuthTokenForAppUser(argsBuilder(appId, null, null), invalidArgsCb(cb));
             },
             function(cb) {
-                api.security_createAuthTokenForAppUser(argsBuilder('-1', null, null), cb);
+                api.security_createAuthTokenForAppUser(argsBuilder('-1', null, null), invalidArgsCb(cb));
             },
             function(cb) {
-                api.hd_chatsList(argsBuilder('1.1', null, null), cb);
+                api.hd_chatsList(argsBuilder('1.1', null, null), invalidArgsCb(cb));
             },
             function(cb) {
-                api.hd_chatsList(argsBuilder('1.0', null, null), cb);
+                api.hd_chatsList(argsBuilder('1.0', null, null), invalidArgsCb(cb));
             }
         ];
-        async.series(fnStack, fnStackInvalidArgsCallback(doneTest));
+        async.series(fnStack, doneTest);
     });
 
     it('Validate invalid arguments: login is invalid', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
         var fnStack = [
             function(cb) {
-                api.security_createAuthTokenForAppUser(argsBuilder('1', null, null), cb);
+                api.security_createAuthTokenForAppUser(argsBuilder('1', null, null), invalidArgsCb(cb));
             },
             function(cb) {
-                api.security_createAuthTokenForAppUser(argsBuilder('1', {}, null), cb);
+                api.security_createAuthTokenForAppUser(argsBuilder('1', {}, null), invalidArgsCb(cb));
             },
             function(cb) {
-                api.security_createAuthTokenForAppUser(argsBuilder('1', '', null), cb);
+                api.security_createAuthTokenForAppUser(argsBuilder('1', '', null), invalidArgsCb(cb));
             },
             function(cb) {
                 var login = '0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789';
-                api.security_createAuthTokenForAppUser(argsBuilder('1', login, null), cb);
+                api.security_createAuthTokenForAppUser(argsBuilder('1', login, null), invalidArgsCb(cb));
             }
         ];
-        async.series(fnStack, fnStackInvalidArgsCallback(doneTest));
+        async.series(fnStack, doneTest);
     });
 
     it('Validate invalid arguments: password is invalid', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
         var fnStack = [
             function(cb) {
-                api.security_createAuthTokenForAppUser(argsBuilder('1', 'zzzzz', null), cb);
+                api.security_createAuthTokenForAppUser(argsBuilder('1', 'zzzzz', null), invalidArgsCb(cb));
             },
             function(cb) {
-                api.security_createAuthTokenForAppUser(argsBuilder('1', 'xxx@xxx.com', {}), cb);
+                api.security_createAuthTokenForAppUser(argsBuilder('1', 'xxx@xxx.com', {}), invalidArgsCb(cb));
             },
             function(cb) {
-                api.security_createAuthTokenForAppUser(argsBuilder('1', 'xxx@xxx.com', ''), cb);
+                api.security_createAuthTokenForAppUser(argsBuilder('1', 'xxx@xxx.com', ''), invalidArgsCb(cb));
             }
         ];
-        async.series(fnStack, fnStackInvalidArgsCallback(doneTest));
+        async.series(fnStack, doneTest);
     });
 
     it('Token must not be created in case of error', function(doneTest) {
