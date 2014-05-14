@@ -102,6 +102,9 @@ describe('API#hd_chatsList', function() {
             },
             function(cb) {
                 api.hd_chatsList(argsBuilder(token, appId, 0.2), cb);
+            },
+            function(cb) {
+                api.hd_chatsList(argsBuilder(token, appId, 0.0), cb);
             }
         ];
         async.series(fnStack, fnStackInvalidArgsCallback(doneTest));
@@ -130,6 +133,9 @@ describe('API#hd_chatsList', function() {
             },
             function(cb) {
                 api.hd_chatsList(argsBuilder(token, appId, offset, 1.2), cb);
+            },
+            function(cb) {
+                api.hd_chatsList(argsBuilder(token, appId, 1.0), cb);
             }
         ];
         async.series(fnStack, fnStackInvalidArgsCallback(doneTest));
