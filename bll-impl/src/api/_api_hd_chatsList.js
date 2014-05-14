@@ -109,6 +109,10 @@ var _execute = function(env, args, next) {
                 } else if (!(chats instanceof Array)) {
                     cb(errBuilder(dErr.INTERNAL_ERROR, 'It is expected that #getChatsList will be an array. Received: ' + chats));
                 } else {
+                    for (var i = 0; i < chats.length; i++) {
+                        delete chats[i].extra.chatId;
+                        delete chats[i].extra.appId;
+                    }
                     cb(null, user, chats);
                 }
             });
@@ -141,6 +145,8 @@ var _execute = function(env, args, next) {
                     cb(errBuilder(dErr.INTERNAL_ERROR, err));
                 } else {
                     for (var i = 0; i < chats.length; i++) {
+                        delete result[chats[i].id].chatId;
+                        delete result[chats[i].id].appId;
                         chats[i].lastMessage = result[chats[i].id];
                     }
                     cb(null, chats);

@@ -194,8 +194,6 @@ DAL.prototype.getChatsList = function(args, done) {
                 if (!extra) {
                     return done(new Error('No extra information is found for Android application and chat: ' + chats[i].id));
                 } else {
-                    delete extra.chatId;
-                    delete extra.appId;
                     chats[i].extra = extra;
                 }
             } else {
@@ -275,8 +273,6 @@ DAL.prototype.getLastMessagePerChats = function(chatIds, done) {
     for (var i = 0; i < this.mock.chat_messages.length; i++) {
         var item = utils.deepClone(this.mock.chat_messages[i]);
         r[item.chatId] = item;
-        delete item.chatId;
-        delete item.appId;
     }
 
     done(null, r);
