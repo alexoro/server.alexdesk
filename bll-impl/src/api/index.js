@@ -33,6 +33,9 @@ var Api = function(env) {
     if (typeof env.accessTokenConfig !== 'object' || !env.accessTokenConfig) {
         throw new Error('Access token config is not defined or is null or is not a object');
     }
+    if (typeof env.currentTimeProvider !== 'object' || !env.currentTimeProvider) {
+        throw new Error('Current time provider is not defined or is null or is not a object');
+    }
 
     this.env = env;
 };

@@ -230,7 +230,8 @@ DAL.prototype.getMessagesList = function(args, done) {
     var r = _.where(this.mock.chat_messages, {chatId: chatId})
         .slice(offset)
         .splice(0, limit);
-    done(null, r);
+
+    done(null, utils.deepClone(r));
 };
 
 DAL.prototype.getNumberOfUnreadMessagesPerChats = function(args, done) {
@@ -286,6 +287,17 @@ DAL.prototype.getLastVisitOfUserToChat = function(args, done) {
     } else {
         done(null, r.lastVisit);
     }
+};
+
+DAL.prototype.updateLastVisitForChat = function(args, done) {
+    var reqArgs = {
+        chatId: args.chatId,
+        userType: args.userType,
+        userId: args.userId
+    };
+    var r = _.findWhere(this.mock.chat_participants, reqArgs);
+    r.lastVisit = args.newLastVisit;
+    done(null);
 };
 
 

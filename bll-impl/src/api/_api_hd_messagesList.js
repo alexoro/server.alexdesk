@@ -148,18 +148,45 @@ var _execute = function(env, args, next) {
                 } else if (!(messages instanceof Array)) {
                     cb(errBuilder(dErr.INTERNAL_ERROR, 'The result of getMessagesList() is not a Array type: ' + lastVisit));
                 } else {
-                    cb(null, messages, lastVisit);
+                    cb(null, user, messages, lastVisit);
                 }
             });
         },
 
-        function(messages, lastVisit, cb) {
+        function(user, messages, lastVisit, cb) {
             for (var i = 0; i < messages.length; i++) {
                 delete messages[i].appId;
                 delete messages[i].chatId;
                 messages[i].isRead = messages[i].created.getTime() <= lastVisit.getTime();
             }
-            cb(null, messages);
+            cb(null, user, messages);
+        },
+
+        function(user, messages, cb) {
+            env.currentTimeProvider.getCurrentTime(function(err, nowDate) {
+                if (err) {
+                    cb(errBuilder(dErr.INTERNAL_ERROR, err));
+                } else if (!(nowDate instanceof Date)) {
+                    cb(errBuilder(dErr.INTERNAL_ERROR, 'Current time is not a Date type: ' + nowDate));
+                } else {
+                    cb(null, user, messages, nowDate);
+                }
+            });
+        },
+        function(user, messages, nowDate, cb) {
+            var reqArgs = {
+                chatId: args.chatId,
+                userType: user.type,
+                userId: user.id,
+                newLastVisit: nowDate
+            };
+            dal.updateLastVisitForChat(reqArgs, function(err) {
+                if (err) {
+                    cb(errBuilder(dErr.INTERNAL_ERROR, err));
+                } else {
+                    cb(null, messages);
+                }
+            });
         }
     ];
 

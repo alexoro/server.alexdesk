@@ -357,4 +357,24 @@ describe('API#hd_messagesList', function() {
         });
     });
 
+    it('All messages must become read after calling this method', function(doneTest) {
+        var api = mockBuilder.newApiWithMock().api;
+        var reqArgs = argsBuilder('142b2b49-75f2-456f-9533-435bd0ef94c0', '2');
+        api.hd_messagesList(reqArgs, function(err) {
+            if (err) {
+                return doneTest(err);
+            }
+            api.hd_messagesList(reqArgs, function(err, result) {
+                var allIsRead = true;
+                for (var i = 0; i < result.length; i++) {
+                    allIsRead = allIsRead && result[i].isRead;
+                }
+                if (!allIsRead) {
+                    assert.fail('All messages for specified user must become read after calling this method');
+                }
+                doneTest();
+            });
+        });
+    });
+
 });
