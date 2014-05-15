@@ -27,6 +27,9 @@ var messagesListOffsetMax =  100000;
 var messagesListLimitMin = 1;
 var messagesListLimitMax = 50;
 
+var messageMinLength = 2;
+var messageMaxLength = 2000;
+
 
 module.exports = {
 
@@ -98,6 +101,10 @@ module.exports = {
     messagesListLimit: function(value) {
         return typeof value === 'number' && !isNaN(value) && value.toString().match(regexpInt) &&
             value >= messagesListLimitMin && value <= messagesListLimitMax;
+    },
+
+    message: function(value) {
+        return typeof value === 'string' && value.length >= messageMinLength && value.length <= messageMaxLength;
     }
 
 };

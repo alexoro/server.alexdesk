@@ -182,7 +182,7 @@ describe('API#hd_messageCreate', function() {
 
     it('Must return INTERNAL_ERROR in case of invalid response from DAL', function(doneTest) {
         var mock = mockBuilder.newApiWithMock();
-        mock.dal.getUserMainInfoByToken = function(args, done) {
+        mock.dal.isChatExists = function(args, done) {
             done(null, null);
         };
 
@@ -202,7 +202,7 @@ describe('API#hd_messageCreate', function() {
 
     it('Check unknown chat for service user', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
-        var reqArgs = argsBuilder('142b2b49-75f2-456f-9533-435bd0ef94c0', '10');
+        var reqArgs = argsBuilder('142b2b49-75f2-456f-9533-435bd0ef94c0', '10', validMessage);
         api.hd_messageCreate(reqArgs, function(err, result) {
             if (err && err.number && err.number === dErrors.CHAT_NOT_FOUND) {
                 doneTest();
@@ -217,7 +217,7 @@ describe('API#hd_messageCreate', function() {
 
     it('Check unknown chat for application user', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
-        var reqArgs = argsBuilder('302a1baa-78b0-4a4d-ae1f-ebb5a147c71a', '10');
+        var reqArgs = argsBuilder('302a1baa-78b0-4a4d-ae1f-ebb5a147c71a', '10', validMessage);
         api.hd_messageCreate(reqArgs, function(err, result) {
             if (err && err.number && err.number === dErrors.CHAT_NOT_FOUND) {
                 doneTest();
@@ -232,7 +232,7 @@ describe('API#hd_messageCreate', function() {
 
     it('Check access to chat for service user that is not associated with him', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
-        var reqArgs = argsBuilder('142b2b49-75f2-456f-9533-435bd0ef94c0', '4');
+        var reqArgs = argsBuilder('142b2b49-75f2-456f-9533-435bd0ef94c0', '4', validMessage);
         api.hd_messageCreate(reqArgs, function(err, result) {
             if (err && err.number && err.number === dErrors.ACCESS_DENIED) {
                 doneTest();
@@ -247,7 +247,7 @@ describe('API#hd_messageCreate', function() {
 
     it('Check access to chat for app user that is not associated with him', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
-        var reqArgs = argsBuilder('302a1baa-78b0-4a4d-ae1f-ebb5a147c71a', '3');
+        var reqArgs = argsBuilder('302a1baa-78b0-4a4d-ae1f-ebb5a147c71a', '3', validMessage);
         api.hd_messageCreate(reqArgs, function(err, result) {
             if (err && err.number && err.number === dErrors.ACCESS_DENIED) {
                 doneTest();
@@ -259,7 +259,6 @@ describe('API#hd_messageCreate', function() {
             }
         });
     });
-
 
     it('Message must be created for service user', function(doneTest) {
         var currentTime = new Date('2014-05-20 00:00:00 +00:00');
@@ -292,12 +291,11 @@ describe('API#hd_messageCreate', function() {
 
             var matchMessage = {
                 id: idForMessage,
-                appId: '1',
-                chatId: '1',
                 userCreatorId: '1',
                 userCreatorType: domain.userTypes.SERVICE_USER,
                 created: currentTime,
-                content: validMessage
+                content: validMessage,
+                isRead: true
             };
 
             assert.deepEqual(message, matchMessage, 'Expected message and received message are not match');
@@ -324,7 +322,7 @@ describe('API#hd_messageCreate', function() {
             }
         };
 
-        var token = '1302a1baa-78b0-4a4d-ae1f-ebb5a147c71a';
+        var token = '302a1baa-78b0-4a4d-ae1f-ebb5a147c71a';
 
         var mock = mockBuilder.newApiWithMock({currentTimeProvider: currentTimeProvider, uuid: uuid});
         var api = mock.api;
@@ -336,12 +334,11 @@ describe('API#hd_messageCreate', function() {
 
             var matchMessage = {
                 id: idForMessage,
-                appId: '1',
-                chatId: '1',
                 userCreatorId: '2',
                 userCreatorType: domain.userTypes.APP_USER,
                 created: currentTime,
-                content: validMessage
+                content: validMessage,
+                isRead: true
             };
 
             assert.deepEqual(message, matchMessage, 'Expected message and received message are not match');
@@ -425,7 +422,7 @@ describe('API#hd_messageCreate', function() {
         });
     });
 
-    it('All messages must become read after calling this method', function(doneTest) {
+    it('Last message for another user after create must be unread', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
         var reqArgs = argsBuilder('142b2b49-75f2-456f-9533-435bd0ef94c0', validChatId, validMessage);
         api.hd_messageCreate(reqArgs, function(err, message) {
@@ -445,7 +442,7 @@ describe('API#hd_messageCreate', function() {
                     return doneTest(err);
                 }
 
-                assert.ok(result[0].isRead, 'Last message for another user after create user must be unread');
+                assert.notOk(result[0].isRead, 'Last message for another user after create must be unread');
                 doneTest();
             });
         });

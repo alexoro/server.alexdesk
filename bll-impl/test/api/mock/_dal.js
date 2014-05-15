@@ -300,5 +300,24 @@ DAL.prototype.updateLastVisitForChat = function(args, done) {
     done(null);
 };
 
+DAL.prototype.createMessageInChatAndUpdateLastVisit = function(args, done) {
+    var msg = utils.deepClone(args.newMessage);
+    this.mock.chat_messages.push(msg);
+
+    var reqArgs = {
+        chatId: msg.chatId,
+        userType: msg.userCreatorType,
+        userId: msg.userCreatorId,
+        newLastVisit: msg.created
+    };
+    this.updateLastVisitForChat(reqArgs, function(err) {
+        if (err) {
+            done(err);
+        } else {
+            done();
+        }
+    });
+};
+
 
 module.exports = DAL;
