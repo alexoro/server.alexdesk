@@ -448,4 +448,19 @@ describe('API#hd_messageCreate', function() {
         });
     });
 
+    it('Message must be escaped', function(doneTest) {
+        var api = mockBuilder.newApiWithMock().api;
+        var reqArgs = argsBuilder('142b2b49-75f2-456f-9533-435bd0ef94c0', validChatId, '<a href="xas">Ololo</a>');
+        api.hd_messageCreate(reqArgs, function(err, message) {
+            if (err) {
+                return doneTest(err);
+            } else if (!message) {
+                return doneTest(new Error('Message did not created'));
+            }
+
+            assert.equal(message.content, '&lt;a href&#61;&#34;xas&#34;&gt;Ololo&lt;/a&gt;', 'Message have not been escaped');
+            doneTest();
+        });
+    });
+
 });
