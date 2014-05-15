@@ -409,6 +409,10 @@ describe('API#hd_messageCreate', function() {
                 chatId: validChatId
             };
             api.hd_messagesList(argsList, function(err, result) {
+                if (err) {
+                    return doneTest(err);
+                }
+
                 var allIsRead = true;
                 for (var i = 0; i < result.length; i++) {
                     allIsRead = allIsRead && result[i].isRead;
@@ -416,6 +420,32 @@ describe('API#hd_messageCreate', function() {
                 if (!allIsRead) {
                     assert.fail('All messages for specified user must become read after calling this method');
                 }
+                doneTest();
+            });
+        });
+    });
+
+    it('All messages must become read after calling this method', function(doneTest) {
+        var api = mockBuilder.newApiWithMock().api;
+        var reqArgs = argsBuilder('142b2b49-75f2-456f-9533-435bd0ef94c0', validChatId, validMessage);
+        api.hd_messageCreate(reqArgs, function(err, message) {
+            if (err) {
+                return doneTest(err);
+            } else if (!message) {
+                return doneTest(new Error('Message did not created'));
+            }
+
+            var argsList = {
+                accessToken: '302a1baa-78b0-4a4d-ae1f-ebb5a147c71a',
+                chatId: validChatId,
+                offset: -1
+            };
+            api.hd_messagesList(argsList, function(err, result) {
+                if (err) {
+                    return doneTest(err);
+                }
+
+                assert.ok(result[0].isRead, 'Last message for another user after create user must be unread');
                 doneTest();
             });
         });
