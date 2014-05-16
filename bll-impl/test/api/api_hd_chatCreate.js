@@ -52,7 +52,7 @@ var argsBuilder = function(override) {
 
 describe('API#hd_chatCreate', function() {
 
-    it('Validate invalid arguments: all is invalid', function(doneTest) {
+    it.only('Validate invalid arguments: all is invalid', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
         var fnStack = [
             function(cb) {
