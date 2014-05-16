@@ -169,24 +169,292 @@ describe('API#hd_chatCreate', function() {
         async.series(fnStack, doneTest);
     });
 
+    it('Validate invalid arguments: platform', function(doneTest) {
+        var api = mockBuilder.newApiWithMock().api;
+        var fnStack = [
+            function(cb) {
+                api.hd_chatCreate(argsBuilder({platform: null}), invalidArgsCb(cb));
+            },
+            function(cb) {
+                api.hd_chatCreate(argsBuilder({platform: {}}), invalidArgsCb(cb));
+            },
+            function(cb) {
+                api.hd_chatCreate(argsBuilder({platform: -1}), invalidArgsCb(cb));
+            },
+            function(cb) {
+                api.hd_chatCreate(argsBuilder({platform: 100}), invalidArgsCb(cb));
+            }
+        ];
+        async.series(fnStack, doneTest);
+    });
 
+    it('Validate invalid arguments: country', function(doneTest) {
+        var api = mockBuilder.newApiWithMock().api;
+        var fnStack = [
+            function(cb) {
+                api.hd_chatCreate(argsBuilder({country: null}), invalidArgsCb(cb));
+            },
+            function(cb) {
+                api.hd_chatCreate(argsBuilder({country: {}}), invalidArgsCb(cb));
+            },
+            function(cb) {
+                api.hd_chatCreate(argsBuilder({country: 4}), invalidArgsCb(cb));
+            },
+            function(cb) {
+                api.hd_chatCreate(argsBuilder({lang: 'xyz'}), invalidArgsCb(cb));
+            }
+        ];
+        async.series(fnStack, doneTest);
+    });
 
+    it('Validate invalid arguments: language', function(doneTest) {
+        var api = mockBuilder.newApiWithMock().api;
+        var fnStack = [
+            function(cb) {
+                api.hd_chatCreate(argsBuilder({lang: null}), invalidArgsCb(cb));
+            },
+            function(cb) {
+                api.hd_chatCreate(argsBuilder({lang: {}}), invalidArgsCb(cb));
+            },
+            function(cb) {
+                api.hd_chatCreate(argsBuilder({lang: 4}), invalidArgsCb(cb));
+            },
+            function(cb) {
+                api.hd_chatCreate(argsBuilder({lang: 'xyz'}), invalidArgsCb(cb));
+            }
+        ];
+        async.series(fnStack, doneTest);
+    });
 
+    it('Validate invalid arguments: api', function(doneTest) {
+        var api = mockBuilder.newApiWithMock().api;
+        var fnStack = [
+            function(cb) {
+                api.hd_chatCreate(argsBuilder({api: null}), invalidArgsCb(cb));
+            },
+            function(cb) {
+                api.hd_chatCreate(argsBuilder({api: {}}), invalidArgsCb(cb));
+            },
+            function(cb) {
+                api.hd_chatCreate(argsBuilder({api: ''}), invalidArgsCb(cb));
+            },
+            function(cb) {
+                api.hd_chatCreate(argsBuilder({api: -1}), invalidArgsCb(cb));
+            }
+        ];
+        async.series(fnStack, doneTest);
+    });
 
+    it('Validate invalid arguments: apiTextValue', function(doneTest) {
+        var api = mockBuilder.newApiWithMock().api;
+        var fnStack = [
+            function(cb) {
+                api.hd_chatCreate(argsBuilder({apiTextValue: null}), invalidArgsCb(cb));
+            },
+            function(cb) {
+                api.hd_chatCreate(argsBuilder({apiTextValue: {}}), invalidArgsCb(cb));
+            },
+            function(cb) {
+                api.hd_chatCreate(argsBuilder({apiTextValue: -1}), invalidArgsCb(cb));
+            },
+            function(cb) {
+                var veryLong = new Array(100).join("a");
+                api.hd_chatCreate(argsBuilder({apiTextValue: veryLong}), invalidArgsCb(cb));
+            }
+        ];
+        async.series(fnStack, doneTest);
+    });
 
+    it('Validate invalid arguments: appBuild', function(doneTest) {
+        var api = mockBuilder.newApiWithMock().api;
+        var fnStack = [
+            function(cb) {
+                api.hd_chatCreate(argsBuilder({appBuild: null}), invalidArgsCb(cb));
+            },
+            function(cb) {
+                api.hd_chatCreate(argsBuilder({appBuild: {}}), invalidArgsCb(cb));
+            },
+            function(cb) {
+                api.hd_chatCreate(argsBuilder({appBuild: '1'}), invalidArgsCb(cb));
+            },
+            function(cb) {
+                api.hd_chatCreate(argsBuilder({appBuild: -1}), invalidArgsCb(cb));
+            }
+        ];
+        async.series(fnStack, doneTest);
+    });
 
+    it('Validate invalid arguments: appVersion', function(doneTest) {
+        var api = mockBuilder.newApiWithMock().api;
+        var fnStack = [
+            function(cb) {
+                api.hd_chatCreate(argsBuilder({appVersion: null}), invalidArgsCb(cb));
+            },
+            function(cb) {
+                api.hd_chatCreate(argsBuilder({appVersion: {}}), invalidArgsCb(cb));
+            },
+            function(cb) {
+                api.hd_chatCreate(argsBuilder({appVersion: 1}), invalidArgsCb(cb));
+            },
+            function(cb) {
+                var veryLong = new Array(100).join("a");
+                api.hd_chatCreate(argsBuilder({appVersion: veryLong}), invalidArgsCb(cb));
+            }
+        ];
+        async.series(fnStack, doneTest);
+    });
 
-    
+    it('Validate invalid arguments: deviceManufacturer', function(doneTest) {
+        var api = mockBuilder.newApiWithMock().api;
+        var fnStack = [
+            function(cb) {
+                api.hd_chatCreate(argsBuilder({deviceManufacturer: null}), invalidArgsCb(cb));
+            },
+            function(cb) {
+                api.hd_chatCreate(argsBuilder({deviceManufacturer: {}}), invalidArgsCb(cb));
+            },
+            function(cb) {
+                api.hd_chatCreate(argsBuilder({deviceManufacturer: 1}), invalidArgsCb(cb));
+            },
+            function(cb) {
+                var veryLong = new Array(100).join("a");
+                api.hd_chatCreate(argsBuilder({deviceManufacturer: veryLong}), invalidArgsCb(cb));
+            }
+        ];
+        async.series(fnStack, doneTest);
+    });
+
+    it('Validate invalid arguments: deviceModel', function(doneTest) {
+        var api = mockBuilder.newApiWithMock().api;
+        var fnStack = [
+            function(cb) {
+                api.hd_chatCreate(argsBuilder({deviceModel: null}), invalidArgsCb(cb));
+            },
+            function(cb) {
+                api.hd_chatCreate(argsBuilder({deviceModel: {}}), invalidArgsCb(cb));
+            },
+            function(cb) {
+                api.hd_chatCreate(argsBuilder({deviceModel: 1}), invalidArgsCb(cb));
+            },
+            function(cb) {
+                var veryLong = new Array(100).join("a");
+                api.hd_chatCreate(argsBuilder({deviceModel: veryLong}), invalidArgsCb(cb));
+            }
+        ];
+        async.series(fnStack, doneTest);
+    });
+
+    it('Validate invalid arguments: deviceWidthPx', function(doneTest) {
+        var api = mockBuilder.newApiWithMock().api;
+        var fnStack = [
+            function(cb) {
+                api.hd_chatCreate(argsBuilder({deviceWidthPx: null}), invalidArgsCb(cb));
+            },
+            function(cb) {
+                api.hd_chatCreate(argsBuilder({deviceWidthPx: {}}), invalidArgsCb(cb));
+            },
+            function(cb) {
+                api.hd_chatCreate(argsBuilder({deviceWidthPx: '1'}), invalidArgsCb(cb));
+            },
+            function(cb) {
+                api.hd_chatCreate(argsBuilder({deviceWidthPx: -1}), invalidArgsCb(cb));
+            },
+            function(cb) {
+                api.hd_chatCreate(argsBuilder({deviceWidthPx: 40000}), invalidArgsCb(cb));
+            }
+        ];
+        async.series(fnStack, doneTest);
+    });
+
+    it('Validate invalid arguments: deviceHeightPx', function(doneTest) {
+        var api = mockBuilder.newApiWithMock().api;
+        var fnStack = [
+            function(cb) {
+                api.hd_chatCreate(argsBuilder({deviceHeightPx: null}), invalidArgsCb(cb));
+            },
+            function(cb) {
+                api.hd_chatCreate(argsBuilder({deviceHeightPx: {}}), invalidArgsCb(cb));
+            },
+            function(cb) {
+                api.hd_chatCreate(argsBuilder({deviceHeightPx: '1'}), invalidArgsCb(cb));
+            },
+            function(cb) {
+                api.hd_chatCreate(argsBuilder({deviceHeightPx: -1}), invalidArgsCb(cb));
+            },
+            function(cb) {
+                api.hd_chatCreate(argsBuilder({deviceHeightPx: 40000}), invalidArgsCb(cb));
+            }
+        ];
+        async.series(fnStack, doneTest);
+    });
+
+    it('Validate invalid arguments: deviceDensity', function(doneTest) {
+        var api = mockBuilder.newApiWithMock().api;
+        var fnStack = [
+            function(cb) {
+                api.hd_chatCreate(argsBuilder({deviceDensity: null}), invalidArgsCb(cb));
+            },
+            function(cb) {
+                api.hd_chatCreate(argsBuilder({deviceDensity: {}}), invalidArgsCb(cb));
+            },
+            function(cb) {
+                api.hd_chatCreate(argsBuilder({deviceDensity: '1'}), invalidArgsCb(cb));
+            },
+            function(cb) {
+                api.hd_chatCreate(argsBuilder({deviceDensity: -1}), invalidArgsCb(cb));
+            },
+            function(cb) {
+                api.hd_chatCreate(argsBuilder({deviceDensity: 40000}), invalidArgsCb(cb));
+            }
+        ];
+        async.series(fnStack, doneTest);
+    });
+
+    it('Validate invalid arguments: isRooted', function(doneTest) {
+        var api = mockBuilder.newApiWithMock().api;
+        var fnStack = [
+            function(cb) {
+                api.hd_chatCreate(argsBuilder({isRooted: null}), invalidArgsCb(cb));
+            },
+            function(cb) {
+                api.hd_chatCreate(argsBuilder({isRooted: {}}), invalidArgsCb(cb));
+            },
+            function(cb) {
+                api.hd_chatCreate(argsBuilder({isRooted: '1'}), invalidArgsCb(cb));
+            }
+        ];
+        async.series(fnStack, doneTest);
+    });
+
+    it('Validate invalid arguments: metaData', function(doneTest) {
+        var api = mockBuilder.newApiWithMock().api;
+        var fnStack = [
+            function(cb) {
+                api.hd_chatCreate(argsBuilder({metaData: null}), invalidArgsCb(cb));
+            },
+            function(cb) {
+                api.hd_chatCreate(argsBuilder({metaData: {}}), invalidArgsCb(cb));
+            },
+            function(cb) {
+                api.hd_chatCreate(argsBuilder({metaData: 1}), invalidArgsCb(cb));
+            },
+            function(cb) {
+                var veryLong = new Array(10000).join("a");
+                api.hd_chatCreate(argsBuilder({metaData: veryLong}), invalidArgsCb(cb));
+            }
+        ];
+        async.series(fnStack, doneTest);
+    });
 
     it('Must return INTERNAL_ERROR in case of error in DAL', function(doneTest) {
         var mock = mockBuilder.newApiWithMock();
-        mock.dal.getUserMainInfoByToken = function(args, done) {
+        mock.dal.isAppExists = function(args, done) {
             done(new Error('Not implemented yet'));
         };
 
         var api = mock.api;
-        var reqArgs = argsBuilder('142b2b49-75f2-456f-9533-435bd0ef94c0', validChatId, validMessage);
-        api.hd_chatCreate(reqArgs, function(err, result) {
+        var reqArgs = argsBuilder({accessToken: '142b2b49-75f2-456f-9533-435bd0ef94c0'});
+        api.hd_chatCreate(reqArgs, function(err) {
             if (err && err.number && err.number === dErrors.INTERNAL_ERROR) {
                 doneTest();
             } else if (err) {
@@ -200,13 +468,13 @@ describe('API#hd_chatCreate', function() {
 
     it('Must return INTERNAL_ERROR in case of invalid response from DAL', function(doneTest) {
         var mock = mockBuilder.newApiWithMock();
-        mock.dal.isChatExists = function(args, done) {
+        mock.dal.isAppExists = function(args, done) {
             done(null, null);
         };
 
         var api = mock.api;
-        var reqArgs = argsBuilder('142b2b49-75f2-456f-9533-435bd0ef94c0', validChatId, validMessage);
-        api.hd_chatCreate(reqArgs, function(err, result) {
+        var reqArgs = argsBuilder({accessToken: '142b2b49-75f2-456f-9533-435bd0ef94c0'});
+        api.hd_chatCreate(reqArgs, function(err) {
             if (err && err.number && err.number === dErrors.INTERNAL_ERROR) {
                 doneTest();
             } else if (err) {
@@ -218,11 +486,13 @@ describe('API#hd_chatCreate', function() {
         });
     });
 
-    it('Check unknown chat for service user', function(doneTest) {
+    // =========================================================
+
+    it('Check unknown application for service user', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
-        var reqArgs = argsBuilder('142b2b49-75f2-456f-9533-435bd0ef94c0', '10', validMessage);
-        api.hd_chatCreate(reqArgs, function(err, result) {
-            if (err && err.number && err.number === dErrors.CHAT_NOT_FOUND) {
+        var reqArgs = argsBuilder({accessToken: '142b2b49-75f2-456f-9533-435bd0ef94c0', appId: '10'});
+        api.hd_chatsList(reqArgs, function(err) {
+            if (err && err.number && err.number === dErrors.APP_NOT_FOUND) {
                 doneTest();
             } else if (err) {
                 doneTest(err);
@@ -233,11 +503,11 @@ describe('API#hd_chatCreate', function() {
         });
     });
 
-    it('Check unknown chat for application user', function(doneTest) {
+    it('Check unknown application for application user', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
-        var reqArgs = argsBuilder('302a1baa-78b0-4a4d-ae1f-ebb5a147c71a', '10', validMessage);
-        api.hd_chatCreate(reqArgs, function(err, result) {
-            if (err && err.number && err.number === dErrors.CHAT_NOT_FOUND) {
+        var reqArgs = argsBuilder({accessToken: '302a1baa-78b0-4a4d-ae1f-ebb5a147c71a', appId: '10'});
+        api.hd_chatsList(reqArgs, function(err) {
+            if (err && err.number && err.number === dErrors.APP_NOT_FOUND) {
                 doneTest();
             } else if (err) {
                 doneTest(err);
@@ -248,37 +518,39 @@ describe('API#hd_chatCreate', function() {
         });
     });
 
-    it('Check access to chat for service user that is not associated with him', function(doneTest) {
+    it('Check access to application for service user that is not associated with him', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
-        var reqArgs = argsBuilder('142b2b49-75f2-456f-9533-435bd0ef94c0', '4', validMessage);
-        api.hd_chatCreate(reqArgs, function(err, result) {
+        var reqArgs = argsBuilder({accessToken: '142b2b49-75f2-456f-9533-435bd0ef94c0', appId: '2'});
+        api.hd_chatsList(reqArgs, function(err) {
             if (err && err.number && err.number === dErrors.ACCESS_DENIED) {
                 doneTest();
             } else if (err) {
                 doneTest(err);
             } else {
-                assert.fail('Must return ACCESS_DENIED for chat that not belongs to service user');
+                assert.fail('Must return ACCESS_DENIED for application that not belongs to service user');
                 doneTest();
             }
         });
     });
 
-    it('Check access to chat for app user that is not associated with him', function(doneTest) {
+    it('Check access to application for app user that is not associated with him', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
-        var reqArgs = argsBuilder('302a1baa-78b0-4a4d-ae1f-ebb5a147c71a', '3', validMessage);
-        api.hd_chatCreate(reqArgs, function(err, result) {
+        var reqArgs = argsBuilder({accessToken: '302a1baa-78b0-4a4d-ae1f-ebb5a147c71a', appId: '2'});
+        api.hd_chatsList(reqArgs, function(err) {
             if (err && err.number && err.number === dErrors.ACCESS_DENIED) {
                 doneTest();
             } else if (err) {
                 doneTest(err);
             } else {
-                assert.fail('Must return ACCESS_DENIED for chat that not belongs to app user');
+                assert.fail('Must return ACCESS_DENIED for application that not belongs to app user');
                 doneTest();
             }
         });
     });
 
-    it('Message must be created for service user', function(doneTest) {
+    // =========================================================
+
+    it('Chat must not be created for service user', function(doneTest) {
         var currentTime = new Date('2014-05-20 00:00:00 +00:00');
         var idForMessage = '500';
 
@@ -301,27 +573,20 @@ describe('API#hd_chatCreate', function() {
 
         var mock = mockBuilder.newApiWithMock({currentTimeProvider: currentTimeProvider, uuid: uuid});
         var api = mock.api;
-        var args = argsBuilder(token, validChatId, validMessage);
-        api.hd_chatCreate(args, function(err, message) {
-            if (err) {
-                return doneTest(err);
+        var args = argsBuilder({accessToken: token});
+        api.hd_chatCreate(args, function(err) {
+            if (err && err.number === dErrors.LOGIC_ERROR) {
+                doneTest();
+            } else if (err) {
+                doneTest(err);
+            } else {
+                assert.fail('Chat was created for service user');
+                doneTest();
             }
-
-            var matchMessage = {
-                id: idForMessage,
-                userCreatorId: '1',
-                userCreatorType: domain.userTypes.SERVICE_USER,
-                created: currentTime,
-                content: validMessage,
-                isRead: true
-            };
-
-            assert.deepEqual(message, matchMessage, 'Expected message and received message are not match');
-            doneTest();
         });
     });
 
-    it('Message must be created for application user', function(doneTest) {
+    it('Chat must be created for application user', function(doneTest) {
         var currentTime = new Date('2014-05-20 00:00:00 +00:00');
         var idForMessage = '500';
 
@@ -344,27 +609,59 @@ describe('API#hd_chatCreate', function() {
 
         var mock = mockBuilder.newApiWithMock({currentTimeProvider: currentTimeProvider, uuid: uuid});
         var api = mock.api;
-        var args = argsBuilder(token, validChatId, validMessage);
-        api.hd_chatCreate(args, function(err, message) {
+        var args = argsBuilder({accessToken: token});
+        api.hd_chatCreate(args, function(err, chat) {
             if (err) {
                 return doneTest(err);
             }
+
+            var matchChat = {
+                id: idForMessage,
+                appId: args.appId,
+                userCreatorId: '2',
+                userCreatorType: domain.userTypes.APP_USER,
+                created: currentTime,
+                title: '',
+                type: domain.chatTypes.UNKNOWN,
+                status: domain.chatStatuses.UNKNOWN,
+                lastUpdate: currentTime,
+                platform: args.platform,
+                extra: {
+                    countryId: domain.countries.ID_FOR_UNKNOWN_CODE,
+                    langId: domain.languages.ID_FOR_UNKNOWN_CODE,
+                    api: args.api,
+                    apiTextValue: args.apiTextValue,
+                    appBuild: args.appBuild,
+                    appVersion: args.appVersion,
+                    deviceManufacturer: args.deviceManufacturer,
+                    deviceModel: args.deviceModel,
+                    deviceWidthPx: args.deviceWidthPx,
+                    deviceHeightPx: args.deviceHeightPx,
+                    deviceDensity: args.deviceDensity,
+                    isRooted: args.isRooted,
+                    metaData: args.metaData
+                }
+            };
 
             var matchMessage = {
                 id: idForMessage,
                 userCreatorId: '2',
                 userCreatorType: domain.userTypes.APP_USER,
                 created: currentTime,
-                content: validMessage,
+                content: args.message,
                 isRead: true
             };
+            var messageFromResponse = chat.message;
 
-            assert.deepEqual(message, matchMessage, 'Expected message and received message are not match');
+            delete chat.message;
+            assert.deepEqual(chat, matchChat, 'Expected chat and created chat are not match');
+            assert.deepEqual(messageFromResponse, matchMessage, 'Expected message and created message are not match');
+
             doneTest();
         });
     });
 
-    it('Created message must be created in storage', function(doneTest) {
+    it('Message must be created in storage', function(doneTest) {
         var currentTime = new Date('2014-05-20 00:00:00 +00:00');
         var idForMessage = '500';
 
@@ -379,104 +676,91 @@ describe('API#hd_chatCreate', function() {
                 done(null, idForMessage);
             },
             newGuid4: function(done) {
-                done(new Error('Not implememnted'));
+                done(new Error('Not implemented'));
             }
         };
 
-        var token = '142b2b49-75f2-456f-9533-435bd0ef94c0';
+        var token = '302a1baa-78b0-4a4d-ae1f-ebb5a147c71a';
 
         var mock = mockBuilder.newApiWithMock({currentTimeProvider: currentTimeProvider, uuid: uuid});
         var api = mock.api;
-        var args = argsBuilder(token, validChatId, validMessage);
-        api.hd_chatCreate(args, function(err, matchMessage) {
+        var args = argsBuilder({accessToken: token});
+        api.hd_chatCreate(args, function(err, chat) {
             if (err) {
                 return doneTest(err);
             }
 
-            var argsList = {
-                accessToken: token,
-                chatId: validChatId,
-                offset: -1
+            var messagesListArgs = {
+                accessToken: token, chatId: chat.id
             };
-            api.hd_messagesList(argsList, function(err, lastMessage) {
+            api.hd_messagesList(messagesListArgs, function(err, messages) {
                 if (err) {
                     return doneTest(err);
                 }
-                assert.deepEqual(lastMessage[0], matchMessage, 'Expected message and received message are not match');
+                assert.lengthOf(messages, 1, 'Only 1 message must be created');
                 doneTest();
             });
         });
     });
 
-    it('All messages must become read after calling this method', function(doneTest) {
-        var token = '142b2b49-75f2-456f-9533-435bd0ef94c0';
-        var api = mockBuilder.newApiWithMock().api;
-        var reqArgs = argsBuilder(token, validChatId, validMessage);
-        api.hd_chatCreate(reqArgs, function(err, message) {
+    it('New message for another user after create must be unread', function(doneTest) {
+        var currentTime = new Date('2014-05-20 00:00:00 +00:00');
+        var idForMessage = '500';
+
+        var currentTimeProvider = {
+            getCurrentTime: function(done) {
+                done(null, currentTime);
+            }
+        };
+
+        var uuid = {
+            newBigInt: function(done) {
+                done(null, idForMessage);
+            },
+            newGuid4: function(done) {
+                done(new Error('Not implemented'));
+            }
+        };
+
+        var token = '302a1baa-78b0-4a4d-ae1f-ebb5a147c71a';
+
+        var mock = mockBuilder.newApiWithMock({currentTimeProvider: currentTimeProvider, uuid: uuid});
+        var api = mock.api;
+        var args = argsBuilder({accessToken: token});
+        api.hd_chatCreate(args, function(err, chat) {
             if (err) {
                 return doneTest(err);
-            } else if (!message) {
-                return doneTest(new Error('Message did not created'));
             }
 
-            var argsList = {
-                accessToken: token,
-                chatId: validChatId
+            var messagesListArgs = {
+                accessToken: '142b2b49-75f2-456f-9533-435bd0ef94c0', chatId: chat.id, offset: -1
             };
-            api.hd_messagesList(argsList, function(err, result) {
+            api.hd_messagesList(messagesListArgs, function(err, messages) {
                 if (err) {
-                    return doneTest(err);
+                    doneTest(err);
+                } else if (!messages || messages.length !== 1) {
+                    doneTest(new Error('Created message (via new chat) is not accessible or messages list is greater than 1'));
+                } else {
+                    assert.notOk(messages[0].isRead, 'Message for another user must be marked as unread');
+                    doneTest();
                 }
-
-                var allIsRead = true;
-                for (var i = 0; i < result.length; i++) {
-                    allIsRead = allIsRead && result[i].isRead;
-                }
-                if (!allIsRead) {
-                    assert.fail('All messages for specified user must become read after calling this method');
-                }
-                doneTest();
-            });
-        });
-    });
-
-    it('Last message for another user after create must be unread', function(doneTest) {
-        var api = mockBuilder.newApiWithMock().api;
-        var reqArgs = argsBuilder('142b2b49-75f2-456f-9533-435bd0ef94c0', validChatId, validMessage);
-        api.hd_chatCreate(reqArgs, function(err, message) {
-            if (err) {
-                return doneTest(err);
-            } else if (!message) {
-                return doneTest(new Error('Message did not created'));
-            }
-
-            var argsList = {
-                accessToken: '302a1baa-78b0-4a4d-ae1f-ebb5a147c71a',
-                chatId: validChatId,
-                offset: -1
-            };
-            api.hd_messagesList(argsList, function(err, result) {
-                if (err) {
-                    return doneTest(err);
-                }
-
-                assert.notOk(result[0].isRead, 'Last message for another user after create must be unread');
-                doneTest();
             });
         });
     });
 
     it('Message must be escaped', function(doneTest) {
+        var token = '302a1baa-78b0-4a4d-ae1f-ebb5a147c71a';
+        var message = '<a href="xas">Ololo</a>';
+
         var api = mockBuilder.newApiWithMock().api;
-        var reqArgs = argsBuilder('142b2b49-75f2-456f-9533-435bd0ef94c0', validChatId, '<a href="xas">Ololo</a>');
-        api.hd_chatCreate(reqArgs, function(err, message) {
+        api.hd_chatCreate(argsBuilder({accessToken: token, message: message}), function(err, chat) {
             if (err) {
                 return doneTest(err);
             } else if (!message) {
-                return doneTest(new Error('Message did not created'));
+                return doneTest(new Error('Chat did not created'));
             }
 
-            assert.equal(message.content, '&lt;a href&#61;&#34;xas&#34;&gt;Ololo&lt;/a&gt;', 'Message have not been escaped');
+            assert.equal(chat.message.content, '&lt;a href&#61;&#34;xas&#34;&gt;Ololo&lt;/a&gt;', 'Message have not been escaped');
             doneTest();
         });
     });
