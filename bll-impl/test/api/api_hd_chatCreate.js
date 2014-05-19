@@ -27,32 +27,32 @@ var invalidArgsCb = function(cb) {
 
 var argsBuilder = function(override) {
     return {
-        accessToken: override.accessToken || '302a1baa-78b0-4a4d-ae1f-ebb5a147c71a',
-        appId: override.appId || '1',
-
-        platform: override.platform || domain.platform.ANDROID,
-        country: override.country || '',
-        lang: override.langId || '',
-        api: override.api || 10,
-        apiTextValue: override.apiTextValue || 'Gingerbird',
-        appBuild: override.appBuild || 1,
-        appVersion: override.appVersion || '1.0',
-        deviceManufacturer: override.deviceManufacturer || 'Samsung',
-        deviceModel: override.deviceModel || 'S5',
-        deviceWidthPx: override.deviceWidthPx || 1280,
-        deviceHeightPx: override.deviceHeightPx || 1920,
-        deviceDensity: override.deviceDensity || 320,
-        isRooted: override.isRooted || false,
-        metaData: override.metaData || '',
-
-        message: override.message || 'The is a message from test create chat'
+        accessToken: override.accessToken === undefined ? '302a1baa-78b0-4a4d-ae1f-ebb5a147c71a' : override.accessToken,
+        appId: override.appId === undefined ? '1' : override.appId,
+        message: override.message === undefined ? 'The is a message from test create chat' : override.message,
+        platform: override.platform === undefined ? domain.platforms.ANDROID : override.platform,
+        extra: {
+            country: override.country === undefined ? '' : override.country,
+            lang: override.lang === undefined ? '' : override.lang,
+            api: override.api === undefined ? 10 : override.api,
+            apiTextValue: override.apiTextValue === undefined ? 'Gingerbird' : override.apiTextValue,
+            appBuild: override.appBuild === undefined ? 1 : override.appBuild,
+            appVersion: override.appVersion === undefined ? '1.0' : override.appVersion,
+            deviceManufacturer: override.deviceManufacturer === undefined ? 'Samsung' : override.deviceManufacturer,
+            deviceModel: override.deviceModel === undefined ? 'S5' : override.deviceModel,
+            deviceWidthPx: override.deviceWidthPx === undefined ? 1280 : override.deviceWidthPx,
+            deviceHeightPx: override.deviceHeightPx === undefined ? 1920 : override.deviceHeightPx,
+            deviceDensity: override.deviceDensity === undefined ? 320 : override.deviceDensity,
+            isRooted: override.isRooted === undefined ? false : override.isRooted,
+            metaData: override.metaData === undefined ? '' : override.metaData
+        }
     };
 };
 
 
 describe('API#hd_chatCreate', function() {
 
-    it.only('Validate invalid arguments: all is invalid', function(doneTest) {
+    it('Validate invalid arguments: all is invalid', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
         var fnStack = [
             function(cb) {
@@ -100,29 +100,29 @@ describe('API#hd_chatCreate', function() {
         var api = mockBuilder.newApiWithMock().api;
         var fnStack = [
             function(cb) {
-                api.hd_chatsList(argsBuilder({appId: null}), invalidArgsCb(cb));
+                api.hd_chatCreate(argsBuilder({appId: null}), invalidArgsCb(cb));
             },
             function(cb) {
-                api.hd_chatsList(argsBuilder({appId: {}}), invalidArgsCb(cb));
+                api.hd_chatCreate(argsBuilder({appId: {}}), invalidArgsCb(cb));
             },
             function(cb) {
-                api.hd_chatsList(argsBuilder({appId: ''}), invalidArgsCb(cb));
+                api.hd_chatCreate(argsBuilder({appId: ''}), invalidArgsCb(cb));
             },
             function(cb) {
-                api.hd_chatsList(argsBuilder({appId: 1}), invalidArgsCb(cb));
+                api.hd_chatCreate(argsBuilder({appId: 1}), invalidArgsCb(cb));
             },
             function(cb) {
-                api.hd_chatsList(argsBuilder({appId: 'xxx@xx:com'}), invalidArgsCb(cb));
+                api.hd_chatCreate(argsBuilder({appId: 'xxx@xx:com'}), invalidArgsCb(cb));
             },
             function(cb) {
-                api.hd_chatsList(argsBuilder({appId: '-1'}), invalidArgsCb(cb));
+                api.hd_chatCreate(argsBuilder({appId: '-1'}), invalidArgsCb(cb));
             },
             function(cb) {
-                api.hd_chatsList(argsBuilder({appId: '1.0'}), invalidArgsCb(cb));
+                api.hd_chatCreate(argsBuilder({appId: '1.0'}), invalidArgsCb(cb));
             },
             function(cb) {
                 var appId = '0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789';
-                api.hd_chatsList(argsBuilder({appId: appId}), invalidArgsCb(cb));
+                api.hd_chatCreate(argsBuilder({appId: appId}), invalidArgsCb(cb));
             }
         ];
         async.series(fnStack, doneTest);
@@ -491,7 +491,7 @@ describe('API#hd_chatCreate', function() {
     it('Check unknown application for service user', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
         var reqArgs = argsBuilder({accessToken: '142b2b49-75f2-456f-9533-435bd0ef94c0', appId: '10'});
-        api.hd_chatsList(reqArgs, function(err) {
+        api.hd_chatCreate(reqArgs, function(err) {
             if (err && err.number && err.number === dErrors.APP_NOT_FOUND) {
                 doneTest();
             } else if (err) {
@@ -506,7 +506,7 @@ describe('API#hd_chatCreate', function() {
     it('Check unknown application for application user', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
         var reqArgs = argsBuilder({accessToken: '302a1baa-78b0-4a4d-ae1f-ebb5a147c71a', appId: '10'});
-        api.hd_chatsList(reqArgs, function(err) {
+        api.hd_chatCreate(reqArgs, function(err) {
             if (err && err.number && err.number === dErrors.APP_NOT_FOUND) {
                 doneTest();
             } else if (err) {
@@ -521,7 +521,7 @@ describe('API#hd_chatCreate', function() {
     it('Check access to application for service user that is not associated with him', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
         var reqArgs = argsBuilder({accessToken: '142b2b49-75f2-456f-9533-435bd0ef94c0', appId: '2'});
-        api.hd_chatsList(reqArgs, function(err) {
+        api.hd_chatCreate(reqArgs, function(err) {
             if (err && err.number && err.number === dErrors.ACCESS_DENIED) {
                 doneTest();
             } else if (err) {
@@ -536,7 +536,7 @@ describe('API#hd_chatCreate', function() {
     it('Check access to application for app user that is not associated with him', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
         var reqArgs = argsBuilder({accessToken: '302a1baa-78b0-4a4d-ae1f-ebb5a147c71a', appId: '2'});
-        api.hd_chatsList(reqArgs, function(err) {
+        api.hd_chatCreate(reqArgs, function(err) {
             if (err && err.number && err.number === dErrors.ACCESS_DENIED) {
                 doneTest();
             } else if (err) {

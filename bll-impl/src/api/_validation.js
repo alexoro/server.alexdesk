@@ -6,6 +6,9 @@
 
 var BigNumber = require('bignumber.js');
 
+var domain = require('../domain');
+
+
 var regexpAppId = new RegExp("^[0-9]{1,19}$");
 var regexpChatId = new RegExp("^[0-9]{1,19}$");
 var regexpInt = new RegExp("^\\-?[0-9]{1,19}$");
@@ -105,6 +108,54 @@ module.exports = {
 
     message: function(value) {
         return typeof value === 'string' && value.length >= messageMinLength && value.length <= messageMaxLength;
+    },
+
+    platform: function(value) {
+        return typeof value === 'number' && (value === domain.platforms.ANDROID || value === domain.platforms.WEB);
+    },
+
+    extra: function(value) {
+        return typeof value === 'object';
+    },
+
+    countryCode2: function(value) {
+        return typeof value === 'string' && (value.length === 0 || value.length === 2);
+    },
+    langCode2: function(value) {
+        return typeof value === 'string' && (value.length === 0 || value.length === 2);
+    },
+    apiAndroid: function(value) {
+        return typeof value === 'number' && value >= 1 && value <= 100;
+    },
+    apiAndroidTextValue: function(value) {
+        return typeof value === 'string' && value.length >= 0 && value.length <= 40;
+    },
+    appBuild: function(value) {
+        return typeof value === 'number' && value >= 0 && value <= 100000;
+    },
+    appVersion: function(value) {
+        return typeof value === 'string' && value.length >= 0 && value.length <= 20;
+    },
+    deviceManufacturer: function(value) {
+        return typeof value === 'string' && value.length >= 0 && value.length <= 20;
+    },
+    deviceModel: function(value) {
+        return typeof value === 'string' && value.length >= 0 && value.length <= 20;
+    },
+    deviceWidthPx: function(value) {
+        return typeof value === 'number' && value >= 0 && value <= 32767;
+    },
+    deviceHeightPx: function(value) {
+        return typeof value === 'number' && value >= 0 && value <= 32767;
+    },
+    deviceDensity: function(value) {
+        return typeof value === 'number' && value >= 0 && value <= 32767;
+    },
+    isRooted: function(value) {
+        return typeof value === 'boolean';
+    },
+    metaData: function(value) {
+        return typeof value === 'string' && value.length >= 0 && value.length <= 1000;
     }
 
 };

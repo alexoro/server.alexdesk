@@ -14,9 +14,11 @@ var filter = require('./_filter');
 var errBuilder = require('./_errorBuilder');
 
 
-
 var _validateArgsHasErrors = function(env, args) {
     var dErr = domain.errors;
+
+
+    // validate input
 
     if (!args) {
         return errBuilder(dErr.INVALID_PARAMS, 'Arguments are not defined');
@@ -25,24 +27,126 @@ var _validateArgsHasErrors = function(env, args) {
         return errBuilder(dErr.INVALID_PARAMS, 'Arguments is not a object');
     }
 
+
+    // validate main
+
     if (args.accessToken === undefined) {
         return errBuilder(dErr.INVALID_PARAMS, 'Access token is not defined');
     }
-    if (args.chatId === undefined) {
-        return errBuilder(dErr.INVALID_PARAMS, 'Chat id is not defined');
+    if (args.appId === undefined) {
+        return errBuilder(dErr.INVALID_PARAMS, 'App id is not defined');
     }
     if (args.message === undefined) {
         return errBuilder(dErr.INVALID_PARAMS, 'Message is not defined');
+    }
+    if (args.platform === undefined) {
+        return errBuilder(dErr.INVALID_PARAMS, 'Platform is not defined');
+    }
+    if (args.extra === undefined) {
+        return errBuilder(dErr.INVALID_PARAMS, 'Extra is not defined');
     }
 
     if (!validate.accessToken(args.accessToken)) {
         return errBuilder(dErr.INVALID_PARAMS, 'Incorrect access token value: ' + args.accessToken);
     }
-    if (!validate.chatId(args.chatId)) {
-        return errBuilder(dErr.INVALID_PARAMS, 'Incorrect chat id value: ' + args.chatId);
+    if (!validate.appId(args.appId)) {
+        return errBuilder(dErr.INVALID_PARAMS, 'Incorrect app id value: ' + args.appId);
     }
     if (!validate.message(args.message)) {
         return errBuilder(dErr.INVALID_PARAMS, 'Incorrect message value: ' + args.message);
+    }
+    if (!validate.platform(args.platform)) {
+        return errBuilder(dErr.INVALID_PARAMS, 'Incorrect message value: ' + args.message);
+    }
+    if (!validate.extra(args.extra)) {
+        return errBuilder(dErr.INVALID_PARAMS, 'Incorrect message value: ' + args.message);
+    }
+
+
+    // validate extra
+
+    if (args.platform !== domain.platforms.ANDROID) {
+        return errBuilder(dErr.LOGIC_ERROR, 'Only Android users can create chats');
+    }
+
+    if (args.extra.country === undefined) {
+        return errBuilder(dErr.INVALID_PARAMS, 'Country is not defined');
+    }
+    if (args.extra.lang === undefined) {
+        return errBuilder(dErr.INVALID_PARAMS, 'Language is not defined');
+    }
+    if (args.extra.api === undefined) {
+        return errBuilder(dErr.INVALID_PARAMS, 'API is not defined');
+    }
+    if (args.extra.apiTextValue === undefined) {
+        return errBuilder(dErr.INVALID_PARAMS, 'Api Text Value is not defined');
+    }
+    if (args.extra.appBuild === undefined) {
+        return errBuilder(dErr.INVALID_PARAMS, 'App Build is not defined');
+    }
+    if (args.extra.appVersion === undefined) {
+        return errBuilder(dErr.INVALID_PARAMS, 'App Version is not defined');
+    }
+    if (args.extra.deviceManufacturer === undefined) {
+        return errBuilder(dErr.INVALID_PARAMS, 'Device Manufacturer is not defined');
+    }
+    if (args.extra.deviceModel === undefined) {
+        return errBuilder(dErr.INVALID_PARAMS, 'Device Model is not defined');
+    }
+    if (args.extra.deviceWidthPx === undefined) {
+        return errBuilder(dErr.INVALID_PARAMS, 'DeviceWidthPx is not defined');
+    }
+    if (args.extra.deviceHeightPx === undefined) {
+        return errBuilder(dErr.INVALID_PARAMS, 'DeviceHeightPx is not defined');
+    }
+    if (args.extra.deviceDensity === undefined) {
+        return errBuilder(dErr.INVALID_PARAMS, 'DeviceDensity is not defined');
+    }
+    if (args.extra.isRooted === undefined) {
+        return errBuilder(dErr.INVALID_PARAMS, 'IsRooted is not defined');
+    }
+    if (args.extra.metaData === undefined) {
+        return errBuilder(dErr.INVALID_PARAMS, 'MetaData is not defined');
+    }
+
+    if (!validate.countryCode2(args.extra.country)) {
+        return errBuilder(dErr.INVALID_PARAMS, 'Incorrect country value: ' + args.extra.country);
+    }
+    if (!validate.langCode2(args.extra.lang)) {
+        return errBuilder(dErr.INVALID_PARAMS, 'Incorrect language value: ' + args.extra.lang);
+    }
+    if (!validate.apiAndroid(args.extra.api)) {
+        return errBuilder(dErr.INVALID_PARAMS, 'Incorrect api value: ' + args.extra.api);
+    }
+    if (!validate.apiAndroidTextValue(args.extra.apiTextValue)) {
+        return errBuilder(dErr.INVALID_PARAMS, 'Incorrect api text value: ' + args.extra.apiTextValue);
+    }
+    if (!validate.appBuild(args.extra.appBuild)) {
+        return errBuilder(dErr.INVALID_PARAMS, 'Incorrect app build value: ' + args.extra.appBuild);
+    }
+    if (!validate.appVersion(args.extra.appVersion)) {
+        return errBuilder(dErr.INVALID_PARAMS, 'Incorrect app version value: ' + args.extra.appVersion);
+    }
+    if (!validate.deviceManufacturer(args.extra.deviceManufacturer)) {
+        return errBuilder(dErr.INVALID_PARAMS, 'Incorrect device manufacturer value: ' + args.extra.deviceManufacturer);
+    }
+    if (!validate.deviceModel(args.extra.deviceModel)) {
+        return errBuilder(dErr.INVALID_PARAMS, 'Incorrect device model value: ' + args.extra.deviceModel);
+    }
+    if (!validate.deviceWidthPx(args.extra.deviceWidthPx)) {
+        return errBuilder(dErr.INVALID_PARAMS, 'Incorrect device width px value: ' + args.extra.deviceWidthPx);
+    }
+    if (!validate.deviceHeightPx(args.extra.deviceHeightPx)) {
+        return errBuilder(dErr.INVALID_PARAMS, 'Incorrect device height px value: ' + args.extra.deviceHeightPx);
+    }
+    if (!validate.deviceDensity(args.extra.deviceDensity)) {
+        return errBuilder(dErr.INVALID_PARAMS, 'Incorrect device density value: ' + args.extra.deviceDensity);
+    }
+    if (!validate.isRooted(args.extra.isRooted)) {
+        return errBuilder(dErr.INVALID_PARAMS, 'Incorrect is rooted value: ' + args.extra.isRooted);
+    }
+    if (!validate.metaData(args.extra.metaData)) {
+        return errBuilder(dErr.INVALID_PARAMS, 'Incorrect meta data value: ' + args.extra.metaData);
     }
 };
 
@@ -55,7 +159,7 @@ var _execute = function(env, args, next) {
     var messageOriginal = args.message;
 
     var fnStack = [
-        /*function(cb) {
+        function(cb) {
             dal.getUserMainInfoByToken(accessToken, function(err, user) {
                 if (err) {
                     cb(errBuilder(dErr.INTERNAL_ERROR, err));
@@ -65,7 +169,7 @@ var _execute = function(env, args, next) {
                     cb(null, user);
                 }
             });
-        },
+        }/*,
         function(user, cb) {
             dal.isChatExists({chatId: chatId}, function(err, result) {
                 if (err) {
