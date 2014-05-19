@@ -191,8 +191,27 @@ var _execute = function(env, args, next) {
                     cb(null, user);
                 }
             });
-        }/*,
+        },
+        function(user, cb) {
+            if (user.type !== domain.userTypes.APP_USER) {
+                cb(errBuilder(dErr.LOGIC_ERROR, 'Only app users can create chats'));
+            } else {
+                cb(null, user);
+            }
+        },
 
+        function(user, cb) {
+            var flow = {
+                user: user
+            };
+            cb(null, flow);
+        },
+
+        function(flow, cb) {
+            cb(null, null);
+        }
+
+        /*
         function(user, appId, cb) {
             if (user.type === domain.userTypes.SERVICE_USER) {
                 cb(null, user, appId);
