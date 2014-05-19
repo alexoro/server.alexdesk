@@ -32,7 +32,7 @@ var argsBuilder = function(override) {
         message: override.message === undefined ? 'The is a message from test create chat' : override.message,
         platform: override.platform === undefined ? domain.platforms.ANDROID : override.platform,
         extra: {
-            country: override.country === undefined ? '' : override.country,
+            country: override.country === undefined ? 'ru' : override.country,
             lang: override.lang === undefined ? '' : override.lang,
             api: override.api === undefined ? 10 : override.api,
             apiTextValue: override.apiTextValue === undefined ? 'Gingerbird' : override.apiTextValue,
@@ -586,7 +586,7 @@ describe.only('API#hd_chatCreate', function() {
         });
     });
 
-    it('Chat must be created for application user', function(doneTest) {
+    it.only('Chat must be created for application user', function(doneTest) {
         var currentTime = new Date('2014-05-20 00:00:00 +00:00');
         var idForMessage = '500';
 
@@ -613,6 +613,8 @@ describe.only('API#hd_chatCreate', function() {
         api.hd_chatCreate(args, function(err, chat) {
             if (err) {
                 return doneTest(err);
+            } else if (!chat) {
+                return doneTest(new Error('No chat is created'));
             }
 
             var matchChat = {
@@ -627,7 +629,7 @@ describe.only('API#hd_chatCreate', function() {
                 lastUpdate: currentTime,
                 platform: args.platform,
                 extra: {
-                    countryId: domain.countries.ID_FOR_UNKNOWN_CODE,
+                    countryId: 170,
                     langId: domain.languages.ID_FOR_UNKNOWN_CODE,
                     api: args.api,
                     apiTextValue: args.apiTextValue,
@@ -688,6 +690,8 @@ describe.only('API#hd_chatCreate', function() {
         api.hd_chatCreate(args, function(err, chat) {
             if (err) {
                 return doneTest(err);
+            } else if (!chat) {
+                return doneTest(new Error('No chat is created'));
             }
 
             var messagesListArgs = {
@@ -730,6 +734,8 @@ describe.only('API#hd_chatCreate', function() {
         api.hd_chatCreate(args, function(err, chat) {
             if (err) {
                 return doneTest(err);
+            } else if (!chat) {
+                return doneTest(new Error('No chat is created'));
             }
 
             var messagesListArgs = {
@@ -756,8 +762,8 @@ describe.only('API#hd_chatCreate', function() {
         api.hd_chatCreate(argsBuilder({accessToken: token, message: message}), function(err, chat) {
             if (err) {
                 return doneTest(err);
-            } else if (!message) {
-                return doneTest(new Error('Chat did not created'));
+            } else if (!chat) {
+                return doneTest(new Error('No chat is created'));
             }
 
             assert.equal(chat.message.content, '&lt;a href&#61;&#34;xas&#34;&gt;Ololo&lt;/a&gt;', 'Message have not been escaped');

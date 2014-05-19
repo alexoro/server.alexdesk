@@ -202,8 +202,63 @@ var _execute = function(env, args, next) {
 
         function(user, cb) {
             var flow = {
-                user: user
+                user: user,
+                currentTime: null,
+                newChatId: null,
+                newMessageId: null,
+                filteredMessage: null,
+                countryId: null,
+                langId: null
             };
+            cb(null, flow);
+        },
+
+        function(flow, cb) {
+            env.currentTimeProvider.getCurrentTime(function(err, dateNow) {
+                if (err) {
+                    cb(errBuilder(dErr.INTERNAL_ERROR, err));
+                } else if (!dateNow || !(dateNow instanceof Date)) {
+                    cb(errBuilder(dErr.INTERNAL_ERROR, 'Current date is invalid object: ' + dateNow));
+                } else {
+                    flow.currentTime = dateNow;
+                    cb(null, flow);
+                }
+            });
+        },
+        function(flow, cb) {
+            env.uuid.newBigInt(function(err, id) {
+                if (err) {
+                    cb(errBuilder(dErr.INTERNAL_ERROR, err));
+                } else if (!id || typeof id !== 'string') {
+                    cb(errBuilder(dErr.INTERNAL_ERROR, 'Generated id for chat is invalid: ' + id));
+                } else {
+                    flow.newChatId = id;
+                    cb(null, flow);
+                }
+            });
+        },
+        function(flow, cb) {
+            env.uuid.newBigInt(function(err, id) {
+                if (err) {
+                    cb(errBuilder(dErr.INTERNAL_ERROR, err));
+                } else if (!id || typeof id !== 'string') {
+                    cb(errBuilder(dErr.INTERNAL_ERROR, 'Generated id for message is invalid: ' + id));
+                } else {
+                    flow.newMessageId = id;
+                    cb(null, flow);
+                }
+            });
+        },
+        function(flow, cb) {
+            flow.filteredMessage = filter.message(messageOriginal);
+            cb(null, flow);
+        },
+        function(flow, cb) {
+            flow.countryId = domain.countries.getIdByCode(args.extra.country);
+            cb(null, flow);
+        },
+        function(flow, cb) {
+            flow.langId = domain.languages.getIdByCode(args.extra.lang);
             cb(null, flow);
         },
 
@@ -212,49 +267,6 @@ var _execute = function(env, args, next) {
         }
 
         /*
-        function(user, appId, cb) {
-            if (user.type === domain.userTypes.SERVICE_USER) {
-                cb(null, user, appId);
-            } else {
-                dal.isUserTheCreatorOfChat({chatId: chatId, userType: user.type, userId: user.id}, function(err, isCreator) {
-                    if (err) {
-                        cb(errBuilder(dErr.INTERNAL_ERROR, err));
-                    } else if (typeof isCreator !== 'boolean') {
-                        cb(errBuilder(dErr.INTERNAL_ERROR, 'The result of isUserTheCreatorOfChat() is not a boolean type: ' + isCreator));
-                    } else if (!isCreator) {
-                        cb(errBuilder(dErr.ACCESS_DENIED, 'You have no access to this chat'));
-                    } else {
-                        cb(null, user, appId);
-                    }
-                });
-            }
-        },
-
-        function(user, appId, cb) {
-            env.uuid.newBigInt(function(err, messageId) {
-                if (err) {
-                    cb(errBuilder(dErr.INTERNAL_ERROR, err));
-                } else if (!messageId || typeof messageId !== 'string') {
-                    cb(errBuilder(dErr.INTERNAL_ERROR, 'Generated id for message is invalid: ' + messageId));
-                } else {
-                    cb(null, user, appId, messageId);
-                }
-            });
-        },
-
-        function(user, appId, messageId, cb) {
-            env.currentTimeProvider.getCurrentTime(function(err, dateNow) {
-                if (err) {
-                    cb(errBuilder(dErr.INTERNAL_ERROR, err));
-                } else if (!dateNow || !(dateNow instanceof Date)) {
-                    cb(errBuilder(dErr.INTERNAL_ERROR, 'Current date is invalid object: ' + dateNow));
-                } else {
-                    cb(null, user, appId, messageId, dateNow);
-                }
-            });
-        },
-
-
         function(user, appId, messageId, dateNow, cb) {
             var newMessage = {
                 id: messageId,
