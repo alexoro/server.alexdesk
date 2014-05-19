@@ -703,7 +703,7 @@ describe('API#hd_chatCreate', function() {
         });
     });
 
-    it('New message for another user after create must be unread', function(doneTest) {
+    it('New message must be unread for another user', function(doneTest) {
         var currentTime = new Date('2014-05-20 00:00:00 +00:00');
         var idForMessage = '500';
 

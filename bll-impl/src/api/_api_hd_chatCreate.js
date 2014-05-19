@@ -154,50 +154,35 @@ var _execute = function(env, args, next) {
     var dal = env.dal;
     var dErr = domain.errors;
 
-    var accessToken = args.accessToken;
-    var chatId = args.chatId;
     var messageOriginal = args.message;
 
     var fnStack = [
         function(cb) {
-            dal.getUserMainInfoByToken(accessToken, function(err, user) {
+            dal.isAppExists(args.appId, function(err, exists) {
+                if (err) {
+                    cb(errBuilder(dErr.INTERNAL_ERROR, err));
+                } else if (typeof exists !== 'boolean') {
+                    cb(errBuilder(dErr.INTERNAL_ERROR, 'isAppExists returned invalid response. Boolean is expected, result is: ' + exists));
+                } else if (!exists) {
+                    cb(errBuilder(dErr.APP_NOT_FOUND, 'Application with specified ID is not found. #ID: ' + args.appId));
+                } else {
+                    cb();
+                }
+            });
+        },
+        function(cb) {
+            dal.getUserMainInfoByToken(args.accessToken, function(err, user) {
                 if (err) {
                     cb(errBuilder(dErr.INTERNAL_ERROR, err));
                 } else if (!user) {
-                    cb(errBuilder(dErr.INVALID_OR_EXPIRED_TOKEN, 'Specified access token "' + accessToken + '" is expired or invalid'));
-                } else {
-                    cb(null, user);
-                }
-            });
-        }/*,
-        function(user, cb) {
-            dal.isChatExists({chatId: chatId}, function(err, result) {
-                if (err) {
-                    cb(errBuilder(dErr.INTERNAL_ERROR, err));
-                } else if (typeof result !== 'boolean') {
-                    cb(errBuilder(dErr.INTERNAL_ERROR, 'The result of isChatExists() is not a boolean type: ' + result));
-                } else if (!result) {
-                    cb(errBuilder(dErr.CHAT_NOT_FOUND, 'Chat not found. ID: ' + chatId));
+                    cb(errBuilder(dErr.INVALID_OR_EXPIRED_TOKEN, 'Specified access token "' + args.accessToken + '" is expired or invalid'));
                 } else {
                     cb(null, user);
                 }
             });
         },
         function(user, cb) {
-            dal.getAppIdChatBelongsTo({chatId: chatId}, function(err, appId) {
-                if (err) {
-                    cb(errBuilder(dErr.INTERNAL_ERROR, err));
-                } else if (typeof appId !== 'string') {
-                    cb(errBuilder(dErr.INTERNAL_ERROR, 'The result of getAppIdChatBelongsTo() is not a string: ' + appId));
-                } else if (!validate.appId(appId)) {
-                    cb(errBuilder(dErr.INTERNAL_ERROR, 'Application ID for chat is invalid:. ID: ' + appId));
-                } else {
-                    cb(null, user, appId);
-                }
-            });
-        },
-        function(user, appId, cb) {
-            dal.userIsAssociatedWithApp(appId, user.type, user.id, function(err, isAssociated) {
+            dal.userIsAssociatedWithApp(args.appId, user.type, user.id, function(err, isAssociated) {
                 if (err) {
                     cb(errBuilder(dErr.INTERNAL_ERROR, err));
                 } else if (typeof isAssociated !== 'boolean') {
@@ -208,7 +193,8 @@ var _execute = function(env, args, next) {
                     cb(null, user, appId);
                 }
             });
-        },
+        }/*,
+
         function(user, appId, cb) {
             if (user.type === domain.userTypes.SERVICE_USER) {
                 cb(null, user, appId);
