@@ -85,6 +85,19 @@ DAL.prototype.getUserMainInfoByToken = function(token, done) {
     }
 };
 
+DAL.prototype.getAppOwnerUserMainInfoByAppId = function(args, done) {
+    var r = _.findWhere(this.mock.app_acl, {appId: args.appId, isOwner: true});
+    if (r) {
+        var ret = {
+            id: r.userId,
+            type: domain.userTypes.SERVICE_USER
+        };
+        return done(null, ret);
+    } else {
+        return done(null, null);
+    }
+};
+
 DAL.prototype.getAppsList = function(userId, done) {
     var self = this;
     var err;
@@ -317,6 +330,80 @@ DAL.prototype.createMessageInChatAndUpdateLastVisit = function(args, done) {
             done();
         }
     });
+};
+
+DAL.prototype.createChatWithMessage = function(args, done) {
+    var argsNewChat = utils.deepClone(args.newChat);
+    var argsNewMessage = utils.deepClone(args.newMessage);
+    var argsParticipants = utils.deepClone(args.participants);
+
+    var newChat = {
+        id: argsNewChat.id,
+        appId: argsNewChat.appId,
+        userCreatorId: argsNewChat.userCreatorId,
+        userCreatorType: argsNewChat.userCreatorType,
+        created: argsNewChat.created,
+        title: argsNewChat.title,
+        type: argsNewChat.type,
+        status: argsNewChat.status,
+        lastUpdate: argsNewChat.lastUpdate
+    };
+
+    var newChatExtraAndroid = null;
+    if (argsNewChat.platform === domain.platforms.ANDROID) {
+        newChatExtraAndroid  = {
+            chatId: argsNewChat.id,
+            appId: argsNewChat.appId,
+            countryId: argsNewChat.extra.countryId,
+            langId: argsNewChat.extra.langId,
+            api: argsNewChat.extra.api,
+            apiTextValue: argsNewChat.extra.apiTextValue,
+            appBuild: argsNewChat.extra.appBuild,
+            appVersion: argsNewChat.extra.appVersion,
+            deviceManufacturer: argsNewChat.extra.deviceManufacturer,
+            deviceModel: argsNewChat.extra.deviceModel,
+            deviceWidthPx: argsNewChat.extra.deviceWidthPx,
+            deviceHeightPx: argsNewChat.extra.deviceHeightPx,
+            deviceDensity: argsNewChat.extra.deviceDensity,
+            isRooted: argsNewChat.extra.isRooted,
+            metaData: argsNewChat.extra.metaData
+        };
+    }
+
+    var newChatParticipants = [
+        {
+            chatId: argsNewChat.id,
+            userId: argsParticipants[0].userId,
+            userType: argsParticipants[0].userType,
+            lastVisit: argsParticipants[0].lastVisit
+        },
+        {
+            chatId: argsNewChat.id,
+            userId: argsParticipants[1].userId,
+            userType: argsParticipants[1].userType,
+            lastVisit: argsParticipants[1].lastVisit
+        }
+    ];
+
+    var newMessage = {
+        id: argsNewMessage.id,
+        appId: argsNewChat.appId,
+        chatId: argsNewChat.id,
+        userCreatorId: argsNewChat.userCreatorId,
+        userCreatorType: argsNewChat.userCreatorType,
+        created: argsNewMessage.created,
+        content: argsNewMessage.content
+    };
+
+    this.mock.chats.push(newChat);
+    if (newChatExtraAndroid) {
+        this.mock.chat_extra_android.push(newChatExtraAndroid);
+    }
+    this.mock.chat_participants.push(newChatParticipants[0]);
+    this.mock.chat_participants.push(newChatParticipants[1]);
+    this.mock.chat_messages.push(newMessage);
+
+    done();
 };
 
 

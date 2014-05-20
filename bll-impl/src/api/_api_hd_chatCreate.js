@@ -153,6 +153,7 @@ var _execute = function(env, args, next) {
     var dErr = domain.errors;
 
     var messageOriginal = args.message;
+    var metaDataOriginal = args.extra.metaData;
 
     var fnStack = [
         function(cb) {
@@ -199,14 +200,27 @@ var _execute = function(env, args, next) {
                 cb(null, user);
             }
         },
-
         function(user, cb) {
+            dal.getAppOwnerUserMainInfoByAppId({appId: args.appId}, function(err, appOwnerUser) {
+                if (err) {
+                    cb(errBuilder(dErr.INTERNAL_ERROR, err));
+                } else if (!appOwnerUser) {
+                    cb(errBuilder(dErr.LOGIC_ERROR, 'Owner of application is not found. AppId: ' + appOwnerUser));
+                } else {
+                    cb(null, user, appOwnerUser);
+                }
+            });
+        },
+
+        function(user, appOwnerUser, cb) {
             var flow = {
                 user: user,
+                appOwnerUser: appOwnerUser,
                 currentTime: null,
                 newChatId: null,
                 newMessageId: null,
                 filteredMessage: null,
+                filteredMetaData: null,
                 countryId: null,
                 langId: null
             };
@@ -254,6 +268,10 @@ var _execute = function(env, args, next) {
             cb(null, flow);
         },
         function(flow, cb) {
+            flow.filteredMetaData = filter.metaData(metaDataOriginal);
+            cb(null, flow);
+        },
+        function(flow, cb) {
             flow.countryId = domain.countries.getIdByCode(args.extra.country);
             cb(null, flow);
         },
@@ -263,42 +281,74 @@ var _execute = function(env, args, next) {
         },
 
         function(flow, cb) {
-            cb(null, null);
-        }
+            var reqArgs = {};
 
-        /*
-        function(user, appId, messageId, dateNow, cb) {
-            var newMessage = {
-                id: messageId,
-                appId: appId,
-                chatId: chatId,
-                userCreatorId: user.id,
-                userCreatorType: user.type,
-                created: dateNow,
-                content: filter.message(messageOriginal)
+            reqArgs.newChat = {
+                id: flow.newChatId,
+                appId: args.appId,
+                userCreatorId: flow.user.id,
+                userCreatorType: flow.user.type,
+                created: flow.currentTime,
+                title: '',
+                type: domain.chatTypes.UNKNOWN,
+                status: domain.chatStatuses.UNKNOWN,
+                lastUpdate: flow.currentTime,
+                platform: args.platform,
+                extra: {
+                    countryId: flow.countryId,
+                    langId: flow.langId,
+                    api: args.extra.api,
+                    apiTextValue: args.extra.apiTextValue,
+                    appBuild: args.extra.appBuild,
+                    appVersion: args.extra.appVersion,
+                    deviceManufacturer: args.extra.deviceManufacturer,
+                    deviceModel: args.extra.deviceModel,
+                    deviceWidthPx: args.extra.deviceWidthPx,
+                    deviceHeightPx: args.extra.deviceHeightPx,
+                    deviceDensity: args.extra.deviceDensity,
+                    isRooted: args.extra.isRooted,
+                    metaData: flow.filteredMetaData
+                }
             };
-            var reqArgs = {newMessage: newMessage};
+            reqArgs.newMessage = {
+                id: flow.newMessageId,
+                userCreatorId: flow.user.id,
+                userCreatorType: flow.user.type,
+                created: flow.currentTime,
+                content: flow.filteredMessage,
+                isRead: true
+            };
+            reqArgs.participants = [
+                {
+                    userId: flow.user.id,
+                    userType: flow.user.type,
+                    lastVisit:flow.currentTime
+                },
+                {
+                    userId: flow.appOwnerUser.id,
+                    userType: flow.appOwnerUser.type,
+                    lastVisit: new Date('1970-01-01 00:00:00 +00:00')
+                }
+            ];
 
-            dal.createMessageInChatAndUpdateLastVisit(reqArgs, function(err) {
+            dal.createChatWithMessage(reqArgs, function(err) {
                 if (err) {
-                    cb(err);
+                    cb(errBuilder(dErr.INTERNAL_ERROR, err));
                 } else {
-                    delete newMessage.appId;
-                    delete newMessage.chatId;
-                    newMessage.isRead = true;
-                    cb(null, newMessage);
+                    reqArgs.newChat.message = reqArgs.newMessage;
+                    cb(null, reqArgs.newChat);
                 }
             });
-        }*/
+        }
     ];
 
     async.waterfall(
         fnStack,
         function(err, newChat) {
             if (err) {
-                next(err, null);
+                next(err);
             } else {
-                next(null, null);
+                next(null, newChat);
             }
         }
     );
