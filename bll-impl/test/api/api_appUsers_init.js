@@ -112,6 +112,25 @@ describe('API#appUsers_init', function() {
         async.series(fnStack, doneTest);
     });
 
+    it('Validate invalid arguments: platform', function(doneTest) {
+        var api = mockBuilder.newApiWithMock().api;
+        var fnStack = [
+            function(cb) {
+                api.appUsers_init(argsBuilder({platform: null}), invalidArgsCb(cb));
+            },
+            function(cb) {
+                api.appUsers_init(argsBuilder({platform: {}}), invalidArgsCb(cb));
+            },
+            function(cb) {
+                api.appUsers_init(argsBuilder({platform: -1}), invalidArgsCb(cb));
+            },
+            function(cb) {
+                api.appUsers_init(argsBuilder({platform: 100}), invalidArgsCb(cb));
+            }
+        ];
+        async.series(fnStack, doneTest);
+    });
+
     it('Validate invalid arguments: device uuid is invalid', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
         var fnStack = [
