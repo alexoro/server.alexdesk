@@ -60,6 +60,10 @@ describe('API::Interface', function() {
         assert.isDefined(api.appUsers_init, 'appUsers_init function is not exists');
         assert.isFunction(api.appUsers_init, 'appUsers_init must be a function');
         assert.equal(api.appUsers_init.length, 2, 'appUsers_init must receive 2 arguments only');
+
+        assert.isDefined(api.apps_create, 'apps_create function is not exists');
+        assert.isFunction(api.apps_create, 'apps_create must be a function');
+        assert.equal(api.apps_create.length, 2, 'apps_create must receive 2 arguments only');
     });
 
 });

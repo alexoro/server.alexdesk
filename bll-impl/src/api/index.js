@@ -86,5 +86,8 @@ Api.prototype.appUsers_init = function(args, next) {
     next(new Error('Not implemented yet'));
 };
 
+Api.prototype.apps_create = function(args, next) {
+    next(new Error('Not implemented yet'));
+};
 
 module.exports = Api;
