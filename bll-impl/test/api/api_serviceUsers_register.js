@@ -167,26 +167,7 @@ describe('API#serviceUsers_register', function() {
     });
 
     it('Must return valid user', function(doneTest) {
-        var currentTime = new Date('2014-05-20 00:00:00 +00:00');
-        var idForUser = '500';
-
-        var currentTimeProvider = {
-            getCurrentTime: function(done) {
-                done(null, currentTime);
-            }
-        };
-
-        var uuid = {
-            newBigInt: function(done) {
-                done(null, idForUser);
-            },
-            newGuid4: function(done) {
-                done(new Error('Not implemented'));
-            }
-        };
-
-        var mock = mockBuilder.newApiWithMock({currentTimeProvider: currentTimeProvider, uuid: uuid});
-        var api = mock.api;
+        var api = mockBuilder.newApiWithMock().api;
         var reqArgs = argsBuilder();
         api.serviceUsers_register(argsBuilder({login: 'test@test.com'}), function(err, user) {
             if (err) {
@@ -194,12 +175,12 @@ describe('API#serviceUsers_register', function() {
             }
 
             var matchUser = {
-                id: idForUser,
+                id: '1000',
                 login: reqArgs.login,
                 password: '02a243c4202b23e8ec78620f1ff48aa6',
                 name: reqArgs.name,
-                registered: currentTime,
-                lastVisit: currentTime
+                registered: new Date('2014-05-15 00:00:00 +00:00'),
+                lastVisit: new Date('2014-05-15 00:00:00 +00:00')
             };
 
             assert.deepEqual(user, matchUser, 'Created user is not match with expected');

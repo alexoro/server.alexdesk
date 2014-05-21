@@ -10,7 +10,7 @@ var UUID = function() {
 };
 
 UUID.prototype.newBigInt = function(done) {
-    done(null, '1');
+    done(null, '1000');
 };
 
 UUID.prototype.newGuid4 = function(done) {
