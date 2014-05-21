@@ -14,6 +14,7 @@ var regexpChatId = new RegExp("^[0-9]{1,19}$");
 var regexpInt = new RegExp("^\\-?[0-9]{1,19}$");
 var regexpGuid = new RegExp("^[a-fA-F0-9]{8}\\-[a-fA-F0-9]{4}\\-[a-fA-F0-9]{4}\\-[a-fA-F0-9]{4}\\-[a-fA-F0-9]{12}$");
 var regexpEmail = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+var regexpHex = new RegExp("^[0-9a-f]{32}$");
 
 var appIdMin = new BigNumber('0');
 var appIdMax = new BigNumber('9223372036854775807');
@@ -90,6 +91,10 @@ module.exports = {
         return (typeof value === 'string') && value.length >= 1 && value.length <= 64;
     },
 
+    appUserName: function(value) {
+        return (typeof value === 'string') && value.length >= 0 && value.length <= 40;
+    },
+
     chatsListOffset: function(value) {
         return typeof value === 'number' && !isNaN(value) && value.toString().match(regexpInt) &&
             value >= chatsListOffsetMin && value <= chatsListOffsetMax;
@@ -160,6 +165,13 @@ module.exports = {
     },
     metaData: function(value) {
         return typeof value === 'string' && value.length >= 0 && value.length <= 1000;
+    },
+
+    deviceUuid: function(value) {
+        return typeof value === 'string' && value.match(regexpHex);
+    },
+    gcmToken: function(value) {
+        return typeof value === 'string' && value.length >= 0 && value.length <= 4096;
     }
 
 };

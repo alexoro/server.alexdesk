@@ -17,5 +17,8 @@ module.exports = {
     },
     serviceUserName: function(value) {
         return sanitizer.escape(validator.stripLow(value, true));
+    },
+    appUserName: function(value) {
+        return sanitizer.escape(validator.stripLow(value, true));
     }
 };

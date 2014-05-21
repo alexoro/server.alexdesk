@@ -415,8 +415,100 @@ DAL.prototype.getServiceUserCreditionalsByLogin = function(args, done) {
     }
 };
 
+DAL.prototype.getAppUserCreditionalsByLogin = function(args, done) {
+    var r = _.findWhere(this.mock.app_users, {appId: args.appId, login: args.login});
+    if (!r) {
+        done(null, null);
+    } else {
+        done(null, {id: r.appUserId, login: r.login, passwordHash: r.passwordHash});
+    }
+};
+
 DAL.prototype.createServiceUser = function(args, done) {
     this.mock.users.push(utils.deepClone(args));
+    done(null);
+};
+
+DAL.prototype.getAppUserById = function(args, done) {
+    var user = _.findWhere(this.mock.app_users, {appUserId: args.id});
+    if (!user) {
+        done(null, null);
+    } else {
+        user = utils.deepClone(user);
+
+        user.platform = domain.platforms.ANDROID;
+        var extra = _.findWhere(this.mock.app_users_extra_android, {appUserId: args.id});
+        user.extra = {
+            deviceUuid: extra.deviceUuid,
+            gcmToken: extra.gcmToken
+        };
+        user.id = user.appUserId;
+        delete user.appUserId;
+        done(null, user);
+    }
+};
+
+DAL.prototype.createAppUserProfile = function(args, done) {
+    args = args.profile;
+    var profile = {
+        appUserId: args.id,
+        appId: args.appId,
+        login: args.login,
+        passwordHash: args.passwordHash,
+        name: args.name,
+        registered: args.registered,
+        lastVisit: args.lastVisit
+    };
+    this.mock.app_users.push(profile);
+
+    if (args.platform === domain.platforms.ANDROID) {
+        var extra = {
+            appId: args.appId,
+            appUserId: args.id,
+            deviceUuid: args.extra.deviceUuid,
+            gcmToken: args.extra.gcmToken
+        };
+        this.mock.app_users_extra_android.push(extra);
+    }
+
+    done(null);
+};
+
+DAL.prototype.updateAppUserProfile = function(args, done) {
+    args = args.profile;
+    var i;
+
+    var profile = {
+        appUserId: args.id,
+        appId: args.appId,
+        login: args.login,
+        passwordHash: args.passwordHash,
+        name: args.name,
+        registered: args.registered,
+        lastVisit: args.lastVisit
+    };
+    for (i = 0; i < this.mock.app_users.length; i++) {
+        if (this.mock.app_users[i].appUserId === profile.appUserId) {
+            this.mock.app_users[i] = profile;
+            break;
+        }
+    }
+
+    if (args.platform === domain.platforms.ANDROID) {
+        var extra = {
+            appId: args.appId,
+            appUserId: args.id,
+            deviceUuid: args.extra.deviceUuid,
+            gcmToken: args.extra.gcmToken
+        };
+        for (i = 0; i < this.mock.app_users_extra_android.length; i++) {
+            if (this.mock.app_users_extra_android[i].appUserId === profile.appUserId) {
+                this.mock.app_users_extra_android[i] = extra;
+                break;
+            }
+        }
+    }
+
     done(null);
 };
 

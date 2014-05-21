@@ -56,10 +56,10 @@ var _validateArgsHasErrors = function(env, args) {
         return errBuilder(dErr.INVALID_PARAMS, 'Incorrect message value: ' + args.message);
     }
     if (!validate.platform(args.platform)) {
-        return errBuilder(dErr.INVALID_PARAMS, 'Incorrect message value: ' + args.message);
+        return errBuilder(dErr.INVALID_PARAMS, 'Incorrect platform value: ' + args.platform);
     }
     if (!validate.extra(args.extra)) {
-        return errBuilder(dErr.INVALID_PARAMS, 'Incorrect message value: ' + args.message);
+        return errBuilder(dErr.INVALID_PARAMS, 'Incorrect extra value: ' + args.extra);
     }
 
 

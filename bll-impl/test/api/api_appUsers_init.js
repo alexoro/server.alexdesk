@@ -26,6 +26,9 @@ var invalidArgsCb = function(cb) {
 };
 
 var argsBuilder = function(override) {
+    if (!override) {
+        override = {};
+    }
     return {
         appId: override.appId === undefined ? '1' : override.appId,
         login: override.login === undefined ? 'xxx@xxx.com' : override.login,
@@ -145,6 +148,9 @@ describe('API#appUsers_init', function() {
             },
             function(cb) {
                 api.appUsers_init(argsBuilder({deviceUuid: '012345678901234567890123456789=='}), invalidArgsCb(cb));
+            },
+            function(cb) {
+                api.appUsers_init(argsBuilder({deviceUuid: '012345678901234567890123456789xx'}), invalidArgsCb(cb));
             }
         ];
         async.series(fnStack, doneTest);
@@ -168,6 +174,21 @@ describe('API#appUsers_init', function() {
 
     // =========================================================
 
+    it('Must fail on unknown application', function(doneTest) {
+        var api = mockBuilder.newApiWithMock().api;
+        var reqArgs = argsBuilder({appId: '400'});
+        api.appUsers_init(reqArgs, function(err) {
+            if (err && err.number === dErrors.APP_NOT_FOUND) {
+                doneTest();
+            } else if (err) {
+                doneTest(err);
+            } else {
+                assert.fail('Update was successful for app user with unknown application id');
+                doneTest();
+            }
+        });
+    });
+
     it('Must fail update when invalid password is passed', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
         var reqArgs = argsBuilder({login: 'test1', password: '1'});
@@ -183,30 +204,6 @@ describe('API#appUsers_init', function() {
         });
     });
 
-    it('Must create new app user if not exists', function(doneTest) {
-        var api = mockBuilder.newApiWithMock().api;
-        api.appUsers_init(argsBuilder(), function(err, appUser) {
-            if (err) {
-                doneTest(err);
-            } else {
-                assert.strictEqual(appUser.id, '1000', 'User was not created or was created with invalid ID');
-                doneTest();
-            }
-        });
-    });
-
-    it('Must update app user if exists', function(doneTest) {
-        var api = mockBuilder.newApiWithMock().api;
-        api.appUsers_init(argsBuilder({login: 'test1', password: 'test1'}), function(err, appUser) {
-            if (err) {
-                doneTest(err);
-            } else {
-                assert.strictEqual(appUser.id, '1', 'User was not update or was update for invalid ID');
-                doneTest();
-            }
-        });
-    });
-
     it('Must return valid user object in case of create', function(doneTest) {
         var reqArgs = argsBuilder();
         var api = mockBuilder.newApiWithMock().api;
@@ -216,14 +213,19 @@ describe('API#appUsers_init', function() {
             }
 
             var matchAppUser = {
-                id: '1000',
-                appId: reqArgs.appId,
-                login: reqArgs.login,
-                name: reqArgs.name,
-                platform: reqArgs.platform,
-                extra: {
-                    deviceUuid: reqArgs.extra.deviceUuid,
-                    gcmToken: reqArgs.extra.gcmToken
+                isCreated: true,
+                profile: {
+                    id: '1000',
+                    appId: reqArgs.appId,
+                    login: reqArgs.login,
+                    name: reqArgs.name,
+                    platform: reqArgs.platform,
+                    registered: new Date('2014-05-15 00:00:00 +00:00'),
+                    lastVisit: new Date('2014-05-15 00:00:00 +00:00'),
+                    extra: {
+                        deviceUuid: reqArgs.extra.deviceUuid,
+                        gcmToken: reqArgs.extra.gcmToken
+                    }
                 }
             };
 
@@ -248,18 +250,23 @@ describe('API#appUsers_init', function() {
             }
 
             var matchAppUser = {
-                id: '1',
-                appId: reqArgs.appId,
-                login: reqArgs.login,
-                name: reqArgs.name,
-                platform: reqArgs.platform,
-                extra: {
-                    deviceUuid: reqArgs.extra.deviceUuid,
-                    gcmToken: reqArgs.extra.gcmToken
+                isCreated: false,
+                profile: {
+                    id: '2',
+                    appId: reqArgs.appId,
+                    login: reqArgs.login,
+                    name: reqArgs.name,
+                    platform: reqArgs.platform,
+                    registered: new Date('2012-05-01 13:00:00 +00:00'),
+                    lastVisit: new Date('2014-05-15 00:00:00 +00:00'),
+                    extra: {
+                        deviceUuid: reqArgs.extra.deviceUuid,
+                        gcmToken: reqArgs.extra.gcmToken
+                    }
                 }
             };
 
-            assert.deepEqual(appUser, matchAppUser, 'Just updates user is not matching with expected value');
+            assert.deepEqual(appUser, matchAppUser, 'Just updated user is not matching with expected value');
             doneTest();
         });
     });
@@ -332,7 +339,7 @@ describe('API#appUsers_init', function() {
                 return doneTest(err);
             }
 
-            assert.equal(appUser.name, '&lt;a href&#61;&#34;xas&#34;&gt;Ololo&lt;/a&gt;', 'Name have not been escaped');
+            assert.equal(appUser.profile.name, '&lt;a href&#61;&#34;xas&#34;&gt;Ololo&lt;/a&gt;', 'Name have not been escaped');
             doneTest();
         });
     });
