@@ -141,5 +141,105 @@ describe('API#apps_create', function() {
 
     // ==============================================================
 
+    it('Must support only Android applications', function(doneTest) {
+        var api = mockBuilder.newApiWithMock().api;
+        api.apps_create(argsBuilder({platform: domain.platforms.WEB}), function(err, app) {
+            if (err && err.number === dErrors.LOGIC_ERROR) {
+                doneTest();
+            } else if (err) {
+                doneTest(err);
+            } else {
+                assert.fail('Not Android application was created');
+                doneTest();
+            }
+        });
+    });
+
+    it('Must not allow application user to create app', function(doneTest) {
+        var api = mockBuilder.newApiWithMock().api;
+        api.apps_create(argsBuilder({accessToken: '302a1baa-78b0-4a4d-ae1f-ebb5a147c71a'}), function(err, app) {
+            if (err && err.number === dErrors.ACCESS_DENIED) {
+                doneTest();
+            } else if (err) {
+                doneTest(err);
+            } else {
+                assert.fail('Application user did create the application');
+                doneTest();
+            }
+        });
+    });
+
+    it('Must create chat', function(doneTest) {
+        var api = mockBuilder.newApiWithMock().api;
+        var reqArgs = argsBuilder();
+        api.apps_create(reqArgs, function(err, app) {
+            if (err) {
+                return doneTest(err);
+            }
+
+            var matchApp = {
+                id: '1000',
+                platform: reqArgs.platform,
+                title: reqArgs.title,
+                created: new Date('2014-05-15 00:00:00 +00:00'),
+                extra: {
+                    package: reqArgs.package
+                }
+            };
+
+            assert.deepEqual(app, matchApp, 'Created chat is not match with expected');
+            doneTest();
+        });
+    });
+
+    it('App must be created in storage', function(doneTest) {
+        var api = mockBuilder.newApiWithMock().api;
+        var reqArgs = argsBuilder();
+        api.apps_create(reqArgs, function(err, app) {
+            if (err) {
+                return doneTest(err);
+            }
+
+            api.apps_list({accessToken: reqArgs.accessToken}, function(err, apps) {
+                if (err) {
+                    doneTest(err);
+                } else {
+                    for (var i = 0; i < apps.length; i++) {
+                        if (apps[i].id === '1000') {
+                            return doneTest();
+                        }
+                    }
+                    assert.fail('Just created application was not found in storage');
+                    doneTest();
+                }
+            });
+        });
+    });
+
+    it('Title must be escaped', function(doneTest) {
+        var reqArgs = argsBuilder({title: '<a href="xas">Ololo</a>'});
+        var api = mockBuilder.newApiWithMock().api;
+        api.apps_create(reqArgs, function(err, app) {
+            if (err) {
+                return doneTest(err);
+            }
+
+            assert.equal(app.title, '&lt;a href&#61;&#34;xas&#34;&gt;Ololo&lt;/a&gt;', 'Title has not been escaped');
+            doneTest();
+        });
+    });
+
+    it('Package must be escaped', function(doneTest) {
+        var reqArgs = argsBuilder({package: '<a href="xas">Ololo</a>'});
+        var api = mockBuilder.newApiWithMock().api;
+        api.apps_create(reqArgs, function(err, app) {
+            if (err) {
+                return doneTest(err);
+            }
+
+            assert.equal(app.extra.package, '&lt;a href&#61;&#34;xas&#34;&gt;Ololo&lt;/a&gt;', 'Package has not been escaped');
+            doneTest();
+        });
+    });
 
 });
