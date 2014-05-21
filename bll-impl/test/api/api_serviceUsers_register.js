@@ -229,4 +229,20 @@ describe('API#serviceUsers_register', function() {
         });
     });
 
+    it('Name must be escaped', function(doneTest) {
+        var name = '<a href="xas">Ololo</a>';
+
+        var api = mockBuilder.newApiWithMock().api;
+        api.hd_chatCreate(argsBuilder({name: name}), function(err, user) {
+            if (err) {
+                return doneTest(err);
+            } else if (!user) {
+                return doneTest(new Error('No chat is created'));
+            }
+
+            assert.equal(user.name, '&lt;a href&#61;&#34;xas&#34;&gt;Ololo&lt;/a&gt;', 'Name have not been escaped');
+            doneTest();
+        });
+    });
+
 });
