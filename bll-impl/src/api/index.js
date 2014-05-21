@@ -79,11 +79,11 @@ Api.prototype.security_createAuthTokenForAppUser = function(args, next) {
 };
 
 Api.prototype.serviceUsers_register = function(args, next) {
-    next(null, null);
+    next(new Error('Not implemented yet'));
 };
 
 Api.prototype.appUsers_init = function(args, next) {
-    next(null, null);
+    next(new Error('Not implemented yet'));
 };
 
 
