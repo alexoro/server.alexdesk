@@ -14,5 +14,8 @@ module.exports = {
     },
     metaData: function(value) {
         return sanitizer.escape(validator.stripLow(value, true));
+    },
+    serviceUserName: function(value) {
+        return sanitizer.escape(validator.stripLow(value, true));
     }
 };

@@ -78,6 +78,10 @@ module.exports = {
         return (typeof value === 'string') && value.length >= 1 && value.length <= 64;
     },
 
+    serviceUserName: function(value) {
+        return (typeof value === 'string') && value.length >= 0 && value.length <= 40;
+    },
+
     appUserLogin: function(value) {
         return (typeof value === 'string') && value.length >= 1 && value.length <= 64;
     },

@@ -26,6 +26,9 @@ var invalidArgsCb = function(cb) {
 };
 
 var argsBuilder = function(override) {
+    if (!override) {
+        override = {};
+    }
     return {
         login: override.login === undefined ? 'xxx@xxx.com' : override.login,
         password: override.password === undefined ? 'xxx@xxx.com' : override.password,
@@ -112,13 +115,13 @@ describe('API#serviceUsers_register', function() {
 
     it('Must return INTERNAL_ERROR in case of error in DAL', function(doneTest) {
         var mock = mockBuilder.newApiWithMock();
-        mock.dal.isUserExists = function(args, done) {
+        mock.dal.getServiceUserCreditionalsByLogin = function(args, done) {
             done(new Error('Not implemented yet'));
         };
 
         var api = mock.api;
-        var reqArgs = argsBuilder({accessToken: '142b2b49-75f2-456f-9533-435bd0ef94c0'});
-        api.serviceUsers_register(reqArgs, function(err) {
+        var reqArgs = argsBuilder();
+        api.serviceUsers_register(reqArgs, function(err, newUser) {
             if (err && err.number && err.number === dErrors.INTERNAL_ERROR) {
                 doneTest();
             } else if (err) {
@@ -132,13 +135,13 @@ describe('API#serviceUsers_register', function() {
 
     it('Must return INTERNAL_ERROR in case of invalid response from DAL', function(doneTest) {
         var mock = mockBuilder.newApiWithMock();
-        mock.dal.isUserExists = function(args, done) {
-            done(null, {});
+        mock.dal.getServiceUserCreditionalsByLogin = function(args, done) {
+            done(null, 1);
         };
 
         var api = mock.api;
-        var reqArgs = argsBuilder({accessToken: '142b2b49-75f2-456f-9533-435bd0ef94c0'});
-        api.serviceUsers_register(reqArgs, function(err) {
+        var reqArgs = argsBuilder();
+        api.serviceUsers_register(reqArgs, function(err, newUser) {
             if (err && err.number && err.number === dErrors.INTERNAL_ERROR) {
                 doneTest();
             } else if (err) {
@@ -169,7 +172,7 @@ describe('API#serviceUsers_register', function() {
     it('Must return valid user', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
         var reqArgs = argsBuilder();
-        api.serviceUsers_register(argsBuilder({login: 'test@test.com'}), function(err, user) {
+        api.serviceUsers_register(argsBuilder(), function(err, user) {
             if (err) {
                 return doneTest(err);
             }
@@ -177,7 +180,6 @@ describe('API#serviceUsers_register', function() {
             var matchUser = {
                 id: '1000',
                 login: reqArgs.login,
-                password: '02a243c4202b23e8ec78620f1ff48aa6',
                 name: reqArgs.name,
                 registered: new Date('2014-05-15 00:00:00 +00:00'),
                 lastVisit: new Date('2014-05-15 00:00:00 +00:00')
@@ -191,7 +193,7 @@ describe('API#serviceUsers_register', function() {
     it('Must fetch user after registration', function(doneTest) {
         var mock = mockBuilder.newApiWithMock();
         var api = mock.api;
-        api.serviceUsers_register(argsBuilder({login: 'test@test.com'}), function(err, user) {
+        api.serviceUsers_register(argsBuilder(), function(err, user) {
             if (err) {
                 return doneTest(err);
             }
@@ -214,7 +216,7 @@ describe('API#serviceUsers_register', function() {
         var name = '<a href="xas">Ololo</a>';
 
         var api = mockBuilder.newApiWithMock().api;
-        api.hd_chatCreate(argsBuilder({name: name}), function(err, user) {
+        api.serviceUsers_register(argsBuilder({name: name}), function(err, user) {
             if (err) {
                 return doneTest(err);
             }

@@ -406,8 +406,18 @@ DAL.prototype.createChatWithMessage = function(args, done) {
     done();
 };
 
-DAL.prototype.isUserExists = function(args, done) {
+DAL.prototype.getServiceUserCreditionalsByLogin = function(args, done) {
+    var r = _.findWhere(this.mock.users, {login: args.login});
+    if (!r) {
+        done(null, null);
+    } else {
+        done(null, {id: r.id, login: r.login, passwordHash: r.passwordHash});
+    }
+};
 
+DAL.prototype.createServiceUser = function(args, done) {
+    this.mock.users.push(utils.deepClone(args));
+    done(null);
 };
 
 

@@ -72,7 +72,7 @@ var _create = function(env, args, next) {
         function(userId, guid, cb) {
             env.accessTokenConfig.getExpireTimeForServiceUser(function(err, expires) {
                 if (err) {
-                    cb(err);
+                    cb(errBuilder(dErr.INTERNAL_ERROR, err));
                 } else {
                     cb(null, userId, guid, expires);
                 }

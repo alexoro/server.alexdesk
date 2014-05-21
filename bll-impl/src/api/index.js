@@ -14,6 +14,7 @@ var api_hd_chatsList = require('./_api_hd_chatsList');
 var api_hd_messagesList = require('./_api_hd_messagesList');
 var api_hd_messageCreate = require('./_api_hd_messageCreate');
 var api_hd_chatCreate = require('./_api_hd_chatCreate');
+var api_serviceUser_register = require('./_api_serviceUser_register');
 
 
 var Api = function(env) {
@@ -79,7 +80,7 @@ Api.prototype.security_createAuthTokenForAppUser = function(args, next) {
 };
 
 Api.prototype.serviceUsers_register = function(args, next) {
-    next(new Error('Not implemented yet'));
+    this._before(api_serviceUser_register, args, next);
 };
 
 Api.prototype.appUsers_init = function(args, next) {
