@@ -406,5 +406,9 @@ DAL.prototype.createChatWithMessage = function(args, done) {
     done();
 };
 
+DAL.prototype.isUserExists = function(args, done) {
+
+};
+
 
 module.exports = DAL;
