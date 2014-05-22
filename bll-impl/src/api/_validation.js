@@ -172,6 +172,14 @@ module.exports = {
     },
     gcmToken: function(value) {
         return typeof value === 'string' && value.length >= 0 && value.length <= 4096;
+    },
+
+    appTitle: function(value) {
+        return typeof value === 'string' && value.length >= 1 && value.length <= 40;
+    },
+
+    appAndroidPackage: function(value) {
+        return typeof value === 'string' && value.length >= 0 && value.length <= 50;
     }
 
 };

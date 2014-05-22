@@ -26,6 +26,9 @@ var invalidArgsCb = function(cb) {
 };
 
 var argsBuilder = function(override) {
+    if (!override) {
+        override = {};
+    }
     return {
         accessToken: override.accessToken === undefined ? '142b2b49-75f2-456f-9533-435bd0ef94c0' : override.accessToken,
         platform: override.platform === undefined ? domain.platforms.ANDROID : override.platform,
@@ -57,7 +60,7 @@ describe('API#apps_create', function() {
 
     it('Check invalid access token', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
-        var args = {accessToken: '142b2b49-75f2-456f-9533-435bd0ef94c0!!'};
+        var args = argsBuilder({accessToken: '142b2b49-75f2-456f-9533-435bd0ef94c0!!'});
         api.apps_create(args, function(err) {
             if (err.number && err.number === dErrors.INVALID_PARAMS) {
                 doneTest();
@@ -72,7 +75,7 @@ describe('API#apps_create', function() {
 
     it('Check expired access token', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
-        var args = {accessToken: '390582c6-a59b-4ab2-a8e1-87fdbb291b97'};
+        var args = argsBuilder({accessToken: '390582c6-a59b-4ab2-a8e1-87fdbb291b97'});
         api.apps_create(args, function(err) {
             if (err && err.number === dErrors.INVALID_OR_EXPIRED_TOKEN) {
                 doneTest();
@@ -108,16 +111,16 @@ describe('API#apps_create', function() {
         var api = mockBuilder.newApiWithMock().api;
         var fnStack = [
             function(cb) {
-                api.apps_create(argsBuilder({name: null}), invalidArgsCb(cb));
+                api.apps_create(argsBuilder({title: null}), invalidArgsCb(cb));
             },
             function(cb) {
-                api.apps_create(argsBuilder({name: {}}), invalidArgsCb(cb));
+                api.apps_create(argsBuilder({title: {}}), invalidArgsCb(cb));
             },
             function(cb) {
-                api.apps_create(argsBuilder({name: ''}), invalidArgsCb(cb));
+                api.apps_create(argsBuilder({title: ''}), invalidArgsCb(cb));
             },
             function(cb) {
-                api.apps_create(argsBuilder({name: new Array(100).join('a')}), invalidArgsCb(cb));
+                api.apps_create(argsBuilder({title: new Array(100).join('a')}), invalidArgsCb(cb));
             }
         ];
         async.series(fnStack, doneTest);
@@ -169,7 +172,7 @@ describe('API#apps_create', function() {
         });
     });
 
-    it('Must create chat', function(doneTest) {
+    it('Must create app', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
         var reqArgs = argsBuilder();
         api.apps_create(reqArgs, function(err, app) {
@@ -182,9 +185,13 @@ describe('API#apps_create', function() {
                 platform: reqArgs.platform,
                 title: reqArgs.title,
                 created: new Date('2014-05-15 00:00:00 +00:00'),
+                isApproved: true,
+                isBlocked: false,
+                isDeleted: false,
                 extra: {
                     package: reqArgs.package
-                }
+                },
+                ownerUserId: '1'
             };
 
             assert.deepEqual(app, matchApp, 'Created chat is not match with expected');
@@ -213,32 +220,6 @@ describe('API#apps_create', function() {
                     doneTest();
                 }
             });
-        });
-    });
-
-    it('Title must be escaped', function(doneTest) {
-        var reqArgs = argsBuilder({title: '<a href="xas">Ololo</a>'});
-        var api = mockBuilder.newApiWithMock().api;
-        api.apps_create(reqArgs, function(err, app) {
-            if (err) {
-                return doneTest(err);
-            }
-
-            assert.equal(app.title, '&lt;a href&#61;&#34;xas&#34;&gt;Ololo&lt;/a&gt;', 'Title has not been escaped');
-            doneTest();
-        });
-    });
-
-    it('Package must be escaped', function(doneTest) {
-        var reqArgs = argsBuilder({package: '<a href="xas">Ololo</a>'});
-        var api = mockBuilder.newApiWithMock().api;
-        api.apps_create(reqArgs, function(err, app) {
-            if (err) {
-                return doneTest(err);
-            }
-
-            assert.equal(app.extra.package, '&lt;a href&#61;&#34;xas&#34;&gt;Ololo&lt;/a&gt;', 'Package has not been escaped');
-            doneTest();
         });
     });
 

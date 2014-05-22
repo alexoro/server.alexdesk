@@ -16,6 +16,7 @@ var api_hd_messageCreate = require('./_api_hd_messageCreate');
 var api_hd_chatCreate = require('./_api_hd_chatCreate');
 var api_serviceUser_register = require('./_api_serviceUser_register');
 var api_appUsers_init = require('./_api_appUsers_init');
+var api_apps_create = require('./_api_apps_create');
 
 
 var Api = function(env) {
@@ -89,7 +90,7 @@ Api.prototype.appUsers_init = function(args, next) {
 };
 
 Api.prototype.apps_create = function(args, next) {
-    next(new Error('Not implemented yet'));
+    this._before(api_apps_create, args, next);
 };
 
 module.exports = Api;

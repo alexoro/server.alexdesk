@@ -512,5 +512,35 @@ DAL.prototype.updateAppUserProfile = function(args, done) {
     done(null);
 };
 
+DAL.prototype.createApplication = function(args, done) {
+    var app = {
+        id: args.id,
+        platformType: args.platform,
+        title: args.title,
+        created: args.created,
+        isApproved: args.isApproved,
+        isBlocked: args.isBlocked,
+        isDeleted: args.isDeleted
+    };
+    this.mock.apps.push(app);
+
+    var acl = {
+        appId: args.id,
+        userId: args.ownerUserId,
+        isOwner: true
+    };
+    this.mock.app_acl.push(acl);
+
+    if (args.platform === domain.platforms.ANDROID) {
+        var extra = {
+            appId: args.id,
+            package: args.extra.package
+        };
+        this.mock.app_info_extra_android.push(extra);
+    }
+
+    done(null);
+};
+
 
 module.exports = DAL;
