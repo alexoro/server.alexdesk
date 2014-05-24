@@ -17,6 +17,10 @@ var api_hd_chatCreate = require('./_api_hd_chatCreate');
 var api_serviceUser_register = require('./_api_serviceUser_register');
 var api_appUsers_init = require('./_api_appUsers_init');
 var api_apps_create = require('./_api_apps_create');
+var api_serviceUser_registerRequest = require('./_api_serviceUser_registerRequest');
+var api_serviceUser_registerConfirm = require('./_api_serviceUser_registerConfirm');
+var api_serviceUser_resetPasswordRequest = require('./_api_serviceUser_resetPasswordRequest');
+var api_serviceUser_resetPasswordConfirm = require('./_api_serviceUser_resetPasswordConfirm');
 
 
 var Api = function(env) {
@@ -94,19 +98,19 @@ Api.prototype.apps_create = function(args, next) {
 };
 
 Api.prototype.serviceUsers_registerRequest = function(args, next) {
-    next(new Error('Not implemented'));
+    this._before(api_serviceUser_registerRequest, args, next);
 };
 
 Api.prototype.serviceUsers_registerConfirm = function(args, next) {
-    next(new Error('Not implemented'));
+    this._before(api_serviceUser_registerConfirm, args, next);
 };
 
 Api.prototype.serviceUsers_resetPasswordRequest = function(args, next) {
-    next(new Error('Not implemented'));
+    this._before(api_serviceUser_resetPasswordRequest, args, next);
 };
 
 Api.prototype.serviceUsers_resetPasswordConfirm = function(args, next) {
-    next(new Error('Not implemented'));
+    this._before(api_serviceUser_resetPasswordConfirm, args, next);
 };
 
 module.exports = Api;
