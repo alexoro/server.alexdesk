@@ -64,6 +64,22 @@ describe('API::Interface', function() {
         assert.isDefined(api.apps_create, 'apps_create function is not exists');
         assert.isFunction(api.apps_create, 'apps_create must be a function');
         assert.equal(api.apps_create.length, 2, 'apps_create must receive 2 arguments only');
+
+        assert.isDefined(api.serviceUsers_registerRequest, 'serviceUsers_registerRequest function is not exists');
+        assert.isFunction(api.serviceUsers_registerRequest, 'serviceUsers_registerRequest must be a function');
+        assert.equal(api.serviceUsers_registerRequest.length, 2, 'serviceUsers_registerRequest must receive 2 arguments only');
+
+        assert.isDefined(api.serviceUsers_registerConfirm, 'serviceUsers_registerConfirm function is not exists');
+        assert.isFunction(api.serviceUsers_registerConfirm, 'serviceUsers_registerConfirm must be a function');
+        assert.equal(api.serviceUsers_registerConfirm.length, 2, 'serviceUsers_registerConfirm must receive 2 arguments only');
+
+        assert.isDefined(api.serviceUsers_resetPasswordRequest, 'serviceUsers_resetPasswordRequest function is not exists');
+        assert.isFunction(api.serviceUsers_resetPasswordRequest, 'serviceUsers_resetPasswordRequest must be a function');
+        assert.equal(api.serviceUsers_resetPasswordRequest.length, 2, 'serviceUsers_resetPasswordRequest must receive 2 arguments only');
+
+        assert.isDefined(api.serviceUsers_resetPasswordConfirm, 'serviceUsers_resetPasswordConfirm function is not exists');
+        assert.isFunction(api.serviceUsers_resetPasswordConfirm, 'serviceUsers_resetPasswordConfirm must be a function');
+        assert.equal(api.serviceUsers_resetPasswordConfirm.length, 2, 'serviceUsers_resetPasswordConfirm must receive 2 arguments only');
     });
 
 });

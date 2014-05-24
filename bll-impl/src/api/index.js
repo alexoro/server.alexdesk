@@ -93,4 +93,20 @@ Api.prototype.apps_create = function(args, next) {
     this._before(api_apps_create, args, next);
 };
 
+Api.prototype.serviceUsers_registerRequest = function(args, next) {
+    next(new Error('Not implemented'));
+};
+
+Api.prototype.serviceUsers_registerConfirm = function(args, next) {
+    next(new Error('Not implemented'));
+};
+
+Api.prototype.serviceUsers_resetPasswordRequest = function(args, next) {
+    next(new Error('Not implemented'));
+};
+
+Api.prototype.serviceUsers_resetPasswordConfirm = function(args, next) {
+    next(new Error('Not implemented'));
+};
+
 module.exports = Api;
