@@ -91,6 +91,22 @@ describe('API#security_createAuthTokenForServiceUser', function() {
         async.series(fnStack, doneTest);
     });
 
+    // ==============================================
+
+    it('Must not allow not confirmed user to call this method', function (doneTest) {
+        var api = mockBuilder.newApiWithMock().api;
+        api.security_createAuthTokenForServiceUser(argsBuilder('3@3.com', '3@3.com'), function(err) {
+            if (err && err.number === dErrors.USER_NOT_CONFIRMED) {
+                doneTest();
+            } else if (err) {
+                doneTest(err);
+            } else {
+                assert.fail('Not confirmed user created the access token');
+                doneTest();
+            }
+        });
+    });
+
     it('Token must not be created in case of error', function(doneTest) {
         var mock = mockBuilder.newApiWithMock();
         var data = mock.data;

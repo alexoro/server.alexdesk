@@ -16,7 +16,8 @@ var mock = {
             passwordHash: 'b642b4217b34b1e8d3bd915fc65c4452', // md5 of 'test@test.com'
             name: 'Test',
             registered: new Date('2014-05-01 12:00:00 +04:00'),
-            lastVisit: new Date('2014-05-01 14:00:00 +04:00')
+            lastVisit: new Date('2014-05-01 14:00:00 +04:00'),
+            isConfirmed: true
         },
         {
             id: '2',
@@ -24,7 +25,17 @@ var mock = {
             passwordHash: '1e6fd8e56879c84999cd481255530592',
             name: 'Test #2',
             registered: new Date('2014-05-01 12:00:00 +04:00'),
-            lastVisit: new Date('2014-05-01 14:00:00 +04:00')
+            lastVisit: new Date('2014-05-01 14:00:00 +04:00'),
+            isConfirmed: true
+        },
+        {
+            id: '3',
+            login: '3@3.com',
+            passwordHash: '317fe8b099749d32b8eea573565842d5',
+            name: 'Test #3',
+            registered: new Date('2014-05-01 12:00:00 +04:00'),
+            lastVisit: new Date('2014-05-01 14:00:00 +04:00'),
+            isConfirmed: false
         }
     ],
 
@@ -33,6 +44,12 @@ var mock = {
             token: '142b2b49-75f2-456f-9533-435bd0ef94c0',
             userType: domain.userTypes.SERVICE_USER,
             userId: '1',
+            expires: new Date('2020-01-01 00:00:00 +00:00').getTime()
+        },
+        {
+            token: 'b6e84344-74e0-43f3-83e0-6a16c3fe6b5d',
+            userType: domain.userTypes.SERVICE_USER,
+            userId: '3',
             expires: new Date('2020-01-01 00:00:00 +00:00').getTime()
         },
         {

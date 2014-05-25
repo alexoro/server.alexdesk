@@ -206,6 +206,22 @@ describe('API#hd_chatsList', function() {
         });
     });
 
+    // =================================================
+
+    it('Must not allow not confirmed user to call this method', function (doneTest) {
+        var api = mockBuilder.newApiWithMock().api;
+        api.hd_chatsList(argsBuilder('b6e84344-74e0-43f3-83e0-6a16c3fe6b5d', '1'), function(err) {
+            if (err && err.number === dErrors.USER_NOT_CONFIRMED) {
+                doneTest();
+            } else if (err) {
+                doneTest(err);
+            } else {
+                assert.fail('Not confirmed user gained access to the chats list');
+                doneTest();
+            }
+        });
+    });
+
     it('Check unknown application for service user', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
         var reqArgs = argsBuilder('142b2b49-75f2-456f-9533-435bd0ef94c0', '10');
