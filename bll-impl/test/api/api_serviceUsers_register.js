@@ -182,7 +182,8 @@ describe('API#serviceUsers_register', function() {
                 login: reqArgs.login,
                 name: reqArgs.name,
                 registered: new Date('2014-05-15 00:00:00 +00:00'),
-                lastVisit: new Date('2014-05-15 00:00:00 +00:00')
+                lastVisit: new Date('2014-05-15 00:00:00 +00:00'),
+                isConfirmed: false
             };
 
             assert.deepEqual(user, matchUser, 'Created user is not match with expected');
