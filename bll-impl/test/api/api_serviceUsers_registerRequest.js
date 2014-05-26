@@ -241,14 +241,14 @@ describe('API#serviceUsers_registerRequest', function() {
 
         var api = mockBuilder.newApiWithMock({emailSender: Sender}).api;
         var reqArgs = argsBuilder();
-        api.serviceUsers_registerRequest(reqArgs, function(err, user) {
+        api.serviceUsers_registerRequest(reqArgs, function(err) {
             if (err) {
                 return doneTest(err);
             }
-            if (isCalled) {
+            if (!isCalled) {
+                assert.fail('#sendServiceUserRegistrationConfirmLink was not called');
                 doneTest();
             } else {
-                assert.fail('#sendServiceUserRegistrationConfirmLink was not called');
                 doneTest();
             }
         });
