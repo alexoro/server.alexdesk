@@ -66,6 +66,24 @@ var _execute = function(env, args, next) {
                 }
             });
         },
+        function (user, cb) {
+           if (user.type === domain.userTypes.SERVICE_USER) {
+               var reqArgs = {
+                   userId: user.id
+               };
+               dal.serviceUserIsConfirmed(reqArgs, function (err, isConfirmed) {
+                   if (err) {
+                       cb(errBuilder(dErr.INTERNAL_ERROR, err));
+                   } else if (!isConfirmed) {
+                       cb(errBuilder(dErr.USER_NOT_CONFIRMED, 'User not confirmed'));
+                   } else {
+                       cb(null, user);
+                   }
+               });
+           } else {
+               cb(null, user);
+           }
+        },
         function(user, cb) {
             dal.isChatExists({chatId: chatId}, function(err, result) {
                 if (err) {

@@ -103,6 +103,21 @@ var _execute = function(env, args, next) {
                 cb(null, flow);
             }
         },
+        function (flow, cb) {
+            var reqArgs = {
+                userId: flow.userId
+            };
+            dal.serviceUserIsConfirmed(reqArgs, function (err, isConfirmed) {
+                if (err) {
+                    cb(errBuilder(dErr.INTERNAL_ERROR, err));
+                } else if (!isConfirmed) {
+                    cb(errBuilder(dErr.USER_NOT_CONFIRMED, 'User not confirmed'));
+                } else {
+                    cb(null, flow);
+                }
+            });
+        },
+
         function(flow, cb) {
             env.currentTimeProvider.getCurrentTime(function(err, dateNow) {
                 if (err) {

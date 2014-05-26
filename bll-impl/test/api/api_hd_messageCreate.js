@@ -204,7 +204,7 @@ describe('API#hd_messageCreate', function() {
 
     it('Must not allow not confirmed user to call this method', function (doneTest) {
         var api = mockBuilder.newApiWithMock().api;
-        api.hd_messageCreate(argsBuilder('b6e84344-74e0-43f3-83e0-6a16c3fe6b5d'), function(err) {
+        api.hd_messageCreate(argsBuilder('b6e84344-74e0-43f3-83e0-6a16c3fe6b5d', '1', 'XX'), function(err) {
             if (err && err.number === dErrors.USER_NOT_CONFIRMED) {
                 doneTest();
             } else if (err) {

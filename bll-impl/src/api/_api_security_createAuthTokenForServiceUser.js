@@ -60,6 +60,21 @@ var _create = function(env, args, next) {
                 }
             });
         },
+        function (userId, cb) {
+            var reqArgs = {
+                userId: userId
+            };
+            dal.serviceUserIsConfirmed(reqArgs, function (err, isConfirmed) {
+                if (err) {
+                    cb(errBuilder(dErr.INTERNAL_ERROR, err));
+                } else if (!isConfirmed) {
+                    cb(errBuilder(dErr.USER_NOT_CONFIRMED, 'User not confirmed'));
+                } else {
+                    cb(null, userId);
+                }
+            });
+        },
+
         function(userId, cb) {
             uuid.newGuid4(function(err, guid) {
                 if (err) {

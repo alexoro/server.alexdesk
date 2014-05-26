@@ -58,6 +58,20 @@ var _appsFetching = function(env, args, next) {
                 cb();
             }
         },
+        function (cb) {
+            var reqArgs = {
+                userId: user.id
+            };
+            dal.serviceUserIsConfirmed(reqArgs, function (err, isConfirmed) {
+                if (err) {
+                    cb(errBuilder(dErr.INTERNAL_ERROR, err));
+                } else if (!isConfirmed) {
+                    cb(errBuilder(dErr.USER_NOT_CONFIRMED, 'User not confirmed'));
+                } else {
+                    cb(null);
+                }
+            });
+        },
 
         function(cb) {
             dal.getAppsList(user.id, function(err, result) {

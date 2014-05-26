@@ -542,5 +542,14 @@ DAL.prototype.createApplication = function(args, done) {
     done(null);
 };
 
+DAL.prototype.serviceUserIsConfirmed = function(args, done) {
+    var r = _.findWhere(this.mock.users, {id: args.userId});
+    if (!r) {
+        done(new Error('User not found'));
+    } else {
+        done(null, r.isConfirmed);
+    }
+};
+
 
 module.exports = DAL;

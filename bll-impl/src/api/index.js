@@ -7,6 +7,7 @@
 var domain = require('../domain');
 
 var errBuilder = require('./_errorBuilder');
+
 var api_apps_list = require('./_api_apps_list');
 var api_security_createAuthTokenForServiceUser = require('./_api_security_createAuthTokenForServiceUser');
 var api_security_createAuthTokenForAppUser = require('./_api_security_createAuthTokenForAppUser');
