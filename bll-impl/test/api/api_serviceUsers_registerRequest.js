@@ -37,19 +37,19 @@ var argsBuilder = function(override) {
 };
 
 
-describe('API#serviceUsers_register', function() {
+describe('API#serviceUsers_registerRequest', function() {
 
     it('Validate invalid arguments: all is invalid', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
         var fnStack = [
             function(cb) {
-                api.serviceUsers_register(null, invalidArgsCb(cb));
+                api.serviceUsers_registerRequest(null, invalidArgsCb(cb));
             },
             function(cb) {
-                api.serviceUsers_register(new Date(), invalidArgsCb(cb));
+                api.serviceUsers_registerRequest(new Date(), invalidArgsCb(cb));
             },
             function(cb) {
-                api.serviceUsers_register(-1, invalidArgsCb(cb));
+                api.serviceUsers_registerRequest(-1, invalidArgsCb(cb));
             }
         ];
         async.series(fnStack, doneTest);
@@ -59,20 +59,20 @@ describe('API#serviceUsers_register', function() {
         var api = mockBuilder.newApiWithMock().api;
         var fnStack = [
             function(cb) {
-                api.serviceUsers_register(argsBuilder({login: null}), invalidArgsCb(cb));
+                api.serviceUsers_registerRequest(argsBuilder({login: null}), invalidArgsCb(cb));
             },
             function(cb) {
-                api.serviceUsers_register(argsBuilder({login: {}}), invalidArgsCb(cb));
+                api.serviceUsers_registerRequest(argsBuilder({login: {}}), invalidArgsCb(cb));
             },
             function(cb) {
-                api.serviceUsers_register(argsBuilder({login: ''}), invalidArgsCb(cb));
+                api.serviceUsers_registerRequest(argsBuilder({login: ''}), invalidArgsCb(cb));
             },
             function(cb) {
-                api.serviceUsers_register(argsBuilder({login: 'xxx@xxx:com'}), invalidArgsCb(cb));
+                api.serviceUsers_registerRequest(argsBuilder({login: 'xxx@xxx:com'}), invalidArgsCb(cb));
             },
             function(cb) {
                 var email = '0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789@www.com';
-                api.serviceUsers_register(argsBuilder({login: email}), invalidArgsCb(cb));
+                api.serviceUsers_registerRequest(argsBuilder({login: email}), invalidArgsCb(cb));
             }
         ];
         async.series(fnStack, doneTest);
@@ -82,16 +82,16 @@ describe('API#serviceUsers_register', function() {
         var api = mockBuilder.newApiWithMock().api;
         var fnStack = [
             function(cb) {
-                api.serviceUsers_register(argsBuilder({password: null}), invalidArgsCb(cb));
+                api.serviceUsers_registerRequest(argsBuilder({password: null}), invalidArgsCb(cb));
             },
             function(cb) {
-                api.serviceUsers_register(argsBuilder({password: {}}), invalidArgsCb(cb));
+                api.serviceUsers_registerRequest(argsBuilder({password: {}}), invalidArgsCb(cb));
             },
             function(cb) {
-                api.serviceUsers_register(argsBuilder({password: ''}), invalidArgsCb(cb));
+                api.serviceUsers_registerRequest(argsBuilder({password: ''}), invalidArgsCb(cb));
             },
             function(cb) {
-                api.serviceUsers_register(argsBuilder({password: new Array(100).join('a')}), invalidArgsCb(cb));
+                api.serviceUsers_registerRequest(argsBuilder({password: new Array(100).join('a')}), invalidArgsCb(cb));
             }
         ];
         async.series(fnStack, doneTest);
@@ -101,13 +101,13 @@ describe('API#serviceUsers_register', function() {
         var api = mockBuilder.newApiWithMock().api;
         var fnStack = [
             function(cb) {
-                api.serviceUsers_register(argsBuilder({name: null}), invalidArgsCb(cb));
+                api.serviceUsers_registerRequest(argsBuilder({name: null}), invalidArgsCb(cb));
             },
             function(cb) {
-                api.serviceUsers_register(argsBuilder({name: {}}), invalidArgsCb(cb));
+                api.serviceUsers_registerRequest(argsBuilder({name: {}}), invalidArgsCb(cb));
             },
             function(cb) {
-                api.serviceUsers_register(argsBuilder({name: new Array(100).join('a')}), invalidArgsCb(cb));
+                api.serviceUsers_registerRequest(argsBuilder({name: new Array(100).join('a')}), invalidArgsCb(cb));
             }
         ];
         async.series(fnStack, doneTest);
@@ -121,7 +121,7 @@ describe('API#serviceUsers_register', function() {
 
         var api = mock.api;
         var reqArgs = argsBuilder();
-        api.serviceUsers_register(reqArgs, function(err, newUser) {
+        api.serviceUsers_registerRequest(reqArgs, function(err, newUser) {
             if (err && err.number && err.number === dErrors.INTERNAL_ERROR) {
                 doneTest();
             } else if (err) {
@@ -141,7 +141,7 @@ describe('API#serviceUsers_register', function() {
 
         var api = mock.api;
         var reqArgs = argsBuilder();
-        api.serviceUsers_register(reqArgs, function(err, newUser) {
+        api.serviceUsers_registerRequest(reqArgs, function(err, newUser) {
             if (err && err.number && err.number === dErrors.INTERNAL_ERROR) {
                 doneTest();
             } else if (err) {
@@ -157,7 +157,7 @@ describe('API#serviceUsers_register', function() {
 
     it('Must not create user with matching login', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
-        api.serviceUsers_register(argsBuilder({login: 'test@test.com'}), function(err, user) {
+        api.serviceUsers_registerRequest(argsBuilder({login: 'test@test.com'}), function(err, user) {
             if (err && err.number === dErrors.USER_ALREADY_EXISTS) {
                 doneTest();
             } else if (err) {
@@ -172,7 +172,7 @@ describe('API#serviceUsers_register', function() {
     it('Must return valid user', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
         var reqArgs = argsBuilder();
-        api.serviceUsers_register(argsBuilder(), function(err, user) {
+        api.serviceUsers_registerRequest(reqArgs, function(err, user) {
             if (err) {
                 return doneTest(err);
             }
@@ -194,7 +194,7 @@ describe('API#serviceUsers_register', function() {
     it('Must fetch user after registration', function(doneTest) {
         var mock = mockBuilder.newApiWithMock();
         var api = mock.api;
-        api.serviceUsers_register(argsBuilder(), function(err, user) {
+        api.serviceUsers_registerRequest(argsBuilder(), function(err, user) {
             if (err) {
                 return doneTest(err);
             }
@@ -217,7 +217,7 @@ describe('API#serviceUsers_register', function() {
         var name = '<a href="xas">Ololo</a>';
 
         var api = mockBuilder.newApiWithMock().api;
-        api.serviceUsers_register(argsBuilder({name: name}), function(err, user) {
+        api.serviceUsers_registerRequest(argsBuilder({name: name}), function(err, user) {
             if (err) {
                 return doneTest(err);
             }
@@ -225,6 +225,34 @@ describe('API#serviceUsers_register', function() {
             assert.equal(user.name, '&lt;a href&#61;&#34;xas&#34;&gt;Ololo&lt;/a&gt;', 'Name have not been escaped');
             doneTest();
         });
+    });
+
+    it('Must call the emailSender#sendServiceUserRegistrationConfirmLink', function(doneTest) {
+        var isCalled = false;
+        var Sender = {
+            sendServiceUserRegistrationConfirmLink: function (done) {
+                isCalled = true;
+                done();
+            },
+            sendServiceUserPasswordResetConfirmLink: function(done) {
+                done(new Error('Mock implementation'));
+            }
+        };
+
+        var api = mockBuilder.newApiWithMock({emailSender: Sender}).api;
+        var reqArgs = argsBuilder();
+        api.serviceUsers_registerRequest(reqArgs, function(err, user) {
+            if (err) {
+                return doneTest(err);
+            }
+            if (isCalled) {
+                doneTest();
+            } else {
+                assert.fail('#sendServiceUserRegistrationConfirmLink was not called');
+                doneTest();
+            }
+        });
+
     });
 
 });
