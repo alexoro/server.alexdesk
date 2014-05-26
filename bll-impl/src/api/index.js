@@ -117,6 +117,6 @@ Api.prototype.serviceUsers_resetPasswordConfirm = function(args, next) {
 
 Api.prototype.serviceUsers_resetPasswordLookup = function (args, next) {
     this._before(api_serviceUsers_resetPasswordLookup, args, next);
-}
+};
 
 module.exports = Api;
