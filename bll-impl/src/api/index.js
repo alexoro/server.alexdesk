@@ -22,6 +22,7 @@ var api_serviceUser_registerRequest = require('./_api_serviceUser_registerReques
 var api_serviceUser_registerConfirm = require('./_api_serviceUser_registerConfirm');
 var api_serviceUser_resetPasswordRequest = require('./_api_serviceUser_resetPasswordRequest');
 var api_serviceUser_resetPasswordConfirm = require('./_api_serviceUser_resetPasswordConfirm');
+var api_serviceUsers_resetPasswordLookup = require('./_api_serviceUsers_resetPasswordLookup');
 
 
 var Api = function(env) {
@@ -113,5 +114,9 @@ Api.prototype.serviceUsers_resetPasswordRequest = function(args, next) {
 Api.prototype.serviceUsers_resetPasswordConfirm = function(args, next) {
     this._before(api_serviceUser_resetPasswordConfirm, args, next);
 };
+
+Api.prototype.serviceUsers_resetPasswordLookup = function (args, next) {
+    this._before(api_serviceUsers_resetPasswordLookup, args, next);
+}
 
 module.exports = Api;

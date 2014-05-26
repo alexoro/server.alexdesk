@@ -99,6 +99,11 @@ var mock = {
             id: 'd8463bf9-0af6-4db6-86b7-f9c366cc289e',
             service_user_id: '3',
             expires: new Date('2020-01-01 00:00:00 +00:00').getTime()
+        },
+        {
+            id: '5e604462-4f09-4077-afe7-d84bcdb5004e',
+            service_user_id: '100',
+            expires: new Date('2020-01-01 00:00:00 +00:00').getTime()
         }
     ],
 

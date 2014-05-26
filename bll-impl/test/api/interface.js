@@ -80,6 +80,10 @@ describe('API::Interface', function() {
         assert.isDefined(api.serviceUsers_resetPasswordConfirm, 'serviceUsers_resetPasswordConfirm function is not exists');
         assert.isFunction(api.serviceUsers_resetPasswordConfirm, 'serviceUsers_resetPasswordConfirm must be a function');
         assert.equal(api.serviceUsers_resetPasswordConfirm.length, 2, 'serviceUsers_resetPasswordConfirm must receive 2 arguments only');
+
+        assert.isDefined(api.serviceUsers_resetPasswordLookup, 'serviceUsers_resetPasswordLookup function is not exists');
+        assert.isFunction(api.serviceUsers_resetPasswordLookup, 'serviceUsers_resetPasswordLookup must be a function');
+        assert.equal(api.serviceUsers_resetPasswordLookup.length, 2, 'serviceUsers_resetPasswordLookup must receive 2 arguments only');
     });
 
 });

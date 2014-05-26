@@ -4,6 +4,7 @@
 
 "use strict";
 
+
 module.exports = {
     NO_ERROR: 0,
 
@@ -22,6 +23,7 @@ module.exports = {
     USER_NOT_FOUND: 100,
     USER_ALREADY_EXISTS: 102,
     USER_NOT_CONFIRMED: 104,
+    USER_ALREADY_CONFIRMED: 105,
     INVALID_PASSWORD: 108,
     INVALID_OR_EXPIRED_TOKEN: 112,
     ACCESS_DENIED: 401

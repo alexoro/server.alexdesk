@@ -178,12 +178,18 @@ describe('API#serviceUsers_registerRequest', function() {
             }
 
             var matchUser = {
-                id: '1000',
-                login: reqArgs.login,
-                name: reqArgs.name,
-                registered: new Date('2014-05-15 00:00:00 +00:00'),
-                lastVisit: new Date('2014-05-15 00:00:00 +00:00'),
-                isConfirmed: false
+                confirmation: {
+                    id: 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
+                    expires: new Date('2020-01-01 00:00:00 +00:00').getTime()
+                },
+                user: {
+                    id: '1000',
+                    login: reqArgs.login,
+                    name: reqArgs.name,
+                    registered: new Date('2014-05-15 00:00:00 +00:00'),
+                    lastVisit: new Date('2014-05-15 00:00:00 +00:00'),
+                    isConfirmed: false
+                }
             };
 
             assert.deepEqual(user, matchUser, 'Created user is not match with expected');
@@ -234,7 +240,7 @@ describe('API#serviceUsers_registerRequest', function() {
                 isCalled = true;
                 done();
             },
-            sendServiceUserPasswordResetConfirmLink: function(done) {
+            sendServiceUserResetPasswordConfirmLink: function(done) {
                 done(new Error('Mock implementation'));
             }
         };

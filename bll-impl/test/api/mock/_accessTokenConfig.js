@@ -17,4 +17,12 @@ Config.prototype.getExpireTimeForAppUser = function(done) {
     done(null, new Date('2020-01-01 00:00:00 +00:00').getTime());
 };
 
+Config.prototype.getExpireTimeForRegister = function (done) {
+    done(null, new Date('2020-01-01 00:00:00 +00:00').getTime());
+};
+
+Config.prototype.getExpireTimeForPasswordReset = function (done) {
+    done(null, new Date('2020-01-01 00:00:00 +00:00').getTime());
+};
+
 module.exports = Config;

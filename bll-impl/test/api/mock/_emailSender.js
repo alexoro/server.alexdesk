@@ -12,7 +12,7 @@ Sender.prototype.sendServiceUserRegistrationConfirmLink = function(done) {
     done(null);
 };
 
-Sender.prototype.sendServiceUserPasswordResetConfirmLink = function(done) {
+Sender.prototype.sendServiceUserResetPasswordConfirmLink = function(done) {
     done(null);
 };
 
