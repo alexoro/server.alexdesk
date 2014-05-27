@@ -551,7 +551,7 @@ DAL.prototype.serviceUserIsConfirmed = function(args, done) {
     }
 };
 
-DAL.prototype.serviceUserCreateRegisterConfirmData = function (args, done) {
+DAL.prototype.serviceUserCreateRegisterConfirmData = function(args, done) {
     var data = {
         id: args.id,
         service_user_id: args.userId,
@@ -559,6 +559,30 @@ DAL.prototype.serviceUserCreateRegisterConfirmData = function (args, done) {
     };
     this.mock.system_register_confirm.push(data);
     done(null);
+};
+
+DAL.prototype.fetchUserCreateRegisterConfirmData = function(args, done) {
+    var r = _.findWhere(this.mock.system_register_confirm, {id: args.confirmToken});
+    if (!r) {
+        done(null, null);
+    } else {
+        var ret = {
+            id: r.id,
+            userId: r.service_user_id,
+            expires: r.expires
+        };
+        done(null, ret);
+    }
+};
+
+DAL.prototype.markServiceUserAsConfirmed = function(args, done) {
+    var user = _.findWhere(this.mock.users, {id: args.userId});
+    if (!user) {
+        done(new Error('User is not found'));
+    } else {
+        user.isConfirmed = true;
+        done(null);
+    }
 };
 
 
