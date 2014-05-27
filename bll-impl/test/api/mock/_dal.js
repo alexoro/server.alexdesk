@@ -551,5 +551,15 @@ DAL.prototype.serviceUserIsConfirmed = function(args, done) {
     }
 };
 
+DAL.prototype.serviceUserCreateRegisterConfirmData = function (args, done) {
+    var data = {
+        id: args.id,
+        service_user_id: args.userId,
+        expires: args.expires
+    };
+    this.mock.system_register_confirm.push(data);
+    done(null);
+};
+
 
 module.exports = DAL;

@@ -223,12 +223,12 @@ describe('API#serviceUsers_registerRequest', function() {
         var name = '<a href="xas">Ololo</a>';
 
         var api = mockBuilder.newApiWithMock().api;
-        api.serviceUsers_registerRequest(argsBuilder({name: name}), function(err, user) {
+        api.serviceUsers_registerRequest(argsBuilder({name: name}), function(err, result) {
             if (err) {
                 return doneTest(err);
             }
 
-            assert.equal(user.name, '&lt;a href&#61;&#34;xas&#34;&gt;Ololo&lt;/a&gt;', 'Name have not been escaped');
+            assert.equal(result.user.name, '&lt;a href&#61;&#34;xas&#34;&gt;Ololo&lt;/a&gt;', 'Name have not been escaped');
             doneTest();
         });
     });
@@ -236,11 +236,11 @@ describe('API#serviceUsers_registerRequest', function() {
     it('Must call the emailSender#sendServiceUserRegistrationConfirmLink', function(doneTest) {
         var isCalled = false;
         var Sender = {
-            sendServiceUserRegistrationConfirmLink: function (done) {
+            sendServiceUserRegistrationConfirmLink: function (args, done) {
                 isCalled = true;
                 done();
             },
-            sendServiceUserResetPasswordConfirmLink: function(done) {
+            sendServiceUserResetPasswordConfirmLink: function(args, done) {
                 done(new Error('Mock implementation'));
             }
         };

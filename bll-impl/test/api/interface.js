@@ -53,10 +53,6 @@ describe('API::Interface', function() {
         assert.isFunction(api.security_createAuthTokenForServiceUser, 'security_createAuthTokenForAppUser must be a function');
         assert.equal(api.security_createAuthTokenForServiceUser.length, 2, 'security_createAuthTokenForAppUser must receive 2 arguments only');
 
-        assert.isDefined(api.serviceUsers_register, 'serviceUsers_register function is not exists');
-        assert.isFunction(api.serviceUsers_register, 'serviceUsers_register must be a function');
-        assert.equal(api.serviceUsers_register.length, 2, 'serviceUsers_register must receive 2 arguments only');
-
         assert.isDefined(api.appUsers_init, 'appUsers_init function is not exists');
         assert.isFunction(api.appUsers_init, 'appUsers_init must be a function');
         assert.equal(api.appUsers_init.length, 2, 'appUsers_init must receive 2 arguments only');

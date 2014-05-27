@@ -15,7 +15,6 @@ var api_hd_chatsList = require('./_api_hd_chatsList');
 var api_hd_messagesList = require('./_api_hd_messagesList');
 var api_hd_messageCreate = require('./_api_hd_messageCreate');
 var api_hd_chatCreate = require('./_api_hd_chatCreate');
-var api_serviceUser_register = require('./_api_serviceUser_register');
 var api_appUsers_init = require('./_api_appUsers_init');
 var api_apps_create = require('./_api_apps_create');
 var api_serviceUser_registerRequest = require('./_api_serviceUser_registerRequest');
@@ -85,10 +84,6 @@ Api.prototype.security_createAuthTokenForServiceUser = function(args, next) {
 
 Api.prototype.security_createAuthTokenForAppUser = function(args, next) {
     this._before(api_security_createAuthTokenForAppUser, args, next);
-};
-
-Api.prototype.serviceUsers_register = function(args, next) {
-    this._before(api_serviceUser_register, args, next);
 };
 
 Api.prototype.appUsers_init = function(args, next) {

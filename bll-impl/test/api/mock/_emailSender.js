@@ -8,11 +8,11 @@ var Sender = function() {
 
 };
 
-Sender.prototype.sendServiceUserRegistrationConfirmLink = function(done) {
+Sender.prototype.sendServiceUserRegistrationConfirmLink = function(args, done) {
     done(null);
 };
 
-Sender.prototype.sendServiceUserResetPasswordConfirmLink = function(done) {
+Sender.prototype.sendServiceUserResetPasswordConfirmLink = function(args, done) {
     done(null);
 };
 
