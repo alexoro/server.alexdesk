@@ -30,7 +30,7 @@ var argsBuilder = function(override) {
         override = {};
     }
     return {
-        login: override.login === undefined ? 'xxx@xxx.com' : override.login
+        login: override.login === undefined ? 'test@test.com' : override.login
     };
 };
 
@@ -127,10 +127,10 @@ describe('API#serviceUsers_resetPasswordRequest', function() {
     it('Must call the emailSender#sendServiceUserResetPasswordConfirmLink', function(doneTest) {
         var isCalled = false;
         var Sender = {
-            sendServiceUserRegistrationConfirmLink: function (done) {
+            sendServiceUserRegistrationConfirmLink: function (args, done) {
                 done(new Error('Mock implementation'));
             },
-            sendServiceUserResetPasswordConfirmLink: function(done) {
+            sendServiceUserResetPasswordConfirmLink: function(args, done) {
                 isCalled = true;
                 done();
             }

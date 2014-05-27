@@ -124,7 +124,7 @@ var _create = function(env, args, next) {
             });
         },
         function (flow, cb) {
-            env.accessTokenConfig.getExpireTimeForRegister(function (err, expires) {
+            flow.env.accessTokenConfig.getExpireTimeForRegister(function (err, expires) {
                 if (err) {
                     cb(errBuilder(dErr.INTERNAL_ERROR, err));
                 } else {
@@ -168,8 +168,6 @@ var _create = function(env, args, next) {
                     cb(null, flow);
                 }
             });
-
-
         },
         function (flow, cb) {
             var reqArgs = {
