@@ -25,6 +25,13 @@ var _validateArgsHasErrors = function(env, args) {
     if (typeof args !== 'object') {
         return errBuilder(dErr.INVALID_PARAMS, 'Arguments is not a object');
     }
+
+    if (args.confirmToken === undefined) {
+        return errBuilder(dErr.INVALID_PARAMS, 'Confirm token is not defined');
+    }
+    if (!validate.guid(args.confirmToken)) {
+        return errBuilder(dErr.INVALID_PARAMS, 'Confirm token is invalid');
+    }
 };
 
 var _create = function(env, args, next) {
@@ -32,22 +39,90 @@ var _create = function(env, args, next) {
         function(cb) {
             var flow = {
                 args: args,
-                env: env
+                env: env,
+                confirmData: null,
+                login: null
             };
             cb(null , flow);
         },
+
+        function(flow, cb) {
+            var reqArgs = {
+                confirmToken: flow.args.confirmToken
+            };
+            flow.env.dal.fetchUserResetPasswordConfirmData(reqArgs, function(err, confirmData) {
+                if (err) {
+                    cb(errBuilder(dErr.INTERNAL_ERROR, err));
+                } else if (!confirmData) {
+                    cb(errBuilder(dErr.INVALID_OR_EXPIRED_TOKEN, 'Specified token is not found'));
+                } else {
+                    flow.confirmData = confirmData;
+                    cb(null, flow);
+                }
+            });
+        },
         function (flow, cb) {
-            cb(new Error('Not implemented'));
+            flow.env.dal.serviceUserIsExists({userId: flow.confirmData.userId}, function (err, isExists) {
+                if (err) {
+                    cb(errBuilder(dErr.INTERNAL_ERROR, err));
+                } else if (!isExists) {
+                    cb(errBuilder(dErr.USER_NOT_FOUND, 'User is not exists'));
+                } else {
+                    cb(null, flow);
+                }
+            });
+        },
+        function(flow, cb) {
+            flow.env.dal.serviceUserIsConfirmed({userId: flow.confirmData.userId}, function (err, isConfirmed) {
+                if (err) {
+                    cb(errBuilder(dErr.INTERNAL_ERROR, err));
+                } else if (!isConfirmed) {
+                    cb(errBuilder(dErr.USER_NOT_CONFIRMED, 'User is not confirmed'));
+                } else {
+                    cb(null, flow);
+                }
+            });
+        },
+
+        function(flow, cb) {
+            flow.env.currentTimeProvider.getCurrentTime(function (err, currentTime) {
+                if (err) {
+                    cb(errBuilder(dErr.INTERNAL_ERROR, err));
+                } else if (!(currentTime instanceof Date)) {
+                    cb(errBuilder(dErr.INTERNAL_ERROR, 'Current time returned not a Date'));
+                } else {
+                    flow.currentTime = currentTime;
+                    cb(null, flow);
+                }
+            });
+        },
+        function(flow, cb) {
+            if (flow.currentTime.getTime() >= flow.confirmData.expires) {
+                cb(errBuilder(dErr.INVALID_OR_EXPIRED_TOKEN, 'Token is expired'));
+            } else {
+                cb(null, flow);
+            }
+        },
+
+        function (flow, cb) {
+            flow.env.dal.getUserLoginById({userId: flow.confirmData.userId}, function (err, login) {
+                if (err) {
+                    cb(errBuilder(dErr.INTERNAL_ERROR, err));
+                } else {
+                    flow.login = login;
+                    cb(null, flow);
+                }
+            });
         }
     ];
 
     async.waterfall(
         fnStack,
-        function(err, newUser) {
+        function(err, flow) {
             if (err) {
                 next(err);
             } else {
-                next(null, newUser);
+                next(null, {login: flow.login});
             }
         }
     );

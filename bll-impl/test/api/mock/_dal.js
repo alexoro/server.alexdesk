@@ -624,5 +624,14 @@ DAL.prototype.updateServiceUserPasswordHash = function (args, done) {
     }
 };
 
+DAL.prototype.getUserLoginById = function (args, done) {
+    var r = _.findWhere(this.mock.users, {id: args.userId});
+    if (!r) {
+        done(new Error('User not found'));
+    } else {
+        done(null, r.login);
+    }
+};
+
 
 module.exports = DAL;
