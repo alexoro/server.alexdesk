@@ -559,7 +559,7 @@ DAL.prototype.serviceUserIsExists = function (args, done) {
 DAL.prototype.serviceUserCreateRegisterConfirmData = function(args, done) {
     var data = {
         id: args.id,
-        service_user_id: args.userId,
+        serviceUserId: args.userId,
         expires: args.expires
     };
     this.mock.system_register_confirm.push(data);
@@ -573,7 +573,7 @@ DAL.prototype.fetchUserCreateRegisterConfirmData = function(args, done) {
     } else {
         var ret = {
             id: r.id,
-            userId: r.service_user_id,
+            userId: r.serviceUserId,
             expires: r.expires
         };
         done(null, ret);
@@ -593,7 +593,7 @@ DAL.prototype.markServiceUserAsConfirmed = function(args, done) {
 DAL.prototype.serviceUserCreateResetPasswordConfirmData = function(args, done) {
     var data = {
         id: args.id,
-        service_user_id: args.userId,
+        serviceUserId: args.userId,
         expires: args.expires
     };
     this.mock.system_reset_password_confirm.push(data);
@@ -607,7 +607,7 @@ DAL.prototype.fetchUserResetPasswordConfirmData = function(args, done) {
     } else {
         var ret = {
             id: r.id,
-            userId: r.service_user_id,
+            userId: r.serviceUserId,
             expires: r.expires
         };
         done(null, ret);

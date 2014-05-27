@@ -69,17 +69,17 @@ var mock = {
     system_register_confirm: [
         {
             id: '0cec4d47-d9a1-4984-8f23-10583b674123',
-            service_user_id: '1',
+            serviceUserId: '1',
             expires: new Date('2020-01-01 00:00:00 +00:00').getTime()
         },
         {
             id: 'de72bca0-1c76-444d-9b1a-ad1f84d04dfb',
-            service_user_id: '3',
+            serviceUserId: '3',
             expires: new Date('2000-01-01 00:00:00 +00:00').getTime()
         },
         {
             id: '5ece1f7a-c5d0-4a09-97b6-00e8d88a04a1',
-            service_user_id: '3',
+            serviceUserId: '3',
             expires: new Date('2020-01-01 00:00:00 +00:00').getTime()
         }
     ],
@@ -87,22 +87,22 @@ var mock = {
     system_reset_password_confirm: [
         {
             id: 'a1df4350-5fcb-4377-8bfb-6576801cda51',
-            service_user_id: '1',
+            serviceUserId: '1',
             expires: new Date('2020-01-01 00:00:00 +00:00').getTime()
         },
         {
             id: '86fb45f6-2bd4-4918-bd6b-887b6d51b0a9',
-            service_user_id: '1',
+            serviceUserId: '1',
             expires: new Date('2000-01-01 00:00:00 +00:00').getTime()
         },
         {
             id: 'd8463bf9-0af6-4db6-86b7-f9c366cc289e',
-            service_user_id: '3',
+            serviceUserId: '3',
             expires: new Date('2020-01-01 00:00:00 +00:00').getTime()
         },
         {
             id: '5e604462-4f09-4077-afe7-d84bcdb5004e',
-            service_user_id: '100',
+            serviceUserId: '100',
             expires: new Date('2020-01-01 00:00:00 +00:00').getTime()
         }
     ],
