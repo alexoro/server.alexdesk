@@ -551,6 +551,11 @@ DAL.prototype.serviceUserIsConfirmed = function(args, done) {
     }
 };
 
+DAL.prototype.serviceUserIsExists = function (args, done) {
+    var r = _.findWhere(this.mock.users, {id: args.userId});
+    done(null, !!r);
+};
+
 DAL.prototype.serviceUserCreateRegisterConfirmData = function(args, done) {
     var data = {
         id: args.id,
@@ -593,6 +598,30 @@ DAL.prototype.serviceUserCreateResetPasswordConfirmData = function(args, done) {
     };
     this.mock.system_reset_password_confirm.push(data);
     done(null);
+};
+
+DAL.prototype.fetchUserResetPasswordConfirmData = function(args, done) {
+    var r = _.findWhere(this.mock.system_reset_password_confirm, {id: args.confirmToken});
+    if (!r) {
+        done(null, null);
+    } else {
+        var ret = {
+            id: r.id,
+            userId: r.service_user_id,
+            expires: r.expires
+        };
+        done(null, ret);
+    }
+};
+
+DAL.prototype.updateServiceUserPasswordHash = function (args, done) {
+    var r = _.findWhere(this.mock.users, {id: args.userId});
+    if (!r) {
+        done(new Error('User not found'));
+    } else {
+        r.passwordHash = args.passwordHash;
+        done(null);
+    }
 };
 
 

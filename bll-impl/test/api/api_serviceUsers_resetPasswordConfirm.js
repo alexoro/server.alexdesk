@@ -30,7 +30,7 @@ var argsBuilder = function(override) {
         override = {};
     }
     return {
-        confirmToken: override.confirmToken === undefined ? 'd8463bf9-0af6-4db6-86b7-f9c366cc289e' : override.confirmToken,
+        confirmToken: override.confirmToken === undefined ? 'a1df4350-5fcb-4377-8bfb-6576801cda51' : override.confirmToken,
         newPassword: override.newPassword === undefined ? '123' : override.newPassword
     };
 };
@@ -150,7 +150,7 @@ describe('API#serviceUsers_resetPasswordConfirm', function() {
                 return doneTest(err);
             }
             var reqArgs = {
-                login: '1@1.com',
+                login: 'test@test.com',
                 passwordHash: '202cb962ac59075b964b07152d234b70'
             };
             dal.getServiceUserIdByCreditionals(reqArgs, function (err, userId) {
