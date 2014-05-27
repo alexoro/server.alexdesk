@@ -14,6 +14,20 @@ CREATE TABLE system_access_tokens (
   PRIMARY KEY(id)
 );
 
+CREATE TABLE system_register_confirm (
+  id UUID NOT NULL,
+  service_user_id BIGINT NOT NULL,
+  expires TIMESTAMPTZ NOT NULL,
+  PRIMARY KEY(id)
+);
+
+CREATE TABLE system_reset_password_confirm (
+  id UUID NOT NULL,
+  service_user_id BIGINT NOT NULL,
+  expires TIMESTAMPTZ NOT NULL,
+  PRIMARY KEY(id)
+);
+
 CREATE TABLE users (
   id BIGINT NOT NULL,
   email VARCHAR(100) NOT NULL,
