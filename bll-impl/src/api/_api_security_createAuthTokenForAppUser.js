@@ -5,126 +5,160 @@
 "use strict";
 
 
-var _ = require('underscore');
 var async = require('async');
 
 var domain = require('../domain');
+var dErr = domain.errors;
 
 var errBuilder = require('./_errorBuilder');
 var validate = require('./_validation');
 
 
-var _validateArgsHasErrors = function(env, args) {
-    var dErr = domain.errors;
-
-    if (!args) {
-        return errBuilder(dErr.INVALID_PARAMS, 'Arguments is not defined');
-    }
-    if (typeof args !== 'object') {
-        return errBuilder(dErr.INVALID_PARAMS, 'Arguments is not a object');
-    }
-    if (args.appId === undefined || args.login === undefined || args.password === undefined) {
-        return errBuilder(dErr.INVALID_PARAMS, 'Not all required fields are set: appId or login or password');
-    }
-
-    if (!validate.appId(args.appId)) {
-        return errBuilder(dErr.INVALID_PARAMS, 'Invalid application id value: ' + args.appId);
-    }
-    if (!validate.appUserLogin(args.login)) {
-        return errBuilder(dErr.INVALID_PARAMS, 'App user login must be a string with length [1,64]. Given: ' + args.login);
-    }
-    if (!validate.appUserPassword(args.password)) {
-        return errBuilder(dErr.INVALID_PARAMS, 'App user password must be a string with length [1, 64]. Given: ' + args.password);
-    }
-};
-
-var _create = function(env, args, next) {
-    var dal = env.dal;
-    var uuid = env.uuid;
-    var dUserTypes = domain.userTypes;
-    var dErr = domain.errors;
-
+var fnExecute = function (env, args, next) {
     var fnStack = [
         function(cb) {
-            env.dal.isAppExists(args.appId, function(err, result) {
-                if (!result) {
-                    return cb(errBuilder(dErr.APP_NOT_FOUND, 'Application not found. #ID: ' + args.appId));
-                }
-                return cb();
-            });
-        },
-        function(cb) {
-            env.passwordManager.hashAppUserPassword(args.password, cb);
-        },
-        function(passwordHash, cb) {
-            var creditionals = {
-                appId: args.appId,
-                login: args.login,
-                passwordHash: passwordHash
+            var flow = {
+                args: args,
+                env: env,
+                passwordHash: null,
+                userId: null,
+                tokenId: null,
+                tokenExpires: null,
+                result: null
             };
-            dal.getAppUserIdByCreditionals(creditionals, function(err, userId) {
-                if (err) {
-                    cb(errBuilder(dErr.INTERNAL_ERROR, err));
-                } else if (!userId) {
-                    cb(errBuilder(dErr.USER_NOT_FOUND, 'User with specified creditionals is not found'));
-                } else {
-                    cb(null, userId);
-                }
-            });
+            cb(null , flow);
         },
-        function(userId, cb) {
-            uuid.newGuid4(function(err, guid) {
-                if (err) {
-                    cb(errBuilder(dErr.INTERNAL_ERROR, err));
-                } else {
-                    cb(null, userId, guid);
-                }
-            });
-        },
-        function(userId, guid, cb) {
-            env.accessTokenConfig.getExpireTimeForAppUser(function(err, expires) {
-                if (err) {
-                    cb(err);
-                } else {
-                    cb(null, userId, guid, expires);
-                }
-            });
-        },
-        function(userId, guid, expires, cb) {
-            var toSave = {
-                token: guid,
-                userType: dUserTypes.APP_USER,
-                userId: userId,
-                expires: expires
-            };
-            dal.createAuthToken(toSave, function(err) {
-                if (err) {
-                    cb(errBuilder(dErr.INTERNAL_ERROR, err));
-                } else {
-                    cb(null, guid, expires);
-                }
-            });
-        }
+        fnValidate,
+        fnAppIsExists,
+        fnAppUserHashPassword,
+        fnAppUserGetIdByCreditionals,
+        fnTokenGenerateId,
+        fnTokenGenerateExpireTime,
+        fnTokenSave,
+        fnGenerateResult
     ];
 
     async.waterfall(
         fnStack,
-        function(err, guid, expires) {
+        function(err, flow) {
             if (err) {
-                return next(err);
+                next(err);
             } else {
-                next(null, {token: guid, expires: expires});
+                next(null, flow.result);
             }
         }
     );
 };
 
 
-module.exports = function(env, args, next) {
-    var argsError = _validateArgsHasErrors(env, args);
-    if (argsError) {
-        next(argsError, null);
-    } else {
-        _create(env, args, next);
+var fnValidate = function (flow, cb) {
+    if (!flow.args) {
+        return cb(errBuilder(dErr.INVALID_PARAMS, 'Arguments is not defined'));
     }
+    if (typeof flow.args !== 'object') {
+        return cb(errBuilder(dErr.INVALID_PARAMS, 'Arguments is not a object'));
+    }
+    if (flow.args.appId === undefined || flow.args.login === undefined || flow.args.password === undefined) {
+        return cb(errBuilder(dErr.INVALID_PARAMS, 'Not all required fields are set: appId or login or password'));
+    }
+
+    if (!validate.appId(flow.args.appId)) {
+        return cb(errBuilder(dErr.INVALID_PARAMS, 'Invalid application id value: ' + flow.args.appId));
+    }
+    if (!validate.appUserLogin(flow.args.login)) {
+        return cb(errBuilder(dErr.INVALID_PARAMS, 'App user login must be a string with length [1,64]. Given: ' + flow.args.login));
+    }
+    if (!validate.appUserPassword(flow.args.password)) {
+        return cb(errBuilder(dErr.INVALID_PARAMS, 'App user password must be a string with length [1, 64]. Given: ' + flow.args.password));
+    }
+
+    return cb(null, flow);
 };
+
+var fnAppIsExists = function (flow, cb) {
+    flow.env.dal.isAppExists(flow.args.appId, function(err, result) {
+        if (!result) {
+            cb(errBuilder(dErr.APP_NOT_FOUND, 'Application not found. #ID: ' + flow.args.appId));
+        } else {
+            cb(null, flow);
+        }
+    });
+};
+
+var fnAppUserHashPassword = function (flow, cb) {
+    flow.env.passwordManager.hashAppUserPassword(flow.args.password, function (err, hashedPassword) {
+        if (err) {
+            cb(errBuilder(dErr.INTERNAL_ERROR, err));
+        } else {
+            flow.passwordHash = hashedPassword;
+            cb(null, flow);
+        }
+    });
+};
+
+var fnAppUserGetIdByCreditionals = function (flow, cb) {
+    var reqArgs = {
+        appId: flow.args.appId,
+        login: flow.args.login,
+        passwordHash: flow.passwordHash
+    };
+    flow.env.dal.getAppUserIdByCreditionals(reqArgs, function (err, userId) {
+        if (err) {
+            cb(errBuilder(dErr.INTERNAL_ERROR, err));
+        } else if (!userId) {
+            cb(errBuilder(dErr.USER_NOT_FOUND, 'User with specified creditionals is not found'));
+        } else {
+            flow.userId = userId;
+            cb(null, flow);
+        }
+    });
+};
+
+var fnTokenGenerateId = function (flow, cb) {
+    flow.env.uuid.newGuid4(function(err, guid) {
+        if (err) {
+            cb(errBuilder(dErr.INTERNAL_ERROR, err));
+        } else {
+            flow.tokenId = guid;
+            cb(null, flow);
+        }
+    });
+};
+
+var fnTokenGenerateExpireTime = function (flow, cb) {
+    flow.env.accessTokenConfig.getExpireTimeForAppUser(function(err, expires) {
+        if (err) {
+            cb(err);
+        } else {
+            flow.tokenExpires = expires;
+            cb(null, flow);
+        }
+    });
+};
+
+var fnTokenSave = function (flow, cb) {
+    var toSave = {
+        token: flow.tokenId,
+        userType: domain.userTypes.APP_USER,
+        userId: flow.userId,
+        expires: flow.tokenExpires
+    };
+    flow.env.dal.createAuthToken(toSave, function(err) {
+        if (err) {
+            cb(errBuilder(dErr.INTERNAL_ERROR, err));
+        } else {
+            cb(null, flow);
+        }
+    });
+};
+
+var fnGenerateResult = function (flow, cb) {
+    flow.result = {
+        token: flow.tokenId,
+        expires: flow.tokenExpires
+    };
+    cb(null, flow);
+};
+
+
+module.exports = fnExecute;
