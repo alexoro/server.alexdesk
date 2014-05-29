@@ -30,11 +30,11 @@ var fnExecute = function(env, args, next) {
         },
         fnValidate,
         fnServiceUserInfoGetByLogin,
-        fnServiceUserisConfirmed,
-        fnGenerateConfirmId,
-        fnGenerateExpireTimeForConfirm,
-        fnServiceUserCreateConfirm,
-        fnSendConfirmInfo,
+        fnServiceUserIsConfirmed,
+        fnConfirmGenerateId,
+        fnConfirmGenerateExpireTime,
+        fnConfirmCreate,
+        fnConfirmSendToServiceUser,
         fnGenerateResponse
     ];
 
@@ -81,7 +81,7 @@ var fnServiceUserInfoGetByLogin = function (flow, cb) {
     });
 };
 
-var fnServiceUserisConfirmed = function (flow, cb) {
+var fnServiceUserIsConfirmed = function (flow, cb) {
     flow.env.dal.serviceUserIsConfirmed({userId: flow.userId}, function (err, isConfirmed) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
@@ -93,7 +93,7 @@ var fnServiceUserisConfirmed = function (flow, cb) {
     });
 };
 
-var fnGenerateConfirmId = function (flow, cb) {
+var fnConfirmGenerateId = function (flow, cb) {
     flow.env.uuid.newGuid4(function(err, id) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
@@ -104,7 +104,7 @@ var fnGenerateConfirmId = function (flow, cb) {
     });
 };
 
-var fnGenerateExpireTimeForConfirm = function (flow, cb) {
+var fnConfirmGenerateExpireTime = function (flow, cb) {
     flow.env.accessTokenConfig.getExpireTimeForPasswordReset(function (err, expires) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
@@ -115,7 +115,7 @@ var fnGenerateExpireTimeForConfirm = function (flow, cb) {
     });
 };
 
-var fnServiceUserCreateConfirm = function (flow, cb) {
+var fnConfirmCreate = function (flow, cb) {
     var reqArgs = {
         id: flow.confirmId,
         userId: flow.userId,
@@ -130,7 +130,7 @@ var fnServiceUserCreateConfirm = function (flow, cb) {
     });
 };
 
-var fnSendConfirmInfo = function (flow, cb) {
+var fnConfirmSendToServiceUser = function (flow, cb) {
     var reqArgs = {
         id: flow.confirmId,
         expires: flow.confirmExpires

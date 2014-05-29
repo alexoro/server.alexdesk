@@ -33,7 +33,7 @@ var fnExecute = function (env, args, next) {
         fnServiceUserIsExists,
         fnServiceUserIsConfirmed,
         fnGetCurrentTIme,
-        fnConfirmIsExpired,
+        fnConfirmIsNotExpired,
         fnServiceUserGetLoginByUserId,
         fnGenerateResult
     ];
@@ -126,7 +126,7 @@ var fnGetCurrentTIme = function (flow, cb) {
     });
 };
 
-var fnConfirmIsExpired = function (flow, cb) {
+var fnConfirmIsNotExpired = function (flow, cb) {
     if (flow.currentTime.getTime() >= flow.confirmData.expires) {
         cb(errBuilder(dErr.INVALID_OR_EXPIRED_TOKEN, 'Token is expired'));
     } else {

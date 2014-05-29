@@ -36,14 +36,14 @@ var fnExecute = function (env, args, next) {
         fnValidate,
         fnServiceUserGetCreditionalsByLogin,
         fnServiceUserGenerateUserId,
-        fnServiceUserGetRegistrationTime,
+        fnServiceUserGenerateRegistrationTime,
         fnServiceUserHashPassword,
         fnServiceUserFilterName,
-        fnGenerateConfirmId,
-        fnGenerateConfirmExpires,
+        fnConfirmGenerateId,
+        fnConfirmGenerateExpiresTime,
         fnServiceUserCreate,
         fnConfirmCreate,
-        fnConfirmSend,
+        fnConfirmSendToServiceUser,
         fnGenerateResult
     ];
 
@@ -119,7 +119,7 @@ var fnServiceUserGenerateUserId = function (flow, cb) {
     });
 };
 
-var fnServiceUserGetRegistrationTime = function (flow, cb) {
+var fnServiceUserGenerateRegistrationTime = function (flow, cb) {
     flow.env.currentTimeProvider.getCurrentTime(function(err, currentTime) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
@@ -146,7 +146,7 @@ var fnServiceUserFilterName = function (flow, cb) {
     cb(null, flow);
 };
 
-var fnGenerateConfirmId = function (flow, cb) {
+var fnConfirmGenerateId = function (flow, cb) {
     flow.env.uuid.newGuid4(function(err, id) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
@@ -157,7 +157,7 @@ var fnGenerateConfirmId = function (flow, cb) {
     });
 };
 
-var fnGenerateConfirmExpires = function (flow, cb) {
+var fnConfirmGenerateExpiresTime = function (flow, cb) {
     flow.env.accessTokenConfig.getExpireTimeForRegister(function (err, expires) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
@@ -204,7 +204,7 @@ var fnConfirmCreate = function (flow, cb) {
     });
 };
 
-var fnConfirmSend = function (flow, cb) {
+var fnConfirmSendToServiceUser = function (flow, cb) {
     var reqArgs = {
         id: flow.confirmId,
         expires: flow.confirmExpires,
