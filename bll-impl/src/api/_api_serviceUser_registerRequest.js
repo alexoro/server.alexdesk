@@ -5,7 +5,6 @@
 "use strict";
 
 
-var _ = require('underscore');
 var async = require('async');
 
 var domain = require('../domain');
