@@ -5,7 +5,6 @@
 "use strict";
 
 
-var _ = require('underscore');
 var async = require('async');
 
 var domain = require('../domain');
@@ -177,10 +176,12 @@ var fnChatsGetList = function (flow, cb) {
 };
 
 var fnChatsSetNumberOfUnreadMessages = function (flow, cb) {
+    var chatIds = [];
+    for (var i = 0; i < flow.chatsList.length; i++) {
+        chatIds.push(flow.chatsList[i].id);
+    }
     var reqArgs = {
-        chatIds: _.map(flow.chatsList, function(item) {
-            return item.id;
-        }),
+        chatIds: chatIds,
         userType: flow.userType,
         userId: flow.userId
     };
@@ -197,10 +198,11 @@ var fnChatsSetNumberOfUnreadMessages = function (flow, cb) {
 };
 
 var fnChatsSetLastMessage = function (flow, cb) {
-    var ids = _.map(flow.chatsList, function(item) {
-        return item.id;
-    });
-    flow.env.dal.getLastMessagePerChats(ids, function(err, result) {
+    var chatIds = [];
+    for (var i = 0; i < flow.chatsList.length; i++) {
+        chatIds.push(flow.chatsList[i].id);
+    }
+    flow.env.dal.getLastMessagePerChats(chatIds, function(err, result) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else {
