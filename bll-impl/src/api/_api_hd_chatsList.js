@@ -27,6 +27,7 @@ var fnExecute = function (env, args, next) {
                 userId: null,
                 appId: null,
                 chatsList: null,
+                chatIds: null,
                 result: null
             };
             cb(null, flow);
@@ -170,18 +171,18 @@ var fnChatsGetList = function (flow, cb) {
             cb(errBuilder(dErr.INTERNAL_ERROR, 'It is expected that #getChatsList will be an array. Received: ' + chats));
         } else {
             flow.chatsList = chats;
+            flow.chatIds = [];
+            for (var i = 0; i < flow.chatsList.length; i++) {
+                flow.chatIds.push(flow.chatsList[i].id);
+            }
             cb(null, flow);
         }
     });
 };
 
 var fnChatsSetNumberOfUnreadMessages = function (flow, cb) {
-    var chatIds = [];
-    for (var i = 0; i < flow.chatsList.length; i++) {
-        chatIds.push(flow.chatsList[i].id);
-    }
     var reqArgs = {
-        chatIds: chatIds,
+        chatIds: flow.chatIds,
         userType: flow.userType,
         userId: flow.userId
     };
@@ -198,11 +199,7 @@ var fnChatsSetNumberOfUnreadMessages = function (flow, cb) {
 };
 
 var fnChatsSetLastMessage = function (flow, cb) {
-    var chatIds = [];
-    for (var i = 0; i < flow.chatsList.length; i++) {
-        chatIds.push(flow.chatsList[i].id);
-    }
-    flow.env.dal.getLastMessagePerChats(chatIds, function(err, result) {
+    flow.env.dal.getLastMessagePerChats(flow.chatIds, function(err, result) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else {
