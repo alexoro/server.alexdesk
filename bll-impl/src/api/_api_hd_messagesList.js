@@ -4,228 +4,279 @@
 
 "use strict";
 
-var _ = require('underscore');
 var async = require('async');
 
 var domain = require('../domain');
+var dErr = domain.errors;
 
 var validate = require('./_validation');
 var errBuilder = require('./_errorBuilder');
-
 
 var defaultOffset = -50;
 var defaultLimit = 50;
 
 
-var _validateArgsHasErrors = function(env, args) {
-    var dErr = domain.errors;
-
-    if (!args) {
-        return errBuilder(dErr.INVALID_PARAMS, 'Arguments are not defined');
-    }
-    if (typeof args !== 'object') {
-        return errBuilder(dErr.INVALID_PARAMS, 'Arguments is not a object');
-    }
-
-    if (args.accessToken === undefined) {
-        return errBuilder(dErr.INVALID_PARAMS, 'Access token is not defined');
-    }
-    if (args.chatId === undefined) {
-        return errBuilder(dErr.INVALID_PARAMS, 'Chat id is not defined');
-    }
-
-    if (!validate.accessToken(args.accessToken)) {
-        return errBuilder(dErr.INVALID_PARAMS, 'Incorrect access token value: ' + args.accessToken);
-    }
-    if (!validate.chatId(args.chatId)) {
-        return errBuilder(dErr.INVALID_PARAMS, 'Incorrect chat id value: ' + args.chatId);
-    }
-
-    if (args.offset !== undefined && !validate.messagesListOffset(args.offset)) {
-        return errBuilder(dErr.INVALID_PARAMS, 'Offset is invalid: ' + args.offset);
-    }
-    if (args.limit !== undefined && !validate.messagesListLimit(args.limit)) {
-        return errBuilder(dErr.INVALID_PARAMS, 'Limit is invalid: ' + args.limit);
-    }
-};
-
-var _execute = function(env, args, next) {
-    var dal = env.dal;
-    var dErr = domain.errors;
-
-    var offset = args.offset || defaultOffset;
-    var limit = args.limit || defaultLimit;
-
+var fnExecute = function (env, args, next) {
     var fnStack = [
         function(cb) {
-            dal.getUserMainInfoByToken(args.accessToken, function(err, user) {
-                if (err) {
-                    cb(errBuilder(dErr.INTERNAL_ERROR, err));
-                } else if (!user) {
-                    cb(errBuilder(dErr.INVALID_OR_EXPIRED_TOKEN, 'Specified access token "' + args.accessToken + '" is expired or invalid'));
-                } else {
-                    cb(null, user);
-                }
-            });
-        },
-        function (user, cb) {
-            if (user.type === domain.userTypes.SERVICE_USER) {
-                var reqArgs = {
-                    userId: user.id
-                };
-                dal.serviceUserIsConfirmed(reqArgs, function (err, isConfirmed) {
-                    if (err) {
-                        cb(errBuilder(dErr.INTERNAL_ERROR, err));
-                    } else if (!isConfirmed) {
-                        cb(errBuilder(dErr.USER_NOT_CONFIRMED, 'User not confirmed'));
-                    } else {
-                        cb(null, user);
-                    }
-                });
-            } else {
-                cb(null, user);
-            }
-        },
-        function(user, cb) {
-            dal.isChatExists({chatId: args.chatId}, function(err, result) {
-                if (err) {
-                    cb(errBuilder(dErr.INTERNAL_ERROR, err));
-                } else if (typeof result !== 'boolean') {
-                    cb(errBuilder(dErr.INTERNAL_ERROR, 'The result of isChatExists() is not a boolean type: ' + result));
-                } else if (!result) {
-                    cb(errBuilder(dErr.CHAT_NOT_FOUND, 'Chat not found. ID: ' + args.chatId));
-                } else {
-                    cb(null, user);
-                }
-            });
-        },
-        function(user, cb) {
-            dal.getAppIdChatBelongsTo({chatId: args.chatId}, function(err, appId) {
-                if (err) {
-                    cb(errBuilder(dErr.INTERNAL_ERROR, err));
-                } else if (typeof appId !== 'string') {
-                    cb(errBuilder(dErr.INTERNAL_ERROR, 'The result of getAppIdChatBelongsTo() is not a string: ' + appId));
-                } else if (!validate.appId(appId)) {
-                    cb(errBuilder(dErr.INTERNAL_ERROR, 'Application ID for chat is invalid:. ID: ' + appId));
-                } else {
-                    cb(null, user, appId);
-                }
-            });
-        },
-        function(user, appId, cb) {
-            dal.userIsAssociatedWithApp(appId, user.type, user.id, function(err, isAssociated) {
-                if (err) {
-                    cb(errBuilder(dErr.INTERNAL_ERROR, err));
-                } else if (typeof isAssociated !== 'boolean') {
-                    cb(errBuilder(dErr.INTERNAL_ERROR, 'The result of userIsAssociatedWithApp() is not a boolean type: ' + isAssociated));
-                } else if (!isAssociated) {
-                    cb(errBuilder(dErr.ACCESS_DENIED, 'You have no access to this chat'));
-                } else {
-                    cb(null, user, appId);
-                }
-            });
-        },
-        function(user, appId, cb) {
-            if (user.type === domain.userTypes.SERVICE_USER) {
-                cb(null, user);
-            } else {
-                dal.isUserTheCreatorOfChat({chatId: args.chatId, userType: user.type, userId: user.id}, function(err, isCreator) {
-                    if (err) {
-                        cb(errBuilder(dErr.INTERNAL_ERROR, err));
-                    } else if (typeof isCreator !== 'boolean') {
-                        cb(errBuilder(dErr.INTERNAL_ERROR, 'The result of isUserTheCreatorOfChat() is not a boolean type: ' + isCreator));
-                    } else if (!isCreator) {
-                        cb(errBuilder(dErr.ACCESS_DENIED, 'You have no access to this chat'));
-                    } else {
-                        cb(null, user);
-                    }
-                });
-            }
-        },
-
-        function(user, cb) {
-            dal.getLastVisitOfUserToChat({chatId: args.chatId, userType: user.type, userId: user.id}, function(err, lastVisit) {
-                if (err) {
-                    cb(errBuilder(dErr.INTERNAL_ERROR, err));
-                } else if (!(lastVisit instanceof Date)) {
-                    cb(errBuilder(dErr.INTERNAL_ERROR, 'The result of getLastVisitOfUserToChat() is not a Date type: ' + lastVisit));
-                } else {
-                    cb(null, user, lastVisit);
-                }
-            });
-        },
-        function(user, lastVisit, cb) {
-            var reqArgs = {
-                chatId: args.chatId,
-                offset: offset,
-                limit: limit
+            var flow = {
+                args: args,
+                env: env,
+                userType: null,
+                userId: null,
+                appId: null,
+                lastVisit: null,
+                messages: null,
+                currentDate: null,
+                result: null
             };
-            dal.getMessagesList(reqArgs, function(err, messages) {
-                if (err) {
-                    cb(errBuilder(dErr.INTERNAL_ERROR, err));
-                } else if (!(messages instanceof Array)) {
-                    cb(errBuilder(dErr.INTERNAL_ERROR, 'The result of getMessagesList() is not a Array type: ' + lastVisit));
-                } else {
-                    cb(null, user, messages, lastVisit);
-                }
-            });
+            cb(null , flow);
         },
-
-        function(user, messages, lastVisit, cb) {
-            for (var i = 0; i < messages.length; i++) {
-                delete messages[i].appId;
-                delete messages[i].chatId;
-                messages[i].isRead = messages[i].created.getTime() <= lastVisit.getTime();
-            }
-            cb(null, user, messages);
-        },
-
-        function(user, messages, cb) {
-            env.currentTimeProvider.getCurrentTime(function(err, nowDate) {
-                if (err) {
-                    cb(errBuilder(dErr.INTERNAL_ERROR, err));
-                } else if (!(nowDate instanceof Date)) {
-                    cb(errBuilder(dErr.INTERNAL_ERROR, 'Current time is not a Date type: ' + nowDate));
-                } else {
-                    cb(null, user, messages, nowDate);
-                }
-            });
-        },
-        function(user, messages, nowDate, cb) {
-            var reqArgs = {
-                chatId: args.chatId,
-                userType: user.type,
-                userId: user.id,
-                newLastVisit: nowDate
-            };
-            dal.updateLastVisitForChat(reqArgs, function(err) {
-                if (err) {
-                    cb(errBuilder(dErr.INTERNAL_ERROR, err));
-                } else {
-                    cb(null, messages);
-                }
-            });
-        }
+        fnValidate,
+        fnSetDefaultsIfRequired,
+        fnUserGetInfoByToken,
+        fnServiceUserIsConfirmed,
+        fnChatIsExists,
+        fnChatGetAppIdItBelongsTo,
+        fnUserIsAssociatedWithApp,
+        fnAppUserIsCreatorOfChat,
+        fnUserGetLastVisitOfChat,
+        fnChatGetMessagesList,
+        fnGetCurrentTime,
+        fnChatUpdateLastVisitForUser,
+        fnGenerateResult
     ];
 
     async.waterfall(
         fnStack,
-        function(err, messages) {
+        function(err, flow) {
             if (err) {
-                next(err, null);
+                next(err);
             } else {
-                next(null, messages);
+                next(null, flow.result);
             }
         }
     );
 };
 
 
-module.exports = function(env, args, next) {
-    var argsError = _validateArgsHasErrors(env, args);
-    if (argsError) {
-        next(argsError, null);
+var fnValidate = function (flow, cb) {
+    if (!flow.args) {
+        return cb(errBuilder(dErr.INVALID_PARAMS, 'Arguments are not defined'));
+    }
+    if (typeof flow.args !== 'object') {
+        return cb(errBuilder(dErr.INVALID_PARAMS, 'Arguments is not a object'));
+    }
+
+    if (flow.args.accessToken === undefined) {
+        return cb(errBuilder(dErr.INVALID_PARAMS, 'Access token is not defined'));
+    }
+    if (flow.args.chatId === undefined) {
+        return cb(errBuilder(dErr.INVALID_PARAMS, 'Chat id is not defined'));
+    }
+
+    if (!validate.accessToken(flow.args.accessToken)) {
+        return cb(errBuilder(dErr.INVALID_PARAMS, 'Incorrect access token value: ' + flow.args.accessToken));
+    }
+    if (!validate.chatId(flow.args.chatId)) {
+        return cb(errBuilder(dErr.INVALID_PARAMS, 'Incorrect chat id value: ' + flow.args.chatId));
+    }
+
+    if (flow.args.offset !== undefined && !validate.messagesListOffset(flow.args.offset)) {
+        return cb(errBuilder(dErr.INVALID_PARAMS, 'Offset is invalid: ' + flow.args.offset));
+    }
+    if (flow.args.limit !== undefined && !validate.messagesListLimit(flow.args.limit)) {
+        return cb(errBuilder(dErr.INVALID_PARAMS, 'Limit is invalid: ' + flow.args.limit));
+    }
+
+    return cb(null, flow);
+};
+
+var fnSetDefaultsIfRequired = function (flow, cb) {
+    flow.args.offset = flow.args.offset || defaultOffset;
+    flow.args.limit = flow.args.limit || defaultLimit;
+    cb(null, flow);
+};
+
+var fnUserGetInfoByToken = function (flow, cb) {
+    flow.env.dal.getUserMainInfoByToken(flow.args.accessToken, function(err, user) {
+        if (err) {
+            cb(errBuilder(dErr.INTERNAL_ERROR, err));
+        } else if (!user) {
+            cb(errBuilder(dErr.INVALID_OR_EXPIRED_TOKEN, 'Specified access token "' + flow.args.accessToken + '" is expired or invalid'));
+        } else {
+            flow.userType = user.type;
+            flow.userId = user.id;
+            cb(null, flow);
+        }
+    });
+};
+
+var fnServiceUserIsConfirmed = function (flow, cb) {
+    if (flow.userType === domain.userTypes.SERVICE_USER) {
+        var reqArgs = {
+            userId: flow.userId
+        };
+        flow.env.dal.serviceUserIsConfirmed(reqArgs, function (err, isConfirmed) {
+            if (err) {
+                cb(errBuilder(dErr.INTERNAL_ERROR, err));
+            } else if (!isConfirmed) {
+                cb(errBuilder(dErr.USER_NOT_CONFIRMED, 'User not confirmed'));
+            } else {
+                cb(null, flow);
+            }
+        });
     } else {
-        _execute(env, args, next);
+        cb(null, flow);
     }
 };
+
+var fnChatIsExists = function (flow, cb) {
+    var reqArgs = {
+        chatId: flow.args.chatId
+    };
+    flow.env.dal.isChatExists(reqArgs, function(err, result) {
+        if (err) {
+            cb(errBuilder(dErr.INTERNAL_ERROR, err));
+        } else if (typeof result !== 'boolean') {
+            cb(errBuilder(dErr.INTERNAL_ERROR, 'The result of isChatExists() is not a boolean type: ' + result));
+        } else if (!result) {
+            cb(errBuilder(dErr.CHAT_NOT_FOUND, 'Chat not found. ID: ' + flow.args.chatId));
+        } else {
+            cb(null, flow);
+        }
+    });
+};
+
+var fnChatGetAppIdItBelongsTo = function (flow, cb) {
+    var reqArgs = {
+        chatId: flow.args.chatId
+    };
+    flow.env.dal.getAppIdChatBelongsTo(reqArgs, function(err, appId) {
+        if (err) {
+            cb(errBuilder(dErr.INTERNAL_ERROR, err));
+        } else if (typeof appId !== 'string') {
+            cb(errBuilder(dErr.INTERNAL_ERROR, 'The result of getAppIdChatBelongsTo() is not a string: ' + appId));
+        } else if (!validate.appId(appId)) {
+            cb(errBuilder(dErr.INTERNAL_ERROR, 'Application ID for chat is invalid:. ID: ' + appId));
+        } else {
+            flow.appId = appId;
+            cb(null, flow);
+        }
+    });
+};
+
+var fnUserIsAssociatedWithApp = function (flow, cb) {
+    flow.env.dal.userIsAssociatedWithApp(flow.appId, flow.userType, flow.userId, function(err, isAssociated) {
+        if (err) {
+            cb(errBuilder(dErr.INTERNAL_ERROR, err));
+        } else if (typeof isAssociated !== 'boolean') {
+            cb(errBuilder(dErr.INTERNAL_ERROR, 'The result of userIsAssociatedWithApp() is not a boolean type: ' + isAssociated));
+        } else if (!isAssociated) {
+            cb(errBuilder(dErr.ACCESS_DENIED, 'You have no access to this chat'));
+        } else {
+            cb(null, flow);
+        }
+    });
+};
+
+var fnAppUserIsCreatorOfChat = function (flow, cb) {
+    if (flow.userType === domain.userTypes.SERVICE_USER) {
+        cb(null, flow);
+    } else {
+        var reqArgs = {
+            chatId: flow.args.chatId,
+            userType: flow.userType,
+            userId: flow.userId
+        };
+        flow.env.dal.isUserTheCreatorOfChat(reqArgs, function(err, isCreator) {
+            if (err) {
+                cb(errBuilder(dErr.INTERNAL_ERROR, err));
+            } else if (typeof isCreator !== 'boolean') {
+                cb(errBuilder(dErr.INTERNAL_ERROR, 'The result of isUserTheCreatorOfChat() is not a boolean type: ' + isCreator));
+            } else if (!isCreator) {
+                cb(errBuilder(dErr.ACCESS_DENIED, 'You have no access to this chat'));
+            } else {
+                cb(null, flow);
+            }
+        });
+    }
+};
+
+var fnUserGetLastVisitOfChat = function (flow, cb) {
+    var reqArgs = {
+        chatId: flow.args.chatId,
+        userType: flow.userType,
+        userId: flow.userId
+    };
+    flow.env.dal.getLastVisitOfUserToChat(reqArgs, function(err, lastVisit) {
+        if (err) {
+            cb(errBuilder(dErr.INTERNAL_ERROR, err));
+        } else if (!(lastVisit instanceof Date)) {
+            cb(errBuilder(dErr.INTERNAL_ERROR, 'The result of getLastVisitOfUserToChat() is not a Date type: ' + lastVisit));
+        } else {
+            flow.lastVisit = lastVisit;
+            cb(null, flow);
+        }
+    });
+};
+
+var fnChatGetMessagesList = function (flow, cb) {
+    var reqArgs = {
+        chatId: flow.args.chatId,
+        offset: flow.args.offset,
+        limit: flow.args.limit
+    };
+    flow.env.dal.getMessagesList(reqArgs, function(err, messages) {
+        if (err) {
+            cb(errBuilder(dErr.INTERNAL_ERROR, err));
+        } else if (!(messages instanceof Array)) {
+            cb(errBuilder(dErr.INTERNAL_ERROR, 'The result of getMessagesList() is not a Array type: ' + messages));
+        } else {
+            for (var i = 0; i < messages.length; i++) {
+                delete messages[i].appId;
+                delete messages[i].chatId;
+                messages[i].isRead = messages[i].created.getTime() <= flow.lastVisit.getTime();
+            }
+            flow.messages = messages;
+            cb(null, flow);
+        }
+    });
+};
+
+var fnGetCurrentTime = function (flow, cb) {
+    flow.env.currentTimeProvider.getCurrentTime(function(err, currentDate) {
+        if (err) {
+            cb(errBuilder(dErr.INTERNAL_ERROR, err));
+        } else if (!(currentDate instanceof Date)) {
+            cb(errBuilder(dErr.INTERNAL_ERROR, 'Current time is not a Date type: ' + currentDate));
+        } else {
+            flow.currentDate = currentDate;
+            cb(null, flow);
+        }
+    });
+};
+
+var fnChatUpdateLastVisitForUser = function (flow, cb) {
+    var reqArgs = {
+        chatId: flow.args.chatId,
+        userType: flow.userType,
+        userId: flow.userId,
+        newLastVisit: flow.currentDate
+    };
+    flow.env.dal.updateLastVisitForChat(reqArgs, function(err) {
+        if (err) {
+            cb(errBuilder(dErr.INTERNAL_ERROR, err));
+        } else {
+            cb(null, flow);
+        }
+    });
+};
+
+var fnGenerateResult = function (flow, cb) {
+    flow.result = flow.messages;
+    cb(null, flow);
+};
+
+
+module.exports = fnExecute;
