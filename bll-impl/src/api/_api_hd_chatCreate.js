@@ -33,8 +33,8 @@ var fnExecute = function (env, args, next) {
             cb(null, flow);
         },
         fnValidate,
-        fnAppIsExists,
         fnCheckThatOnlyAndroidUsersCanCallThisMethod,
+        fnAppIsExists,
         fnUserGetInfoByToken,
         fnCheckThatAppUserCalledThisMethod,
         fnUserIsAssociatedWithApp,

@@ -4,6 +4,7 @@
 
 "use strict";
 
+
 var data = [
     ['ab', 1],
     ['aa', 2],

@@ -4,6 +4,7 @@
 
 "use strict";
 
+
 var assert = require('chai').assert;
 var Api = require('../../').api;
 var mock = require('./mock/');

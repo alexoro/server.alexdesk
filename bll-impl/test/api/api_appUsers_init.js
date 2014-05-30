@@ -4,6 +4,7 @@
 
 "use strict";
 
+
 var assert = require('chai').assert;
 var async = require('async');
 
@@ -173,6 +174,21 @@ describe('API#appUsers_init', function() {
     });
 
     // =========================================================
+
+    it('Must work only for Android users', function (doneTest) {
+        var api = mockBuilder.newApiWithMock().api;
+        var reqArgs = argsBuilder({platform: domain.platforms.WEB});
+        api.appUsers_init(reqArgs, function(err) {
+            if (err && err.number && err.number === dErrors.LOGIC_ERROR) {
+                doneTest();
+            } else if (err) {
+                doneTest(err);
+            } else {
+                assert.fail('Must allow only Android users to create the chat');
+                doneTest();
+            }
+        });
+    });
 
     it('Must fail on unknown application', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;

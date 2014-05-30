@@ -4,6 +4,7 @@
 
 "use strict";
 
+
 var BigNumber = require('bignumber.js');
 
 var domain = require('../domain');
