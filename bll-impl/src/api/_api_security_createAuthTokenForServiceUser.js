@@ -26,7 +26,7 @@ var fnExecute = function (env, args, next) {
                 tokenExpires: null,
                 result: null
             };
-            cb(null , flow);
+            cb(null, flow);
         },
         fnValidate,
         fnServiceUserHashPassword,

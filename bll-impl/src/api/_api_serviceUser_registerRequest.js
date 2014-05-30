@@ -30,7 +30,7 @@ var fnExecute = function (env, args, next) {
                 confirmExpires: null,
                 result: null
             };
-            cb(null , flow);
+            cb(null, flow);
         },
         fnValidate,
         fnServiceUserGetCreditionalsByLogin,

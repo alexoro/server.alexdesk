@@ -24,7 +24,7 @@ var fnExecute = function (env, args, next) {
                 hashedPassword: null,
                 result: null
             };
-            cb(null , flow);
+            cb(null, flow);
         },
         fnValidate,
         fnServiceUserGetResetPasswordConfirmData,

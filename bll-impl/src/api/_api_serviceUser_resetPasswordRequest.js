@@ -24,7 +24,7 @@ var fnExecute = function(env, args, next) {
                 confirmId: null,
                 confirmExpires: null
             };
-            cb(null , flow);
+            cb(null, flow);
         },
         fnValidate,
         fnServiceUserInfoGetByLogin,

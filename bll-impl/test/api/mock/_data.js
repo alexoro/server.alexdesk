@@ -329,7 +329,7 @@ var mock = {
         {chatId: '2', userType: domain.userTypes.APP_USER, userId: '2', lastVisit: new Date('2012-05-01 13:26:00 +00:00')},
 
         {chatId: '3', userType: domain.userTypes.SERVICE_USER, userId: '1', lastVisit: new Date('2012-05-01 13:50:00 +00:00')},
-        {chatId: '3', userType: domain.userTypes.APP_USER, userId: '1', lastVisit: new Date('2012-05-01 13:40:00 +00:00')},
+        {chatId: '3', userType: domain.userTypes.APP_USER, userId: '3', lastVisit: new Date('2012-05-01 13:40:00 +00:00')},
 
         {chatId: '4', userType: domain.userTypes.SERVICE_USER, userId: '2', lastVisit: new Date('2012-05-01 13:50:00 +00:00')},
         {chatId: '4', userType: domain.userTypes.APP_USER, userId: '4', lastVisit: new Date('1970-01-01 00:00:00 +00:00')}
@@ -429,4 +429,4 @@ module.exports = {
     getCopy: function() {
         return utils.deepClone(mock);
     }
-}
+};

@@ -29,7 +29,7 @@ var fnExecute = function (env, args, next) {
                 newMessage: null,
                 result: null
             };
-            cb(null , flow);
+            cb(null, flow);
         },
         fnValidate,
         fnUserGetInfoByToken,

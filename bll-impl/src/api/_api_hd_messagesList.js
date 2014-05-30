@@ -31,7 +31,7 @@ var fnExecute = function (env, args, next) {
                 currentDate: null,
                 result: null
             };
-            cb(null , flow);
+            cb(null, flow);
         },
         fnValidate,
         fnSetDefaultsIfRequired,
