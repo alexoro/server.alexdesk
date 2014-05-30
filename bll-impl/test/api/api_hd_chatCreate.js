@@ -26,6 +26,9 @@ var invalidArgsCb = function(cb) {
 };
 
 var argsBuilder = function(override) {
+    if (!override) {
+        override = {};
+    }
     return {
         accessToken: override.accessToken === undefined ? '302a1baa-78b0-4a4d-ae1f-ebb5a147c71a' : override.accessToken,
         appId: override.appId === undefined ? '1' : override.appId,
@@ -488,31 +491,16 @@ describe('API#hd_chatCreate', function() {
 
     // =========================================================
 
-    it('Must not allow not confirmed user to call this method', function (doneTest) {
+    it('Must work only for Android users', function (doneTest) {
         var api = mockBuilder.newApiWithMock().api;
-        var reqArgs = argsBuilder({accessToken: 'b6e84344-74e0-43f3-83e0-6a16c3fe6b5d'});
+        var reqArgs = argsBuilder({platform: domain.platforms.WEB});
         api.hd_chatCreate(reqArgs, function(err) {
-            if (err && err.number === dErrors.USER_NOT_CONFIRMED) {
+            if (err && err.number && err.number === dErrors.LOGIC_ERROR) {
                 doneTest();
             } else if (err) {
                 doneTest(err);
             } else {
-                assert.fail('Not confirmed user created the chat');
-                doneTest();
-            }
-        });
-    });
-
-    it('Check unknown application for service user', function(doneTest) {
-        var api = mockBuilder.newApiWithMock().api;
-        var reqArgs = argsBuilder({accessToken: '142b2b49-75f2-456f-9533-435bd0ef94c0', appId: '10'});
-        api.hd_chatCreate(reqArgs, function(err) {
-            if (err && err.number && err.number === dErrors.APP_NOT_FOUND) {
-                doneTest();
-            } else if (err) {
-                doneTest(err);
-            } else {
-                assert.fail('Must return APP_NOT_FOUND for unknown application');
+                assert.fail('Must allow only Android users to create the chat');
                 doneTest();
             }
         });
@@ -528,21 +516,6 @@ describe('API#hd_chatCreate', function() {
                 doneTest(err);
             } else {
                 assert.fail('Must return APP_NOT_FOUND for unknown application');
-                doneTest();
-            }
-        });
-    });
-
-    it('Check access to application for service user that is not associated with him', function(doneTest) {
-        var api = mockBuilder.newApiWithMock().api;
-        var reqArgs = argsBuilder({accessToken: '142b2b49-75f2-456f-9533-435bd0ef94c0', appId: '2'});
-        api.hd_chatCreate(reqArgs, function(err) {
-            if (err && err.number && err.number === dErrors.ACCESS_DENIED) {
-                doneTest();
-            } else if (err) {
-                doneTest(err);
-            } else {
-                assert.fail('Must return ACCESS_DENIED for application that not belongs to service user');
                 doneTest();
             }
         });
