@@ -28,9 +28,14 @@ var invalidArgsCb = function(cb) {
 };
 
 
-var argsBuilder = function(appId, login, password) {
+var argsBuilder = function(override) {
+    if (!override) {
+        override = {};
+    }
     return {
-        appId: appId, login: login, password: password
+        appId: override.appId === undefined ? '1' : override.appId,
+        login: override.login === undefined ? 'test1' : override.login,
+        password: override.password === undefined ? 'test1' : override.password
     };
 };
 
@@ -57,29 +62,29 @@ describe('API#security_createAuthTokenForAppUser', function() {
         var api = mockBuilder.newApiWithMock().api;
         var fnStack = [
             function(cb) {
-                api.security_createAuthTokenForAppUser(argsBuilder(null, null, null), invalidArgsCb(cb));
+                api.security_createAuthTokenForAppUser(argsBuilder({appId: null}), invalidArgsCb(cb));
             },
             function(cb) {
-                api.security_createAuthTokenForAppUser(argsBuilder({}, null, null), invalidArgsCb(cb));
+                api.security_createAuthTokenForAppUser(argsBuilder({appId: {}}), invalidArgsCb(cb));
             },
             function(cb) {
-                api.security_createAuthTokenForAppUser(argsBuilder('', null, null), invalidArgsCb(cb));
+                api.security_createAuthTokenForAppUser(argsBuilder({appId: ''}), invalidArgsCb(cb));
             },
             function(cb) {
-                api.security_createAuthTokenForAppUser(argsBuilder('xxx@xx:com', null, null), invalidArgsCb(cb));
+                api.security_createAuthTokenForAppUser(argsBuilder({appId: 'xxx@xx:com'}), invalidArgsCb(cb));
             },
             function(cb) {
                 var appId = '0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789';
-                api.security_createAuthTokenForAppUser(argsBuilder(appId, null, null), invalidArgsCb(cb));
+                api.security_createAuthTokenForAppUser(argsBuilder({appId: appId}), invalidArgsCb(cb));
             },
             function(cb) {
-                api.security_createAuthTokenForAppUser(argsBuilder('-1', null, null), invalidArgsCb(cb));
+                api.security_createAuthTokenForAppUser(argsBuilder({appId: '-1'}), invalidArgsCb(cb));
             },
             function(cb) {
-                api.hd_chatsList(argsBuilder('1.1', null, null), invalidArgsCb(cb));
+                api.hd_chatsList(argsBuilder({appId: '1.1'}), invalidArgsCb(cb));
             },
             function(cb) {
-                api.hd_chatsList(argsBuilder('1.0', null, null), invalidArgsCb(cb));
+                api.hd_chatsList(argsBuilder({appId: '1.0'}), invalidArgsCb(cb));
             }
         ];
         async.series(fnStack, doneTest);
@@ -89,17 +94,17 @@ describe('API#security_createAuthTokenForAppUser', function() {
         var api = mockBuilder.newApiWithMock().api;
         var fnStack = [
             function(cb) {
-                api.security_createAuthTokenForAppUser(argsBuilder('1', null, null), invalidArgsCb(cb));
+                api.security_createAuthTokenForAppUser(argsBuilder({login: null}), invalidArgsCb(cb));
             },
             function(cb) {
-                api.security_createAuthTokenForAppUser(argsBuilder('1', {}, null), invalidArgsCb(cb));
+                api.security_createAuthTokenForAppUser(argsBuilder({login: {}}), invalidArgsCb(cb));
             },
             function(cb) {
-                api.security_createAuthTokenForAppUser(argsBuilder('1', '', null), invalidArgsCb(cb));
+                api.security_createAuthTokenForAppUser(argsBuilder({login: ''}), invalidArgsCb(cb));
             },
             function(cb) {
                 var login = '0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789';
-                api.security_createAuthTokenForAppUser(argsBuilder('1', login, null), invalidArgsCb(cb));
+                api.security_createAuthTokenForAppUser(argsBuilder({login: login}), invalidArgsCb(cb));
             }
         ];
         async.series(fnStack, doneTest);
@@ -109,13 +114,13 @@ describe('API#security_createAuthTokenForAppUser', function() {
         var api = mockBuilder.newApiWithMock().api;
         var fnStack = [
             function(cb) {
-                api.security_createAuthTokenForAppUser(argsBuilder('1', 'zzzzz', null), invalidArgsCb(cb));
+                api.security_createAuthTokenForAppUser(argsBuilder({password: null}), invalidArgsCb(cb));
             },
             function(cb) {
-                api.security_createAuthTokenForAppUser(argsBuilder('1', 'xxx@xxx.com', {}), invalidArgsCb(cb));
+                api.security_createAuthTokenForAppUser(argsBuilder({password: {}}), invalidArgsCb(cb));
             },
             function(cb) {
-                api.security_createAuthTokenForAppUser(argsBuilder('1', 'xxx@xxx.com', ''), invalidArgsCb(cb));
+                api.security_createAuthTokenForAppUser(argsBuilder({password: ''}), invalidArgsCb(cb));
             }
         ];
         async.series(fnStack, doneTest);
@@ -128,7 +133,7 @@ describe('API#security_createAuthTokenForAppUser', function() {
 
         var currentTokensLength = data.system_access_tokens.length;
 
-        var reqArgs = argsBuilder('1', 'test1', '1');
+        var reqArgs = argsBuilder({password: '1'});
         api.security_createAuthTokenForAppUser(reqArgs, function(err, result) {
             if (err) {
                 assert.strictEqual(data.system_access_tokens.length, currentTokensLength, 'In case of error token must not be created');
@@ -141,7 +146,7 @@ describe('API#security_createAuthTokenForAppUser', function() {
 
     it('Token must not be created for unknown/not registered user', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
-        var reqArgs = argsBuilder('1', 'test1', '1');
+        var reqArgs = argsBuilder({password: '1'});
         api.security_createAuthTokenForAppUser(reqArgs, function(err, result) {
             if (err && err.number && err.number === dErrors.USER_NOT_FOUND) {
                 doneTest();
@@ -156,7 +161,7 @@ describe('API#security_createAuthTokenForAppUser', function() {
 
     it('Token must be created for valid app user', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
-        var reqArgs = argsBuilder('1', 'test1', 'test1');
+        var reqArgs = argsBuilder();
         api.security_createAuthTokenForAppUser(reqArgs, function(err, result) {
             if (err && err.number && err.number === dErrors.USER_NOT_FOUND) {
                 assert.fail('Known user was not found with creditionals');
@@ -183,7 +188,7 @@ describe('API#security_createAuthTokenForAppUser', function() {
     it('Token must be written to DAL with valid type and id', function(doneTest) {
         var mockApi = mockBuilder.newApiWithMock();
         var api = mockApi.api;
-        var reqArgs = argsBuilder('1', 'test1', 'test1');
+        var reqArgs = argsBuilder();
         api.security_createAuthTokenForAppUser(reqArgs, function(err, result) {
             if (err) {
                 return doneTest(err);
@@ -204,23 +209,13 @@ describe('API#security_createAuthTokenForAppUser', function() {
     });
 
     it('Check token is used from uuid-generator', function(doneTest) {
-        var guid4 = '6c1bd09f-ca96-438d-adee-ff4c7c1694ba';
-        var UUID = function() {};
-        UUID.prototype.newBigInt = function(done) {
-            done(null, '1');
-        };
-        UUID.prototype.newGuid4 = function(done) {
-            done(null, guid4);
-        };
-        var uuid = new UUID();
-
-        var api = mockBuilder.newApiWithMock({uuid: uuid}).api;
-        var reqArgs = argsBuilder('1', 'test1', 'test1');
+        var api = mockBuilder.newApiWithMock().api;
+        var reqArgs = argsBuilder();
         api.security_createAuthTokenForAppUser(reqArgs, function(err, result) {
             if (err) {
                 return doneTest(err);
             }
-            assert.strictEqual(result.token, guid4, 'Module must use uuid generator. Provided token and result are not match');
+            assert.strictEqual(result.token, 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'Module must use uuid generator. Provided token and result are not match');
             doneTest();
         });
     });
@@ -236,7 +231,7 @@ describe('API#security_createAuthTokenForAppUser', function() {
         var uuid = new UUID();
 
         var api = mockBuilder.newApiWithMock({uuid: uuid}).api;
-        var reqArgs = argsBuilder('1', 'test1', 'test1');
+        var reqArgs = argsBuilder();
         api.security_createAuthTokenForAppUser(reqArgs, function(err, result) {
             if (!err || !err.number || err.number !== dErrors.INTERNAL_ERROR) {
                 assert.fail('Method did not respond with INTERNAL_ERROR for not error on uuid');
