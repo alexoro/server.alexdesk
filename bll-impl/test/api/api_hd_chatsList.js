@@ -26,10 +26,15 @@ var invalidArgsCb = function(cb) {
     };
 };
 
-
-var argsBuilder = function(accessToken, appId, offset, limit) {
+var argsBuilder = function(override) {
+    if (!override) {
+        override = {};
+    }
     return {
-        accessToken: accessToken, appId: appId, offset: offset === undefined ? 0 : offset, limit: limit === undefined ? 50 : limit
+        accessToken: override.accessToken === undefined ? '142b2b49-75f2-456f-9533-435bd0ef94c0' : override.accessToken,
+        appId: override.appId === undefined ? '1' : override.appId,
+        offset: override.offset === undefined ? 0 : override.offset,
+        limit: override.limit === undefined ? 50 : override.limit
     };
 };
 
@@ -57,26 +62,26 @@ describe('API#hd_chatsList', function() {
         var token = '142b2b49-75f2-456f-9533-435bd0ef94c0';
         var fnStack = [
             function(cb) {
-                api.hd_chatsList(argsBuilder(token, null), invalidArgsCb(cb));
+                api.hd_chatsList(argsBuilder({appId: null}), invalidArgsCb(cb));
             },
             function(cb) {
-                api.hd_chatsList(argsBuilder(token, {}), invalidArgsCb(cb));
+                api.hd_chatsList(argsBuilder({appId: {}}), invalidArgsCb(cb));
             },
             function(cb) {
-                api.hd_chatsList(argsBuilder(token,''), invalidArgsCb(cb));
+                api.hd_chatsList(argsBuilder({appId: ''}), invalidArgsCb(cb));
             },
             function(cb) {
-                api.hd_chatsList(argsBuilder(token, 'xxx@xx:com'), invalidArgsCb(cb));
+                api.hd_chatsList(argsBuilder({appId: 'xxx@xx:com'}), invalidArgsCb(cb));
             },
             function(cb) {
-                api.hd_chatsList(argsBuilder(token, '-1'), invalidArgsCb(cb));
+                api.hd_chatsList(argsBuilder({appId: '-1'}), invalidArgsCb(cb));
             },
             function(cb) {
-                api.hd_chatsList(argsBuilder(token, '1.0'), invalidArgsCb(cb));
+                api.hd_chatsList(argsBuilder({appId: '1.0'}), invalidArgsCb(cb));
             },
             function(cb) {
                 var appId = '0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789';
-                api.hd_chatsList(argsBuilder(token, appId), invalidArgsCb(cb));
+                api.hd_chatsList(argsBuilder({appId: appId}), invalidArgsCb(cb));
             }
         ];
         async.series(fnStack, doneTest);
@@ -84,26 +89,24 @@ describe('API#hd_chatsList', function() {
 
     it('Validate invalid arguments: offset is invalid', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
-        var token = '142b2b49-75f2-456f-9533-435bd0ef94c0';
-        var appId = '1';
         var fnStack = [
             function(cb) {
-                api.hd_chatsList(argsBuilder(token, appId, null), invalidArgsCb(cb));
+                api.hd_chatsList(argsBuilder({offset: null}), invalidArgsCb(cb));
             },
             function(cb) {
-                api.hd_chatsList(argsBuilder(token, appId, {}), invalidArgsCb(cb));
+                api.hd_chatsList(argsBuilder({offset: {}}), invalidArgsCb(cb));
             },
             function(cb) {
-                api.hd_chatsList(argsBuilder(token, appId, ''), invalidArgsCb(cb));
+                api.hd_chatsList(argsBuilder({offset: ''}), invalidArgsCb(cb));
             },
             function(cb) {
-                api.hd_chatsList(argsBuilder(token, appId, 'xxx@xx:com'), invalidArgsCb(cb));
+                api.hd_chatsList(argsBuilder({offset: 'xxx@xx:com'}), invalidArgsCb(cb));
             },
             function(cb) {
-                api.hd_chatsList(argsBuilder(token, appId, -1), invalidArgsCb(cb));
+                api.hd_chatsList(argsBuilder({offset:  -1}), invalidArgsCb(cb));
             },
             function(cb) {
-                api.hd_chatsList(argsBuilder(token, appId, 0.2), invalidArgsCb(cb));
+                api.hd_chatsList(argsBuilder({offset: 0.2}), invalidArgsCb(cb));
             }
         ];
         async.series(fnStack, doneTest);
@@ -111,27 +114,24 @@ describe('API#hd_chatsList', function() {
 
     it('Validate invalid arguments: limit is invalid', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
-        var token = '142b2b49-75f2-456f-9533-435bd0ef94c0';
-        var appId = '1';
-        var offset = 0;
         var fnStack = [
             function(cb) {
-                api.hd_chatsList(argsBuilder(token, appId, offset, null), invalidArgsCb(cb));
+                api.hd_chatsList(argsBuilder({limit: null}), invalidArgsCb(cb));
             },
             function(cb) {
-                api.hd_chatsList(argsBuilder(token, appId, offset, {}), invalidArgsCb(cb));
+                api.hd_chatsList(argsBuilder({limit: {}}), invalidArgsCb(cb));
             },
             function(cb) {
-                api.hd_chatsList(argsBuilder(token, appId, offset, 'xxx@xx:com'), invalidArgsCb(cb));
+                api.hd_chatsList(argsBuilder({limit: 'xxx@xx:com'}), invalidArgsCb(cb));
             },
             function(cb) {
-                api.hd_chatsList(argsBuilder(token, appId, offset, -1), invalidArgsCb(cb));
+                api.hd_chatsList(argsBuilder({limit: -1}), invalidArgsCb(cb));
             },
             function(cb) {
-                api.hd_chatsList(argsBuilder(token, appId, offset, 100), invalidArgsCb(cb));
+                api.hd_chatsList(argsBuilder({limit: 100}), invalidArgsCb(cb));
             },
             function(cb) {
-                api.hd_chatsList(argsBuilder(token, appId, offset, 1.2), invalidArgsCb(cb));
+                api.hd_chatsList(argsBuilder({limit: 1.2}), invalidArgsCb(cb));
             }
         ];
         async.series(fnStack, doneTest);
@@ -139,7 +139,7 @@ describe('API#hd_chatsList', function() {
 
     it('Check invalid access token', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
-        var args = argsBuilder('142b2b49-75f2-456f-9533-435bd0ef94c0!!', '1');
+        var args = argsBuilder({accessToken: '142b2b49-75f2-456f-9533-435bd0ef94c0!!'});
         api.hd_chatsList(args, function(err, result) {
             if (err.number && err.number === dErrors.INVALID_PARAMS) {
                 doneTest();
@@ -154,7 +154,7 @@ describe('API#hd_chatsList', function() {
 
     it('Check expired access token', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
-        var args = argsBuilder('390582c6-a59b-4ab2-a8e1-87fdbb291b97', '1');
+        var args = argsBuilder({accessToken: '390582c6-a59b-4ab2-a8e1-87fdbb291b97'});
         api.hd_chatsList(args, function(err, result) {
             if (err && err.number === dErrors.INVALID_OR_EXPIRED_TOKEN) {
                 doneTest();
@@ -174,8 +174,7 @@ describe('API#hd_chatsList', function() {
         };
 
         var api = mock.api;
-        var reqArgs = argsBuilder('142b2b49-75f2-456f-9533-435bd0ef94c0', '1');
-        api.hd_chatsList(reqArgs, function(err, result) {
+        api.hd_chatsList(argsBuilder(), function(err, result) {
             if (err && err.number && err.number === dErrors.INTERNAL_ERROR) {
                 doneTest();
             } else if (err) {
@@ -194,8 +193,7 @@ describe('API#hd_chatsList', function() {
         };
 
         var api = mock.api;
-        var reqArgs = argsBuilder('142b2b49-75f2-456f-9533-435bd0ef94c0', '1');
-        api.hd_chatsList(reqArgs, function(err, result) {
+        api.hd_chatsList(argsBuilder(), function(err, result) {
             if (err && err.number && err.number === dErrors.INTERNAL_ERROR) {
                 doneTest();
             } else if (err) {
@@ -211,7 +209,7 @@ describe('API#hd_chatsList', function() {
 
     it('Must not allow not confirmed user to call this method', function (doneTest) {
         var api = mockBuilder.newApiWithMock().api;
-        api.hd_chatsList(argsBuilder('b6e84344-74e0-43f3-83e0-6a16c3fe6b5d', '1'), function(err) {
+        api.hd_chatsList(argsBuilder({accessToken: 'b6e84344-74e0-43f3-83e0-6a16c3fe6b5d'}), function(err) {
             if (err && err.number === dErrors.USER_NOT_CONFIRMED) {
                 doneTest();
             } else if (err) {
@@ -225,7 +223,7 @@ describe('API#hd_chatsList', function() {
 
     it('Check unknown application for service user', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
-        var reqArgs = argsBuilder('142b2b49-75f2-456f-9533-435bd0ef94c0', '10');
+        var reqArgs = argsBuilder({appId: '10'});
         api.hd_chatsList(reqArgs, function(err, result) {
             if (err && err.number && err.number === dErrors.APP_NOT_FOUND) {
                 doneTest();
@@ -240,7 +238,7 @@ describe('API#hd_chatsList', function() {
 
     it('Check unknown application for application user', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
-        var reqArgs = argsBuilder('302a1baa-78b0-4a4d-ae1f-ebb5a147c71a', '10');
+        var reqArgs = argsBuilder({accessToken: '302a1baa-78b0-4a4d-ae1f-ebb5a147c71a', appId: '10'});
         api.hd_chatsList(reqArgs, function(err, result) {
             if (err && err.number && err.number === dErrors.APP_NOT_FOUND) {
                 doneTest();
@@ -255,7 +253,7 @@ describe('API#hd_chatsList', function() {
 
     it('Check access to application for service user that is not associated with him', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
-        var reqArgs = argsBuilder('142b2b49-75f2-456f-9533-435bd0ef94c0', '2');
+        var reqArgs = argsBuilder({appId: '2'});
         api.hd_chatsList(reqArgs, function(err, result) {
             if (err && err.number && err.number === dErrors.ACCESS_DENIED) {
                 doneTest();
@@ -270,7 +268,7 @@ describe('API#hd_chatsList', function() {
 
     it('Check access to application for app user that is not associated with him', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
-        var reqArgs = argsBuilder('302a1baa-78b0-4a4d-ae1f-ebb5a147c71a', '2');
+        var reqArgs = argsBuilder({accessToken: '302a1baa-78b0-4a4d-ae1f-ebb5a147c71a', appId: '2'});
         api.hd_chatsList(reqArgs, function(err, result) {
             if (err && err.number && err.number === dErrors.ACCESS_DENIED) {
                 doneTest();
@@ -285,8 +283,7 @@ describe('API#hd_chatsList', function() {
 
     it('Service user must get access to all chats', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
-        var reqArgs = argsBuilder('142b2b49-75f2-456f-9533-435bd0ef94c0', '1');
-        api.hd_chatsList(reqArgs, function(err, result) {
+        api.hd_chatsList(argsBuilder(), function(err, result) {
             if (err) {
                 return doneTest(err);
             }
@@ -298,7 +295,7 @@ describe('API#hd_chatsList', function() {
 
     it('Application user must get access only to his chats', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
-        var reqArgs = argsBuilder('302a1baa-78b0-4a4d-ae1f-ebb5a147c71a', '1');
+        var reqArgs = argsBuilder({accessToken: '302a1baa-78b0-4a4d-ae1f-ebb5a147c71a', appId: '1'});
         api.hd_chatsList(reqArgs, function(err, result) {
             if (err) {
                 return doneTest(err);
@@ -311,8 +308,7 @@ describe('API#hd_chatsList', function() {
 
     it('Chats must be in DESC order by last_update', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
-        var reqArgs = argsBuilder('142b2b49-75f2-456f-9533-435bd0ef94c0', '1');
-        api.hd_chatsList(reqArgs, function(err, result) {
+        api.hd_chatsList(argsBuilder(), function(err, result) {
             if (err) {
                 return doneTest(err);
             }
@@ -331,7 +327,7 @@ describe('API#hd_chatsList', function() {
 
     it('Big offset must return empty array', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
-        var reqArgs = argsBuilder('142b2b49-75f2-456f-9533-435bd0ef94c0', '1', 1000, 50);
+        var reqArgs = argsBuilder({offset: 1000, limit: 50});
         api.hd_chatsList(reqArgs, function(err, result) {
             if (err) {
                 return doneTest(err);
@@ -344,8 +340,7 @@ describe('API#hd_chatsList', function() {
 
     it('Chats list must return valid objects', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
-        var reqArgs = argsBuilder('142b2b49-75f2-456f-9533-435bd0ef94c0', '1');
-        api.hd_chatsList(reqArgs, function(err, result) {
+        api.hd_chatsList(argsBuilder(), function(err, result) {
             if (err) {
                 return doneTest(err);
             }
