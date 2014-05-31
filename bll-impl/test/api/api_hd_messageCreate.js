@@ -27,13 +27,16 @@ var invalidArgsCb = function(cb) {
 };
 
 
-var argsBuilder = function(accessToken, chatId, message) {
+var argsBuilder = function(override) {
+    if (!override) {
+        override = {};
+    }
     return {
-        accessToken: accessToken, chatId: chatId, message: message
+        accessToken: override.accessToken === undefined ? '142b2b49-75f2-456f-9533-435bd0ef94c0' : override.accessToken,
+        chatId: override.chatId === undefined ? '1' : override.chatId,
+        message: override.message === undefined ? 'Hey, this is message from test' : override.message
     };
 };
-var validChatId = '1';
-var validMessage = 'Hey, this is message from test';
 
 
 describe('API#hd_messageCreate', function() {
@@ -56,7 +59,7 @@ describe('API#hd_messageCreate', function() {
 
     it('Check invalid access token', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
-        var args = argsBuilder('142b2b49-75f2-456f-9533-435bd0ef94c0!!', validChatId, validMessage);
+        var args = argsBuilder({accessToken: '142b2b49-75f2-456f-9533-435bd0ef94c0!!'});
         api.hd_messageCreate(args, function(err, result) {
             if (err.number && err.number === dErrors.INVALID_PARAMS) {
                 doneTest();
@@ -71,7 +74,7 @@ describe('API#hd_messageCreate', function() {
 
     it('Check expired access token', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
-        var args = argsBuilder('390582c6-a59b-4ab2-a8e1-87fdbb291b97', validChatId, validMessage);
+        var args = argsBuilder({accessToken: '390582c6-a59b-4ab2-a8e1-87fdbb291b97'});
         api.hd_messageCreate(args, function(err, result) {
             if (err && err.number === dErrors.INVALID_OR_EXPIRED_TOKEN) {
                 doneTest();
@@ -86,29 +89,28 @@ describe('API#hd_messageCreate', function() {
 
     it('Validate invalid arguments: chat id is invalid', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
-        var token = '142b2b49-75f2-456f-9533-435bd0ef94c0';
         var fnStack = [
             function(cb) {
-                api.hd_messageCreate(argsBuilder(token, null, validMessage), invalidArgsCb(cb));
+                api.hd_messageCreate(argsBuilder({chatId: null}), invalidArgsCb(cb));
             },
             function(cb) {
-                api.hd_messageCreate(argsBuilder(token, {}, validMessage), invalidArgsCb(cb));
+                api.hd_messageCreate(argsBuilder({chatId: {}}), invalidArgsCb(cb));
             },
             function(cb) {
-                api.hd_messageCreate(argsBuilder(token, '', validMessage), invalidArgsCb(cb));
+                api.hd_messageCreate(argsBuilder({chatId: ''}), invalidArgsCb(cb));
             },
             function(cb) {
-                api.hd_messageCreate(argsBuilder(token, 'xxx@xx:com', validMessage), invalidArgsCb(cb));
+                api.hd_messageCreate(argsBuilder({chatId: 'xxx@xx:com'}), invalidArgsCb(cb));
             },
             function(cb) {
                 var chatId = '0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789';
-                api.hd_messageCreate(argsBuilder(token, chatId, validMessage), invalidArgsCb(cb));
+                api.hd_messageCreate(argsBuilder({chatId: chatId}), invalidArgsCb(cb));
             },
             function(cb) {
-                api.hd_messageCreate(argsBuilder(token, '-1', validMessage), invalidArgsCb(cb));
+                api.hd_messageCreate(argsBuilder({chatId: '-1'}), invalidArgsCb(cb));
             },
             function(cb) {
-                api.hd_messageCreate(argsBuilder(token, '1.0', validMessage), invalidArgsCb(cb));
+                api.hd_messageCreate(argsBuilder({chatId: '1.0'}), invalidArgsCb(cb));
             }
         ];
         async.series(fnStack, doneTest);
@@ -116,19 +118,18 @@ describe('API#hd_messageCreate', function() {
 
     it('Validate invalid arguments: message type', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
-        var token = '142b2b49-75f2-456f-9533-435bd0ef94c0';
         var fnStack = [
             function(cb) {
-                api.hd_messageCreate(argsBuilder(token, validChatId, null), invalidArgsCb(cb));
+                api.hd_messageCreate(argsBuilder({message: null}), invalidArgsCb(cb));
             },
             function(cb) {
-                api.hd_messageCreate(argsBuilder(token, validChatId, {}), invalidArgsCb(cb));
+                api.hd_messageCreate(argsBuilder({message: {}}), invalidArgsCb(cb));
             },
             function(cb) {
-                api.hd_messageCreate(argsBuilder(token, validChatId, 1.1), invalidArgsCb(cb));
+                api.hd_messageCreate(argsBuilder({message: 1.1}), invalidArgsCb(cb));
             },
             function(cb) {
-                api.hd_messageCreate(argsBuilder(token, validChatId, ''), invalidArgsCb(cb));
+                api.hd_messageCreate(argsBuilder({message: ''}), invalidArgsCb(cb));
             }
         ];
         async.series(fnStack, doneTest);
@@ -136,15 +137,9 @@ describe('API#hd_messageCreate', function() {
 
     it('Validate invalid arguments: very long message must not be passed', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
-        var token = '142b2b49-75f2-456f-9533-435bd0ef94c0';
         var fnStack = [
             function(cb) {
-                var part = '0123456789';
-                var veryLongMessage = '';
-                for (var i = 0; i < 10000; i++) {
-                    veryLongMessage += part;
-                }
-                api.hd_messageCreate(argsBuilder(token, validChatId, veryLongMessage), invalidArgsCb(cb));
+                api.hd_messageCreate(argsBuilder({message: new Array(10000).join('a')}), invalidArgsCb(cb));
             }
         ];
         async.series(fnStack, doneTest);
@@ -152,10 +147,9 @@ describe('API#hd_messageCreate', function() {
 
     it('Validate invalid arguments: too short message must not be passed', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
-        var token = '142b2b49-75f2-456f-9533-435bd0ef94c0';
         var fnStack = [
             function(cb) {
-                api.hd_messageCreate(argsBuilder(token, validChatId, 'x'), invalidArgsCb(cb));
+                api.hd_messageCreate(argsBuilder({message: 'x'}), invalidArgsCb(cb));
             }
         ];
         async.series(fnStack, doneTest);
@@ -168,8 +162,7 @@ describe('API#hd_messageCreate', function() {
         };
 
         var api = mock.api;
-        var reqArgs = argsBuilder('142b2b49-75f2-456f-9533-435bd0ef94c0', validChatId, validMessage);
-        api.hd_messageCreate(reqArgs, function(err, result) {
+        api.hd_messageCreate(argsBuilder(), function(err, result) {
             if (err && err.number && err.number === dErrors.INTERNAL_ERROR) {
                 doneTest();
             } else if (err) {
@@ -188,8 +181,7 @@ describe('API#hd_messageCreate', function() {
         };
 
         var api = mock.api;
-        var reqArgs = argsBuilder('142b2b49-75f2-456f-9533-435bd0ef94c0', validChatId, validMessage);
-        api.hd_messageCreate(reqArgs, function(err, result) {
+        api.hd_messageCreate(argsBuilder(), function(err, result) {
             if (err && err.number && err.number === dErrors.INTERNAL_ERROR) {
                 doneTest();
             } else if (err) {
@@ -205,7 +197,7 @@ describe('API#hd_messageCreate', function() {
 
     it('Must not allow not confirmed user to call this method', function (doneTest) {
         var api = mockBuilder.newApiWithMock().api;
-        api.hd_messageCreate(argsBuilder('b6e84344-74e0-43f3-83e0-6a16c3fe6b5d', '1', 'XX'), function(err) {
+        api.hd_messageCreate(argsBuilder({accessToken: 'b6e84344-74e0-43f3-83e0-6a16c3fe6b5d'}), function(err) {
             if (err && err.number === dErrors.USER_NOT_CONFIRMED) {
                 doneTest();
             } else if (err) {
@@ -219,7 +211,7 @@ describe('API#hd_messageCreate', function() {
 
     it('Check unknown chat for service user', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
-        var reqArgs = argsBuilder('142b2b49-75f2-456f-9533-435bd0ef94c0', '10', validMessage);
+        var reqArgs = argsBuilder({chatId: '10'});
         api.hd_messageCreate(reqArgs, function(err, result) {
             if (err && err.number && err.number === dErrors.CHAT_NOT_FOUND) {
                 doneTest();
@@ -234,7 +226,7 @@ describe('API#hd_messageCreate', function() {
 
     it('Check unknown chat for application user', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
-        var reqArgs = argsBuilder('302a1baa-78b0-4a4d-ae1f-ebb5a147c71a', '10', validMessage);
+        var reqArgs = argsBuilder({accessToken: '302a1baa-78b0-4a4d-ae1f-ebb5a147c71a', chatId: '10'});
         api.hd_messageCreate(reqArgs, function(err, result) {
             if (err && err.number && err.number === dErrors.CHAT_NOT_FOUND) {
                 doneTest();
@@ -249,7 +241,7 @@ describe('API#hd_messageCreate', function() {
 
     it('Check access to chat for service user that is not associated with him', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
-        var reqArgs = argsBuilder('142b2b49-75f2-456f-9533-435bd0ef94c0', '4', validMessage);
+        var reqArgs = argsBuilder({chatId: '4'});
         api.hd_messageCreate(reqArgs, function(err, result) {
             if (err && err.number && err.number === dErrors.ACCESS_DENIED) {
                 doneTest();
@@ -264,7 +256,7 @@ describe('API#hd_messageCreate', function() {
 
     it('Check access to chat for app user that is not associated with him', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
-        var reqArgs = argsBuilder('302a1baa-78b0-4a4d-ae1f-ebb5a147c71a', '3', validMessage);
+        var reqArgs = argsBuilder({accessToken: '302a1baa-78b0-4a4d-ae1f-ebb5a147c71a', chatId: '3'});
         api.hd_messageCreate(reqArgs, function(err, result) {
             if (err && err.number && err.number === dErrors.ACCESS_DENIED) {
                 doneTest();
@@ -296,11 +288,9 @@ describe('API#hd_messageCreate', function() {
             }
         };
 
-        var token = '142b2b49-75f2-456f-9533-435bd0ef94c0';
-
         var mock = mockBuilder.newApiWithMock({currentTimeProvider: currentTimeProvider, uuid: uuid});
         var api = mock.api;
-        var args = argsBuilder(token, validChatId, validMessage);
+        var args = argsBuilder();
         api.hd_messageCreate(args, function(err, message) {
             if (err) {
                 return doneTest(err);
@@ -311,7 +301,7 @@ describe('API#hd_messageCreate', function() {
                 userCreatorId: '1',
                 userCreatorType: domain.userTypes.SERVICE_USER,
                 created: currentTime,
-                content: validMessage,
+                content: args.message,
                 isRead: true
             };
 
@@ -339,11 +329,9 @@ describe('API#hd_messageCreate', function() {
             }
         };
 
-        var token = '302a1baa-78b0-4a4d-ae1f-ebb5a147c71a';
-
         var mock = mockBuilder.newApiWithMock({currentTimeProvider: currentTimeProvider, uuid: uuid});
         var api = mock.api;
-        var args = argsBuilder(token, validChatId, validMessage);
+        var args = argsBuilder({accessToken: '302a1baa-78b0-4a4d-ae1f-ebb5a147c71a'});
         api.hd_messageCreate(args, function(err, message) {
             if (err) {
                 return doneTest(err);
@@ -354,7 +342,7 @@ describe('API#hd_messageCreate', function() {
                 userCreatorId: '2',
                 userCreatorType: domain.userTypes.APP_USER,
                 created: currentTime,
-                content: validMessage,
+                content: args.message,
                 isRead: true
             };
 
@@ -382,19 +370,17 @@ describe('API#hd_messageCreate', function() {
             }
         };
 
-        var token = '142b2b49-75f2-456f-9533-435bd0ef94c0';
-
         var mock = mockBuilder.newApiWithMock({currentTimeProvider: currentTimeProvider, uuid: uuid});
         var api = mock.api;
-        var args = argsBuilder(token, validChatId, validMessage);
+        var args = argsBuilder();
         api.hd_messageCreate(args, function(err, matchMessage) {
             if (err) {
                 return doneTest(err);
             }
 
             var argsList = {
-                accessToken: token,
-                chatId: validChatId,
+                accessToken: args.accessToken,
+                chatId: args.chatId,
                 offset: -1
             };
             api.hd_messagesList(argsList, function(err, lastMessage) {
@@ -408,9 +394,8 @@ describe('API#hd_messageCreate', function() {
     });
 
     it('All messages must become read after calling this method', function(doneTest) {
-        var token = '142b2b49-75f2-456f-9533-435bd0ef94c0';
         var api = mockBuilder.newApiWithMock().api;
-        var reqArgs = argsBuilder(token, validChatId, validMessage);
+        var reqArgs = argsBuilder();
         api.hd_messageCreate(reqArgs, function(err, message) {
             if (err) {
                 return doneTest(err);
@@ -419,8 +404,8 @@ describe('API#hd_messageCreate', function() {
             }
 
             var argsList = {
-                accessToken: token,
-                chatId: validChatId
+                accessToken: reqArgs.accessToken,
+                chatId: reqArgs.chatId
             };
             api.hd_messagesList(argsList, function(err, result) {
                 if (err) {
@@ -441,7 +426,7 @@ describe('API#hd_messageCreate', function() {
 
     it('Last message for another user after create must be unread', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
-        var reqArgs = argsBuilder('142b2b49-75f2-456f-9533-435bd0ef94c0', validChatId, validMessage);
+        var reqArgs = argsBuilder();
         api.hd_messageCreate(reqArgs, function(err, message) {
             if (err) {
                 return doneTest(err);
@@ -451,7 +436,7 @@ describe('API#hd_messageCreate', function() {
 
             var argsList = {
                 accessToken: '302a1baa-78b0-4a4d-ae1f-ebb5a147c71a',
-                chatId: validChatId,
+                chatId: reqArgs.chatId,
                 offset: -1
             };
             api.hd_messagesList(argsList, function(err, result) {
@@ -467,7 +452,7 @@ describe('API#hd_messageCreate', function() {
 
     it('Message must be escaped', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
-        var reqArgs = argsBuilder('142b2b49-75f2-456f-9533-435bd0ef94c0', validChatId, '<a href="xas">Ololo</a>');
+        var reqArgs = argsBuilder({message: '<a href="xas">Ololo</a>'});
         api.hd_messageCreate(reqArgs, function(err, message) {
             if (err) {
                 return doneTest(err);
