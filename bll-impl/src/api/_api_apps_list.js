@@ -5,144 +5,177 @@
 "use strict";
 
 
-var _ = require('underscore');
 var async = require('async');
 
 var domain = require('../domain');
+var dErr = domain.errors;
 
-var validate = require('./_validation');
 var errBuilder = require('./_errorBuilder');
+var validate = require('./_validation');
 
 
-var _validateArgsHasErrors = function(env, args) {
-    var dErr = domain.errors;
-
-    if (!args) {
-        return errBuilder(dErr.INVALID_PARAMS, 'Arguments are not defined');
-    }
-    if (typeof args !== 'object') {
-        return errBuilder(dErr.INVALID_PARAMS, 'Arguments is not a object');
-    }
-    if (args.accessToken === undefined) {
-        return errBuilder(dErr.INVALID_PARAMS, 'Access token is not defined');
-    }
-    if (!validate.accessToken(args.accessToken)) {
-        return errBuilder(dErr.INVALID_PARAMS, 'Incorrect access token value: ' + args.accessToken);
-    }
-};
-
-var _appsFetching = function(env, args, next) {
-    var apps = {};
-    var user;
-
-    var dal = env.dal;
-    var dUserTypes = domain.userTypes;
-    var dErr = domain.errors;
-
+var fnExecute = function (env, args, next) {
     var fnStack = [
         function(cb) {
-            dal.getUserMainInfoByToken(args.accessToken, function(err, result) {
-                if (err) {
-                    cb(errBuilder(dErr.INTERNAL_ERROR, err));
-                } else if (!result) {
-                    cb(errBuilder(dErr.INVALID_OR_EXPIRED_TOKEN, 'Specified access token "' + args.accessToken + '" is expired or invalid'));
-                } else {
-                    user = result;
-                    cb();
-                }
-            });
-        },
-        function(cb) {
-            if (user.type !== dUserTypes.SERVICE_USER) {
-                cb(errBuilder(dErr.ACCESS_DENIED, 'Only service user has access to this command. Given access token is: ' + args.accessToken));
-            } else {
-                cb();
-            }
-        },
-        function (cb) {
-            var reqArgs = {
-                userId: user.id
+            var flow = {
+                args: args,
+                env: env,
+                userType: null,
+                userId: null,
+                appsMap: null,
+                appsIds: null,
+                result: null
             };
-            dal.serviceUserIsConfirmed(reqArgs, function (err, isConfirmed) {
-                if (err) {
-                    cb(errBuilder(dErr.INTERNAL_ERROR, err));
-                } else if (!isConfirmed) {
-                    cb(errBuilder(dErr.USER_NOT_CONFIRMED, 'User not confirmed'));
-                } else {
-                    cb(null);
-                }
-            });
+            cb(null, flow);
         },
-
-        function(cb) {
-            dal.getAppsList(user.id, function(err, result) {
-                if (err) {
-                    cb(errBuilder(dErr.INTERNAL_ERROR, err));
-                } else {
-                    for (var i = 0; i < result.length; i++) {
-                        apps[result[i].id] = result[i];
-                    }
-                    cb();
-                }
-            });
-        },
-
-        function(cb) {
-            dal.getNumberOfChats(_.keys(apps), function(err, result) {
-                if (err) {
-                    cb(errBuilder(dErr.INTERNAL_ERROR, err));
-                } else {
-                    _.keys(result).forEach(function(item) {
-                        apps[item].numberOfChats = result[item];
-                    });
-                    cb();
-                }
-            });
-        },
-        function(cb) {
-            dal.getNumberOfAllMessages(_.keys(apps), function(err, result) {
-                if (err) {
-                    cb(errBuilder(dErr.INTERNAL_ERROR, err));
-                } else {
-                    _.keys(result).forEach(function(item) {
-                        apps[item].numberOfAllMessages = result[item];
-                    });
-                    cb();
-                }
-            });
-        },
-        function(cb) {
-            dal.getNumberOfUnreadMessages(_.keys(apps), user.type, user.id, function(err, result) {
-                if (err) {
-                    cb(errBuilder(dErr.INTERNAL_ERROR, err));
-                } else {
-                    _.keys(result).forEach(function(item) {
-                        apps[item].numberOfUnreadMessages = result[item];
-                    });
-                    cb();
-                }
-            });
-        }
+        fnValidate,
+        fnUserGetInfoByToken,
+        fnCheckThatServiceUserIsCallingThisMethod,
+        fnServiceUserIsConfirmed,
+        fnAppsGetList,
+        fnAppsSetNumberOfChats,
+        fnAppsSetNumberOfAllMessages,
+        fnAppsSetNumberOfUnreadMessages,
+        fnGenerateResult
     ];
 
-    async.series(
+    async.waterfall(
         fnStack,
-        function(err) {
+        function(err, flow) {
             if (err) {
-                next(err, null);
+                next(err);
             } else {
-                next(null, _.values(apps));
+                next(null, flow.result);
             }
         }
     );
 };
 
 
-module.exports = function(env, args, next) {
-    var argsError = _validateArgsHasErrors(env, args);
-    if (argsError) {
-        next(argsError, null);
+var fnValidate = function (flow, cb) {
+    if (!flow.args) {
+        return cb(errBuilder(dErr.INVALID_PARAMS, 'Arguments are not defined'));
+    }
+    if (typeof flow.args !== 'object') {
+        return cb(errBuilder(dErr.INVALID_PARAMS, 'Arguments is not a object'));
+    }
+    if (flow.args.accessToken === undefined) {
+        return cb(errBuilder(dErr.INVALID_PARAMS, 'Access token is not defined'));
+    }
+    if (!validate.accessToken(flow.args.accessToken)) {
+        return cb(errBuilder(dErr.INVALID_PARAMS, 'Incorrect access token value: ' + flow.args.accessToken));
+    }
+
+    return cb(null, flow);
+};
+
+var fnUserGetInfoByToken = function (flow, cb) {
+    flow.env.dal.getUserMainInfoByToken(flow.args.accessToken, function(err, user) {
+        if (err) {
+            cb(errBuilder(dErr.INTERNAL_ERROR, err));
+        } else if (!user) {
+            cb(errBuilder(dErr.INVALID_OR_EXPIRED_TOKEN, 'Specified access token "' + flow.args.accessToken + '" is expired or invalid'));
+        } else {
+            flow.userType = user.type;
+            flow.userId = user.id;
+            cb(null, flow);
+        }
+    });
+};
+
+var fnCheckThatServiceUserIsCallingThisMethod = function (flow, cb) {
+    if (flow.userType !== domain.userTypes.SERVICE_USER) {
+        cb(errBuilder(dErr.ACCESS_DENIED, 'Only service user has access to this command'));
     } else {
-        _appsFetching(env, args, next);
+        cb(null, flow);
     }
 };
+
+var fnServiceUserIsConfirmed = function (flow, cb) {
+    var reqArgs = {
+        userId: flow.userId
+    };
+    flow.env.dal.serviceUserIsConfirmed(reqArgs, function (err, isConfirmed) {
+        if (err) {
+            cb(errBuilder(dErr.INTERNAL_ERROR, err));
+        } else if (!isConfirmed) {
+            cb(errBuilder(dErr.USER_NOT_CONFIRMED, 'User not confirmed'));
+        } else {
+            cb(null, flow);
+        }
+    });
+};
+
+var fnAppsGetList = function (flow, cb) {
+    flow.env.dal.getAppsList(flow.userId, function(err, result) {
+        if (err) {
+            cb(errBuilder(dErr.INTERNAL_ERROR, err));
+        } else {
+            flow.appsMap = {};
+            flow.appsIds = [];
+            for (var i = 0; i < result.length; i++) {
+                flow.appsMap[result[i].id] = result[i];
+                flow.appsIds.push(result[i].id);
+            }
+            cb(null, flow);
+        }
+    });
+};
+
+var fnAppsSetNumberOfChats = function (flow, cb) {
+    flow.env.dal.getNumberOfChats(flow.appsIds, function(err, result) {
+        if (err) {
+            cb(errBuilder(dErr.INTERNAL_ERROR, err));
+        } else {
+            for (var i in result) {
+                if(result.hasOwnProperty(i)) {
+                    flow.appsMap[i].numberOfChats = result[i];
+                }
+            }
+            cb(null, flow);
+        }
+    });
+};
+
+var fnAppsSetNumberOfAllMessages = function (flow, cb) {
+    flow.env.dal.getNumberOfAllMessages(flow.appsIds, function(err, result) {
+        if (err) {
+            cb(errBuilder(dErr.INTERNAL_ERROR, err));
+        } else {
+            for (var i in result) {
+                if(result.hasOwnProperty(i)) {
+                    flow.appsMap[i].numberOfAllMessages = result[i];
+                }
+            }
+            cb(null, flow);
+        }
+    });
+};
+
+var fnAppsSetNumberOfUnreadMessages = function (flow, cb) {
+    flow.env.dal.getNumberOfUnreadMessages(flow.appsIds, flow.userType, flow.userId, function(err, result) {
+        if (err) {
+            cb(errBuilder(dErr.INTERNAL_ERROR, err));
+        } else {
+            for (var i in result) {
+                if(result.hasOwnProperty(i)) {
+                    flow.appsMap[i].numberOfUnreadMessages = result[i];
+                }
+            }
+            cb(null, flow);
+        }
+    });
+};
+
+var fnGenerateResult = function (flow, cb) {
+    flow.result = [];
+    for (var i in flow.appsMap) {
+        if(flow.appsMap.hasOwnProperty(i)) {
+            flow.result.push(flow.appsMap[i]);
+        }
+    }
+    cb(null, flow);
+};
+
+
+module.exports = fnExecute;
