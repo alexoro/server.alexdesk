@@ -27,7 +27,6 @@ var invalidArgsCb = function(cb) {
     };
 };
 
-
 var argsBuilder = function(override) {
     if (!override) {
         override = {};
