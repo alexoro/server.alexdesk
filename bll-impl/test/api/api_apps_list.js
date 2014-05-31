@@ -26,6 +26,15 @@ var invalidArgsCb = function(cb) {
     };
 };
 
+var argsBuilder = function(override) {
+    if (!override) {
+        override = {};
+    }
+    return {
+        accessToken: override.accessToken === undefined ? '142b2b49-75f2-456f-9533-435bd0ef94c0' : override.accessToken,
+    };
+};
+
 
 describe('API#apps_list', function() {
 
@@ -47,7 +56,7 @@ describe('API#apps_list', function() {
 
     it('Check invalid access token', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
-        var args = {accessToken: '142b2b49-75f2-456f-9533-435bd0ef94c0!!'};
+        var args = argsBuilder({accessToken: '142b2b49-75f2-456f-9533-435bd0ef94c0!!'});
         api.apps_list(args, function(err, result) {
             if (err.number && err.number === dErrors.INVALID_PARAMS) {
                 doneTest();
@@ -62,7 +71,7 @@ describe('API#apps_list', function() {
 
     it('Check expired access token', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
-        var args = {accessToken: '390582c6-a59b-4ab2-a8e1-87fdbb291b97'};
+        var args = argsBuilder({accessToken: '390582c6-a59b-4ab2-a8e1-87fdbb291b97'});
         api.apps_list(args, function(err, result) {
             if (err && err.number === dErrors.INVALID_OR_EXPIRED_TOKEN) {
                 doneTest();
@@ -79,7 +88,8 @@ describe('API#apps_list', function() {
 
     it('Must not allow not confirmed user to call this method', function (doneTest) {
         var api = mockBuilder.newApiWithMock().api;
-        api.apps_list({accessToken: 'b6e84344-74e0-43f3-83e0-6a16c3fe6b5d'}, function(err) {
+        var args = argsBuilder({accessToken: 'b6e84344-74e0-43f3-83e0-6a16c3fe6b5d'});
+        api.apps_list(args, function(err) {
             if (err && err.number === dErrors.USER_NOT_CONFIRMED) {
                 doneTest();
             } else if (err) {
@@ -94,7 +104,7 @@ describe('API#apps_list', function() {
     it('Service user must have access to applications list method', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
         api.apps_list(
-            {accessToken: '142b2b49-75f2-456f-9533-435bd0ef94c0'},
+            argsBuilder(),
             function(err, result) {
                 if (err && err.number && err.number === dErrors.ACCESS_DENIED) {
                     assert.fail('Access denied to applications list method for valid user');
@@ -108,8 +118,9 @@ describe('API#apps_list', function() {
 
     it('Application user must not have access to applications list method', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
+        var args = argsBuilder({accessToken: '302a1baa-78b0-4a4d-ae1f-ebb5a147c71a'});
         api.apps_list(
-            {accessToken: '302a1baa-78b0-4a4d-ae1f-ebb5a147c71a'},
+            args,
             function(err, result) {
                 if (err && err.number && err.number === dErrors.ACCESS_DENIED) {
                     doneTest();
@@ -126,7 +137,7 @@ describe('API#apps_list', function() {
     it('Check applications list response', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
         api.apps_list(
-            {accessToken: '142b2b49-75f2-456f-9533-435bd0ef94c0'},
+            argsBuilder(),
             function(err, apps) {
                 if (err) {
                     return doneTest(err);
