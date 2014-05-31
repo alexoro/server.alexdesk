@@ -5,188 +5,194 @@
 "use strict";
 
 
-var _ = require('underscore');
 var async = require('async');
 
 var domain = require('../domain');
+var dErr = domain.errors;
 
+var errBuilder = require('./_errorBuilder');
 var validate = require('./_validation');
 var filter = require('./_filter');
-var errBuilder = require('./_errorBuilder');
 
 
-var _validateArgsHasErrors = function(env, args) {
-    var dErr = domain.errors;
-
-    if (!args) {
-        return errBuilder(dErr.INVALID_PARAMS, 'Arguments are not defined');
-    }
-    if (typeof args !== 'object') {
-        return errBuilder(dErr.INVALID_PARAMS, 'Arguments is not a object');
-    }
-
-    if (args.accessToken === undefined) {
-        return errBuilder(dErr.INVALID_PARAMS, 'Access token is not defined');
-    }
-    if (args.platform === undefined) {
-        return errBuilder(dErr.INVALID_PARAMS, 'Platform is not defined');
-    }
-    if (args.title === undefined) {
-        return errBuilder(dErr.INVALID_PARAMS, 'Title is not defined');
-    }
-    if (args.extra === undefined) {
-        return errBuilder(dErr.INVALID_PARAMS, 'Extra is not defined');
-    }
-
-    if (!validate.accessToken(args.accessToken)) {
-        return errBuilder(dErr.INVALID_PARAMS, 'Incorrect access token value: ' + args.accessToken);
-    }
-    if (!validate.platform(args.platform)) {
-        return errBuilder(dErr.INVALID_PARAMS, 'Incorrect platform value: ' + args.platform);
-    }
-    if (!validate.appTitle(args.title)) {
-        return errBuilder(dErr.INVALID_PARAMS, 'Incorrect title value: ' + args.title);
-    }
-    if (!validate.extra(args.extra)) {
-        return errBuilder(dErr.INVALID_PARAMS, 'Incorrect extra value: ' + args.extra);
-    }
-
-    if (args.platform === domain.platforms.ANDROID) {
-        if (args.extra.package === undefined) {
-            return errBuilder(dErr.INVALID_PARAMS, 'Package is not defined');
-        }
-        if (!validate.appAndroidPackage(args.extra.package)) {
-            return errBuilder(dErr.INVALID_PARAMS, 'Incorrect package value: ' + args.extra.package);
-        }
-    }
-};
-
-var _execute = function(env, args, next) {
-    var dal = env.dal;
-    var dErr = domain.errors;
-
+var fnExecute = function (env, args, next) {
     var fnStack = [
         function(cb) {
-            if (args.platform !== domain.platforms.ANDROID) {
-                cb(errBuilder(dErr.LOGIC_ERROR, 'Only Android applications are allowed to be created'));
-            } else {
-                cb(null);
-            }
-        },
-
-        function(cb) {
             var flow = {
+                args: args,
+                env: env,
                 userType: null,
                 userId: null,
                 newAppId: null,
-                currentTime: null
+                newAppCreateDate: null,
+                result: null
             };
             cb(null, flow);
         },
-
-        function(flow, cb) {
-            dal.getUserMainInfoByToken(args.accessToken, function(err, user) {
-                if (err) {
-                    cb(errBuilder(dErr.INTERNAL_ERROR, err));
-                } else if (!user) {
-                    cb(errBuilder(dErr.INVALID_OR_EXPIRED_TOKEN, 'Specified access token "' + args.accessToken + '" is expired or invalid'));
-                } else {
-                    flow.userType = user.type;
-                    flow.userId = user.id;
-                    cb(null, flow);
-                }
-            });
-        },
-        function(flow, cb) {
-            if (flow.userType !== domain.userTypes.SERVICE_USER) {
-                cb(errBuilder(dErr.ACCESS_DENIED, 'Only service users has permission to create applications'));
-            } else {
-                cb(null, flow);
-            }
-        },
-        function (flow, cb) {
-            var reqArgs = {
-                userId: flow.userId
-            };
-            dal.serviceUserIsConfirmed(reqArgs, function (err, isConfirmed) {
-                if (err) {
-                    cb(errBuilder(dErr.INTERNAL_ERROR, err));
-                } else if (!isConfirmed) {
-                    cb(errBuilder(dErr.USER_NOT_CONFIRMED, 'User not confirmed'));
-                } else {
-                    cb(null, flow);
-                }
-            });
-        },
-
-        function(flow, cb) {
-            env.currentTimeProvider.getCurrentTime(function(err, dateNow) {
-                if (err) {
-                    cb(errBuilder(dErr.INTERNAL_ERROR, err));
-                } else if (!dateNow || !(dateNow instanceof Date)) {
-                    cb(errBuilder(dErr.INTERNAL_ERROR, 'Current date is invalid object: ' + dateNow));
-                } else {
-                    flow.currentTime = dateNow;
-                    cb(null, flow);
-                }
-            });
-        },
-        function(flow, cb) {
-            env.uuid.newBigInt(function(err, id) {
-                if (err) {
-                    cb(errBuilder(dErr.INTERNAL_ERROR, err));
-                } else if (!id || typeof id !== 'string') {
-                    cb(errBuilder(dErr.INTERNAL_ERROR, 'Generated id for chat is invalid: ' + id));
-                } else {
-                    flow.newAppId = id;
-                    cb(null, flow);
-                }
-            });
-        },
-
-        function(flow, cb) {
-            var reqArgs = {
-                id: flow.newAppId,
-                platform: args.platform,
-                title: args.title,
-                created: flow.currentTime,
-                isApproved: true,
-                isBlocked: false,
-                isDeleted: false,
-                extra: {
-                    package: args.package
-                },
-                ownerUserId: flow.userId
-            };
-
-            dal.createApplication(reqArgs, function(err) {
-                if (err) {
-                    cb(errBuilder(dErr.INTERNAL_ERROR, err));
-                } else {
-                    cb(null, reqArgs);
-                }
-            });
-        }
+        fnValidate,
+        fnCheckThatOnlyAndroidApplicationCanBeCreated,
+        fnUserGetInfoByToken,
+        fnCheckThatServiceUserIsCallingThisMethod,
+        fnServiceUserIsConfirmed,
+        fnAppGenerateId,
+        fnAppGenerateCreateTime,
+        fnAppCreateAndGenerateResult
     ];
 
     async.waterfall(
         fnStack,
-        function(err, newApp) {
+        function(err, flow) {
             if (err) {
                 next(err);
             } else {
-                next(null, newApp);
+                next(null, flow.result);
             }
         }
     );
 };
 
 
-module.exports = function(env, args, next) {
-    var argsError = _validateArgsHasErrors(env, args);
-    if (argsError) {
-        next(argsError, null);
+var fnValidate = function (flow, cb) {
+    if (!flow.args) {
+        return cb(errBuilder(dErr.INVALID_PARAMS, 'Arguments are not defined'));
+    }
+    if (typeof flow.args !== 'object') {
+        return cb(errBuilder(dErr.INVALID_PARAMS, 'Arguments is not a object'));
+    }
+
+    if (flow.args.accessToken === undefined) {
+        return cb(errBuilder(dErr.INVALID_PARAMS, 'Access token is not defined'));
+    }
+    if (flow.args.platform === undefined) {
+        return cb(errBuilder(dErr.INVALID_PARAMS, 'Platform is not defined'));
+    }
+    if (flow.args.title === undefined) {
+        return cb(errBuilder(dErr.INVALID_PARAMS, 'Title is not defined'));
+    }
+    if (flow.args.extra === undefined) {
+        return cb(errBuilder(dErr.INVALID_PARAMS, 'Extra is not defined'));
+    }
+
+    if (!validate.accessToken(flow.args.accessToken)) {
+        return cb(errBuilder(dErr.INVALID_PARAMS, 'Incorrect access token value: ' + flow.args.accessToken));
+    }
+    if (!validate.platform(flow.args.platform)) {
+        return cb(errBuilder(dErr.INVALID_PARAMS, 'Incorrect platform value: ' + flow.args.platform));
+    }
+    if (!validate.appTitle(flow.args.title)) {
+        return cb(errBuilder(dErr.INVALID_PARAMS, 'Incorrect title value: ' + flow.args.title));
+    }
+    if (!validate.extra(flow.args.extra)) {
+        return cb(errBuilder(dErr.INVALID_PARAMS, 'Incorrect extra value: ' + flow.args.extra));
+    }
+
+    if (flow.args.platform === domain.platforms.ANDROID) {
+        if (flow.args.extra.package === undefined) {
+            return cb(errBuilder(dErr.INVALID_PARAMS, 'Package is not defined'));
+        }
+        if (!validate.appAndroidPackage(flow.args.extra.package)) {
+            return cb(errBuilder(dErr.INVALID_PARAMS, 'Incorrect package value: ' + flow.args.extra.package));
+        }
+    }
+
+    return cb(null, flow);
+};
+
+var fnCheckThatOnlyAndroidApplicationCanBeCreated = function (flow, cb) {
+    if (flow.args.platform !== domain.platforms.ANDROID) {
+        cb(errBuilder(dErr.LOGIC_ERROR, 'Only Android applications are allowed to be created'));
     } else {
-        _execute(env, args, next);
+        cb(null, flow);
     }
 };
+
+var fnUserGetInfoByToken = function (flow, cb) {
+    flow.env.dal.getUserMainInfoByToken(flow.args.accessToken, function(err, user) {
+        if (err) {
+            cb(errBuilder(dErr.INTERNAL_ERROR, err));
+        } else if (!user) {
+            cb(errBuilder(dErr.INVALID_OR_EXPIRED_TOKEN, 'Specified access token "' + flow.args.accessToken + '" is expired or invalid'));
+        } else {
+            flow.userType = user.type;
+            flow.userId = user.id;
+            cb(null, flow);
+        }
+    });
+};
+
+var fnCheckThatServiceUserIsCallingThisMethod = function (flow, cb) {
+    if (flow.userType !== domain.userTypes.SERVICE_USER) {
+        cb(errBuilder(dErr.ACCESS_DENIED, 'Only service user has access to this command'));
+    } else {
+        cb(null, flow);
+    }
+};
+
+var fnServiceUserIsConfirmed = function (flow, cb) {
+    var reqArgs = {
+        userId: flow.userId
+    };
+    flow.env.dal.serviceUserIsConfirmed(reqArgs, function (err, isConfirmed) {
+        if (err) {
+            cb(errBuilder(dErr.INTERNAL_ERROR, err));
+        } else if (!isConfirmed) {
+            cb(errBuilder(dErr.USER_NOT_CONFIRMED, 'User not confirmed'));
+        } else {
+            cb(null, flow);
+        }
+    });
+};
+
+var fnAppGenerateId = function (flow, cb) {
+    flow.env.uuid.newBigInt(function(err, id) {
+        if (err) {
+            cb(errBuilder(dErr.INTERNAL_ERROR, err));
+        } else if (!id || typeof id !== 'string') {
+            cb(errBuilder(dErr.INTERNAL_ERROR, 'Generated id for chat is invalid: ' + id));
+        } else {
+            flow.newAppId = id;
+            cb(null, flow);
+        }
+    });
+};
+
+var fnAppGenerateCreateTime = function (flow, cb) {
+    flow.env.currentTimeProvider.getCurrentTime(function(err, dateNow) {
+        if (err) {
+            cb(errBuilder(dErr.INTERNAL_ERROR, err));
+        } else if (!dateNow || !(dateNow instanceof Date)) {
+            cb(errBuilder(dErr.INTERNAL_ERROR, 'Current date is invalid object: ' + dateNow));
+        } else {
+            flow.newAppCreateDate = dateNow;
+            cb(null, flow);
+        }
+    });
+};
+
+var fnAppCreateAndGenerateResult = function (flow, cb) {
+    var reqArgs = {
+        id: flow.newAppId,
+        platform: flow.args.platform,
+        title: flow.args.title,
+        created: flow.newAppCreateDate,
+        isApproved: true,
+        isBlocked: false,
+        isDeleted: false,
+        extra: {
+            package: flow.args.package
+        },
+        ownerUserId: flow.userId
+    };
+
+    flow.env.dal.createApplication(reqArgs, function(err) {
+        if (err) {
+            cb(errBuilder(dErr.INTERNAL_ERROR, err));
+        } else {
+            flow.result = reqArgs;
+            cb(null, flow);
+        }
+    });
+};
+
+
+module.exports = fnExecute;
