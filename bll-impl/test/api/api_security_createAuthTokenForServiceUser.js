@@ -27,10 +27,13 @@ var invalidArgsCb = function(cb) {
     };
 };
 
-
-var argsBuilder = function(login, password) {
+var argsBuilder = function(override) {
+    if (!override) {
+        override = {};
+    }
     return {
-        login: login, password: password
+        login: override.login === undefined ? 'test@test.com' : override.login,
+        password: override.password === undefined ? 'test@test.com' : override.password
     };
 };
 
@@ -44,10 +47,10 @@ describe('API#security_createAuthTokenForServiceUser', function() {
                 api.security_createAuthTokenForServiceUser(null, invalidArgsCb(cb));
             },
             function(cb) {
-                api.security_createAuthTokenForServiceUser({}, invalidArgsCb(cb));
+                api.security_createAuthTokenForServiceUser(-1, invalidArgsCb(cb));
             },
             function(cb) {
-                api.security_createAuthTokenForServiceUser(-1, invalidArgsCb(cb));
+                api.security_createAuthTokenForServiceUser(new Date(), invalidArgsCb(cb));
             }
         ];
         async.series(fnStack, doneTest);
@@ -57,20 +60,20 @@ describe('API#security_createAuthTokenForServiceUser', function() {
         var api = mockBuilder.newApiWithMock().api;
         var fnStack = [
             function(cb) {
-                api.security_createAuthTokenForServiceUser(argsBuilder(null, null), invalidArgsCb(cb));
+                api.security_createAuthTokenForServiceUser(argsBuilder({login: null}), invalidArgsCb(cb));
             },
             function(cb) {
-                api.security_createAuthTokenForServiceUser(argsBuilder({}, null), invalidArgsCb(cb));
+                api.security_createAuthTokenForServiceUser(argsBuilder({login:{}}), invalidArgsCb(cb));
             },
             function(cb) {
-                api.security_createAuthTokenForServiceUser(argsBuilder('', null), invalidArgsCb(cb));
+                api.security_createAuthTokenForServiceUser(argsBuilder({login: ''}), invalidArgsCb(cb));
             },
             function(cb) {
-                api.security_createAuthTokenForServiceUser(argsBuilder('xxx@xx:com', null), invalidArgsCb(cb));
+                api.security_createAuthTokenForServiceUser(argsBuilder({login: 'xxx@xx:com'}), invalidArgsCb(cb));
             },
             function(cb) {
                 var email = '0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789';
-                api.security_createAuthTokenForServiceUser(argsBuilder(email, null), invalidArgsCb(cb));
+                api.security_createAuthTokenForServiceUser(argsBuilder({login: email}), invalidArgsCb(cb));
             }
         ];
         async.series(fnStack, doneTest);
@@ -80,13 +83,13 @@ describe('API#security_createAuthTokenForServiceUser', function() {
         var api = mockBuilder.newApiWithMock().api;
         var fnStack = [
             function(cb) {
-                api.security_createAuthTokenForServiceUser(argsBuilder('zzzzz', null), invalidArgsCb(cb));
+                api.security_createAuthTokenForServiceUser(argsBuilder({password: null}), invalidArgsCb(cb));
             },
             function(cb) {
-                api.security_createAuthTokenForServiceUser(argsBuilder('xxx@xxx.com', {}), invalidArgsCb(cb));
+                api.security_createAuthTokenForServiceUser(argsBuilder({password: {}}), invalidArgsCb(cb));
             },
             function(cb) {
-                api.security_createAuthTokenForServiceUser(argsBuilder('xxx@xxx.com', ''), invalidArgsCb(cb));
+                api.security_createAuthTokenForServiceUser(argsBuilder({password: ''}), invalidArgsCb(cb));
             }
         ];
         async.series(fnStack, doneTest);
@@ -96,7 +99,7 @@ describe('API#security_createAuthTokenForServiceUser', function() {
 
     it('Must not allow not confirmed user to call this method', function (doneTest) {
         var api = mockBuilder.newApiWithMock().api;
-        api.security_createAuthTokenForServiceUser(argsBuilder('3@3.com', '3@3.com'), function(err) {
+        api.security_createAuthTokenForServiceUser(argsBuilder({login: '3@3.com', password: '3@3.com'}), function(err) {
             if (err && err.number === dErrors.USER_NOT_CONFIRMED) {
                 doneTest();
             } else if (err) {
@@ -115,7 +118,7 @@ describe('API#security_createAuthTokenForServiceUser', function() {
 
         var currentTokensLength = data.system_access_tokens.length;
 
-        var reqArgs = argsBuilder('test@test.com', '1');
+        var reqArgs = argsBuilder({password: '1'});
         api.security_createAuthTokenForServiceUser(reqArgs, function(err, result) {
             if (err) {
                 assert.strictEqual(data.system_access_tokens.length, currentTokensLength, 'In case of error token must not be created');
@@ -128,7 +131,7 @@ describe('API#security_createAuthTokenForServiceUser', function() {
 
     it('Token must not be created for unknown/not registered user', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
-        var reqArgs = argsBuilder('test@test.com', '1');
+        var reqArgs = argsBuilder({password: '1'});
         api.security_createAuthTokenForServiceUser(reqArgs, function(err, result) {
             if (err && err.number && err.number === dErrors.USER_NOT_FOUND) {
                 doneTest();
@@ -143,7 +146,7 @@ describe('API#security_createAuthTokenForServiceUser', function() {
 
     it('Token must be created for valid service user', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
-        var reqArgs = argsBuilder('test@test.com', 'test@test.com');
+        var reqArgs = argsBuilder();
         api.security_createAuthTokenForServiceUser(reqArgs, function(err, result) {
             if (err && err.number && err.number === dErrors.USER_NOT_FOUND) {
                 assert.fail('Known user was not found with creditionals');
@@ -170,7 +173,7 @@ describe('API#security_createAuthTokenForServiceUser', function() {
     it('Token must be written to DAL with valid type and id', function(doneTest) {
         var mockApi = mockBuilder.newApiWithMock();
         var api = mockApi.api;
-        var reqArgs = argsBuilder('test@test.com', 'test@test.com');
+        var reqArgs = argsBuilder();
         api.security_createAuthTokenForServiceUser(reqArgs, function(err, result) {
             if (err) {
                 return doneTest(err);
@@ -191,23 +194,13 @@ describe('API#security_createAuthTokenForServiceUser', function() {
     });
 
     it('Check token is used from uuid-generator', function(doneTest) {
-        var guid4 = '6c1bd09f-ca96-438d-adee-ff4c7c1694ba';
-        var UUID = function() {};
-        UUID.prototype.newBigInt = function(done) {
-            done(null, '1');
-        };
-        UUID.prototype.newGuid4 = function(done) {
-            done(null, guid4);
-        };
-        var uuid = new UUID();
-
-        var api = mockBuilder.newApiWithMock({uuid: uuid}).api;
+        var api = mockBuilder.newApiWithMock().api;
         var reqArgs = argsBuilder('test@test.com', 'test@test.com');
         api.security_createAuthTokenForServiceUser(reqArgs, function(err, result) {
             if (err) {
                 return doneTest(err);
             }
-            assert.strictEqual(result.token, guid4, 'Module must use uuid generator. Provided token and result are not match');
+            assert.strictEqual(result.token, 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'Module must use uuid generator. Provided token and result are not match');
             doneTest();
         });
     });
@@ -223,8 +216,7 @@ describe('API#security_createAuthTokenForServiceUser', function() {
         var uuid = new UUID();
 
         var api = mockBuilder.newApiWithMock({uuid: uuid}).api;
-        var reqArgs = argsBuilder('test@test.com', 'test@test.com');
-        api.security_createAuthTokenForServiceUser(reqArgs, function(err, result) {
+        api.security_createAuthTokenForServiceUser(argsBuilder(), function(err, result) {
             if (!err || !err.number || err.number !== dErrors.INTERNAL_ERROR) {
                 assert.fail('Method did not respond with INTERNAL_ERROR for not error on uuid');
             }
