@@ -129,7 +129,7 @@ describe('API#security_createAuthTokenForServiceUser', function() {
         });
     });
 
-    it('Token must not be created for registered user', function(doneTest) {
+    it('Token must not be created for not registered user', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
         var reqArgs = argsBuilder({login: 'unknown@unknown.com', password: '1'});
         api.security_createAuthTokenForServiceUser(reqArgs, function(err, result) {

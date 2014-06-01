@@ -76,7 +76,10 @@ var fnValidate = function (flow, cb) {
 };
 
 var fnAppIsExists = function (flow, cb) {
-    flow.env.dal.isAppExists(flow.args.appId, function(err, result) {
+    var reqArgs = {
+        appId: flow.args.appId
+    };
+    flow.env.dal.isAppExists(reqArgs, function(err, result) {
         if (!result) {
             cb(errBuilder(dErr.APP_NOT_FOUND, 'Application not found. #ID: ' + flow.args.appId));
         } else {
@@ -99,16 +102,17 @@ var fnAppUserHashPassword = function (flow, cb) {
 var fnAppUserGetIdByCreditionals = function (flow, cb) {
     var reqArgs = {
         appId: flow.args.appId,
-        login: flow.args.login,
-        passwordHash: flow.passwordHash
+        login: flow.args.login
     };
-    flow.env.dal.getAppUserIdByCreditionals(reqArgs, function (err, userId) {
+    flow.env.dal.getAppUserCreditionalsByLogin(reqArgs, function (err, creditionals) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
-        } else if (!userId) {
+        } else if (!creditionals) {
             cb(errBuilder(dErr.USER_NOT_FOUND, 'User with specified creditionals is not found'));
+        } else if (creditionals.passwordHash !== flow.passwordHash) {
+            cb(errBuilder(dErr.INVALID_PASSWORD, 'User is found, but password is invalid'));
         } else {
-            flow.userId = userId;
+            flow.userId = creditionals.id;
             cb(null, flow);
         }
     });

@@ -194,7 +194,10 @@ var fnCheckThatOnlyAndroidUsersCanCallThisMethod = function (flow, cb) {
 };
 
 var fnAppIsExists = function (flow, cb) {
-    flow.env.dal.isAppExists(flow.args.appId, function(err, exists) {
+    var reqArgs = {
+        appId: flow.args.appId
+    };
+    flow.env.dal.isAppExists(reqArgs, function(err, exists) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else if (typeof exists !== 'boolean') {

@@ -170,11 +170,11 @@ DAL.prototype.serviceUserCreateResetPasswordConfirmData = function(args, done) {
 };
 
 
-DAL.prototype.getAppsList = function(userId, done) {
+DAL.prototype.getAppsList = function(args, done) {
     var self = this;
     var err;
 
-    var appsIds = _.where(this.mock.app_acl, {userId: userId});
+    var appsIds = _.where(this.mock.app_acl, {userId: args.userId});
     var apps = [];
 
     utils.forEach(appsIds, function(item) {
@@ -213,21 +213,12 @@ DAL.prototype.getAppsList = function(userId, done) {
     return done(null, apps);
 };
 
-DAL.prototype.isAppExists = function(appId, done) {
-    var r = _.findWhere(this.mock.apps, {id: appId});
+DAL.prototype.isAppExists = function(args, done) {
+    var r = _.findWhere(this.mock.apps, {id: args.appId});
     if (!r) {
         done(null, false);
     } else {
         done(null, true);
-    }
-};
-
-DAL.prototype.getAppType = function(appId, done) {
-    var r = _.findWhere(this.mock.apps, {id: appId});
-    if (!r) {
-        done(new Error('Application is not found. Given id: ' + appId));
-    } else {
-        done(null, r.platformType);
     }
 };
 
@@ -275,6 +266,15 @@ DAL.prototype.createApplication = function(args, done) {
 };
 
 
+DAL.prototype.getAppUserCreditionalsByLogin = function(args, done) {
+    var r = _.findWhere(this.mock.app_users, {appId: args.appId, login: args.login});
+    if (!r) {
+        done(null, null);
+    } else {
+        done(null, {id: r.appUserId, login: r.login, passwordHash: r.passwordHash});
+    }
+};
+
 DAL.prototype.getAppUserById = function(args, done) {
     var user = _.findWhere(this.mock.app_users, {appUserId: args.id});
     if (!user) {
@@ -291,24 +291,6 @@ DAL.prototype.getAppUserById = function(args, done) {
         user.id = user.appUserId;
         delete user.appUserId;
         done(null, user);
-    }
-};
-
-DAL.prototype.getAppUserCreditionalsByLogin = function(args, done) {
-    var r = _.findWhere(this.mock.app_users, {appId: args.appId, login: args.login});
-    if (!r) {
-        done(null, null);
-    } else {
-        done(null, {id: r.appUserId, login: r.login, passwordHash: r.passwordHash});
-    }
-};
-
-DAL.prototype.getAppUserIdByCreditionals = function(creditionals, done) {
-    var r = _.findWhere(this.mock.app_users, creditionals);
-    if (!r) {
-        done(null, null);
-    } else {
-        done(null, r.appUserId);
     }
 };
 
@@ -403,29 +385,30 @@ DAL.prototype.getChatsList = function(args, done) {
     chats = chats.slice(args.offset, args.limit);
     chats = utils.deepClone(chats);
 
-    var self = this;
-    this.getAppType(args.appId, function(err, appType) {
-        if (err) {
-            return done(err);
-        }
+    var app = _.findWhere(this.mock.apps, {id: args.appId});
+    var appPlatform;
+    if (!app) {
+        return done(new Error('Application is not found. Given id: ' + args.appId));
+    } else {
+        appPlatform = app.platformType;
+    }
 
-        for (var i = 0; i < chats.length; i++) {
-            if (appType === dPlatforms.ANDROID) {
-                var extra = _.findWhere(self.mock.chat_extra_android, {chatId: chats[i].id});
-                if (!extra) {
-                    return done(new Error('No extra information is found for Android application and chat: ' + chats[i].id));
-                } else {
-                    delete extra.chatId;
-                    delete extra.appId;
-                    chats[i].extra = extra;
-                }
+    for (var i = 0; i < chats.length; i++) {
+        if (appPlatform === dPlatforms.ANDROID) {
+            var extra = _.findWhere(this.mock.chat_extra_android, {chatId: chats[i].id});
+            if (!extra) {
+                return done(new Error('No extra information is found for Android application and chat: ' + chats[i].id));
             } else {
-                chats.extra = {};
+                delete extra.chatId;
+                delete extra.appId;
+                chats[i].extra = extra;
             }
+        } else {
+            chats.extra = {};
         }
+    }
 
-        done(null, chats);
-    });
+    done(null, chats);
 };
 
 DAL.prototype.isChatExists = function(args, done) {

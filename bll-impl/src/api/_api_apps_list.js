@@ -112,7 +112,10 @@ var fnCheckServiceUserIsExistsAndConfirmed = function (flow, cb) {
 };
 
 var fnAppsGetList = function (flow, cb) {
-    flow.env.dal.getAppsList(flow.userId, function(err, result) {
+    var reqArgs = {
+        userId: flow.userId
+    };
+    flow.env.dal.getAppsList(reqArgs, function(err, result) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else {
