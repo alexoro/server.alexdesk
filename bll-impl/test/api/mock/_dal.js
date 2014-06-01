@@ -80,24 +80,13 @@ DAL.prototype.getServiceUserLoginById = function (args, done) {
     }
 };
 
-DAL.prototype.serviceUserIsConfirmed = function(args, done) {
+DAL.prototype.getServiceUserProfileById = function (args, done) {
     var reqArgs = {
-        id: args.userId
+        id: args.id
     };
-    var r = _.findWhere(this.mock.users, reqArgs);
-    if (!r) {
-        done(new Error('User not found'));
-    } else {
-        done(null, r.isConfirmed);
-    }
-};
 
-DAL.prototype.serviceUserIsExists = function (args, done) {
-    var reqArgs = {
-        id: args.userId
-    };
     var r = _.findWhere(this.mock.users, reqArgs);
-    done(null, !!r);
+    done(null, r === undefined ? null : r);
 };
 
 DAL.prototype.createServiceUser = function(args, done) {

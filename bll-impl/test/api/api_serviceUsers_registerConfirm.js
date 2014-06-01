@@ -110,11 +110,11 @@ describe('API#serviceUsers_registerConfirm', function() {
             if (errBll) {
                 return doneTest(errBll);
             }
-            dal.serviceUserIsConfirmed({userId: '3'}, function(err, isConfirmed) {
+            dal.getServiceUserProfileById({id: '3'}, function(err, userProfile) {
                 if (err) {
                     return doneTest(err);
                 }
-                if (!isConfirmed) {
+                if (!userProfile.isConfirmed) {
                     assert.fail('Confirm did not switch the isConfirmed flag to true');
                 }
                 doneTest();

@@ -28,7 +28,7 @@ var fnExecute = function(env, args, next) {
         },
         fnValidate,
         fnServiceUserInfoGetByLogin,
-        fnServiceUserIsConfirmed,
+        fnCheckServiceUserIsExistsAndConfirmed,
         fnConfirmGenerateId,
         fnConfirmGenerateExpireTime,
         fnConfirmCreate,
@@ -79,12 +79,17 @@ var fnServiceUserInfoGetByLogin = function (flow, cb) {
     });
 };
 
-var fnServiceUserIsConfirmed = function (flow, cb) {
-    flow.env.dal.serviceUserIsConfirmed({userId: flow.userId}, function (err, isConfirmed) {
+var fnCheckServiceUserIsExistsAndConfirmed = function (flow, cb) {
+    var reqArgs = {
+        id: flow.userId
+    };
+    flow.env.dal.getServiceUserProfileById(reqArgs, function (err, userProfile) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
-        } else if (!isConfirmed) {
-            cb(errBuilder(dErr.USER_NOT_CONFIRMED, 'User is not confirmed'));
+        } else if (!userProfile) {
+            cb(errBuilder(dErr.USER_NOT_FOUND, 'User not found'));
+        } else if (!userProfile.isConfirmed) {
+            cb(errBuilder(dErr.USER_NOT_CONFIRMED, 'User not confirmed'));
         } else {
             cb(null, flow);
         }

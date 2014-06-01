@@ -33,7 +33,7 @@ var fnExecute = function (env, args, next) {
         fnCheckThatOnlyAndroidApplicationCanBeCreated,
         fnUserGetInfoByToken,
         fnCheckThatServiceUserIsCallingThisMethod,
-        fnServiceUserIsConfirmed,
+        fnCheckServiceUserIsExistsAndConfirmed,
         fnAppGenerateId,
         fnAppGenerateCreateTime,
         fnAppCreateAndGenerateResult
@@ -131,14 +131,16 @@ var fnCheckThatServiceUserIsCallingThisMethod = function (flow, cb) {
     }
 };
 
-var fnServiceUserIsConfirmed = function (flow, cb) {
+var fnCheckServiceUserIsExistsAndConfirmed = function (flow, cb) {
     var reqArgs = {
-        userId: flow.userId
+        id: flow.userId
     };
-    flow.env.dal.serviceUserIsConfirmed(reqArgs, function (err, isConfirmed) {
+    flow.env.dal.getServiceUserProfileById(reqArgs, function (err, userProfile) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
-        } else if (!isConfirmed) {
+        } else if (!userProfile) {
+            cb(errBuilder(dErr.USER_NOT_FOUND, 'User not found'));
+        } else if (!userProfile.isConfirmed) {
             cb(errBuilder(dErr.USER_NOT_CONFIRMED, 'User not confirmed'));
         } else {
             cb(null, flow);

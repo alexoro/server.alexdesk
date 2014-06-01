@@ -28,8 +28,7 @@ var fnExecute = function (env, args, next) {
         },
         fnValidate,
         fnServiceUserGetResetPasswordConfirmData,
-        fnServiceUserIsExists,
-        fnServiceUserIsConfirmed,
+        fnServiceUserIsExistsAndConfirmed,
         fnGetCurrentTIme,
         fnConfirmIsNotExpired,
         fnHashNewPassword,
@@ -91,27 +90,16 @@ var fnServiceUserGetResetPasswordConfirmData = function (flow, cb) {
     });
 };
 
-var fnServiceUserIsExists = function (flow, cb) {
+var fnServiceUserIsExistsAndConfirmed = function (flow, cb) {
     var reqArgs = {
-        userId: flow.confirmData.userId
+        id: flow.confirmData.userId
     };
-    flow.env.dal.serviceUserIsExists(reqArgs, function (err, isExists) {
+    flow.env.dal.getServiceUserProfileById(reqArgs, function (err, userProfile) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
-        } else if (!isExists) {
+        } else if (!userProfile) {
             cb(errBuilder(dErr.USER_NOT_FOUND, 'User is not exists'));
-        } else {
-            cb(null, flow);
-        }
-    });
-};
-
-var fnServiceUserIsConfirmed = function (flow, cb) {
-    var reqArgs = {userId: flow.confirmData.userId};
-    flow.env.dal.serviceUserIsConfirmed(reqArgs, function (err, isConfirmed) {
-        if (err) {
-            cb(errBuilder(dErr.INTERNAL_ERROR, err));
-        } else if (!isConfirmed) {
+        } else if (!userProfile.isConfirmed) {
             cb(errBuilder(dErr.USER_NOT_CONFIRMED, 'User is not confirmed'));
         } else {
             cb(null, flow);
