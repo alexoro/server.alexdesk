@@ -150,15 +150,19 @@ describe('API#serviceUsers_resetPasswordConfirm', function() {
             if (err) {
                 return doneTest(err);
             }
+
+            var passwordHash = '202cb962ac59075b964b07152d234b70';
             var reqArgs = {
-                login: 'test@test.com',
-                passwordHash: '202cb962ac59075b964b07152d234b70'
+                login: 'test@test.com'
             };
-            dal.getServiceUserIdByCreditionals(reqArgs, function (err, userId) {
+            dal.getServiceUserCreditionalsByLogin(reqArgs, function (err, creditionals) {
                 if (err) {
                     doneTest(err);
-                } else if (!userId) {
+                } else if (!creditionals) {
                     assert.fail('User with new password was not found');
+                    doneTest();
+                } else if (creditionals.passwordHash !== passwordHash) {
+                    assert.fail('User was created with wrong passwordHash');
                     doneTest();
                 } else {
                     doneTest();

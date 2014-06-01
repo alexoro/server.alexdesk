@@ -206,12 +206,16 @@ describe('API#serviceUsers_registerRequest', function() {
                 return doneTest(err);
             }
 
-            var reqArgs = {login: 'xxx@xxx.com', passwordHash: '02a243c4202b23e8ec78620f1ff48aa6'};
-            mock.dal.getServiceUserIdByCreditionals(reqArgs, function(err, userId) {
+            var passwordHash = '02a243c4202b23e8ec78620f1ff48aa6';
+            var reqArgs = {login: 'xxx@xxx.com'};
+            mock.dal.getServiceUserCreditionalsByLogin(reqArgs, function(err, creditionals) {
                 if (err) {
                     return doneTest(err);
-                } else if (!userId) {
-                    assert.fail('User was created but was not written database or cannot be fetched via #getServiceUserIdByCreditionals');
+                } else if (!creditionals) {
+                    assert.fail('User was created but was not written database or cannot be fetched via #getServiceUserCreditionalsByLogin');
+                    doneTest();
+                } else if (creditionals.passwordHash !== passwordHash) {
+                    assert.fail('User was created with wrong passwordHash');
                     doneTest();
                 } else {
                     doneTest();

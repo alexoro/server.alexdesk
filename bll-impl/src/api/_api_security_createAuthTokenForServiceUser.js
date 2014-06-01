@@ -30,7 +30,7 @@ var fnExecute = function (env, args, next) {
         },
         fnValidate,
         fnServiceUserHashPassword,
-        fnServiceUserGetIdByCreditionals,
+        fnServiceUserGetIdByCreditionalsAndCheckPassword,
         fnServiceUserIsConfirmed,
         fnTokenGenerateId,
         fnTokenGenerateExpireTime,
@@ -83,18 +83,19 @@ var fnServiceUserHashPassword = function (flow, cb) {
     });
 };
 
-var fnServiceUserGetIdByCreditionals = function (flow, cb) {
+var fnServiceUserGetIdByCreditionalsAndCheckPassword = function (flow, cb) {
     var reqArgs = {
-        login: flow.args.login,
-        passwordHash: flow.passwordHash
+        login: flow.args.login
     };
-    flow.env.dal.getServiceUserIdByCreditionals(reqArgs, function(err, userId) {
+    flow.env.dal.getServiceUserCreditionalsByLogin(reqArgs, function(err, creditionals) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
-        } else if (!userId) {
+        } else if (!creditionals) {
             cb(errBuilder(dErr.USER_NOT_FOUND, 'User with specified creditionals is not found'));
+        } else if (creditionals.passwordHash !== flow.passwordHash) {
+            cb(errBuilder(dErr.INVALID_PASSWORD, 'User was found, but invalid password was specified'));
         } else {
-            flow.userId = userId;
+            flow.userId = creditionals.id;
             cb(null, flow);
         }
     });

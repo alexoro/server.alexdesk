@@ -19,7 +19,11 @@ var DAL = function(mockData) {
 
 
 DAL.prototype.getUserMainInfoByToken = function(args, done) {
-    var r = _.findWhere(this.mock.system_access_tokens, {token: args.token});
+    var reqArgs = {
+        token: args.token
+    };
+
+    var r = _.findWhere(this.mock.system_access_tokens, reqArgs);
     if (r) {
         var dateNow = new Date();
         var dateUser = r.expires;
@@ -33,28 +37,21 @@ DAL.prototype.getUserMainInfoByToken = function(args, done) {
     }
 };
 
-DAL.prototype.getServiceUserIdByCreditionals = function(args, done) {
-    var reqArgs = {
-        login: args.login,
-        passwordHash: args.passwordHash
-    };
-    var r = _.findWhere(this.mock.users, reqArgs);
-    if (!r) {
-        done(null, null);
-    } else {
-        done(null, r.id);
-    }
-};
-
 DAL.prototype.getServiceUserCreditionalsByLogin = function(args, done) {
     var reqArgs = {
         login: args.login
     };
+
     var r = _.findWhere(this.mock.users, reqArgs);
     if (!r) {
         done(null, null);
     } else {
-        done(null, {id: r.id, login: r.login, passwordHash: r.passwordHash});
+        var ret = {
+            id: r.id,
+            login: r.login,
+            passwordHash: r.passwordHash
+        };
+        done(null, ret);
     }
 };
 

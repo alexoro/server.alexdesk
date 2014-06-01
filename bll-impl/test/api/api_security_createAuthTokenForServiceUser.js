@@ -129,11 +129,26 @@ describe('API#security_createAuthTokenForServiceUser', function() {
         });
     });
 
-    it('Token must not be created for unknown/not registered user', function(doneTest) {
+    it('Token must not be created for registered user', function(doneTest) {
+        var api = mockBuilder.newApiWithMock().api;
+        var reqArgs = argsBuilder({login: 'unknown@unknown.com', password: '1'});
+        api.security_createAuthTokenForServiceUser(reqArgs, function(err, result) {
+            if (err && err.number && err.number === dErrors.USER_NOT_FOUND) {
+                doneTest();
+            } else if (err) {
+                doneTest(err);
+            } else {
+                assert.fail('Token was successfully created for unknown/not registered user');
+                doneTest();
+            }
+        });
+    });
+
+    it('Token must not be created for registered user with invalid password', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
         var reqArgs = argsBuilder({password: '1'});
         api.security_createAuthTokenForServiceUser(reqArgs, function(err, result) {
-            if (err && err.number && err.number === dErrors.USER_NOT_FOUND) {
+            if (err && err.number && err.number === dErrors.INVALID_PASSWORD) {
                 doneTest();
             } else if (err) {
                 doneTest(err);
