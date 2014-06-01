@@ -77,15 +77,21 @@ DAL.prototype.getServiceUserProfileById = function (args, done) {
 };
 
 DAL.prototype.createServiceUser = function(args, done) {
-    this.mock.users.push(utils.deepClone(args));
+    var data = {
+        id: args.id,
+        login: args.login,
+        passwordHash: args.passwordHash,
+        name: args.name,
+        registered: utils.deepClone(args.registered),
+        lastVisit: utils.deepClone(args.lastVisit),
+        isConfirmed: args.isConfirmed
+    };
+    this.mock.users.push(data);
     done(null);
 };
 
 DAL.prototype.updateServiceUserPasswordHash = function (args, done) {
-    var reqArgs = {
-        id: args.userId
-    };
-    var r = _.findWhere(this.mock.users, reqArgs);
+    var r = _.findWhere(this.mock.users, {id: args.userId});
     if (!r) {
         done(new Error('User not found'));
     } else {
