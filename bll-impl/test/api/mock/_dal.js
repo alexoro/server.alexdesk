@@ -33,8 +33,12 @@ DAL.prototype.getUserMainInfoByToken = function(args, done) {
     }
 };
 
-DAL.prototype.getServiceUserIdByCreditionals = function(creditionals, done) {
-    var r = _.findWhere(this.mock.users, creditionals);
+DAL.prototype.getServiceUserIdByCreditionals = function(args, done) {
+    var reqArgs = {
+        login: args.login,
+        passwordHash: args.passwordHash
+    };
+    var r = _.findWhere(this.mock.users, reqArgs);
     if (!r) {
         done(null, null);
     } else {
@@ -43,7 +47,10 @@ DAL.prototype.getServiceUserIdByCreditionals = function(creditionals, done) {
 };
 
 DAL.prototype.getServiceUserCreditionalsByLogin = function(args, done) {
-    var r = _.findWhere(this.mock.users, {login: args.login});
+    var reqArgs = {
+        login: args.login
+    };
+    var r = _.findWhere(this.mock.users, reqArgs);
     if (!r) {
         done(null, null);
     } else {
@@ -52,7 +59,10 @@ DAL.prototype.getServiceUserCreditionalsByLogin = function(args, done) {
 };
 
 DAL.prototype.getUserLoginById = function (args, done) {
-    var r = _.findWhere(this.mock.users, {id: args.userId});
+    var reqArgs = {
+        id: args.userId
+    };
+    var r = _.findWhere(this.mock.users,reqArgs);
     if (!r) {
         done(new Error('User not found'));
     } else {
@@ -61,7 +71,10 @@ DAL.prototype.getUserLoginById = function (args, done) {
 };
 
 DAL.prototype.serviceUserIsConfirmed = function(args, done) {
-    var r = _.findWhere(this.mock.users, {id: args.userId});
+    var reqArgs = {
+        id: args.userId
+    };
+    var r = _.findWhere(this.mock.users, reqArgs);
     if (!r) {
         done(new Error('User not found'));
     } else {
@@ -70,7 +83,10 @@ DAL.prototype.serviceUserIsConfirmed = function(args, done) {
 };
 
 DAL.prototype.serviceUserIsExists = function (args, done) {
-    var r = _.findWhere(this.mock.users, {id: args.userId});
+    var reqArgs = {
+        id: args.userId
+    };
+    var r = _.findWhere(this.mock.users, reqArgs);
     done(null, !!r);
 };
 
@@ -80,7 +96,10 @@ DAL.prototype.createServiceUser = function(args, done) {
 };
 
 DAL.prototype.updateServiceUserPasswordHash = function (args, done) {
-    var r = _.findWhere(this.mock.users, {id: args.userId});
+    var reqArgs = {
+        id: args.userId
+    };
+    var r = _.findWhere(this.mock.users, reqArgs);
     if (!r) {
         done(new Error('User not found'));
     } else {
@@ -91,7 +110,10 @@ DAL.prototype.updateServiceUserPasswordHash = function (args, done) {
 
 
 DAL.prototype.fetchUserCreateRegisterConfirmData = function(args, done) {
-    var r = _.findWhere(this.mock.system_register_confirm, {id: args.confirmToken});
+    var reqArgs = {
+        id: args.confirmToken
+    };
+    var r = _.findWhere(this.mock.system_register_confirm, reqArgs);
     if (!r) {
         done(null, null);
     } else {
@@ -115,7 +137,10 @@ DAL.prototype.serviceUserCreateRegisterConfirmData = function(args, done) {
 };
 
 DAL.prototype.markServiceUserAsConfirmed = function(args, done) {
-    var user = _.findWhere(this.mock.users, {id: args.userId});
+    var reqArgs = {
+        id: args.userId
+    };
+    var user = _.findWhere(this.mock.users, reqArgs);
     if (!user) {
         done(new Error('User is not found'));
     } else {
@@ -126,7 +151,10 @@ DAL.prototype.markServiceUserAsConfirmed = function(args, done) {
 
 
 DAL.prototype.fetchUserResetPasswordConfirmData = function(args, done) {
-    var r = _.findWhere(this.mock.system_reset_password_confirm, {id: args.confirmToken});
+    var reqArgs = {
+        id: args.confirmToken
+    };
+    var r = _.findWhere(this.mock.system_reset_password_confirm, reqArgs);
     if (!r) {
         done(null, null);
     } else {
