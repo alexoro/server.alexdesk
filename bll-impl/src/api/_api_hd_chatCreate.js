@@ -236,12 +236,13 @@ var fnCheckThatAppUserCalledThisMethod = function (flow, cb) {
 };
 
 var fnUserIsAssociatedWithApp = function (flow, cb) {
-    flow.env.dal.userIsAssociatedWithApp(flow.args.appId, flow.userType, flow.userId, function(err, isAssociated) {
+    var reqArgs = {
+        id: flow.userId
+    };
+    flow.env.dal.getAppUserById(reqArgs, function (err, userProfile) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
-        } else if (typeof isAssociated !== 'boolean') {
-            cb(errBuilder(dErr.INTERNAL_ERROR, 'The result of userIsAssociatedWithApp() is not a boolean type: ' + isAssociated));
-        } else if (!isAssociated) {
+        } else if (!userProfile || userProfile.appId !== flow.args.appId) {
             cb(errBuilder(dErr.ACCESS_DENIED, 'You have no access to this chat'));
         } else {
             cb(null, flow);

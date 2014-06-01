@@ -25,7 +25,6 @@ var fnExecute = function (env, args, next) {
                 env: env,
                 userType: null,
                 userId: null,
-                appId: null,
                 chatsList: null,
                 chatIds: null,
                 result: null
@@ -152,17 +151,34 @@ var fnCheckServiceUserIsExistsAndConfirmed = function (flow, cb) {
 };
 
 var fnUserIsAssociatedWithApp = function (flow, cb) {
-    flow.env.dal.userIsAssociatedWithApp(flow.args.appId, flow.userType, flow.userId, function(err, isAssociated) {
-        if (err) {
-            cb(errBuilder(dErr.INTERNAL_ERROR, err));
-        } else if (typeof isAssociated !== 'boolean') {
-            cb(errBuilder(dErr.INTERNAL_ERROR, 'The result of userIsAssociatedWithApp() is not a boolean type: ' + isAssociated));
-        } else if (!isAssociated) {
-            cb(errBuilder(dErr.ACCESS_DENIED, 'You have no access to this chat'));
-        } else {
-            cb(null, flow);
-        }
-    });
+    var reqArgs;
+    if (flow.userType === domain.userTypes.APP_USER) {
+        reqArgs = {
+            id: flow.userId
+        };
+        flow.env.dal.getAppUserById(reqArgs, function (err, userProfile) {
+            if (err) {
+                cb(errBuilder(dErr.INTERNAL_ERROR, err));
+            } else if (!userProfile || userProfile.appId !== flow.args.appId) {
+                cb(errBuilder(dErr.ACCESS_DENIED, 'You have no access to this chat'));
+            } else {
+                cb(null, flow);
+            }
+        });
+    } else {
+        reqArgs = {
+            appId: flow.args.appId
+        };
+        flow.env.dal.getAppOwnerUserMainInfoByAppId(reqArgs, function (err, userInfo) {
+            if (err) {
+                cb(errBuilder(dErr.INTERNAL_ERROR, err));
+            } else if (!userInfo || userInfo.id !== flow.userId) {
+                cb(errBuilder(dErr.ACCESS_DENIED, 'You have no access to this chat'));
+            } else {
+                cb(null, flow);
+            }
+        });
+    }
 };
 
 var fnChatsGetList = function (flow, cb) {

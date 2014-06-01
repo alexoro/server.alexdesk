@@ -359,20 +359,6 @@ DAL.prototype.updateAppUserProfile = function(args, done) {
 };
 
 
-DAL.prototype.userIsAssociatedWithApp = function(appId, userType, userId, done) {
-    var r;
-    if (userType === domain.userTypes.SERVICE_USER) {
-        r = _.findWhere(this.mock.app_acl, {appId: appId, userId: userId, isOwner: true});
-        done(null, !!r);
-    } else if (userType === domain.userTypes.APP_USER) {
-        r = _.findWhere(this.mock.app_users, {appUserId: userId, appId: appId});
-        done(null, !!r);
-    } else {
-        done(new Error('Unknown userType: ' + userType));
-    }
-};
-
-
 DAL.prototype.getChatsList = function(args, done) {
     var chats = !!args.userCreatorId ?
         _.where(this.mock.chats, {appId: args.appId, userCreatorId: args.userCreatorId})
