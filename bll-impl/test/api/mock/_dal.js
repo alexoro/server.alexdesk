@@ -17,60 +17,6 @@ var DAL = function(mockData) {
     this.mock = mockData;
 };
 
-DAL.prototype.isAppExists = function(appId, done) {
-    var r = _.findWhere(this.mock.apps, {id: appId});
-    if (!r) {
-        done(null, false);
-    } else {
-        done(null, true);
-    }
-};
-
-DAL.prototype.getAppType = function(appId, done) {
-    var r = _.findWhere(this.mock.apps, {id: appId});
-    if (!r) {
-        done(new Error('Application is not found. Given id: ' + appId));
-    } else {
-        done(null, r.platformType);
-    }
-};
-
-DAL.prototype.userIsAssociatedWithApp = function(appId, userType, userId, done) {
-    var r;
-    if (userType === domain.userTypes.SERVICE_USER) {
-        r = _.findWhere(this.mock.app_acl, {appId: appId, userId: userId, isOwner: true});
-        done(null, !!r);
-    } else if (userType === domain.userTypes.APP_USER) {
-        r = _.findWhere(this.mock.app_users, {appUserId: userId, appId: appId});
-        done(null, !!r);
-    } else {
-        done(new Error('Unknown userType: ' + userType));
-    }
-};
-
-DAL.prototype.getServiceUserIdByCreditionals = function(creditionals, done) {
-    var r = _.findWhere(this.mock.users, creditionals);
-    if (!r) {
-        done(null, null);
-    } else {
-        done(null, r.id);
-    }
-};
-
-DAL.prototype.getAppUserIdByCreditionals = function(creditionals, done) {
-    var r = _.findWhere(this.mock.app_users, creditionals);
-    if (!r) {
-        done(null, null);
-    } else {
-        done(null, r.appUserId);
-    }
-};
-
-DAL.prototype.createAuthToken = function(args, done) {
-    this.mock.system_access_tokens.push(args);
-    done(null);
-};
-
 DAL.prototype.getUserMainInfoByToken = function(token, done) {
     var r = _.findWhere(this.mock.system_access_tokens, {token: token});
     if (r) {
@@ -86,18 +32,128 @@ DAL.prototype.getUserMainInfoByToken = function(token, done) {
     }
 };
 
-DAL.prototype.getAppOwnerUserMainInfoByAppId = function(args, done) {
-    var r = _.findWhere(this.mock.app_acl, {appId: args.appId, isOwner: true});
-    if (r) {
-        var ret = {
-            id: r.userId,
-            type: domain.userTypes.SERVICE_USER
-        };
-        return done(null, ret);
+DAL.prototype.getServiceUserIdByCreditionals = function(creditionals, done) {
+    var r = _.findWhere(this.mock.users, creditionals);
+    if (!r) {
+        done(null, null);
     } else {
-        return done(null, null);
+        done(null, r.id);
     }
 };
+
+DAL.prototype.getServiceUserCreditionalsByLogin = function(args, done) {
+    var r = _.findWhere(this.mock.users, {login: args.login});
+    if (!r) {
+        done(null, null);
+    } else {
+        done(null, {id: r.id, login: r.login, passwordHash: r.passwordHash});
+    }
+};
+
+DAL.prototype.getUserLoginById = function (args, done) {
+    var r = _.findWhere(this.mock.users, {id: args.userId});
+    if (!r) {
+        done(new Error('User not found'));
+    } else {
+        done(null, r.login);
+    }
+};
+
+DAL.prototype.serviceUserIsConfirmed = function(args, done) {
+    var r = _.findWhere(this.mock.users, {id: args.userId});
+    if (!r) {
+        done(new Error('User not found'));
+    } else {
+        done(null, r.isConfirmed);
+    }
+};
+
+DAL.prototype.serviceUserIsExists = function (args, done) {
+    var r = _.findWhere(this.mock.users, {id: args.userId});
+    done(null, !!r);
+};
+
+DAL.prototype.createServiceUser = function(args, done) {
+    this.mock.users.push(utils.deepClone(args));
+    done(null);
+};
+
+DAL.prototype.updateServiceUserPasswordHash = function (args, done) {
+    var r = _.findWhere(this.mock.users, {id: args.userId});
+    if (!r) {
+        done(new Error('User not found'));
+    } else {
+        r.passwordHash = args.passwordHash;
+        done(null);
+    }
+};
+
+
+DAL.prototype.fetchUserCreateRegisterConfirmData = function(args, done) {
+    var r = _.findWhere(this.mock.system_register_confirm, {id: args.confirmToken});
+    if (!r) {
+        done(null, null);
+    } else {
+        var ret = {
+            id: r.id,
+            userId: r.serviceUserId,
+            expires: r.expires
+        };
+        done(null, ret);
+    }
+};
+
+DAL.prototype.serviceUserCreateRegisterConfirmData = function(args, done) {
+    var data = {
+        id: args.id,
+        serviceUserId: args.userId,
+        expires: args.expires
+    };
+    this.mock.system_register_confirm.push(data);
+    done(null);
+};
+
+DAL.prototype.markServiceUserAsConfirmed = function(args, done) {
+    var user = _.findWhere(this.mock.users, {id: args.userId});
+    if (!user) {
+        done(new Error('User is not found'));
+    } else {
+        user.isConfirmed = true;
+        done(null);
+    }
+};
+
+
+DAL.prototype.fetchUserResetPasswordConfirmData = function(args, done) {
+    var r = _.findWhere(this.mock.system_reset_password_confirm, {id: args.confirmToken});
+    if (!r) {
+        done(null, null);
+    } else {
+        var ret = {
+            id: r.id,
+            userId: r.serviceUserId,
+            expires: r.expires
+        };
+        done(null, ret);
+    }
+};
+
+DAL.prototype.serviceUserCreateResetPasswordConfirmData = function(args, done) {
+    var data = {
+        id: args.id,
+        serviceUserId: args.userId,
+        expires: args.expires
+    };
+    this.mock.system_reset_password_confirm.push(data);
+    done(null);
+};
+
+
+DAL.prototype.createAuthToken = function(args, done) {
+    this.mock.system_access_tokens.push(args);
+    done(null);
+};
+
 
 DAL.prototype.getAppsList = function(userId, done) {
     var self = this;
@@ -142,47 +198,183 @@ DAL.prototype.getAppsList = function(userId, done) {
     return done(null, apps);
 };
 
-DAL.prototype.getNumberOfChats = function(appIds, done) {
-    var self = this;
-    var r = {};
-    utils.forEach(appIds, function(item) {
-        r[item] = _.where(self.mock.chats, {appId: item}).length;
-    });
-    done(null, r);
+DAL.prototype.isAppExists = function(appId, done) {
+    var r = _.findWhere(this.mock.apps, {id: appId});
+    if (!r) {
+        done(null, false);
+    } else {
+        done(null, true);
+    }
 };
 
-DAL.prototype.getNumberOfAllMessages = function(appIds, done) {
-    var self = this;
-    var r = {};
-    utils.forEach(appIds, function(item) {
-        r[item] = _.where(self.mock.chat_messages, {appId: item}).length;
-    });
-    done(null, r);
+DAL.prototype.getAppType = function(appId, done) {
+    var r = _.findWhere(this.mock.apps, {id: appId});
+    if (!r) {
+        done(new Error('Application is not found. Given id: ' + appId));
+    } else {
+        done(null, r.platformType);
+    }
 };
 
-DAL.prototype.getNumberOfUnreadMessages = function(appIds, userType, userId, done) {
-    var self = this;
+DAL.prototype.getAppOwnerUserMainInfoByAppId = function(args, done) {
+    var r = _.findWhere(this.mock.app_acl, {appId: args.appId, isOwner: true});
+    if (r) {
+        var ret = {
+            id: r.userId,
+            type: domain.userTypes.SERVICE_USER
+        };
+        return done(null, ret);
+    } else {
+        return done(null, null);
+    }
+};
 
-    var chatsLastVisit = {};
-    _.where(this.mock.chat_participants, {userType: userType, userId: userId}).forEach(function(item) {
-        chatsLastVisit[item.chatId] = new Date(item.lastVisit);
-    });
+DAL.prototype.createApplication = function(args, done) {
+    var app = {
+        id: args.id,
+        platformType: args.platform,
+        title: args.title,
+        created: args.created,
+        isApproved: args.isApproved,
+        isBlocked: args.isBlocked,
+        isDeleted: args.isDeleted
+    };
+    this.mock.apps.push(app);
 
-    var r = {};
-    utils.forEach(appIds, function(appId) {
-        r[appId] = 0;
-        utils.forEach(self.mock.chat_messages, function(message) {
-            if (message.appId === appId &&
-                message.userCreatorType !== userType &&
-                message.userCreatorId !== userId &&
-                chatsLastVisit[message.chatId].getTime() < message.created.getTime()) {
-                r[appId]++;
+    var acl = {
+        appId: args.id,
+        userId: args.ownerUserId,
+        isOwner: true
+    };
+    this.mock.app_acl.push(acl);
+
+    if (args.platform === domain.platforms.ANDROID) {
+        var extra = {
+            appId: args.id,
+            package: args.extra.package
+        };
+        this.mock.app_info_extra_android.push(extra);
+    }
+
+    done(null);
+};
+
+
+DAL.prototype.getAppUserById = function(args, done) {
+    var user = _.findWhere(this.mock.app_users, {appUserId: args.id});
+    if (!user) {
+        done(null, null);
+    } else {
+        user = utils.deepClone(user);
+
+        user.platform = domain.platforms.ANDROID;
+        var extra = _.findWhere(this.mock.app_users_extra_android, {appUserId: args.id});
+        user.extra = {
+            deviceUuid: extra.deviceUuid,
+            gcmToken: extra.gcmToken
+        };
+        user.id = user.appUserId;
+        delete user.appUserId;
+        done(null, user);
+    }
+};
+
+DAL.prototype.getAppUserCreditionalsByLogin = function(args, done) {
+    var r = _.findWhere(this.mock.app_users, {appId: args.appId, login: args.login});
+    if (!r) {
+        done(null, null);
+    } else {
+        done(null, {id: r.appUserId, login: r.login, passwordHash: r.passwordHash});
+    }
+};
+
+DAL.prototype.getAppUserIdByCreditionals = function(creditionals, done) {
+    var r = _.findWhere(this.mock.app_users, creditionals);
+    if (!r) {
+        done(null, null);
+    } else {
+        done(null, r.appUserId);
+    }
+};
+
+DAL.prototype.createAppUserProfile = function(args, done) {
+    args = args.profile;
+    var profile = {
+        appUserId: args.id,
+        appId: args.appId,
+        login: args.login,
+        passwordHash: args.passwordHash,
+        name: args.name,
+        registered: args.registered,
+        lastVisit: args.lastVisit
+    };
+    this.mock.app_users.push(profile);
+
+    if (args.platform === domain.platforms.ANDROID) {
+        var extra = {
+            appId: args.appId,
+            appUserId: args.id,
+            deviceUuid: args.extra.deviceUuid,
+            gcmToken: args.extra.gcmToken
+        };
+        this.mock.app_users_extra_android.push(extra);
+    }
+
+    done(null);
+};
+
+DAL.prototype.updateAppUserProfile = function(args, done) {
+    args = args.profile;
+    var i;
+
+    var profile = {
+        appUserId: args.id,
+        appId: args.appId,
+        login: args.login,
+        passwordHash: args.passwordHash,
+        name: args.name,
+        registered: args.registered,
+        lastVisit: args.lastVisit
+    };
+    for (i = 0; i < this.mock.app_users.length; i++) {
+        if (this.mock.app_users[i].appUserId === profile.appUserId) {
+            this.mock.app_users[i] = profile;
+            break;
+        }
+    }
+
+    if (args.platform === domain.platforms.ANDROID) {
+        var extra = {
+            appId: args.appId,
+            appUserId: args.id,
+            deviceUuid: args.extra.deviceUuid,
+            gcmToken: args.extra.gcmToken
+        };
+        for (i = 0; i < this.mock.app_users_extra_android.length; i++) {
+            if (this.mock.app_users_extra_android[i].appUserId === profile.appUserId) {
+                this.mock.app_users_extra_android[i] = extra;
+                break;
             }
-        });
-    });
+        }
+    }
 
-    return done(null, r);
+    done(null);
 };
+
+
+DAL.prototype.userIsAssociatedWithApp = function(appId, userType, userId, done) {
+    var r;
+    if (userType === domain.userTypes.SERVICE_USER) {
+        r = _.findWhere(this.mock.app_acl, {appId: appId, userId: userId, isOwner: true});
+        done(null, !!r);
+    } else if (userType === domain.userTypes.APP_USER) {
+        r = _.findWhere(this.mock.app_users, {appUserId: userId, appId: appId});
+        done(null, !!r);
+    } else {
+        done(new Error('Unknown userType: ' + userType));
+    }
+};
+
 
 DAL.prototype.getChatsList = function(args, done) {
     var chats = !!args.userCreatorId ?
@@ -238,16 +430,46 @@ DAL.prototype.isUserTheCreatorOfChat = function(args, done) {
     done(null, !!_.findWhere(this.mock.chats, {id: args.chatId, userCreatorId: args.userId, userCreatorType: args.userType}));
 };
 
-DAL.prototype.getMessagesList = function(args, done) {
-    var chatId = args.chatId;
-    var offset = args.offset;
-    var limit = args.limit;
+DAL.prototype.getNumberOfChats = function(appIds, done) {
+    var self = this;
+    var r = {};
+    utils.forEach(appIds, function(item) {
+        r[item] = _.where(self.mock.chats, {appId: item}).length;
+    });
+    done(null, r);
+};
 
-    var r = _.where(this.mock.chat_messages, {chatId: chatId})
-        .slice(offset)
-        .splice(0, limit);
+DAL.prototype.getNumberOfAllMessages = function(appIds, done) {
+    var self = this;
+    var r = {};
+    utils.forEach(appIds, function(item) {
+        r[item] = _.where(self.mock.chat_messages, {appId: item}).length;
+    });
+    done(null, r);
+};
 
-    done(null, utils.deepClone(r));
+DAL.prototype.getNumberOfUnreadMessages = function(appIds, userType, userId, done) {
+    var self = this;
+
+    var chatsLastVisit = {};
+    _.where(this.mock.chat_participants, {userType: userType, userId: userId}).forEach(function(item) {
+        chatsLastVisit[item.chatId] = new Date(item.lastVisit);
+    });
+
+    var r = {};
+    utils.forEach(appIds, function(appId) {
+        r[appId] = 0;
+        utils.forEach(self.mock.chat_messages, function(message) {
+            if (message.appId === appId &&
+                message.userCreatorType !== userType &&
+                message.userCreatorId !== userId &&
+                chatsLastVisit[message.chatId].getTime() < message.created.getTime()) {
+                r[appId]++;
+            }
+        });
+    });
+
+    return done(null, r);
 };
 
 DAL.prototype.getNumberOfUnreadMessagesPerChats = function(args, done) {
@@ -312,6 +534,19 @@ DAL.prototype.updateLastVisitForChat = function(args, done) {
     var r = _.findWhere(this.mock.chat_participants, reqArgs);
     r.lastVisit = args.newLastVisit;
     done(null);
+};
+
+
+DAL.prototype.getMessagesList = function(args, done) {
+    var chatId = args.chatId;
+    var offset = args.offset;
+    var limit = args.limit;
+
+    var r = _.where(this.mock.chat_messages, {chatId: chatId})
+        .slice(offset)
+        .splice(0, limit);
+
+    done(null, utils.deepClone(r));
 };
 
 DAL.prototype.createMessageInChatAndUpdateLastVisit = function(args, done) {
@@ -405,233 +640,6 @@ DAL.prototype.createChatWithMessage = function(args, done) {
     this.mock.chat_messages.push(newMessage);
 
     done();
-};
-
-DAL.prototype.getServiceUserCreditionalsByLogin = function(args, done) {
-    var r = _.findWhere(this.mock.users, {login: args.login});
-    if (!r) {
-        done(null, null);
-    } else {
-        done(null, {id: r.id, login: r.login, passwordHash: r.passwordHash});
-    }
-};
-
-DAL.prototype.getAppUserCreditionalsByLogin = function(args, done) {
-    var r = _.findWhere(this.mock.app_users, {appId: args.appId, login: args.login});
-    if (!r) {
-        done(null, null);
-    } else {
-        done(null, {id: r.appUserId, login: r.login, passwordHash: r.passwordHash});
-    }
-};
-
-DAL.prototype.createServiceUser = function(args, done) {
-    this.mock.users.push(utils.deepClone(args));
-    done(null);
-};
-
-DAL.prototype.getAppUserById = function(args, done) {
-    var user = _.findWhere(this.mock.app_users, {appUserId: args.id});
-    if (!user) {
-        done(null, null);
-    } else {
-        user = utils.deepClone(user);
-
-        user.platform = domain.platforms.ANDROID;
-        var extra = _.findWhere(this.mock.app_users_extra_android, {appUserId: args.id});
-        user.extra = {
-            deviceUuid: extra.deviceUuid,
-            gcmToken: extra.gcmToken
-        };
-        user.id = user.appUserId;
-        delete user.appUserId;
-        done(null, user);
-    }
-};
-
-DAL.prototype.createAppUserProfile = function(args, done) {
-    args = args.profile;
-    var profile = {
-        appUserId: args.id,
-        appId: args.appId,
-        login: args.login,
-        passwordHash: args.passwordHash,
-        name: args.name,
-        registered: args.registered,
-        lastVisit: args.lastVisit
-    };
-    this.mock.app_users.push(profile);
-
-    if (args.platform === domain.platforms.ANDROID) {
-        var extra = {
-            appId: args.appId,
-            appUserId: args.id,
-            deviceUuid: args.extra.deviceUuid,
-            gcmToken: args.extra.gcmToken
-        };
-        this.mock.app_users_extra_android.push(extra);
-    }
-
-    done(null);
-};
-
-DAL.prototype.updateAppUserProfile = function(args, done) {
-    args = args.profile;
-    var i;
-
-    var profile = {
-        appUserId: args.id,
-        appId: args.appId,
-        login: args.login,
-        passwordHash: args.passwordHash,
-        name: args.name,
-        registered: args.registered,
-        lastVisit: args.lastVisit
-    };
-    for (i = 0; i < this.mock.app_users.length; i++) {
-        if (this.mock.app_users[i].appUserId === profile.appUserId) {
-            this.mock.app_users[i] = profile;
-            break;
-        }
-    }
-
-    if (args.platform === domain.platforms.ANDROID) {
-        var extra = {
-            appId: args.appId,
-            appUserId: args.id,
-            deviceUuid: args.extra.deviceUuid,
-            gcmToken: args.extra.gcmToken
-        };
-        for (i = 0; i < this.mock.app_users_extra_android.length; i++) {
-            if (this.mock.app_users_extra_android[i].appUserId === profile.appUserId) {
-                this.mock.app_users_extra_android[i] = extra;
-                break;
-            }
-        }
-    }
-
-    done(null);
-};
-
-DAL.prototype.createApplication = function(args, done) {
-    var app = {
-        id: args.id,
-        platformType: args.platform,
-        title: args.title,
-        created: args.created,
-        isApproved: args.isApproved,
-        isBlocked: args.isBlocked,
-        isDeleted: args.isDeleted
-    };
-    this.mock.apps.push(app);
-
-    var acl = {
-        appId: args.id,
-        userId: args.ownerUserId,
-        isOwner: true
-    };
-    this.mock.app_acl.push(acl);
-
-    if (args.platform === domain.platforms.ANDROID) {
-        var extra = {
-            appId: args.id,
-            package: args.extra.package
-        };
-        this.mock.app_info_extra_android.push(extra);
-    }
-
-    done(null);
-};
-
-DAL.prototype.serviceUserIsConfirmed = function(args, done) {
-    var r = _.findWhere(this.mock.users, {id: args.userId});
-    if (!r) {
-        done(new Error('User not found'));
-    } else {
-        done(null, r.isConfirmed);
-    }
-};
-
-DAL.prototype.serviceUserIsExists = function (args, done) {
-    var r = _.findWhere(this.mock.users, {id: args.userId});
-    done(null, !!r);
-};
-
-DAL.prototype.serviceUserCreateRegisterConfirmData = function(args, done) {
-    var data = {
-        id: args.id,
-        serviceUserId: args.userId,
-        expires: args.expires
-    };
-    this.mock.system_register_confirm.push(data);
-    done(null);
-};
-
-DAL.prototype.fetchUserCreateRegisterConfirmData = function(args, done) {
-    var r = _.findWhere(this.mock.system_register_confirm, {id: args.confirmToken});
-    if (!r) {
-        done(null, null);
-    } else {
-        var ret = {
-            id: r.id,
-            userId: r.serviceUserId,
-            expires: r.expires
-        };
-        done(null, ret);
-    }
-};
-
-DAL.prototype.markServiceUserAsConfirmed = function(args, done) {
-    var user = _.findWhere(this.mock.users, {id: args.userId});
-    if (!user) {
-        done(new Error('User is not found'));
-    } else {
-        user.isConfirmed = true;
-        done(null);
-    }
-};
-
-DAL.prototype.serviceUserCreateResetPasswordConfirmData = function(args, done) {
-    var data = {
-        id: args.id,
-        serviceUserId: args.userId,
-        expires: args.expires
-    };
-    this.mock.system_reset_password_confirm.push(data);
-    done(null);
-};
-
-DAL.prototype.fetchUserResetPasswordConfirmData = function(args, done) {
-    var r = _.findWhere(this.mock.system_reset_password_confirm, {id: args.confirmToken});
-    if (!r) {
-        done(null, null);
-    } else {
-        var ret = {
-            id: r.id,
-            userId: r.serviceUserId,
-            expires: r.expires
-        };
-        done(null, ret);
-    }
-};
-
-DAL.prototype.updateServiceUserPasswordHash = function (args, done) {
-    var r = _.findWhere(this.mock.users, {id: args.userId});
-    if (!r) {
-        done(new Error('User not found'));
-    } else {
-        r.passwordHash = args.passwordHash;
-        done(null);
-    }
-};
-
-DAL.prototype.getUserLoginById = function (args, done) {
-    var r = _.findWhere(this.mock.users, {id: args.userId});
-    if (!r) {
-        done(new Error('User not found'));
-    } else {
-        done(null, r.login);
-    }
 };
 
 
