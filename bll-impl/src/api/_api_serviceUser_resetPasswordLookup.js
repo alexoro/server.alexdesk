@@ -31,7 +31,6 @@ var fnExecute = function (env, args, next) {
         fnServiceUserIsExistsAndConfirmed,
         fnGetCurrentTIme,
         fnConfirmIsNotExpired,
-        fnServiceUserGetLoginByUserId,
         fnGenerateResult
     ];
 
@@ -94,6 +93,7 @@ var fnServiceUserIsExistsAndConfirmed = function (flow, cb) {
         } else if (!userProfile.isConfirmed) {
             cb(errBuilder(dErr.USER_NOT_CONFIRMED, 'User is not confirmed'));
         } else {
+            flow.login = userProfile.login;
             cb(null, flow);
         }
     });
@@ -118,17 +118,6 @@ var fnConfirmIsNotExpired = function (flow, cb) {
     } else {
         cb(null, flow);
     }
-};
-
-var fnServiceUserGetLoginByUserId = function (flow, cb) {
-    flow.env.dal.getServiceUserLoginById({userId: flow.confirmData.userId}, function (err, login) {
-        if (err) {
-            cb(errBuilder(dErr.INTERNAL_ERROR, err));
-        } else {
-            flow.login = login;
-            cb(null, flow);
-        }
-    });
 };
 
 var fnGenerateResult = function (flow, cb) {

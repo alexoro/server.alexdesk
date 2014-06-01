@@ -67,19 +67,6 @@ DAL.prototype.getServiceUserCreditionalsByLogin = function(args, done) {
     }
 };
 
-DAL.prototype.getServiceUserLoginById = function (args, done) {
-    var reqArgs = {
-        id: args.userId
-    };
-
-    var r = _.findWhere(this.mock.users, reqArgs);
-    if (!r) {
-        done(new Error('User not found'));
-    } else {
-        done(null, r.login);
-    }
-};
-
 DAL.prototype.getServiceUserProfileById = function (args, done) {
     var reqArgs = {
         id: args.id
