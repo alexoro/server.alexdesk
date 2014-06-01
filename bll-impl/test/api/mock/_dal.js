@@ -17,8 +17,9 @@ var DAL = function(mockData) {
     this.mock = mockData;
 };
 
-DAL.prototype.getUserMainInfoByToken = function(token, done) {
-    var r = _.findWhere(this.mock.system_access_tokens, {token: token});
+
+DAL.prototype.getUserMainInfoByToken = function(args, done) {
+    var r = _.findWhere(this.mock.system_access_tokens, {token: args.token});
     if (r) {
         var dateNow = new Date();
         var dateUser = r.expires;

@@ -89,7 +89,10 @@ var fnValidate = function (flow, cb) {
 };
 
 var fnUserGetInfoByToken = function (flow, cb) {
-    flow.env.dal.getUserMainInfoByToken(flow.args.accessToken, function(err, user) {
+    var reqArgs = {
+        token: flow.args.accessToken
+    };
+    flow.env.dal.getUserMainInfoByToken(reqArgs, function(err, user) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else if (!user) {
