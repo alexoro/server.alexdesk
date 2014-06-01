@@ -37,6 +37,18 @@ DAL.prototype.getUserMainInfoByToken = function(args, done) {
     }
 };
 
+DAL.prototype.createAuthToken = function(args, done) {
+    var data = {
+        token: args.token,
+        userType: args.userType,
+        userId: args.userId,
+        expires: args.expires
+    };
+    this.mock.system_access_tokens.push(data);
+    done(null);
+};
+
+
 DAL.prototype.getServiceUserCreditionalsByLogin = function(args, done) {
     var reqArgs = {
         login: args.login
@@ -55,11 +67,12 @@ DAL.prototype.getServiceUserCreditionalsByLogin = function(args, done) {
     }
 };
 
-DAL.prototype.getUserLoginById = function (args, done) {
+DAL.prototype.getServiceUserLoginById = function (args, done) {
     var reqArgs = {
         id: args.userId
     };
-    var r = _.findWhere(this.mock.users,reqArgs);
+
+    var r = _.findWhere(this.mock.users, reqArgs);
     if (!r) {
         done(new Error('User not found'));
     } else {
@@ -171,12 +184,6 @@ DAL.prototype.serviceUserCreateResetPasswordConfirmData = function(args, done) {
         expires: args.expires
     };
     this.mock.system_reset_password_confirm.push(data);
-    done(null);
-};
-
-
-DAL.prototype.createAuthToken = function(args, done) {
-    this.mock.system_access_tokens.push(args);
     done(null);
 };
 

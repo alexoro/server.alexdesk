@@ -133,7 +133,7 @@ var fnConfirmIsNotExpired = function (flow, cb) {
 };
 
 var fnServiceUserGetLoginByUserId = function (flow, cb) {
-    flow.env.dal.getUserLoginById({userId: flow.confirmData.userId}, function (err, login) {
+    flow.env.dal.getServiceUserLoginById({userId: flow.confirmData.userId}, function (err, login) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else {
