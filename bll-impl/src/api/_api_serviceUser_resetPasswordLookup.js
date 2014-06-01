@@ -69,7 +69,7 @@ var fnServiceUserGetResetPasswordConfirmData = function (flow, cb) {
     var reqArgs = {
         confirmToken: flow.args.confirmToken
     };
-    flow.env.dal.fetchUserResetPasswordConfirmData(reqArgs, function(err, confirmData) {
+    flow.env.dal.serviceUserGetResetPasswordConfirmData(reqArgs, function(err, confirmData) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else if (!confirmData) {
@@ -85,7 +85,7 @@ var fnServiceUserIsExistsAndConfirmed = function (flow, cb) {
     var reqArgs = {
         id: flow.confirmData.userId
     };
-    flow.env.dal.getServiceUserProfileById(reqArgs, function (err, userProfile) {
+    flow.env.dal.serviceUserGetProfileById(reqArgs, function (err, userProfile) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else if (!userProfile) {

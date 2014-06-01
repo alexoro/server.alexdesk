@@ -73,7 +73,7 @@ var fnUserGetInfoByToken = function (flow, cb) {
     var reqArgs = {
         token: flow.args.accessToken
     };
-    flow.env.dal.getUserMainInfoByToken(reqArgs, function(err, user) {
+    flow.env.dal.userGetIdByToken(reqArgs, function(err, user) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else if (!user) {
@@ -98,7 +98,7 @@ var fnCheckServiceUserIsExistsAndConfirmed = function (flow, cb) {
     var reqArgs = {
         id: flow.userId
     };
-    flow.env.dal.getServiceUserProfileById(reqArgs, function (err, userProfile) {
+    flow.env.dal.serviceUserGetProfileById(reqArgs, function (err, userProfile) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else if (!userProfile) {
@@ -115,7 +115,7 @@ var fnAppsGetList = function (flow, cb) {
     var reqArgs = {
         userId: flow.userId
     };
-    flow.env.dal.getAppsList(reqArgs, function(err, result) {
+    flow.env.dal.appsGetList(reqArgs, function(err, result) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else {
@@ -134,7 +134,7 @@ var fnAppsSetNumberOfChats = function (flow, cb) {
     var reqArgs = {
         appIds: flow.appIds
     };
-    flow.env.dal.getNumberOfChats(reqArgs, function(err, result) {
+    flow.env.dal.appsGetNumberOfChats(reqArgs, function(err, result) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else {
@@ -152,7 +152,7 @@ var fnAppsSetNumberOfAllMessages = function (flow, cb) {
     var reqArgs = {
         appIds: flow.appIds
     };
-    flow.env.dal.getNumberOfAllMessages(reqArgs, function(err, result) {
+    flow.env.dal.appsGetNumberOfMessages(reqArgs, function(err, result) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else {
@@ -172,7 +172,7 @@ var fnAppsSetNumberOfUnreadMessages = function (flow, cb) {
         userType: flow.userType,
         userId: flow.userId
     };
-    flow.env.dal.getNumberOfUnreadMessages(reqArgs, function(err, result) {
+    flow.env.dal.appsGetNumberOfUnreadMessages(reqArgs, function(err, result) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else {

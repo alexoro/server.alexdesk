@@ -301,7 +301,7 @@ describe('API#appUsers_init', function() {
                 login: 'xxx@xxx.com',
                 passwordHash: '02a243c4202b23e8ec78620f1ff48aa6'
             };
-            dal.getAppUserCreditionalsByLogin(reqArgs, function(err, creditionals) {
+            dal.appUserGetCreditionalsByLogin(reqArgs, function(err, creditionals) {
                 if (err) {
                     doneTest(err);
                 } else if (!creditionals) {
@@ -328,7 +328,7 @@ describe('API#appUsers_init', function() {
                 login: 'test1',
                 passwordHash: '5a105e8b9d40e1329780d62ea2265d8a'
             };
-            dal.getAppUserCreditionalsByLogin(reqArgs, function(err, creditionals) {
+            dal.appUserGetCreditionalsByLogin(reqArgs, function(err, creditionals) {
                 if (err) {
                     doneTest(err);
                 } else if (!creditionals) {

@@ -79,7 +79,7 @@ var fnAppIsExists = function (flow, cb) {
     var reqArgs = {
         appId: flow.args.appId
     };
-    flow.env.dal.isAppExists(reqArgs, function(err, result) {
+    flow.env.dal.appIsExists(reqArgs, function(err, result) {
         if (!result) {
             cb(errBuilder(dErr.APP_NOT_FOUND, 'Application not found. #ID: ' + flow.args.appId));
         } else {
@@ -104,7 +104,7 @@ var fnAppUserGetIdByCreditionals = function (flow, cb) {
         appId: flow.args.appId,
         login: flow.args.login
     };
-    flow.env.dal.getAppUserCreditionalsByLogin(reqArgs, function (err, creditionals) {
+    flow.env.dal.appUserGetCreditionalsByLogin(reqArgs, function (err, creditionals) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else if (!creditionals) {
@@ -147,7 +147,7 @@ var fnTokenSave = function (flow, cb) {
         userId: flow.userId,
         expires: flow.tokenExpires
     };
-    flow.env.dal.createAuthToken(toSave, function(err) {
+    flow.env.dal.authTokenCreate(toSave, function(err) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else {

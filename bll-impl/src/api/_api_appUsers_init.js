@@ -133,7 +133,7 @@ var fnAppIsExists = function (flow, cb) {
     var reqArgs = {
         appId: flow.args.appId
     };
-    flow.env.dal.isAppExists(reqArgs, function(err, exists) {
+    flow.env.dal.appIsExists(reqArgs, function(err, exists) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else if (typeof exists !== 'boolean') {
@@ -162,7 +162,7 @@ var fnFindUserAndDetectMode = function (flow, cb) {
         appId: flow.args.appId,
         login: flow.args.login
     };
-    flow.env.dal.getAppUserCreditionalsByLogin(reqArgs, function(err, creditionals) {
+    flow.env.dal.appUserGetCreditionalsByLogin(reqArgs, function(err, creditionals) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else if (creditionals === null) {
@@ -213,7 +213,7 @@ var fnUserGetProfileIfUpdateMode = function (flow, cb) {
         var reqArgs = {
             id: flow.userId
         };
-        flow.env.dal.getAppUserById(reqArgs, function(err, profile) {
+        flow.env.dal.appUsersGetProfileById(reqArgs, function(err, profile) {
             if (err) {
                 cb(errBuilder(dErr.INTERNAL_ERROR, err));
             } else if (profile === null) {
@@ -246,7 +246,7 @@ var fnUserCreateOrUpdate = function (flow, cb) {
                 gcmToken: flow.args.extra.gcmToken
             }
         };
-        flow.env.dal.createAppUserProfile({profile: newUserProfile}, function(err) {
+        flow.env.dal.appUsersCreate({profile: newUserProfile}, function(err) {
             if (err) {
                 cb(errBuilder(dErr.INTERNAL_ERROR, err));
             } else {
@@ -261,7 +261,7 @@ var fnUserCreateOrUpdate = function (flow, cb) {
         newUserProfile.extra.deviceUuid = flow.args.extra.deviceUuid;
         newUserProfile.extra.gcmToken = flow.args.extra.gcmToken;
 
-        flow.env.dal.updateAppUserProfile({profile: newUserProfile}, function(err) {
+        flow.env.dal.appUserUpdate({profile: newUserProfile}, function(err) {
             if (err) {
                 cb(errBuilder(dErr.INTERNAL_ERROR, err));
             } else {

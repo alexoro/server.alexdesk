@@ -197,7 +197,7 @@ var fnAppIsExists = function (flow, cb) {
     var reqArgs = {
         appId: flow.args.appId
     };
-    flow.env.dal.isAppExists(reqArgs, function(err, exists) {
+    flow.env.dal.appIsExists(reqArgs, function(err, exists) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else if (typeof exists !== 'boolean') {
@@ -214,7 +214,7 @@ var fnUserGetInfoByToken = function (flow, cb) {
     var reqArgs = {
         token: flow.args.accessToken
     };
-    flow.env.dal.getUserMainInfoByToken(reqArgs, function(err, user) {
+    flow.env.dal.userGetIdByToken(reqArgs, function(err, user) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else if (!user) {
@@ -239,7 +239,7 @@ var fnUserIsAssociatedWithApp = function (flow, cb) {
     var reqArgs = {
         id: flow.userId
     };
-    flow.env.dal.getAppUserById(reqArgs, function (err, userProfile) {
+    flow.env.dal.appUsersGetProfileById(reqArgs, function (err, userProfile) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else if (!userProfile || userProfile.appId !== flow.args.appId) {
@@ -254,7 +254,7 @@ var fnAppGetOwner = function (flow, cb) {
     var reqArgs = {
         appId: flow.args.appId
     };
-    flow.env.dal.getAppOwnerUserMainInfoByAppId(reqArgs, function(err, appOwnerUser) {
+    flow.env.dal.appGetOwnerIdAppId(reqArgs, function(err, appOwnerUser) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else if (!appOwnerUser) {
@@ -356,7 +356,7 @@ var fnChatCreateAndGenerateResult = function (flow, cb) {
         }
     ];
 
-    flow.env.dal.createChatWithMessage(reqArgs, function(err) {
+    flow.env.dal.chatCreateWithMessage(reqArgs, function(err) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else {

@@ -167,7 +167,7 @@ describe('API#hd_messagesList', function() {
 
     it('Must return INTERNAL_ERROR in case of error in DAL', function(doneTest) {
         var mock = mockBuilder.newApiWithMock();
-        mock.dal.getMessagesList = function(args, done) {
+        mock.dal.messagesGetListForChat = function(args, done) {
             done(new Error('Not implemented yet'));
         };
 
@@ -186,7 +186,7 @@ describe('API#hd_messagesList', function() {
 
     it('Must return INTERNAL_ERROR in case of invalid response from DAL', function(doneTest) {
         var mock = mockBuilder.newApiWithMock();
-        mock.dal.getMessagesList = function(args, done) {
+        mock.dal.messagesGetListForChat = function(args, done) {
             done(null, null);
         };
 

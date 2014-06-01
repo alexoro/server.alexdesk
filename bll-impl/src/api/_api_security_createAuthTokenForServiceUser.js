@@ -87,7 +87,7 @@ var fnServiceUserGetIdByCreditionalsAndCheckPassword = function (flow, cb) {
     var reqArgs = {
         login: flow.args.login
     };
-    flow.env.dal.getServiceUserCreditionalsByLogin(reqArgs, function(err, creditionals) {
+    flow.env.dal.serviceUserGetCreditionalsByLogin(reqArgs, function(err, creditionals) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else if (!creditionals) {
@@ -105,7 +105,7 @@ var fnCheckServiceUserIsExistsAndConfirmed = function (flow, cb) {
     var reqArgs = {
         id: flow.userId
     };
-    flow.env.dal.getServiceUserProfileById(reqArgs, function (err, userProfile) {
+    flow.env.dal.serviceUserGetProfileById(reqArgs, function (err, userProfile) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else if (!userProfile) {
@@ -147,7 +147,7 @@ var fnTokenSave = function (flow, cb) {
         userId: flow.userId,
         expires: flow.tokenExpires
     };
-    flow.env.dal.createAuthToken(toSave, function(err) {
+    flow.env.dal.authTokenCreate(toSave, function(err) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else {

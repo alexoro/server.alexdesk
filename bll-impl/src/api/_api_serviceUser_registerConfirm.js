@@ -70,7 +70,7 @@ var fnServiceUserGetRegisterConfirmData = function (flow, cb) {
     var reqArgs = {
         confirmToken: flow.args.confirmToken
     };
-    flow.env.dal.fetchUserCreateRegisterConfirmData(reqArgs, function(err, confirmData) {
+    flow.env.dal.serviceUserGetRegisterConfirmData(reqArgs, function(err, confirmData) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else if (!confirmData) {
@@ -86,7 +86,7 @@ var fnCheckServiceUserIsExistsAndNotConfirmed = function (flow, cb) {
     var reqArgs = {
         id: flow.confirmData.userId
     };
-    flow.env.dal.getServiceUserProfileById(reqArgs, function (err, userProfile) {
+    flow.env.dal.serviceUserGetProfileById(reqArgs, function (err, userProfile) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else if (!userProfile) {
@@ -124,7 +124,7 @@ var fnServiceUserMarkAsConfirmed = function (flow, cb) {
     var reqArgs = {
         userId: flow.confirmData.userId
     };
-    flow.env.dal.markServiceUserAsConfirmed(reqArgs, function(err) {
+    flow.env.dal.serviceUserMarkAsConfirmed(reqArgs, function(err) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else {

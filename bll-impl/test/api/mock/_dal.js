@@ -18,7 +18,7 @@ var DAL = function(mockData) {
 };
 
 
-DAL.prototype.getUserMainInfoByToken = function(args, done) {
+DAL.prototype.userGetIdByToken = function(args, done) {
     var reqArgs = {
         token: args.token
     };
@@ -37,7 +37,7 @@ DAL.prototype.getUserMainInfoByToken = function(args, done) {
     }
 };
 
-DAL.prototype.createAuthToken = function(args, done) {
+DAL.prototype.authTokenCreate = function(args, done) {
     var data = {
         token: args.token,
         userType: args.userType,
@@ -49,7 +49,7 @@ DAL.prototype.createAuthToken = function(args, done) {
 };
 
 
-DAL.prototype.getServiceUserCreditionalsByLogin = function(args, done) {
+DAL.prototype.serviceUserGetCreditionalsByLogin = function(args, done) {
     var reqArgs = {
         login: args.login
     };
@@ -67,7 +67,7 @@ DAL.prototype.getServiceUserCreditionalsByLogin = function(args, done) {
     }
 };
 
-DAL.prototype.getServiceUserProfileById = function (args, done) {
+DAL.prototype.serviceUserGetProfileById = function (args, done) {
     var reqArgs = {
         id: args.id
     };
@@ -76,7 +76,7 @@ DAL.prototype.getServiceUserProfileById = function (args, done) {
     done(null, r === undefined ? null : r);
 };
 
-DAL.prototype.createServiceUser = function(args, done) {
+DAL.prototype.serviceUserCreate = function(args, done) {
     var data = {
         id: args.id,
         login: args.login,
@@ -90,7 +90,7 @@ DAL.prototype.createServiceUser = function(args, done) {
     done(null);
 };
 
-DAL.prototype.updateServiceUserPasswordHash = function (args, done) {
+DAL.prototype.serviceUserUpdatePasswordHash = function (args, done) {
     var r = _.findWhere(this.mock.users, {id: args.userId});
     if (!r) {
         done(new Error('User not found'));
@@ -101,7 +101,7 @@ DAL.prototype.updateServiceUserPasswordHash = function (args, done) {
 };
 
 
-DAL.prototype.fetchUserCreateRegisterConfirmData = function(args, done) {
+DAL.prototype.serviceUserGetRegisterConfirmData = function(args, done) {
     var reqArgs = {
         id: args.confirmToken
     };
@@ -128,7 +128,7 @@ DAL.prototype.serviceUserCreateRegisterConfirmData = function(args, done) {
     done(null);
 };
 
-DAL.prototype.markServiceUserAsConfirmed = function(args, done) {
+DAL.prototype.serviceUserMarkAsConfirmed = function(args, done) {
     var reqArgs = {
         id: args.userId
     };
@@ -142,7 +142,7 @@ DAL.prototype.markServiceUserAsConfirmed = function(args, done) {
 };
 
 
-DAL.prototype.fetchUserResetPasswordConfirmData = function(args, done) {
+DAL.prototype.serviceUserGetResetPasswordConfirmData = function(args, done) {
     var reqArgs = {
         id: args.confirmToken
     };
@@ -170,7 +170,7 @@ DAL.prototype.serviceUserCreateResetPasswordConfirmData = function(args, done) {
 };
 
 
-DAL.prototype.getAppsList = function(args, done) {
+DAL.prototype.appsGetList = function(args, done) {
     var self = this;
     var err;
 
@@ -213,7 +213,7 @@ DAL.prototype.getAppsList = function(args, done) {
     return done(null, apps);
 };
 
-DAL.prototype.isAppExists = function(args, done) {
+DAL.prototype.appIsExists = function(args, done) {
     var r = _.findWhere(this.mock.apps, {id: args.appId});
     if (!r) {
         done(null, false);
@@ -222,7 +222,7 @@ DAL.prototype.isAppExists = function(args, done) {
     }
 };
 
-DAL.prototype.getAppOwnerUserMainInfoByAppId = function(args, done) {
+DAL.prototype.appGetOwnerIdAppId = function(args, done) {
     var r = _.findWhere(this.mock.app_acl, {appId: args.appId, isOwner: true});
     if (r) {
         var ret = {
@@ -235,7 +235,7 @@ DAL.prototype.getAppOwnerUserMainInfoByAppId = function(args, done) {
     }
 };
 
-DAL.prototype.createApplication = function(args, done) {
+DAL.prototype.appCreate = function(args, done) {
     var app = {
         id: args.id,
         platformType: args.platform,
@@ -265,8 +265,53 @@ DAL.prototype.createApplication = function(args, done) {
     done(null);
 };
 
+DAL.prototype.appsGetNumberOfChats = function(args, done) {
+    var self = this;
+    var r = {};
+    utils.forEach(args.appIds, function(item) {
+        r[item] = _.where(self.mock.chats, {appId: item}).length;
+    });
+    done(null, r);
+};
 
-DAL.prototype.getAppUserCreditionalsByLogin = function(args, done) {
+DAL.prototype.appsGetNumberOfMessages = function(args, done) {
+    var self = this;
+    var r = {};
+    utils.forEach(args.appIds, function(item) {
+        r[item] = _.where(self.mock.chat_messages, {appId: item}).length;
+    });
+    done(null, r);
+};
+
+DAL.prototype.appsGetNumberOfUnreadMessages = function(args, done) {
+    var appIds = args.appIds;
+    var userType = args.userType;
+    var userId = args.userId;
+    var self = this;
+
+    var chatsLastVisit = {};
+    _.where(this.mock.chat_participants, {userType: userType, userId: userId}).forEach(function(item) {
+        chatsLastVisit[item.chatId] = new Date(item.lastVisit);
+    });
+
+    var r = {};
+    utils.forEach(appIds, function(appId) {
+        r[appId] = 0;
+        utils.forEach(self.mock.chat_messages, function(message) {
+            if (message.appId === appId &&
+                message.userCreatorType !== userType &&
+                message.userCreatorId !== userId &&
+                chatsLastVisit[message.chatId].getTime() < message.created.getTime()) {
+                r[appId]++;
+            }
+        });
+    });
+
+    return done(null, r);
+};
+
+
+DAL.prototype.appUserGetCreditionalsByLogin = function(args, done) {
     var r = _.findWhere(this.mock.app_users, {appId: args.appId, login: args.login});
     if (!r) {
         done(null, null);
@@ -275,7 +320,7 @@ DAL.prototype.getAppUserCreditionalsByLogin = function(args, done) {
     }
 };
 
-DAL.prototype.getAppUserById = function(args, done) {
+DAL.prototype.appUsersGetProfileById = function(args, done) {
     var user = _.findWhere(this.mock.app_users, {appUserId: args.id});
     if (!user) {
         done(null, null);
@@ -294,7 +339,7 @@ DAL.prototype.getAppUserById = function(args, done) {
     }
 };
 
-DAL.prototype.createAppUserProfile = function(args, done) {
+DAL.prototype.appUsersCreate = function(args, done) {
     args = args.profile;
     var profile = {
         appUserId: args.id,
@@ -320,7 +365,7 @@ DAL.prototype.createAppUserProfile = function(args, done) {
     done(null);
 };
 
-DAL.prototype.updateAppUserProfile = function(args, done) {
+DAL.prototype.appUserUpdate = function(args, done) {
     args = args.profile;
     var i;
 
@@ -359,7 +404,7 @@ DAL.prototype.updateAppUserProfile = function(args, done) {
 };
 
 
-DAL.prototype.getChatsList = function(args, done) {
+DAL.prototype.chatsGetList = function(args, done) {
     var chats = !!args.userCreatorId ?
         _.where(this.mock.chats, {appId: args.appId, userCreatorId: args.userCreatorId})
         : _.where(this.mock.chats, {appId: args.appId});
@@ -397,11 +442,11 @@ DAL.prototype.getChatsList = function(args, done) {
     done(null, chats);
 };
 
-DAL.prototype.isChatExists = function(args, done) {
+DAL.prototype.chatIsExists = function(args, done) {
     done(null, !!_.findWhere(this.mock.chats, {id: args.chatId}));
 };
 
-DAL.prototype.getAppIdChatBelongsTo = function(args, done) {
+DAL.prototype.chatGetAppId = function(args, done) {
     var chat = _.findWhere(this.mock.chats, {id: args.chatId});
     if (!chat) {
         done(new Error('Chat is not found. Given ID: ' + args.chatId));
@@ -410,56 +455,11 @@ DAL.prototype.getAppIdChatBelongsTo = function(args, done) {
     }
 };
 
-DAL.prototype.isUserTheCreatorOfChat = function(args, done) {
+DAL.prototype.chatIsUserTheCreator = function(args, done) {
     done(null, !!_.findWhere(this.mock.chats, {id: args.chatId, userCreatorId: args.userId, userCreatorType: args.userType}));
 };
 
-DAL.prototype.getNumberOfChats = function(args, done) {
-    var self = this;
-    var r = {};
-    utils.forEach(args.appIds, function(item) {
-        r[item] = _.where(self.mock.chats, {appId: item}).length;
-    });
-    done(null, r);
-};
-
-DAL.prototype.getNumberOfAllMessages = function(args, done) {
-    var self = this;
-    var r = {};
-    utils.forEach(args.appIds, function(item) {
-        r[item] = _.where(self.mock.chat_messages, {appId: item}).length;
-    });
-    done(null, r);
-};
-
-DAL.prototype.getNumberOfUnreadMessages = function(args, done) {
-    var appIds = args.appIds;
-    var userType = args.userType;
-    var userId = args.userId;
-    var self = this;
-
-    var chatsLastVisit = {};
-    _.where(this.mock.chat_participants, {userType: userType, userId: userId}).forEach(function(item) {
-        chatsLastVisit[item.chatId] = new Date(item.lastVisit);
-    });
-
-    var r = {};
-    utils.forEach(appIds, function(appId) {
-        r[appId] = 0;
-        utils.forEach(self.mock.chat_messages, function(message) {
-            if (message.appId === appId &&
-                message.userCreatorType !== userType &&
-                message.userCreatorId !== userId &&
-                chatsLastVisit[message.chatId].getTime() < message.created.getTime()) {
-                r[appId]++;
-            }
-        });
-    });
-
-    return done(null, r);
-};
-
-DAL.prototype.getNumberOfUnreadMessagesPerChats = function(args, done) {
+DAL.prototype.chatsGetNumberOfUnreadMessagesPerChat = function(args, done) {
     var chatIds = args.chatIds;
     var userType = args.userType;
     var userId = args.userId;
@@ -489,7 +489,7 @@ DAL.prototype.getNumberOfUnreadMessagesPerChats = function(args, done) {
     return done(null, r);
 };
 
-DAL.prototype.getLastMessagePerChats = function(args, done) {
+DAL.prototype.chatsGetLastMessagePerChat = function(args, done) {
     var r = {};
     _.each(args.chatIds, function(item) {
         r[item] = null;
@@ -503,8 +503,14 @@ DAL.prototype.getLastMessagePerChats = function(args, done) {
     done(null, r);
 };
 
-DAL.prototype.getLastVisitOfUserToChat = function(args, done) {
-    var r = _.findWhere(this.mock.chat_participants, args);
+DAL.prototype.chatGetLastVisit = function(args, done) {
+    var reqArgs = {
+        chatId: args.chatId,
+        userType: args.userType,
+        userId: args.userId
+    };
+
+    var r = _.findWhere(this.mock.chat_participants, reqArgs);
     if (!r) {
         done(null, null);
     } else {
@@ -512,7 +518,7 @@ DAL.prototype.getLastVisitOfUserToChat = function(args, done) {
     }
 };
 
-DAL.prototype.updateLastVisitForChat = function(args, done) {
+DAL.prototype.chatUpdateLastVisit = function(args, done) {
     var reqArgs = {
         chatId: args.chatId,
         userType: args.userType,
@@ -523,39 +529,7 @@ DAL.prototype.updateLastVisitForChat = function(args, done) {
     done(null);
 };
 
-
-DAL.prototype.getMessagesList = function(args, done) {
-    var chatId = args.chatId;
-    var offset = args.offset;
-    var limit = args.limit;
-
-    var r = _.where(this.mock.chat_messages, {chatId: chatId})
-        .slice(offset)
-        .splice(0, limit);
-
-    done(null, utils.deepClone(r));
-};
-
-DAL.prototype.createMessageInChatAndUpdateLastVisit = function(args, done) {
-    var msg = utils.deepClone(args.newMessage);
-    this.mock.chat_messages.push(msg);
-
-    var reqArgs = {
-        chatId: msg.chatId,
-        userType: msg.userCreatorType,
-        userId: msg.userCreatorId,
-        newLastVisit: msg.created
-    };
-    this.updateLastVisitForChat(reqArgs, function(err) {
-        if (err) {
-            done(err);
-        } else {
-            done();
-        }
-    });
-};
-
-DAL.prototype.createChatWithMessage = function(args, done) {
+DAL.prototype.chatCreateWithMessage = function(args, done) {
     var argsNewChat = utils.deepClone(args.newChat);
     var argsNewMessage = utils.deepClone(args.newMessage);
     var argsParticipants = utils.deepClone(args.participants);
@@ -627,6 +601,38 @@ DAL.prototype.createChatWithMessage = function(args, done) {
     this.mock.chat_messages.push(newMessage);
 
     done();
+};
+
+
+DAL.prototype.messagesGetListForChat = function(args, done) {
+    var chatId = args.chatId;
+    var offset = args.offset;
+    var limit = args.limit;
+
+    var r = _.where(this.mock.chat_messages, {chatId: chatId})
+        .slice(offset)
+        .splice(0, limit);
+
+    done(null, utils.deepClone(r));
+};
+
+DAL.prototype.messageCreateAndUpdateLastVisit = function(args, done) {
+    var msg = utils.deepClone(args.newMessage);
+    this.mock.chat_messages.push(msg);
+
+    var reqArgs = {
+        chatId: msg.chatId,
+        userType: msg.userCreatorType,
+        userId: msg.userCreatorId,
+        newLastVisit: msg.created
+    };
+    this.chatUpdateLastVisit(reqArgs, function(err) {
+        if (err) {
+            done(err);
+        } else {
+            done();
+        }
+    });
 };
 
 

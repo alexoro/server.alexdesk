@@ -116,7 +116,7 @@ describe('API#serviceUsers_registerRequest', function() {
 
     it('Must return INTERNAL_ERROR in case of error in DAL', function(doneTest) {
         var mock = mockBuilder.newApiWithMock();
-        mock.dal.getServiceUserCreditionalsByLogin = function(args, done) {
+        mock.dal.serviceUserGetCreditionalsByLogin = function(args, done) {
             done(new Error('Not implemented yet'));
         };
 
@@ -136,7 +136,7 @@ describe('API#serviceUsers_registerRequest', function() {
 
     it('Must return INTERNAL_ERROR in case of invalid response from DAL', function(doneTest) {
         var mock = mockBuilder.newApiWithMock();
-        mock.dal.getServiceUserCreditionalsByLogin = function(args, done) {
+        mock.dal.serviceUserGetCreditionalsByLogin = function(args, done) {
             done(null, 1);
         };
 
@@ -208,7 +208,7 @@ describe('API#serviceUsers_registerRequest', function() {
 
             var passwordHash = '02a243c4202b23e8ec78620f1ff48aa6';
             var reqArgs = {login: 'xxx@xxx.com'};
-            mock.dal.getServiceUserCreditionalsByLogin(reqArgs, function(err, creditionals) {
+            mock.dal.serviceUserGetCreditionalsByLogin(reqArgs, function(err, creditionals) {
                 if (err) {
                     return doneTest(err);
                 } else if (!creditionals) {
