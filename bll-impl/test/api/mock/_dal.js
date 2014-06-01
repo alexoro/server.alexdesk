@@ -486,9 +486,9 @@ DAL.prototype.getNumberOfUnreadMessagesPerChats = function(args, done) {
     return done(null, r);
 };
 
-DAL.prototype.getLastMessagePerChats = function(chatIds, done) {
+DAL.prototype.getLastMessagePerChats = function(args, done) {
     var r = {};
-    _.each(chatIds, function(item) {
+    _.each(args.chatIds, function(item) {
         r[item] = null;
     });
 

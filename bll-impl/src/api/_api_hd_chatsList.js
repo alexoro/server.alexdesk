@@ -223,7 +223,10 @@ var fnChatsSetNumberOfUnreadMessages = function (flow, cb) {
 };
 
 var fnChatsSetLastMessage = function (flow, cb) {
-    flow.env.dal.getLastMessagePerChats(flow.chatIds, function(err, result) {
+    var reqArgs = {
+        chatIds: flow.chatIds
+    };
+    flow.env.dal.getLastMessagePerChats(reqArgs, function(err, result) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else {
