@@ -131,7 +131,10 @@ var fnAppsGetList = function (flow, cb) {
 };
 
 var fnAppsSetNumberOfChats = function (flow, cb) {
-    flow.env.dal.getNumberOfChats(flow.appsIds, function(err, result) {
+    var reqArgs = {
+        appIds: flow.appsIds
+    };
+    flow.env.dal.getNumberOfChats(reqArgs, function(err, result) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else {
@@ -146,7 +149,10 @@ var fnAppsSetNumberOfChats = function (flow, cb) {
 };
 
 var fnAppsSetNumberOfAllMessages = function (flow, cb) {
-    flow.env.dal.getNumberOfAllMessages(flow.appsIds, function(err, result) {
+    var reqArgs = {
+        appIds: flow.appsIds
+    };
+    flow.env.dal.getNumberOfAllMessages(reqArgs, function(err, result) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else {

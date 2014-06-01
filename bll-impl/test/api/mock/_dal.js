@@ -414,19 +414,19 @@ DAL.prototype.isUserTheCreatorOfChat = function(args, done) {
     done(null, !!_.findWhere(this.mock.chats, {id: args.chatId, userCreatorId: args.userId, userCreatorType: args.userType}));
 };
 
-DAL.prototype.getNumberOfChats = function(appIds, done) {
+DAL.prototype.getNumberOfChats = function(args, done) {
     var self = this;
     var r = {};
-    utils.forEach(appIds, function(item) {
+    utils.forEach(args.appIds, function(item) {
         r[item] = _.where(self.mock.chats, {appId: item}).length;
     });
     done(null, r);
 };
 
-DAL.prototype.getNumberOfAllMessages = function(appIds, done) {
+DAL.prototype.getNumberOfAllMessages = function(args, done) {
     var self = this;
     var r = {};
-    utils.forEach(appIds, function(item) {
+    utils.forEach(args.appIds, function(item) {
         r[item] = _.where(self.mock.chat_messages, {appId: item}).length;
     });
     done(null, r);
