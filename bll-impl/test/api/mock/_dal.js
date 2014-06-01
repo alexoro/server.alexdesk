@@ -432,7 +432,10 @@ DAL.prototype.getNumberOfAllMessages = function(args, done) {
     done(null, r);
 };
 
-DAL.prototype.getNumberOfUnreadMessages = function(appIds, userType, userId, done) {
+DAL.prototype.getNumberOfUnreadMessages = function(args, done) {
+    var appIds = args.appIds;
+    var userType = args.userType;
+    var userId = args.userId;
     var self = this;
 
     var chatsLastVisit = {};
