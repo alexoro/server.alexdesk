@@ -229,9 +229,9 @@ DAL.prototype.appGetOwnerIdAppId = function(args, done) {
             id: r.userId,
             type: domain.userTypes.SERVICE_USER
         };
-        return done(null, ret);
+        done(null, ret);
     } else {
-        return done(null, null);
+        done(null, null);
     }
 };
 
@@ -295,7 +295,7 @@ DAL.prototype.appsGetNumberOfUnreadMessages = function(args, done) {
         r[args.appIds[i]] = _.where(this.mock.chat_messages_extra, search).length;
     }
 
-    return done(null, r);
+    done(null, r);
 };
 
 
@@ -447,34 +447,19 @@ DAL.prototype.chatIsUserTheCreator = function(args, done) {
     done(null, !!_.findWhere(this.mock.chats, {id: args.chatId, userCreatorId: args.userId, userCreatorType: args.userType}));
 };
 
-DAL.prototype.chatsGetNumberOfUnreadMessagesPerChat = function(args, done) {
-    var chatIds = args.chatIds;
-    var userType = args.userType;
-    var userId = args.userId;
-    var i;
-    var item;
-
+DAL.prototype.chatsGetNumberOfUnreadMessagesPerChatForUser = function(args, done) {
     var r = {};
-    _.each(chatIds, function(item) {
-        r[item] = 0;
-    });
-
-    var lastVisits = {};
-    for (i = 0; i < chatIds.length; i++) {
-        item = _.findWhere(this.mock.chat_participants, {userType: userType, userId: userId, chatId: chatIds[i]});
-        lastVisits[chatIds[i]] = item.lastVisit;
+    for (var i = 0; i < args.chatIds.length; i++) {
+        var search = {
+            chatId: args.chatIds[i],
+            userType: args.userType,
+            userId: args.userId,
+            isRead: false
+        };
+        r[args.chatIds[i]] = _.where(this.mock.chat_messages_extra, search).length;
     }
 
-    for (i = 0; i < this.mock.chat_messages.length; i++) {
-        item = this.mock.chat_messages[i];
-        if (_.contains(chatIds, item.chatId) &&
-            !(item.userCreatorType === userType && item.userCreatorId === userId) &&
-            item.created.getTime() > lastVisits[item.chatId].getTime()) {
-            r[item.chatId]++;
-        }
-    }
-
-    return done(null, r);
+    done(null, r);
 };
 
 DAL.prototype.chatsGetLastMessagePerChat = function(args, done) {

@@ -210,7 +210,7 @@ var fnChatsSetNumberOfUnreadMessages = function (flow, cb) {
         userType: flow.userType,
         userId: flow.userId
     };
-    flow.env.dal.chatsGetNumberOfUnreadMessagesPerChat(reqArgs, function(err, result) {
+    flow.env.dal.chatsGetNumberOfUnreadMessagesPerChatForUser(reqArgs, function(err, result) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else {
