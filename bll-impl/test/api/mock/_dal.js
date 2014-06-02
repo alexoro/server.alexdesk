@@ -284,28 +284,16 @@ DAL.prototype.appsGetNumberOfMessages = function(args, done) {
 };
 
 DAL.prototype.appsGetNumberOfUnreadMessages = function(args, done) {
-    var appIds = args.appIds;
-    var userType = args.userType;
-    var userId = args.userId;
-    var self = this;
-
-    var chatsLastVisit = {};
-    _.where(this.mock.chat_participants, {userType: userType, userId: userId}).forEach(function(item) {
-        chatsLastVisit[item.chatId] = new Date(item.lastVisit);
-    });
-
     var r = {};
-    utils.forEach(appIds, function(appId) {
-        r[appId] = 0;
-        utils.forEach(self.mock.chat_messages, function(message) {
-            if (message.appId === appId &&
-                message.userCreatorType !== userType &&
-                message.userCreatorId !== userId &&
-                chatsLastVisit[message.chatId].getTime() < message.created.getTime()) {
-                r[appId]++;
-            }
-        });
-    });
+    for (var i = 0; i < args.appIds.length; i++) {
+        var search = {
+            appId: args.appIds[i],
+            userType: args.userType,
+            userId: args.userId,
+            isRead: false
+        };
+        r[args.appIds[i]] = _.where(this.mock.chat_messages_extra, search).length;
+    }
 
     return done(null, r);
 };

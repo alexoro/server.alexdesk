@@ -425,27 +425,27 @@ var mock = {
     ],
 
     chat_messages_extra: [
-        {messageId: '1', userType: '1', userId: '1', isRead: true},
-        {messageId: '1', userType: '2', userId: '2', isRead: true},
-        {messageId: '2', userType: '1', userId: '1', isRead: true},
-        {messageId: '2', userType: '2', userId: '2', isRead: true},
+        {messageId: '1', appId: '1', userType: domain.userTypes.SERVICE_USER, userId: '1', isRead: true},
+        {messageId: '1', appId: '1', userType: domain.userTypes.APP_USER, userId: '2', isRead: true},
+        {messageId: '2', appId: '1', userType: domain.userTypes.SERVICE_USER, userId: '1', isRead: true},
+        {messageId: '2', appId: '1', userType: domain.userTypes.APP_USER, userId: '2', isRead: true},
 
-        {messageId: '3', userType: '1', userId: '1', isRead: true},
-        {messageId: '3', userType: '2', userId: '2', isRead: false},
-        {messageId: '4', userType: '1', userId: '1', isRead: true},
-        {messageId: '4', userType: '2', userId: '2', isRead: true},
-        {messageId: '5', userType: '1', userId: '1', isRead: true},
-        {messageId: '5', userType: '2', userId: '2', isRead: true},
-        {messageId: '6', userType: '1', userId: '1', isRead: false},
-        {messageId: '6', userType: '2', userId: '2', isRead: true},
+        {messageId: '3', appId: '1', userType: domain.userTypes.SERVICE_USER, userId: '1', isRead: true},
+        {messageId: '3', appId: '1', userType: domain.userTypes.APP_USER, userId: '2', isRead: false},
+        {messageId: '4', appId: '1', userType: domain.userTypes.SERVICE_USER, userId: '1', isRead: true},
+        {messageId: '4', appId: '1', userType: domain.userTypes.APP_USER, userId: '2', isRead: true},
+        {messageId: '5', appId: '1', userType: domain.userTypes.SERVICE_USER, userId: '1', isRead: true},
+        {messageId: '5', appId: '1', userType: domain.userTypes.APP_USER, userId: '2', isRead: true},
+        {messageId: '6', appId: '1', userType: domain.userTypes.SERVICE_USER, userId: '1', isRead: false},
+        {messageId: '6', appId: '1', userType: domain.userTypes.APP_USER, userId: '2', isRead: true},
 
-        {messageId: '7', userType: '1', userId: '1', isRead: true},
-        {messageId: '7', userType: '2', userId: '3', isRead: true},
-        {messageId: '8', userType: '1', userId: '1', isRead: true},
-        {messageId: '8', userType: '2', userId: '3', isRead: false},
+        {messageId: '7', appId: '1', userType: domain.userTypes.SERVICE_USER, userId: '1', isRead: true},
+        {messageId: '7', appId: '1', userType: domain.userTypes.APP_USER, userId: '3', isRead: true},
+        {messageId: '8', appId: '1', userType: domain.userTypes.SERVICE_USER, userId: '1', isRead: true},
+        {messageId: '8', appId: '1', userType: domain.userTypes.APP_USER, userId: '3', isRead: false},
 
-        {messageId: '9', userType: '1', userId: '1', isRead: false},
-        {messageId: '9', userType: '2', userId: '4', isRead: true}
+        {messageId: '9', appId: '2', userType: '1', userId: '1', isRead: false},
+        {messageId: '9', appId: '2', userType: domain.userTypes.APP_USER, userId: '4', isRead: true}
     ]
 
 };
