@@ -26,9 +26,7 @@ var fnExecute = function (env, args, next) {
                 userType: null,
                 userId: null,
                 appId: null,
-                lastVisit: null,
                 messages: null,
-                currentDate: null,
                 result: null
             };
             cb(null, flow);
@@ -41,10 +39,9 @@ var fnExecute = function (env, args, next) {
         fnChatGetAppIdItBelongsTo,
         fnUserIsAssociatedWithApp,
         fnAppUserIsCreatorOfChat,
-        fnUserGetLastVisitOfChat,
         fnChatGetMessagesList,
-        fnGetCurrentTime,
-        fnChatUpdateLastVisitForUser,
+        fnMessagesSetIsReadStatus,
+        fnMessagesSetIsReadForAllMessagesInChatForUser,
         fnGenerateResult
     ];
 
@@ -226,24 +223,6 @@ var fnAppUserIsCreatorOfChat = function (flow, cb) {
     }
 };
 
-var fnUserGetLastVisitOfChat = function (flow, cb) {
-    var reqArgs = {
-        chatId: flow.args.chatId,
-        userType: flow.userType,
-        userId: flow.userId
-    };
-    flow.env.dal.chatGetLastVisit(reqArgs, function(err, lastVisit) {
-        if (err) {
-            cb(errBuilder(dErr.INTERNAL_ERROR, err));
-        } else if (!(lastVisit instanceof Date)) {
-            cb(errBuilder(dErr.INTERNAL_ERROR, 'The result of getLastVisitOfUserToChat() is not a Date type: ' + lastVisit));
-        } else {
-            flow.lastVisit = lastVisit;
-            cb(null, flow);
-        }
-    });
-};
-
 var fnChatGetMessagesList = function (flow, cb) {
     var reqArgs = {
         chatId: flow.args.chatId,
@@ -256,38 +235,44 @@ var fnChatGetMessagesList = function (flow, cb) {
         } else if (!(messages instanceof Array)) {
             cb(errBuilder(dErr.INTERNAL_ERROR, 'The result of getMessagesList() is not a Array type: ' + messages));
         } else {
-            for (var i = 0; i < messages.length; i++) {
-                delete messages[i].appId;
-                delete messages[i].chatId;
-                messages[i].isRead = messages[i].created.getTime() <= flow.lastVisit.getTime();
-            }
             flow.messages = messages;
             cb(null, flow);
         }
     });
 };
 
-var fnGetCurrentTime = function (flow, cb) {
-    flow.env.currentTimeProvider.getCurrentTime(function(err, currentDate) {
+var fnMessagesSetIsReadStatus = function (flow, cb) {
+    var messageIds = [];
+    for (var i = 0; i < flow.messages.length; i++) {
+        messageIds.push(flow.messages[i].id);
+    }
+
+    var reqArgs = {
+        messageIds: messageIds,
+        userType: flow.userType,
+        userId: flow.userId
+    };
+    flow.env.dal.messagesGetIsReadPerMessageForUser(reqArgs, function (err, data) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
-        } else if (!(currentDate instanceof Date)) {
-            cb(errBuilder(dErr.INTERNAL_ERROR, 'Current time is not a Date type: ' + currentDate));
+        } else if (!(data instanceof Object)) {
+            cb(errBuilder(dErr.INTERNAL_ERROR, 'The result of messagesGetIsReadPerMessageForUser() is not a Object type: ' + data));
         } else {
-            flow.currentDate = currentDate;
+            for (var i = 0; i < flow.messages.length; i++) {
+                flow.messages[i].isRead = data[flow.messages[i].id];
+            }
             cb(null, flow);
         }
     });
 };
 
-var fnChatUpdateLastVisitForUser = function (flow, cb) {
+var fnMessagesSetIsReadForAllMessagesInChatForUser = function (flow, cb) {
     var reqArgs = {
         chatId: flow.args.chatId,
         userType: flow.userType,
-        userId: flow.userId,
-        newLastVisit: flow.currentDate
+        userId: flow.userId
     };
-    flow.env.dal.chatUpdateLastVisit(reqArgs, function(err) {
+    flow.env.dal.messagesSetIsReadInChatForUser(reqArgs, function (err) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else {

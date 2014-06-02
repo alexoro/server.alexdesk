@@ -476,21 +476,6 @@ DAL.prototype.chatsGetLastMessagePerChat = function(args, done) {
     done(null, r);
 };
 
-DAL.prototype.chatGetLastVisit = function(args, done) {
-    var reqArgs = {
-        chatId: args.chatId,
-        userType: args.userType,
-        userId: args.userId
-    };
-
-    var r = _.findWhere(this.mock.chat_participants, reqArgs);
-    if (!r) {
-        done(null, null);
-    } else {
-        done(null, r.lastVisit);
-    }
-};
-
 DAL.prototype.chatUpdateLastVisit = function(args, done) {
     var reqArgs = {
         chatId: args.chatId,
@@ -585,8 +570,45 @@ DAL.prototype.messagesGetListForChat = function(args, done) {
     var r = _.where(this.mock.chat_messages, {chatId: chatId})
         .slice(offset)
         .splice(0, limit);
+    r = utils.deepClone(r);
 
-    done(null, utils.deepClone(r));
+    for (var i = 0; i < r.length; i++) {
+        delete r[i].appId;
+        delete r[i].chatId;
+    }
+
+    done(null, r);
+};
+
+DAL.prototype.messagesGetIsReadPerMessageForUser = function (args, done) {
+    var r = {};
+    for (var i = 0; i < args.messageIds.length; i++) {
+        var search = {
+            messageId: args.messageIds[i],
+            userType: args.userType,
+            userId: args.userId
+        };
+        var item = _.findWhere(this.mock.chat_messages_extra, search);
+        if (!item) {
+            return done(new Error('Extra info for message is not found. Message ID: ' + args.messageIds[i]));
+        }
+        r[args.messageIds[i]] = item.isRead;
+    }
+
+    done(null, r);
+};
+
+DAL.prototype.messagesSetIsReadInChatForUser = function (args, done) {
+    var search = {
+        chatId: args.chatId,
+        userType: args.userType,
+        userId: args.userId
+    };
+    var data = _.where(this.mock.chat_messages_extra, search);
+    for (var i = 0; i < data.length; i++) {
+        data[i].isRead = true;
+    }
+    done(null);
 };
 
 DAL.prototype.messageCreateAndUpdateLastVisit = function(args, done) {
