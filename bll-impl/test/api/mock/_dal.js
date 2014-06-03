@@ -630,7 +630,44 @@ DAL.prototype.messagesSetIsReadInChatForUser = function (args, done) {
 };
 
 DAL.prototype.messageCreateAndUpdateLastVisit = function(args, done) {
-    var msg = utils.deepClone(args.newMessage);
+    var copy = utils.deepClone(args);
+
+    var newMessage = {
+        id: copy.id,
+        appId: copy.appId,
+        chatId: copy.chatId,
+        userCreatorId: copy.userCreatorId,
+        userCreatorType: copy.userCreatorType,
+        created: copy.created,
+        content: copy.content
+    };
+    var newMessageExtraIsRead = [
+        {
+            appId: copy.appId,
+            chatId: copy.chatId,
+            messageId: copy.id,
+            userType: copy.isRead[0].userType,
+            userId: copy.isRead[0].userId,
+            isRead: copy.isRead[0].isRead
+        },
+        {
+            appId: copy.appId,
+            chatId: copy.chatId,
+            messageId: copy.id,
+            userType: copy.isRead[1].userType,
+            userId: copy.isRead[1].userId,
+            isRead: copy.isRead[1].isRead
+        }
+    ];
+    var lastUpdate = copy.created;
+
+    this.mock.chat_messages.push(newMessage);
+    this.mock.chat_messages_extra.push(newMessageExtraIsRead[0]);
+    this.mock.chat_messages_extra.push(newMessageExtraIsRead[1]);
+    _.findWhere(this.mock.chats, {id: copy.chatId}).lastUpdate = lastUpdate;
+
+    done(null);
+    /*var msg = utils.deepClone(args.newMessage);
     this.mock.chat_messages.push(msg);
 
     var reqArgs = {
@@ -645,7 +682,7 @@ DAL.prototype.messageCreateAndUpdateLastVisit = function(args, done) {
         } else {
             done();
         }
-    });
+    });*/
 };
 
 

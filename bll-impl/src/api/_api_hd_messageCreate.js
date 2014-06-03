@@ -24,6 +24,7 @@ var fnExecute = function (env, args, next) {
                 userType: null,
                 userId: null,
                 appId: null,
+                appOwnerServiceUserId: null,
                 newMessageId: null,
                 newMessageCreateDate: null,
                 newMessage: null,
@@ -38,6 +39,7 @@ var fnExecute = function (env, args, next) {
         fnChatGetAppIdItBelongsTo,
         fnUserIsAssociatedWithApp,
         fnAppUserIsCreatorOfChat,
+        fnAppGetOwner,
         fnMessageGenerateId,
         fnMessageGenerateCreateDate,
         fnMessageCreate,
@@ -215,6 +217,22 @@ var fnAppUserIsCreatorOfChat = function (flow, cb) {
     }
 };
 
+var fnAppGetOwner = function (flow, cb) {
+    var reqArgs = {
+        appId: flow.appId
+    };
+    flow.env.dal.appGetOwnerIdAppId(reqArgs, function(err, appOwnerUser) {
+        if (err) {
+            cb(errBuilder(dErr.INTERNAL_ERROR, err));
+        } else if (!appOwnerUser) {
+            cb(errBuilder(dErr.LOGIC_ERROR, 'Owner of application is not found. AppId: ' + appOwnerUser));
+        } else {
+            flow.appOwnerServiceUserId = appOwnerUser.id;
+            cb(null, flow);
+        }
+    });
+};
+
 var fnMessageGenerateId = function (flow, cb) {
     flow.env.uuid.newBigInt(function(err, messageId) {
         if (err) {
@@ -249,13 +267,22 @@ var fnMessageCreate = function (flow, cb) {
         userCreatorId: flow.userId,
         userCreatorType: flow.userType,
         created: flow.newMessageCreateDate,
-        content: filter.message(flow.args.message)
-    };
-    var reqArgs = {
-        newMessage: newMessage
+        content: filter.message(flow.args.message),
+        isRead: [
+            {
+                userId: flow.userId,
+                userType: flow.userType,
+                isRead: true
+            },
+            {
+                userId: flow.appOwnerServiceUserId,
+                userType: domain.userTypes.SERVICE_USER,
+                isRead: false
+            }
+        ]
     };
 
-    flow.env.dal.messageCreateAndUpdateLastVisit(reqArgs, function(err) {
+    flow.env.dal.messageCreateAndUpdateLastVisit(newMessage, function(err) {
         if (err) {
             cb(err);
         } else {
