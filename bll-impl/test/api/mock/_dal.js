@@ -501,7 +501,7 @@ DAL.prototype.chatCreateWithMessage = function(args, done) {
         title: argsNewChat.title,
         type: argsNewChat.type,
         status: argsNewChat.status,
-        lastUpdate: argsNewChat.lastUpdate
+        lastUpdate: argsNewChat.created
     };
 
     var newChatExtraAndroid = null;
@@ -528,15 +528,13 @@ DAL.prototype.chatCreateWithMessage = function(args, done) {
     var newChatParticipants = [
         {
             chatId: argsNewChat.id,
-            userId: argsParticipants[0].userId,
-            userType: argsParticipants[0].userType,
-            lastVisit: argsParticipants[0].lastVisit
+            userId: argsNewChat.participants[0].userId,
+            userType: argsNewChat.participants[0].userType
         },
         {
             chatId: argsNewChat.id,
-            userId: argsParticipants[1].userId,
-            userType: argsParticipants[1].userType,
-            lastVisit: argsParticipants[1].lastVisit
+            userId: argsNewChat.participants[1].userId,
+            userType: argsNewChat.participants[1].userType
         }
     ];
 
@@ -549,6 +547,24 @@ DAL.prototype.chatCreateWithMessage = function(args, done) {
         created: argsNewMessage.created,
         content: argsNewMessage.content
     };
+    var newMessageExtraIsRead = [
+        {
+            appId: argsNewChat.appId,
+            chatId: argsNewChat.id,
+            messageId: argsNewMessage.id,
+            userType: argsNewMessage.isRead[0].userType,
+            userId: argsNewMessage.isRead[0].userId,
+            isRead: argsNewMessage.isRead[0].isRead
+        },
+        {
+            appId: argsNewChat.appId,
+            chatId: argsNewChat.id,
+            messageId: argsNewMessage.id,
+            userType: argsNewMessage.isRead[1].userType,
+            userId: argsNewMessage.isRead[1].userId,
+            isRead: argsNewMessage.isRead[1].isRead
+        }
+    ];
 
     this.mock.chats.push(newChat);
     if (newChatExtraAndroid) {
@@ -557,6 +573,8 @@ DAL.prototype.chatCreateWithMessage = function(args, done) {
     this.mock.chat_participants.push(newChatParticipants[0]);
     this.mock.chat_participants.push(newChatParticipants[1]);
     this.mock.chat_messages.push(newMessage);
+    this.mock.chat_messages_extra.push(newMessageExtraIsRead[0]);
+    this.mock.chat_messages_extra.push(newMessageExtraIsRead[1]);
 
     done();
 };

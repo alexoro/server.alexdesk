@@ -577,7 +577,7 @@ describe('API#hd_chatCreate', function() {
 
     it('Chat must be created for application user', function(doneTest) {
         var currentTime = new Date('2014-05-20 00:00:00 +00:00');
-        var idForMessage = '500';
+        var idForEntities = '500';
 
         var currentTimeProvider = {
             getCurrentTime: function(done) {
@@ -587,7 +587,7 @@ describe('API#hd_chatCreate', function() {
 
         var uuid = {
             newBigInt: function(done) {
-                done(null, idForMessage);
+                done(null, idForEntities);
             },
             newGuid4: function(done) {
                 done(new Error('Not implemented'));
@@ -607,7 +607,7 @@ describe('API#hd_chatCreate', function() {
             }
 
             var matchChat = {
-                id: idForMessage,
+                id: idForEntities,
                 appId: args.appId,
                 userCreatorId: '2',
                 userCreatorType: domain.userTypes.APP_USER,
@@ -615,7 +615,6 @@ describe('API#hd_chatCreate', function() {
                 title: '',
                 type: domain.chatTypes.UNKNOWN,
                 status: domain.chatStatuses.UNKNOWN,
-                lastUpdate: currentTime,
                 platform: args.platform,
                 extra: {
                     countryId: 170,
@@ -635,7 +634,8 @@ describe('API#hd_chatCreate', function() {
             };
 
             var matchMessage = {
-                id: idForMessage,
+                id: idForEntities,
+                chatId: idForEntities,
                 userCreatorId: '2',
                 userCreatorType: domain.userTypes.APP_USER,
                 created: currentTime,

@@ -317,7 +317,6 @@ var fnChatCreateAndGenerateResult = function (flow, cb) {
         title: '',
         type: domain.chatTypes.UNKNOWN,
         status: domain.chatStatuses.UNKNOWN,
-        lastUpdate: flow.createDate,
         platform: flow.args.platform,
         extra: {
             countryId: domain.countries.getIdByCode(flow.args.extra.country),
@@ -333,34 +332,46 @@ var fnChatCreateAndGenerateResult = function (flow, cb) {
             deviceDensity: flow.args.extra.deviceDensity,
             isRooted: flow.args.extra.isRooted,
             metaData: filter.metaData(flow.args.extra.metaData)
-        }
+        },
+        participants: [
+            {
+                userId: flow.userId,
+                userType: flow.userType
+            },
+            {
+                userId: flow.appOwnerServiceUserId,
+                userType: domain.userTypes.SERVICE_USER
+            }
+        ]
     };
     reqArgs.newMessage = {
         id: flow.newMessageId,
+        chatId: flow.newChatId,
         userCreatorId: flow.userId,
         userCreatorType: flow.userType,
         created: flow.createDate,
         content: filter.message(flow.args.message),
-        isRead: true
+        isRead: [
+            {
+                userId: flow.userId,
+                userType: flow.userType,
+                isRead: true
+            },
+            {
+                userId: flow.appOwnerServiceUserId,
+                userType: domain.userTypes.SERVICE_USER,
+                isRead: false
+            }
+        ]
     };
-    reqArgs.participants = [
-        {
-            userId: flow.userId,
-            userType: flow.userType,
-            lastVisit:flow.createDate
-        },
-        {
-            userId: flow.appOwnerServiceUserId,
-            userType: domain.userTypes.SERVICE_USER,
-            lastVisit: new Date('1970-01-01 00:00:00 +00:00')
-        }
-    ];
 
     flow.env.dal.chatCreateWithMessage(reqArgs, function(err) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else {
             reqArgs.newChat.message = reqArgs.newMessage;
+            delete reqArgs.newChat.participants;
+            reqArgs.newChat.message.isRead = true;
             flow.result = reqArgs.newChat;
             cb(null, flow);
         }
