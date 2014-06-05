@@ -488,21 +488,9 @@ DAL.prototype.chatGetParticipantsInfo = function (args, done) {
     done(null, r);
 };
 
-DAL.prototype.chatUpdateLastVisit = function(args, done) {
-    var reqArgs = {
-        chatId: args.chatId,
-        userType: args.userType,
-        userId: args.userId
-    };
-    var r = _.findWhere(this.mock.chat_participants, reqArgs);
-    r.lastVisit = args.newLastVisit;
-    done(null);
-};
-
 DAL.prototype.chatCreateWithMessage = function(args, done) {
     var argsNewChat = utils.deepClone(args.newChat);
     var argsNewMessage = utils.deepClone(args.newMessage);
-    var argsParticipants = utils.deepClone(args.participants);
 
     var newChat = {
         id: argsNewChat.id,
@@ -641,7 +629,7 @@ DAL.prototype.messagesSetIsReadInChatForUser = function (args, done) {
     done(null);
 };
 
-DAL.prototype.messageCreateAndUpdateLastVisit = function(args, done) {
+DAL.prototype.messageCreate = function(args, done) {
     var copy = utils.deepClone(args);
 
     var newMessage = {

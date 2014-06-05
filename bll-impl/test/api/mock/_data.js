@@ -323,17 +323,17 @@ var mock = {
     ],
 
     chat_participants: [
-        {chatId: '1', userType: domain.userTypes.SERVICE_USER, userId: '1', lastVisit: new Date('2012-05-01 13:10:05 +00:00')},
-        {chatId: '1', userType: domain.userTypes.APP_USER, userId: '2', lastVisit: new Date('2012-05-01 13:12:00 +00:00')},
+        {chatId: '1', userType: domain.userTypes.SERVICE_USER, userId: '1'},
+        {chatId: '1', userType: domain.userTypes.APP_USER, userId: '2'},
 
-        {chatId: '2', userType: domain.userTypes.SERVICE_USER, userId: '1', lastVisit: new Date('2012-05-01 13:25:00 +00:00')},
-        {chatId: '2', userType: domain.userTypes.APP_USER, userId: '2', lastVisit: new Date('2012-05-01 13:26:00 +00:00')},
+        {chatId: '2', userType: domain.userTypes.SERVICE_USER, userId: '1'},
+        {chatId: '2', userType: domain.userTypes.APP_USER, userId: '2'},
 
-        {chatId: '3', userType: domain.userTypes.SERVICE_USER, userId: '1', lastVisit: new Date('2012-05-01 13:50:00 +00:00')},
-        {chatId: '3', userType: domain.userTypes.APP_USER, userId: '3', lastVisit: new Date('2012-05-01 13:40:00 +00:00')},
+        {chatId: '3', userType: domain.userTypes.SERVICE_USER, userId: '1'},
+        {chatId: '3', userType: domain.userTypes.APP_USER, userId: '3'},
 
-        {chatId: '4', userType: domain.userTypes.SERVICE_USER, userId: '2', lastVisit: new Date('1970-01-01 00:00:00 +00:00')},
-        {chatId: '4', userType: domain.userTypes.APP_USER, userId: '4', lastVisit: new Date('2012-05-01 13:50:00 +00:00')}
+        {chatId: '4', userType: domain.userTypes.SERVICE_USER, userId: '2'},
+        {chatId: '4', userType: domain.userTypes.APP_USER, userId: '4'}
     ],
 
 
