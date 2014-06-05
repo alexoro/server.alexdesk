@@ -310,7 +310,7 @@ describe('API#hd_messageCreate', function() {
         });
     });
 
-    it.only('Message must be created for application user', function(doneTest) {
+    it('Message must be created for application user', function(doneTest) {
         var currentTime = new Date('2014-05-20 00:00:00 +00:00');
         var idForMessage = '500';
 

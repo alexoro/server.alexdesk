@@ -25,6 +25,7 @@ var fnExecute = function (env, args, next) {
                 userId: null,
                 appId: null,
                 appOwnerServiceUserId: null,
+                participantsInfo: null,
                 newMessageId: null,
                 newMessageCreateDate: null,
                 newMessage: null,
@@ -40,6 +41,7 @@ var fnExecute = function (env, args, next) {
         fnUserIsAssociatedWithApp,
         fnAppUserIsCreatorOfChat,
         fnAppGetOwner,
+        fnChatGetParticipants,
         fnMessageGenerateId,
         fnMessageGenerateCreateDate,
         fnMessageCreate,
@@ -233,6 +235,20 @@ var fnAppGetOwner = function (flow, cb) {
     });
 };
 
+var fnChatGetParticipants = function (flow, cb) {
+    var reqArgs = {
+        chatId: flow.args.chatId
+    };
+    flow.env.dal.chatGetParticipantsInfo(reqArgs, function (err, participants) {
+        if (err) {
+            cb(errBuilder(dErr.INTERNAL_ERROR, err));
+        } else {
+            flow.participantsInfo = participants;
+            cb(null, flow);
+        }
+    });
+};
+
 var fnMessageGenerateId = function (flow, cb) {
     flow.env.uuid.newBigInt(function(err, messageId) {
         if (err) {
@@ -260,6 +276,15 @@ var fnMessageGenerateCreateDate = function (flow, cb) {
 };
 
 var fnMessageCreate = function (flow, cb) {
+    var isReadInfo = [];
+    for (var i = 0; i < flow.participantsInfo.length; i++) {
+        isReadInfo.push({
+            userId: flow.participantsInfo[i].id,
+            userType: flow.participantsInfo[i].type,
+            isRead: flow.participantsInfo[i].type === flow.userType && flow.participantsInfo[i].id === flow.userId
+        });
+    }
+
     var newMessage = {
         id: flow.newMessageId,
         appId: flow.appId,
@@ -268,18 +293,7 @@ var fnMessageCreate = function (flow, cb) {
         userCreatorType: flow.userType,
         created: flow.newMessageCreateDate,
         content: filter.message(flow.args.message),
-        isRead: [
-            {
-                userId: flow.userId,
-                userType: flow.userType,
-                isRead: true
-            },
-            {
-                userId: flow.appOwnerServiceUserId,
-                userType: domain.userTypes.SERVICE_USER,
-                isRead: false
-            }
-        ]
+        isRead: isReadInfo
     };
 
     flow.env.dal.messageCreateAndUpdateLastVisit(newMessage, function(err) {
