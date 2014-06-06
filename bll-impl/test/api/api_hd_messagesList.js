@@ -316,7 +316,7 @@ describe('API#hd_messagesList', function() {
             var prev = result[0].created.getTime();
             for (var i = 1; i < result.length; i++) {
                 if (result[i].created.getTime() < prev) {
-                    assert.fail('Messages are not in desc order');
+                    assert.fail('Messages are not in ASC order');
                     break;
                 }
             }

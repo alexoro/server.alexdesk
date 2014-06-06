@@ -187,7 +187,7 @@ var fnChatsGetListWithLastMessageOrderByLastMessageDesc = function (flow, cb) {
         offset: flow.args.offset,
         limit: flow.args.limit
     };
-    flow.env.dal.chatsGetListWithLastMessageOrderByLastMessageDesc(reqArgs, function(err, chats) {
+    flow.env.dal.chatsGetListWithLastMessageOrderByLastMessageCreatedAsc(reqArgs, function(err, chats) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else if (!(chats instanceof Array)) {

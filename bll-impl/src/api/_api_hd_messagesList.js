@@ -233,7 +233,7 @@ var fnChatGetMessagesList = function (flow, cb) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else if (!(messages instanceof Array)) {
-            cb(errBuilder(dErr.INTERNAL_ERROR, 'The result of getMessagesList() is not a Array type: ' + messages));
+            cb(errBuilder(dErr.INTERNAL_ERROR, 'The result of messagesGetListForChatOrderByCreatedAsc() is not a Array type: ' + messages));
         } else {
             flow.messages = messages;
             cb(null, flow);

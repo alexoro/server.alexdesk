@@ -169,7 +169,7 @@ describe('API#hd_chatsList', function() {
 
     it('Must return INTERNAL_ERROR in case of error in DAL', function(doneTest) {
         var mock = mockBuilder.newApiWithMock();
-        mock.dal.chatsGetListWithLastMessageOrderByLastMessageDesc = function(args, done) {
+        mock.dal.chatsGetListWithLastMessageOrderByLastMessageCreatedAsc = function(args, done) {
             done(new Error('Not implemented yet'));
         };
 
@@ -188,7 +188,7 @@ describe('API#hd_chatsList', function() {
 
     it('Must return INTERNAL_ERROR in case of invalid response from DAL', function(doneTest) {
         var mock = mockBuilder.newApiWithMock();
-        mock.dal.chatsGetListWithLastMessageOrderByLastMessageDesc = function(args, done) {
+        mock.dal.chatsGetListWithLastMessageOrderByLastMessageCreatedAsc = function(args, done) {
             done(null, null);
         };
 
@@ -306,7 +306,7 @@ describe('API#hd_chatsList', function() {
         });
     });
 
-    it('Chats must be in DESC order by last_update', function(doneTest) {
+    it('Chats must be in ASC order by last message created time', function(doneTest) {
         var api = mockBuilder.newApiWithMock().api;
         api.hd_chatsList(argsBuilder(), function(err, result) {
             if (err) {
@@ -316,7 +316,7 @@ describe('API#hd_chatsList', function() {
             var prev = result[0].lastMessage.created.getTime();
             for (var i = 1; i < result.length; i++) {
                 if (result[i].lastMessage.created.getTime() < prev) {
-                    assert.fail('Conversations are not in desc order');
+                    assert.fail('Conversations are not in ASC order');
                     break;
                 }
             }
