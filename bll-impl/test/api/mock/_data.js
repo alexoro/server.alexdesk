@@ -6,7 +6,7 @@
 
 
 var domain = require('../../../src/index').domain;
-var utils = require('./../_utils');
+var utils = require('./_utils');
 
 
 var mock = {

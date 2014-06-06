@@ -5,14 +5,6 @@
 "use strict";
 
 
-module.exports.forEach = function(array, cb) {
-    for (var i = 0; i < array.length; i++) {
-        if (cb(array[i]) === false) {
-            break;
-        }
-    }
-};
-
 module.exports.deepClone = function(obj) {
     // Handle the 3 simple types, and null or undefined
     if (null === obj || "object" !== typeof obj) {
