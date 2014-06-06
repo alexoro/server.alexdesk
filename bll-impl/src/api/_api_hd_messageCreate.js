@@ -184,7 +184,7 @@ var fnUserIsAssociatedWithApp = function (flow, cb) {
         reqArgs = {
             appId: flow.appId
         };
-        flow.env.dal.appGetOwnerIdAppId(reqArgs, function (err, userInfo) {
+        flow.env.dal.appGetOwnerIdForAppById(reqArgs, function (err, userInfo) {
             if (err) {
                 cb(errBuilder(dErr.INTERNAL_ERROR, err));
             } else if (!userInfo || userInfo.id !== flow.userId) {
@@ -223,7 +223,7 @@ var fnAppGetOwner = function (flow, cb) {
     var reqArgs = {
         appId: flow.appId
     };
-    flow.env.dal.appGetOwnerIdAppId(reqArgs, function(err, appOwnerUser) {
+    flow.env.dal.appGetOwnerIdForAppById(reqArgs, function(err, appOwnerUser) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else if (!appOwnerUser) {
@@ -287,7 +287,6 @@ var fnMessageCreate = function (flow, cb) {
 
     var newMessage = {
         id: flow.newMessageId,
-        appId: flow.appId,
         chatId: flow.args.chatId,
         userCreatorId: flow.userId,
         userCreatorType: flow.userType,
@@ -301,7 +300,6 @@ var fnMessageCreate = function (flow, cb) {
             cb(err);
         } else {
             delete newMessage.appId;
-            delete newMessage.chatId;
             newMessage.isRead = true;
 
             flow.newMessage = newMessage;

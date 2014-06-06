@@ -188,7 +188,7 @@ var fnUserIsAssociatedWithApp = function (flow, cb) {
         reqArgs = {
             appId: flow.appId
         };
-        flow.env.dal.appGetOwnerIdAppId(reqArgs, function (err, userInfo) {
+        flow.env.dal.appGetOwnerIdForAppById(reqArgs, function (err, userInfo) {
             if (err) {
                 cb(errBuilder(dErr.INTERNAL_ERROR, err));
             } else if (!userInfo || userInfo.id !== flow.userId) {

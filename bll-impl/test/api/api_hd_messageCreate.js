@@ -298,6 +298,7 @@ describe('API#hd_messageCreate', function() {
 
             var matchMessage = {
                 id: idForMessage,
+                chatId: '1',
                 userCreatorId: '1',
                 userCreatorType: domain.userTypes.SERVICE_USER,
                 created: currentTime,
@@ -339,6 +340,7 @@ describe('API#hd_messageCreate', function() {
 
             var matchMessage = {
                 id: idForMessage,
+                chatId: '1',
                 userCreatorId: '2',
                 userCreatorType: domain.userTypes.APP_USER,
                 created: currentTime,

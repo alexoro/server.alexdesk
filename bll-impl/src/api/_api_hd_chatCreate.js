@@ -254,7 +254,7 @@ var fnAppGetOwner = function (flow, cb) {
     var reqArgs = {
         appId: flow.args.appId
     };
-    flow.env.dal.appGetOwnerIdAppId(reqArgs, function(err, appOwnerUser) {
+    flow.env.dal.appGetOwnerIdForAppById(reqArgs, function(err, appOwnerUser) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else if (!appOwnerUser) {

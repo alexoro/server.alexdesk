@@ -373,6 +373,7 @@ describe('API#hd_chatsList', function() {
                 },
                 lastMessage: {
                     id: '6',
+                    chatId: '2',
                     userCreatorId: '2',
                     userCreatorType: domain.userTypes.APP_USER,
                     created: new Date('2012-05-01 13:26:00 +00:00'),

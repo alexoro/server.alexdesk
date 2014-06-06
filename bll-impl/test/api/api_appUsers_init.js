@@ -332,7 +332,7 @@ describe('API#appUsers_init', function() {
                 if (err) {
                     doneTest(err);
                 } else if (!creditionals) {
-                    assert.fail('Just created app user was not found in storage');
+                    assert.fail('Just updated app user was not found in storage');
                     doneTest();
                 } else {
                     doneTest();

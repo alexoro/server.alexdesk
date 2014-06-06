@@ -246,7 +246,7 @@ var fnUserCreateOrUpdate = function (flow, cb) {
                 gcmToken: flow.args.extra.gcmToken
             }
         };
-        flow.env.dal.appUsersCreate({profile: newUserProfile}, function(err) {
+        flow.env.dal.appUsersCreate(newUserProfile, function(err) {
             if (err) {
                 cb(errBuilder(dErr.INTERNAL_ERROR, err));
             } else {
@@ -261,7 +261,7 @@ var fnUserCreateOrUpdate = function (flow, cb) {
         newUserProfile.extra.deviceUuid = flow.args.extra.deviceUuid;
         newUserProfile.extra.gcmToken = flow.args.extra.gcmToken;
 
-        flow.env.dal.appUserUpdate({profile: newUserProfile}, function(err) {
+        flow.env.dal.appUserUpdate(newUserProfile, function(err) {
             if (err) {
                 cb(errBuilder(dErr.INTERNAL_ERROR, err));
             } else {

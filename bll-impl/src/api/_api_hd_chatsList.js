@@ -169,7 +169,7 @@ var fnUserIsAssociatedWithApp = function (flow, cb) {
         reqArgs = {
             appId: flow.args.appId
         };
-        flow.env.dal.appGetOwnerIdAppId(reqArgs, function (err, userInfo) {
+        flow.env.dal.appGetOwnerIdForAppById(reqArgs, function (err, userInfo) {
             if (err) {
                 cb(errBuilder(dErr.INTERNAL_ERROR, err));
             } else if (!userInfo || userInfo.id !== flow.userId) {
@@ -231,8 +231,6 @@ var fnChatsSetLastMessage = function (flow, cb) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else {
             for (var i = 0; i < flow.chatsList.length; i++) {
-                delete result[flow.chatsList[i].id].chatId;
-                delete result[flow.chatsList[i].id].appId;
                 flow.chatsList[i].lastMessage = result[flow.chatsList[i].id];
             }
             cb(null, flow);

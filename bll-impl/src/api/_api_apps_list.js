@@ -115,7 +115,7 @@ var fnAppsGetList = function (flow, cb) {
     var reqArgs = {
         userId: flow.userId
     };
-    flow.env.dal.appsGetList(reqArgs, function(err, result) {
+    flow.env.dal.appsGetListForServiceUser(reqArgs, function(err, result) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else {
