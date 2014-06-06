@@ -12,7 +12,6 @@ var domain = require('../../').domain;
 var dErrors = domain.errors;
 
 var mockBuilder = require('./mock/');
-var validate = require('./_validation');
 
 
 var invalidArgsCb = function(cb) {
@@ -184,17 +183,11 @@ describe('API#security_createAuthTokenForAppUser', function() {
                 return doneTest(err);
             }
 
-            assert.isObject(result, 'The result is not a object');
-            assert.isDefined(result.token, 'Token field is not defined');
-            assert.isDefined(result.expires, 'Expires field is not defined');
-
-            if (!validate.guid(result.token)) {
-                assert.fail('Token is not a string or not in guid format. Given: ' + result.token);
-            }
-
-            assert.typeOf(result.expires, 'number', 'Expires is not a timestamp');
-            assert.operator(result.expires, '>', Date.now(), 'Expire time should be greater than current time');
-
+            var matchToken = {
+                token: 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
+                expires: 1577836800000
+            };
+            assert.deepEqual(result, matchToken, 'Expected token and received are not match');
             doneTest();
         });
     });
@@ -222,18 +215,6 @@ describe('API#security_createAuthTokenForAppUser', function() {
                 assert.deepEqual(matchUserMainInfo, resultUser, 'Expected token and token in response are not match');
                 doneTest();
             });
-        });
-    });
-
-    it('Check token is used from uuid-generator', function(doneTest) {
-        var api = mockBuilder.newApiWithMock().api;
-        var reqArgs = argsBuilder();
-        api.security_createAuthTokenForAppUser(reqArgs, function(err, result) {
-            if (err) {
-                return doneTest(err);
-            }
-            assert.strictEqual(result.token, 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'Module must use uuid generator. Provided token and result are not match');
-            doneTest();
         });
     });
 
