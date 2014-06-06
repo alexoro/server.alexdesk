@@ -10,9 +10,8 @@ var async = require('async');
 var domain = require('../domain');
 var dErr = domain.errors;
 
-var validate = require('./_validation');
-var filter = require('./_filter');
 var errBuilder = require('./_errorBuilder');
+var validate = require('./_validation');
 
 
 var fnExecute = function (env, args, next) {
@@ -291,7 +290,7 @@ var fnMessageCreate = function (flow, cb) {
         userCreatorId: flow.userId,
         userCreatorType: flow.userType,
         created: flow.newMessageCreateDate,
-        content: filter.message(flow.args.message),
+        content: flow.args.message,
         isRead: isReadInfo
     };
 

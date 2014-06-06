@@ -341,23 +341,4 @@ describe('API#appUsers_init', function() {
         });
     });
 
-    it('Name must be escaped', function(doneTest) {
-        var reqArgs = {
-            login: 'test1',
-            password: 'test1',
-            name: '<a href="xas">Ololo</a>'
-        };
-        reqArgs = argsBuilder(reqArgs);
-
-        var api = mockBuilder.newApiWithMock().api;
-        api.appUsers_init(reqArgs, function(err, appUser) {
-            if (err) {
-                return doneTest(err);
-            }
-
-            assert.equal(appUser.profile.name, '&lt;a href&#61;&#34;xas&#34;&gt;Ololo&lt;/a&gt;', 'Name have not been escaped');
-            doneTest();
-        });
-    });
-
 });

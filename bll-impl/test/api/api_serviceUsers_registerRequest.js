@@ -224,20 +224,6 @@ describe('API#serviceUsers_registerRequest', function() {
         });
     });
 
-    it('Name must be escaped', function(doneTest) {
-        var name = '<a href="xas">Ololo</a>';
-
-        var api = mockBuilder.newApiWithMock().api;
-        api.serviceUsers_registerRequest(argsBuilder({name: name}), function(err, result) {
-            if (err) {
-                return doneTest(err);
-            }
-
-            assert.equal(result.user.name, '&lt;a href&#61;&#34;xas&#34;&gt;Ololo&lt;/a&gt;', 'Name have not been escaped');
-            doneTest();
-        });
-    });
-
     it('Must call the emailSender#sendServiceUserRegistrationConfirmLink', function(doneTest) {
         var isCalled = false;
         var Sender = {

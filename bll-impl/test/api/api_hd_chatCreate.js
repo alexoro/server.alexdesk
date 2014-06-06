@@ -743,38 +743,4 @@ describe('API#hd_chatCreate', function() {
         });
     });
 
-    it('Message must be escaped', function(doneTest) {
-        var token = '302a1baa-78b0-4a4d-ae1f-ebb5a147c71a';
-        var message = '<a href="xas">Ololo</a>';
-
-        var api = mockBuilder.newApiWithMock().api;
-        api.hd_chatCreate(argsBuilder({accessToken: token, message: message}), function(err, chat) {
-            if (err) {
-                return doneTest(err);
-            } else if (!chat) {
-                return doneTest(new Error('No chat is created'));
-            }
-
-            assert.equal(chat.message.content, '&lt;a href&#61;&#34;xas&#34;&gt;Ololo&lt;/a&gt;', 'Message have not been escaped');
-            doneTest();
-        });
-    });
-
-    it('MetaData must be escaped', function(doneTest) {
-        var token = '302a1baa-78b0-4a4d-ae1f-ebb5a147c71a';
-        var meta = '<a href="xas">Ololo</a>';
-
-        var api = mockBuilder.newApiWithMock().api;
-        api.hd_chatCreate(argsBuilder({accessToken: token, metaData: meta}), function(err, chat) {
-            if (err) {
-                return doneTest(err);
-            } else if (!chat) {
-                return doneTest(new Error('No chat is created'));
-            }
-
-            assert.equal(chat.extra.metaData, '&lt;a href&#61;&#34;xas&#34;&gt;Ololo&lt;/a&gt;', 'Message have not been escaped');
-            doneTest();
-        });
-    });
-
 });

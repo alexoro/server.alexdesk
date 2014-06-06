@@ -12,7 +12,6 @@ var dErr = domain.errors;
 
 var errBuilder = require('./_errorBuilder');
 var validate = require('./_validation');
-var filter = require('./_filter');
 
 
 var fnExecute = function (env, args, next) {
@@ -331,7 +330,7 @@ var fnChatCreateAndGenerateResult = function (flow, cb) {
             deviceHeightPx: flow.args.extra.deviceHeightPx,
             deviceDensity: flow.args.extra.deviceDensity,
             isRooted: flow.args.extra.isRooted,
-            metaData: filter.metaData(flow.args.extra.metaData)
+            metaData: flow.args.extra.metaData
         },
         participants: [
             {
@@ -350,7 +349,7 @@ var fnChatCreateAndGenerateResult = function (flow, cb) {
         userCreatorId: flow.userId,
         userCreatorType: flow.userType,
         created: flow.createDate,
-        content: filter.message(flow.args.message),
+        content: flow.args.message,
         isRead: [
             {
                 userId: flow.userId,

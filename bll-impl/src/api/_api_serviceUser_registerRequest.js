@@ -12,7 +12,6 @@ var dErr = domain.errors;
 
 var errBuilder = require('./_errorBuilder');
 var validate = require('./_validation');
-var filter = require('./_filter');
 
 
 var fnExecute = function (env, args, next) {
@@ -24,7 +23,6 @@ var fnExecute = function (env, args, next) {
                 newUserId: null,
                 passwordHash: null,
                 currentTime: null,
-                filteredName: null,
                 createdUser: null,
                 confirmId: null,
                 confirmExpires: null,
@@ -37,7 +35,6 @@ var fnExecute = function (env, args, next) {
         fnServiceUserGenerateUserId,
         fnServiceUserGenerateRegistrationTime,
         fnServiceUserHashPassword,
-        fnServiceUserFilterName,
         fnConfirmGenerateId,
         fnConfirmGenerateExpiresTime,
         fnServiceUserCreate,
@@ -140,11 +137,6 @@ var fnServiceUserHashPassword = function (flow, cb) {
     });
 };
 
-var fnServiceUserFilterName = function (flow, cb) {
-    flow.filteredName = filter.serviceUserName(flow.args.name);
-    cb(null, flow);
-};
-
 var fnConfirmGenerateId = function (flow, cb) {
     flow.env.uuid.newGuid4(function(err, id) {
         if (err) {
@@ -172,7 +164,7 @@ var fnServiceUserCreate = function (flow, cb) {
         id: flow.newUserId,
         login: flow.args.login,
         passwordHash: flow.passwordHash,
-        name: flow.filteredName,
+        name: flow.args.name,
         registered: flow.currentTime,
         lastVisit: flow.currentTime
     };

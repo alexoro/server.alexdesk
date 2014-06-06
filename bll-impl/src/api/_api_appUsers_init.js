@@ -12,7 +12,6 @@ var dErr = domain.errors;
 
 var errBuilder = require('./_errorBuilder');
 var validate = require('./_validation');
-var filter = require('./_filter');
 
 var MODE_CREATE = 1;
 var MODE_UPDATE = 2;
@@ -237,7 +236,7 @@ var fnUserCreateOrUpdate = function (flow, cb) {
             appId: flow.args.appId,
             login: flow.args.login,
             passwordHash: flow.passwordHash,
-            name: filter.appUserName(flow.args.name),
+            name: flow.args.name,
             registered: flow.currentTime,
             lastVisit: flow.currentTime,
             platform: flow.args.platform,
@@ -256,7 +255,7 @@ var fnUserCreateOrUpdate = function (flow, cb) {
         });
     } else {
         newUserProfile = flow.currentProfile;
-        newUserProfile.name = filter.appUserName(flow.args.name);
+        newUserProfile.name = flow.args.name;
         newUserProfile.lastVisit = flow.currentTime;
         newUserProfile.extra.deviceUuid = flow.args.extra.deviceUuid;
         newUserProfile.extra.gcmToken = flow.args.extra.gcmToken;

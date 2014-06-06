@@ -12,7 +12,6 @@ var dErr = domain.errors;
 
 var errBuilder = require('./_errorBuilder');
 var validate = require('./_validation');
-var filter = require('./_filter');
 
 
 var fnExecute = function (env, args, next) {

@@ -452,19 +452,4 @@ describe('API#hd_messageCreate', function() {
         });
     });
 
-    it('Message must be escaped', function(doneTest) {
-        var api = mockBuilder.newApiWithMock().api;
-        var reqArgs = argsBuilder({message: '<a href="xas">Ololo</a>'});
-        api.hd_messageCreate(reqArgs, function(err, message) {
-            if (err) {
-                return doneTest(err);
-            } else if (!message) {
-                return doneTest(new Error('Message did not created'));
-            }
-
-            assert.equal(message.content, '&lt;a href&#61;&#34;xas&#34;&gt;Ololo&lt;/a&gt;', 'Message have not been escaped');
-            doneTest();
-        });
-    });
-
 });
