@@ -169,7 +169,7 @@ describe('API#hd_chatsList', function() {
 
     it('Must return INTERNAL_ERROR in case of error in DAL', function(doneTest) {
         var mock = mockBuilder.newApiWithMock();
-        mock.dal.chatsGetList = function(args, done) {
+        mock.dal.chatsGetListWithLastMessageOrderByLastMessageDesc = function(args, done) {
             done(new Error('Not implemented yet'));
         };
 
@@ -188,7 +188,7 @@ describe('API#hd_chatsList', function() {
 
     it('Must return INTERNAL_ERROR in case of invalid response from DAL', function(doneTest) {
         var mock = mockBuilder.newApiWithMock();
-        mock.dal.chatsGetList = function(args, done) {
+        mock.dal.chatsGetListWithLastMessageOrderByLastMessageDesc = function(args, done) {
             done(null, null);
         };
 
@@ -313,9 +313,9 @@ describe('API#hd_chatsList', function() {
                 return doneTest(err);
             }
 
-            var prev = result[0].lastUpdate.getTime();
+            var prev = result[0].lastMessage.created.getTime();
             for (var i = 1; i < result.length; i++) {
-                if (result[i].lastUpdate.getTime() < prev) {
+                if (result[i].lastMessage.created.getTime() < prev) {
                     assert.fail('Conversations are not in desc order');
                     break;
                 }
@@ -354,7 +354,6 @@ describe('API#hd_chatsList', function() {
                 title: '',
                 type: domain.chatTypes.UNKNOWN,
                 status: domain.chatStatuses.UNKNOWN,
-                lastUpdate: new Date('2012-05-01 13:26:00 +00:00'),
                 numberOfUnreadMessages: 1,
                 extra: {
                     countryId: domain.countries.getIdByCode('ru'),

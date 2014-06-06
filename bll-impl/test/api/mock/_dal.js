@@ -437,9 +437,10 @@ DAL.prototype.appUserUpdate = function(args, done) {
     done(null);
 };
 
-
-DAL.prototype.chatsGetList = function(args, done) {
+DAL.prototype.chatsGetListWithLastMessageOrderByLastMessageDesc = function(args, done) {
     args = utils.deepClone(args);
+    var i;
+
     var chats = !!args.userCreatorId ?
         _.where(this.mock.chats, {appId: args.appId, userCreatorId: args.userCreatorId})
         : _.where(this.mock.chats, {appId: args.appId});
@@ -457,7 +458,7 @@ DAL.prototype.chatsGetList = function(args, done) {
     }
 
     var ret = [];
-    for (var i = 0; i < chats.length; i++) {
+    for (i = 0; i < chats.length; i++) {
         var chat = {
             id: chats[i].id,
             appId: chats[i].appId,
@@ -467,9 +468,9 @@ DAL.prototype.chatsGetList = function(args, done) {
             title: chats[i].title,
             type: chats[i].type,
             status: chats[i].status,
-            lastUpdate: chats[i].lastUpdate,
             extra: {}
         };
+
         if (app.platformType === domain.platforms.ANDROID) {
             var extra = _.findWhere(this.mock.chat_extra_android, {chatId: chats[i].id});
             if (!extra) {
@@ -493,6 +494,22 @@ DAL.prototype.chatsGetList = function(args, done) {
             }
         }
         ret.push(chat);
+    }
+
+    for (i = 0; i < ret.length; i++) {
+        for (var j = 0; j < this.mock.chat_messages.length; j++) {
+            var msg = this.mock.chat_messages[j];
+            if (msg.chatId === ret[i].id) {
+                ret[i].lastMessage = {
+                    id: msg.id,
+                    chatId: msg.chatId,
+                    userCreatorId: msg.userCreatorId,
+                    userCreatorType: msg.userCreatorType,
+                    created: utils.deepClone(msg.created),
+                    content: msg.content
+                };
+            }
+        }
     }
 
     done(null, ret);

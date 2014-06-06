@@ -37,9 +37,8 @@ var fnExecute = function (env, args, next) {
         fnUserGetInfoByToken,
         fnCheckServiceUserIsExistsAndConfirmed,
         fnUserIsAssociatedWithApp,
-        fnChatsGetList,
+        fnChatsGetListWithLastMessageOrderByLastMessageDesc,
         fnChatsSetNumberOfUnreadMessages,
-        fnChatsSetLastMessage,
         fnGenerateResult
     ];
 
@@ -181,14 +180,14 @@ var fnUserIsAssociatedWithApp = function (flow, cb) {
     }
 };
 
-var fnChatsGetList = function (flow, cb) {
+var fnChatsGetListWithLastMessageOrderByLastMessageDesc = function (flow, cb) {
     var reqArgs = {
         appId: flow.args.appId,
         userCreatorId: flow.userType === domain.userTypes.SERVICE_USER ? null : flow.userId,
         offset: flow.args.offset,
         limit: flow.args.limit
     };
-    flow.env.dal.chatsGetList(reqArgs, function(err, chats) {
+    flow.env.dal.chatsGetListWithLastMessageOrderByLastMessageDesc(reqArgs, function(err, chats) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else if (!(chats instanceof Array)) {
@@ -216,22 +215,6 @@ var fnChatsSetNumberOfUnreadMessages = function (flow, cb) {
         } else {
             for (var i = 0; i < flow.chatsList.length; i++) {
                 flow.chatsList[i].numberOfUnreadMessages = result[flow.chatsList[i].id];
-            }
-            cb(null, flow);
-        }
-    });
-};
-
-var fnChatsSetLastMessage = function (flow, cb) {
-    var reqArgs = {
-        chatIds: flow.chatIds
-    };
-    flow.env.dal.chatsGetLastMessagePerChat(reqArgs, function(err, result) {
-        if (err) {
-            cb(errBuilder(dErr.INTERNAL_ERROR, err));
-        } else {
-            for (var i = 0; i < flow.chatsList.length; i++) {
-                flow.chatsList[i].lastMessage = result[flow.chatsList[i].id];
             }
             cb(null, flow);
         }
