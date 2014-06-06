@@ -448,9 +448,7 @@ DAL.prototype.chatsGetListWithLastMessageOrderByLastMessageDesc = function(args,
     chats = chats.sort(function(a, b) {
         return a.lastUpdate.getTime() > b.lastUpdate.getTime();
     });
-
     chats = chats.slice(args.offset, args.limit);
-    chats = utils.deepClone(chats);
 
     var app = _.findWhere(this.mock.apps, {id: args.appId});
     if (!app) {
@@ -464,7 +462,7 @@ DAL.prototype.chatsGetListWithLastMessageOrderByLastMessageDesc = function(args,
             appId: chats[i].appId,
             userCreatorId: chats[i].userCreatorId,
             userCreatorType: chats[i].userCreatorType,
-            created: chats[i].created,
+            created: utils.deepClone(chats[i].created),
             title: chats[i].title,
             type: chats[i].type,
             status: chats[i].status,
@@ -679,15 +677,17 @@ DAL.prototype.chatCreateWithMessage = function(args, done) {
 };
 
 
-DAL.prototype.messagesGetListForChat = function(args, done) {
+DAL.prototype.messagesGetListForChatOrderByCreatedAsc = function(args, done) {
     args = utils.deepClone(args);
     var chatId = args.chatId;
     var offset = args.offset;
     var limit = args.limit;
 
-    var messages = _.where(this.mock.chat_messages, {chatId: chatId})
-        .slice(offset)
-        .splice(0, limit);
+    var messages = _.where(this.mock.chat_messages, {chatId: chatId});
+    messages = messages.sort(function(a, b) {
+        return a.created.getTime() > b.created.getTime();
+    });
+    messages = messages.slice(offset).splice(0, limit);
     messages = utils.deepClone(messages);
 
     var ret = [];

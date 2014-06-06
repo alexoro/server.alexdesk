@@ -229,7 +229,7 @@ var fnChatGetMessagesList = function (flow, cb) {
         offset: flow.args.offset,
         limit: flow.args.limit
     };
-    flow.env.dal.messagesGetListForChat(reqArgs, function(err, messages) {
+    flow.env.dal.messagesGetListForChatOrderByCreatedAsc(reqArgs, function(err, messages) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else if (!(messages instanceof Array)) {
