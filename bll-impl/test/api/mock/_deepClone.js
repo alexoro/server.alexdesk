@@ -4,8 +4,7 @@
 
 "use strict";
 
-
-module.exports.deepClone = function(obj) {
+var deepClone = function(obj) {
     // Handle the 3 simple types, and null or undefined
     if (null === obj || "object" !== typeof obj) {
         return obj;
@@ -24,7 +23,7 @@ module.exports.deepClone = function(obj) {
     if (obj instanceof Array) {
         copy = [];
         for (var i = 0, len = obj.length; i < len; i++) {
-            copy[i] = this.deepClone(obj[i]);
+            copy[i] = deepClone(obj[i]);
         }
         return copy;
     }
@@ -34,7 +33,7 @@ module.exports.deepClone = function(obj) {
         copy = {};
         for (var attr in obj) {
             if (obj.hasOwnProperty(attr)) {
-                copy[attr] = this.deepClone(obj[attr]);
+                copy[attr] = deepClone(obj[attr]);
             }
         }
         return copy;
@@ -42,3 +41,5 @@ module.exports.deepClone = function(obj) {
 
     throw new Error("Unable to copy obj! Its type isn't supported.");
 };
+
+module.exports = deepClone;

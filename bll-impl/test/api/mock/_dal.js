@@ -9,7 +9,7 @@ var _ = require('underscore');
 
 var domain = require('../../../src/index').domain;
 
-var utils = require('./_utils');
+var deepClone = require('./_deepClone');
 
 
 var DAL = function(mockData) {
@@ -18,7 +18,7 @@ var DAL = function(mockData) {
 
 
 DAL.prototype.userGetIdByToken = function(args, done) {
-    args = utils.deepClone(args);
+    args = deepClone(args);
     var reqArgs = {
         token: args.token
     };
@@ -42,7 +42,7 @@ DAL.prototype.userGetIdByToken = function(args, done) {
 };
 
 DAL.prototype.authTokenCreate = function(args, done) {
-    args = utils.deepClone(args);
+    args = deepClone(args);
     var data = {
         token: args.token,
         userType: args.userType,
@@ -55,7 +55,7 @@ DAL.prototype.authTokenCreate = function(args, done) {
 
 
 DAL.prototype.serviceUserGetCreditionalsByLogin = function(args, done) {
-    args = utils.deepClone(args);
+    args = deepClone(args);
     var reqArgs = {
         login: args.login
     };
@@ -74,7 +74,7 @@ DAL.prototype.serviceUserGetCreditionalsByLogin = function(args, done) {
 };
 
 DAL.prototype.serviceUserGetProfileById = function (args, done) {
-    args = utils.deepClone(args);
+    args = deepClone(args);
     var reqArgs = {
         id: args.id
     };
@@ -97,14 +97,14 @@ DAL.prototype.serviceUserGetProfileById = function (args, done) {
 };
 
 DAL.prototype.serviceUserCreate = function(args, done) {
-    args = utils.deepClone(args);
+    args = deepClone(args);
     var data = {
         id: args.id,
         login: args.login,
         passwordHash: args.passwordHash,
         name: args.name,
-        registered: utils.deepClone(args.registered),
-        lastVisit: utils.deepClone(args.lastVisit),
+        registered: deepClone(args.registered),
+        lastVisit: deepClone(args.lastVisit),
         isConfirmed: args.isConfirmed
     };
     this.mock.users.push(data);
@@ -112,7 +112,7 @@ DAL.prototype.serviceUserCreate = function(args, done) {
 };
 
 DAL.prototype.serviceUserUpdatePasswordHash = function (args, done) {
-    args = utils.deepClone(args);
+    args = deepClone(args);
     var r = _.findWhere(this.mock.users, {id: args.userId});
     if (!r) {
         done(new Error('User not found'));
@@ -124,7 +124,7 @@ DAL.prototype.serviceUserUpdatePasswordHash = function (args, done) {
 
 
 DAL.prototype.serviceUserGetRegisterConfirmData = function(args, done) {
-    args = utils.deepClone(args);
+    args = deepClone(args);
     var reqArgs = {
         id: args.confirmToken
     };
@@ -143,7 +143,7 @@ DAL.prototype.serviceUserGetRegisterConfirmData = function(args, done) {
 };
 
 DAL.prototype.serviceUserCreateRegisterConfirmData = function(args, done) {
-    args = utils.deepClone(args);
+    args = deepClone(args);
     var data = {
         id: args.id,
         serviceUserId: args.userId,
@@ -154,7 +154,7 @@ DAL.prototype.serviceUserCreateRegisterConfirmData = function(args, done) {
 };
 
 DAL.prototype.serviceUserMarkAsConfirmed = function(args, done) {
-    args = utils.deepClone(args);
+    args = deepClone(args);
     var reqArgs = {
         id: args.userId
     };
@@ -170,7 +170,7 @@ DAL.prototype.serviceUserMarkAsConfirmed = function(args, done) {
 
 
 DAL.prototype.serviceUserGetResetPasswordConfirmData = function(args, done) {
-    args = utils.deepClone(args);
+    args = deepClone(args);
     var search = {
         id: args.confirmToken
     };
@@ -189,7 +189,7 @@ DAL.prototype.serviceUserGetResetPasswordConfirmData = function(args, done) {
 };
 
 DAL.prototype.serviceUserCreateResetPasswordConfirmData = function(args, done) {
-    args = utils.deepClone(args);
+    args = deepClone(args);
     var data = {
         id: args.id,
         serviceUserId: args.userId,
@@ -221,7 +221,7 @@ DAL.prototype.appsGetListForServiceUser = function(args, done) {
             id: apps[i].id,
             platformType: apps[i].platformType,
             title: apps[i].title,
-            created: utils.deepClone(apps[i].created),
+            created: deepClone(apps[i].created),
             isApproved: apps[i].isApproved,
             isBlocked: apps[i].isBlocked,
             isDeleted: apps[i].isDeleted
@@ -247,12 +247,12 @@ DAL.prototype.appsGetListForServiceUser = function(args, done) {
 };
 
 DAL.prototype.appIsExists = function(args, done) {
-    args = utils.deepClone(args);
+    args = deepClone(args);
     done(null, !!_.findWhere(this.mock.apps, {id: args.appId}));
 };
 
 DAL.prototype.appGetOwnerIdForAppById = function(args, done) {
-    args = utils.deepClone(args);
+    args = deepClone(args);
     var r = _.findWhere(this.mock.app_acl, {appId: args.appId, isOwner: true});
     if (r) {
         var ret = {
@@ -266,7 +266,7 @@ DAL.prototype.appGetOwnerIdForAppById = function(args, done) {
 };
 
 DAL.prototype.appCreate = function(args, done) {
-    args = utils.deepClone(args);
+    args = deepClone(args);
     var app = {
         id: args.id,
         platformType: args.platform,
@@ -297,7 +297,7 @@ DAL.prototype.appCreate = function(args, done) {
 };
 
 DAL.prototype.appsGetNumberOfChats = function(args, done) {
-    args = utils.deepClone(args);
+    args = deepClone(args);
     var r = {};
     for (var i = 0; i < args.appIds.length; i++) {
         r[args.appIds[i]] = _.where(this.mock.chats, {appId: args.appIds[i]}).length;
@@ -306,7 +306,7 @@ DAL.prototype.appsGetNumberOfChats = function(args, done) {
 };
 
 DAL.prototype.appsGetNumberOfMessages = function(args, done) {
-    args = utils.deepClone(args);
+    args = deepClone(args);
     var r = {};
     for (var i = 0; i < args.appIds.length; i++) {
         r[args.appIds[i]] = _.where(this.mock.chat_messages, {appId: args.appIds[i]}).length;
@@ -315,7 +315,7 @@ DAL.prototype.appsGetNumberOfMessages = function(args, done) {
 };
 
 DAL.prototype.appsGetNumberOfUnreadMessages = function(args, done) {
-    args = utils.deepClone(args);
+    args = deepClone(args);
     var r = {};
     for (var i = 0; i < args.appIds.length; i++) {
         var search = {
@@ -331,7 +331,7 @@ DAL.prototype.appsGetNumberOfUnreadMessages = function(args, done) {
 
 
 DAL.prototype.appUserGetCreditionalsByLogin = function(args, done) {
-    args = utils.deepClone(args);
+    args = deepClone(args);
     var r = _.findWhere(this.mock.app_users, {appId: args.appId, login: args.login});
     if (!r) {
         done(null, null);
@@ -346,12 +346,12 @@ DAL.prototype.appUserGetCreditionalsByLogin = function(args, done) {
 };
 
 DAL.prototype.appUsersGetProfileById = function(args, done) {
-    args = utils.deepClone(args);
+    args = deepClone(args);
     var user = _.findWhere(this.mock.app_users, {appUserId: args.id});
     if (!user) {
         done(null, null);
     } else {
-        user = utils.deepClone(user);
+        user = deepClone(user);
         var ret = {
             id: user.appUserId,
             appId: user.appId,
@@ -374,7 +374,7 @@ DAL.prototype.appUsersGetProfileById = function(args, done) {
 };
 
 DAL.prototype.appUsersCreate = function(args, done) {
-    args = utils.deepClone(args);
+    args = deepClone(args);
     var profile = {
         appUserId: args.id,
         appId: args.appId,
@@ -400,7 +400,7 @@ DAL.prototype.appUsersCreate = function(args, done) {
 };
 
 DAL.prototype.appUserUpdate = function(args, done) {
-    args = utils.deepClone(args);
+    args = deepClone(args);
     var i;
 
     var profile = {
@@ -438,7 +438,7 @@ DAL.prototype.appUserUpdate = function(args, done) {
 };
 
 DAL.prototype.chatsGetListWithLastMessageOrderByLastMessageCreatedAsc = function(args, done) {
-    args = utils.deepClone(args);
+    args = deepClone(args);
     var i;
 
     var chats = !!args.userCreatorId ?
@@ -462,7 +462,7 @@ DAL.prototype.chatsGetListWithLastMessageOrderByLastMessageCreatedAsc = function
             appId: chats[i].appId,
             userCreatorId: chats[i].userCreatorId,
             userCreatorType: chats[i].userCreatorType,
-            created: utils.deepClone(chats[i].created),
+            created: deepClone(chats[i].created),
             title: chats[i].title,
             type: chats[i].type,
             status: chats[i].status,
@@ -503,7 +503,7 @@ DAL.prototype.chatsGetListWithLastMessageOrderByLastMessageCreatedAsc = function
                     chatId: msg.chatId,
                     userCreatorId: msg.userCreatorId,
                     userCreatorType: msg.userCreatorType,
-                    created: utils.deepClone(msg.created),
+                    created: deepClone(msg.created),
                     content: msg.content
                 };
             }
@@ -514,12 +514,12 @@ DAL.prototype.chatsGetListWithLastMessageOrderByLastMessageCreatedAsc = function
 };
 
 DAL.prototype.chatIsExists = function(args, done) {
-    args = utils.deepClone(args);
+    args = deepClone(args);
     done(null, !!_.findWhere(this.mock.chats, {id: args.chatId}));
 };
 
 DAL.prototype.chatGetAppId = function(args, done) {
-    args = utils.deepClone(args);
+    args = deepClone(args);
     var chat = _.findWhere(this.mock.chats, {id: args.chatId});
     if (!chat) {
         done(new Error('Chat is not found. Given ID: ' + args.chatId));
@@ -529,7 +529,7 @@ DAL.prototype.chatGetAppId = function(args, done) {
 };
 
 DAL.prototype.chatIsUserTheCreator = function(args, done) {
-    args = utils.deepClone(args);
+    args = deepClone(args);
     var search = {
         id: args.chatId,
         userCreatorId: args.userId,
@@ -539,7 +539,7 @@ DAL.prototype.chatIsUserTheCreator = function(args, done) {
 };
 
 DAL.prototype.chatsGetNumberOfUnreadMessagesPerChatForUser = function(args, done) {
-    args = utils.deepClone(args);
+    args = deepClone(args);
     var r = {};
     for (var i = 0; i < args.chatIds.length; i++) {
         var search = {
@@ -555,18 +555,18 @@ DAL.prototype.chatsGetNumberOfUnreadMessagesPerChatForUser = function(args, done
 };
 
 DAL.prototype.chatsGetLastMessagePerChat = function(args, done) {
-    args = utils.deepClone(args);
+    args = deepClone(args);
 
     var r = {};
     for (var i = 0; i < this.mock.chat_messages.length; i++) {
-        var item = utils.deepClone(this.mock.chat_messages[i]);
+        var item = deepClone(this.mock.chat_messages[i]);
         if (args.chatIds.indexOf(item.chatId) >= 0) {
             r[item.chatId] = {
                 id: item.id,
                 chatId: item.chatId,
                 userCreatorId: item.userCreatorId,
                 userCreatorType: item.userCreatorType,
-                created: utils.deepClone(item.created),
+                created: deepClone(item.created),
                 content: item.content
             };
         }
@@ -576,7 +576,7 @@ DAL.prototype.chatsGetLastMessagePerChat = function(args, done) {
 };
 
 DAL.prototype.chatGetParticipantsInfo = function (args, done) {
-    args = utils.deepClone(args);
+    args = deepClone(args);
     var collection = _.where(this.mock.chat_participants, {chatId: args.chatId});
     var r = [];
     _.each(collection, function (item) {
@@ -589,9 +589,9 @@ DAL.prototype.chatGetParticipantsInfo = function (args, done) {
 };
 
 DAL.prototype.chatCreateWithMessage = function(args, done) {
-    args = utils.deepClone(args);
-    var argsNewChat = utils.deepClone(args.newChat);
-    var argsNewMessage = utils.deepClone(args.newMessage);
+    args = deepClone(args);
+    var argsNewChat = deepClone(args.newChat);
+    var argsNewMessage = deepClone(args.newMessage);
 
     var newChat = {
         id: argsNewChat.id,
@@ -678,7 +678,7 @@ DAL.prototype.chatCreateWithMessage = function(args, done) {
 
 
 DAL.prototype.messagesGetListForChatOrderByCreatedAsc = function(args, done) {
-    args = utils.deepClone(args);
+    args = deepClone(args);
     var chatId = args.chatId;
     var offset = args.offset;
     var limit = args.limit;
@@ -688,7 +688,7 @@ DAL.prototype.messagesGetListForChatOrderByCreatedAsc = function(args, done) {
         return a.created.getTime() - b.created.getTime();
     });
     messages = messages.slice(offset).splice(0, limit);
-    messages = utils.deepClone(messages);
+    messages = deepClone(messages);
 
     var ret = [];
     for (var i = 0; i < messages.length; i++) {
@@ -697,7 +697,7 @@ DAL.prototype.messagesGetListForChatOrderByCreatedAsc = function(args, done) {
             chatId: messages[i].chatId,
             userCreatorId: messages[i].userCreatorId,
             userCreatorType: messages[i].userCreatorType,
-            created: utils.deepClone(messages[i].created),
+            created: deepClone(messages[i].created),
             content: messages[i].content
         });
     }
@@ -706,7 +706,7 @@ DAL.prototype.messagesGetListForChatOrderByCreatedAsc = function(args, done) {
 };
 
 DAL.prototype.messagesGetIsReadPerMessageForUser = function (args, done) {
-    args = utils.deepClone(args);
+    args = deepClone(args);
     var r = {};
     for (var i = 0; i < args.messageIds.length; i++) {
         var search = {
@@ -725,7 +725,7 @@ DAL.prototype.messagesGetIsReadPerMessageForUser = function (args, done) {
 };
 
 DAL.prototype.messagesSetIsReadInChatForUser = function (args, done) {
-    args = utils.deepClone(args);
+    args = deepClone(args);
     var search = {
         chatId: args.chatId,
         userType: args.userType,
@@ -739,7 +739,7 @@ DAL.prototype.messagesSetIsReadInChatForUser = function (args, done) {
 };
 
 DAL.prototype.messageCreate = function(args, done) {
-    var copy = utils.deepClone(args);
+    var copy = deepClone(args);
 
     var chat = _.findWhere(this.mock.chats, {id: copy.chatId});
     if (!chat) {

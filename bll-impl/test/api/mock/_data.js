@@ -6,7 +6,7 @@
 
 
 var domain = require('../../../src/index').domain;
-var utils = require('./_utils');
+var deepClone = require('./_deepClone');
 
 
 var mock = {
@@ -452,6 +452,6 @@ var mock = {
 
 module.exports = {
     getCopy: function() {
-        return utils.deepClone(mock);
+        return deepClone(mock);
     }
 };
