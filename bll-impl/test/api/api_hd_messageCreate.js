@@ -270,14 +270,7 @@ describe('API#hd_messageCreate', function() {
     });
 
     it('Message must be created for service user', function(doneTest) {
-        var currentTime = new Date('2014-05-20 00:00:00 +00:00');
         var idForMessage = '500';
-
-        var currentTimeProvider = {
-            getCurrentTime: function(done) {
-                done(null, currentTime);
-            }
-        };
 
         var uuid = {
             newBigInt: function(done) {
@@ -288,7 +281,7 @@ describe('API#hd_messageCreate', function() {
             }
         };
 
-        var mock = mockBuilder.newApiWithMock({currentTimeProvider: currentTimeProvider, uuid: uuid});
+        var mock = mockBuilder.newApiWithMock({uuid: uuid});
         var api = mock.api;
         var args = argsBuilder();
         api.hd_messageCreate(args, function(err, message) {
@@ -301,7 +294,7 @@ describe('API#hd_messageCreate', function() {
                 chatId: '1',
                 userCreatorId: '1',
                 userCreatorType: domain.userTypes.SERVICE_USER,
-                created: currentTime,
+                created: new Date('2014-05-15 00:00:00 +00:00'),
                 content: args.message,
                 isRead: true
             };
@@ -312,15 +305,7 @@ describe('API#hd_messageCreate', function() {
     });
 
     it('Message must be created for application user', function(doneTest) {
-        var currentTime = new Date('2014-05-20 00:00:00 +00:00');
         var idForMessage = '500';
-
-        var currentTimeProvider = {
-            getCurrentTime: function(done) {
-                done(null, currentTime);
-            }
-        };
-
         var uuid = {
             newBigInt: function(done) {
                 done(null, idForMessage);
@@ -330,7 +315,7 @@ describe('API#hd_messageCreate', function() {
             }
         };
 
-        var mock = mockBuilder.newApiWithMock({currentTimeProvider: currentTimeProvider, uuid: uuid});
+        var mock = mockBuilder.newApiWithMock({uuid: uuid});
         var api = mock.api;
         var args = argsBuilder({accessToken: '302a1baa-78b0-4a4d-ae1f-ebb5a147c71a'});
         api.hd_messageCreate(args, function(err, message) {
@@ -343,7 +328,7 @@ describe('API#hd_messageCreate', function() {
                 chatId: '1',
                 userCreatorId: '2',
                 userCreatorType: domain.userTypes.APP_USER,
-                created: currentTime,
+                created: new Date('2014-05-15 00:00:00 +00:00'),
                 content: args.message,
                 isRead: true
             };

@@ -11,7 +11,7 @@ var Api = bllDef.api;
 var Dal = require('./_dal');
 var dataBuilder = require('./_data');
 var Uuid = require('./_uuid');
-var CurrentTimeProvider = require('./_currentTimeProvider');
+var ConfigManager = require('./_configManager');
 var NotificationsManager = require('./_notificationsManager');
 var SecurityManager = require('./_securityManager');
 
@@ -26,14 +26,14 @@ module.exports = {
         var data = dataBuilder.getCopy();
         var dal = new Dal(data);
         var uuid = new Uuid();
-        var currentTimeProvider = new CurrentTimeProvider();
+        var configManager = new ConfigManager();
         var notificationsManager = new NotificationsManager();
         var securityManager = new SecurityManager();
 
         var env = {
             dal: override.dal || dal,
             uuid: override.uuid || uuid,
-            currentTimeProvider: override.currentTimeProvider || currentTimeProvider,
+            configManager: override.configManager || configManager,
             notificationsManager: override.notificationsManager || notificationsManager,
             securityManager: override.securityManager || securityManager
         };
@@ -41,7 +41,7 @@ module.exports = {
             dal: env.dal,
             uuid: env.uuid,
             data: data,
-            currentTimeProvider: env.currentTimeProvider,
+            configManager: env.configManager,
             notificationsManager: env.notificationsManager,
             securityManager: env.securityManager,
             api: new Api(env)

@@ -41,8 +41,8 @@ var Api = function(env) {
     if (typeof env.securityManager !== 'object' || !env.securityManager) {
         throw new Error('Security manager is not defined or is null or is not a object');
     }
-    if (typeof env.currentTimeProvider !== 'object' || !env.currentTimeProvider) {
-        throw new Error('Current time provider is not defined or is null or is not a object');
+    if (typeof env.configManager !== 'object' || !env.configManager) {
+        throw new Error('Config manager is not defined or is null or is not a object');
     }
     if (typeof env.notificationsManager !== 'object' || !env.notificationsManager) {
         throw new Error('Notifications manager is not defined or is null or is not a object');

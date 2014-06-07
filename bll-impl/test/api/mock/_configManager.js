@@ -5,13 +5,13 @@
 "use strict";
 
 
-var Provider = function() {
+var ConfigManager = function() {
 
 };
 
-Provider.prototype.getCurrentTime = function(done) {
+ConfigManager.prototype.getCurrentTime = function(done) {
     done(null, new Date('2014-05-15 00:00:00 +00:00'));
 };
 
 
-module.exports = Provider;
+module.exports = ConfigManager;

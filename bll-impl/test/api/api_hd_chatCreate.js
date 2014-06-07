@@ -576,15 +576,7 @@ describe('API#hd_chatCreate', function() {
     });
 
     it('Chat must be created for application user', function(doneTest) {
-        var currentTime = new Date('2014-05-20 00:00:00 +00:00');
         var idForEntities = '500';
-
-        var currentTimeProvider = {
-            getCurrentTime: function(done) {
-                done(null, currentTime);
-            }
-        };
-
         var uuid = {
             newBigInt: function(done) {
                 done(null, idForEntities);
@@ -596,7 +588,7 @@ describe('API#hd_chatCreate', function() {
 
         var token = '302a1baa-78b0-4a4d-ae1f-ebb5a147c71a';
 
-        var mock = mockBuilder.newApiWithMock({currentTimeProvider: currentTimeProvider, uuid: uuid});
+        var mock = mockBuilder.newApiWithMock({uuid: uuid});
         var api = mock.api;
         var args = argsBuilder({accessToken: token});
         api.hd_chatCreate(args, function(err, chat) {
@@ -611,7 +603,7 @@ describe('API#hd_chatCreate', function() {
                 appId: args.appId,
                 userCreatorId: '2',
                 userCreatorType: domain.userTypes.APP_USER,
-                created: currentTime,
+                created: new Date('2014-05-15 00:00:00 +00:00'),
                 title: '',
                 type: domain.chatTypes.UNKNOWN,
                 status: domain.chatStatuses.UNKNOWN,
@@ -638,7 +630,7 @@ describe('API#hd_chatCreate', function() {
                 chatId: idForEntities,
                 userCreatorId: '2',
                 userCreatorType: domain.userTypes.APP_USER,
-                created: currentTime,
+                created: new Date('2014-05-15 00:00:00 +00:00'),
                 content: args.message,
                 isRead: true
             };
@@ -653,15 +645,7 @@ describe('API#hd_chatCreate', function() {
     });
 
     it('Message must be created in storage', function(doneTest) {
-        var currentTime = new Date('2014-05-20 00:00:00 +00:00');
         var idForMessage = '500';
-
-        var currentTimeProvider = {
-            getCurrentTime: function(done) {
-                done(null, currentTime);
-            }
-        };
-
         var uuid = {
             newBigInt: function(done) {
                 done(null, idForMessage);
@@ -673,7 +657,7 @@ describe('API#hd_chatCreate', function() {
 
         var token = '302a1baa-78b0-4a4d-ae1f-ebb5a147c71a';
 
-        var mock = mockBuilder.newApiWithMock({currentTimeProvider: currentTimeProvider, uuid: uuid});
+        var mock = mockBuilder.newApiWithMock({uuid: uuid});
         var api = mock.api;
         var args = argsBuilder({accessToken: token});
         api.hd_chatCreate(args, function(err, chat) {
