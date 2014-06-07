@@ -9,7 +9,7 @@ var ConfigManager = function() {
 
 };
 
-ConfigManager.prototype.getCurrentTime = function(done) {
+ConfigManager.prototype.getCurrentDateUtc = function(done) {
     done(null, new Date('2014-05-15 00:00:00 +00:00'));
 };
 

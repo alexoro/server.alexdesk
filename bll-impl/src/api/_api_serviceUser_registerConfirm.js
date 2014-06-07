@@ -100,7 +100,7 @@ var fnCheckServiceUserIsExistsAndNotConfirmed = function (flow, cb) {
 };
 
 var fnGetCurrentTime = function (flow, cb) {
-    flow.env.configManager.getCurrentTime(function (err, currentTime) {
+    flow.env.configManager.getCurrentDateUtc(function (err, currentTime) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else if (!(currentTime instanceof Date)) {
