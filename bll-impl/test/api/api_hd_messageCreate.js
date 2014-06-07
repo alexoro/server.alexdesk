@@ -270,18 +270,7 @@ describe('API#hd_messageCreate', function() {
     });
 
     it('Message must be created for service user', function(doneTest) {
-        var idForMessage = '500';
-
-        var uuid = {
-            newBigInt: function(done) {
-                done(null, idForMessage);
-            },
-            newGuid4: function(done) {
-                done(new Error('Not implemented'));
-            }
-        };
-
-        var mock = mockBuilder.newApiWithMock({uuid: uuid});
+        var mock = mockBuilder.newApiWithMock();
         var api = mock.api;
         var args = argsBuilder();
         api.hd_messageCreate(args, function(err, message) {
@@ -290,7 +279,7 @@ describe('API#hd_messageCreate', function() {
             }
 
             var matchMessage = {
-                id: idForMessage,
+                id: '1000',
                 chatId: '1',
                 userCreatorId: '1',
                 userCreatorType: domain.userTypes.SERVICE_USER,
@@ -305,17 +294,7 @@ describe('API#hd_messageCreate', function() {
     });
 
     it('Message must be created for application user', function(doneTest) {
-        var idForMessage = '500';
-        var uuid = {
-            newBigInt: function(done) {
-                done(null, idForMessage);
-            },
-            newGuid4: function(done) {
-                done(new Error('Not implemented'));
-            }
-        };
-
-        var mock = mockBuilder.newApiWithMock({uuid: uuid});
+        var mock = mockBuilder.newApiWithMock();
         var api = mock.api;
         var args = argsBuilder({accessToken: '302a1baa-78b0-4a4d-ae1f-ebb5a147c71a'});
         api.hd_messageCreate(args, function(err, message) {
@@ -324,7 +303,7 @@ describe('API#hd_messageCreate', function() {
             }
 
             var matchMessage = {
-                id: idForMessage,
+                id: '1000',
                 chatId: '1',
                 userCreatorId: '2',
                 userCreatorType: domain.userTypes.APP_USER,
@@ -339,25 +318,7 @@ describe('API#hd_messageCreate', function() {
     });
 
     it('Created message must be created in storage', function(doneTest) {
-        var currentTime = new Date('2014-05-20 00:00:00 +00:00');
-        var idForMessage = '500';
-
-        var currentTimeProvider = {
-            getCurrentTime: function(done) {
-                done(null, currentTime);
-            }
-        };
-
-        var uuid = {
-            newBigInt: function(done) {
-                done(null, idForMessage);
-            },
-            newGuid4: function(done) {
-                done(new Error('Not implememnted'));
-            }
-        };
-
-        var mock = mockBuilder.newApiWithMock({currentTimeProvider: currentTimeProvider, uuid: uuid});
+        var mock = mockBuilder.newApiWithMock();
         var api = mock.api;
         var args = argsBuilder();
         api.hd_messageCreate(args, function(err, matchMessage) {

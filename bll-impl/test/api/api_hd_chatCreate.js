@@ -540,27 +540,8 @@ describe('API#hd_chatCreate', function() {
     // =========================================================
 
     it('Chat must not be created for service user', function(doneTest) {
-        var currentTime = new Date('2014-05-20 00:00:00 +00:00');
-        var idForMessage = '500';
-
-        var currentTimeProvider = {
-            getCurrentTime: function(done) {
-                done(null, currentTime);
-            }
-        };
-
-        var uuid = {
-            newBigInt: function(done) {
-                done(null, idForMessage);
-            },
-            newGuid4: function(done) {
-                done(new Error('Not implemented'));
-            }
-        };
-
         var token = '142b2b49-75f2-456f-9533-435bd0ef94c0';
-
-        var mock = mockBuilder.newApiWithMock({currentTimeProvider: currentTimeProvider, uuid: uuid});
+        var mock = mockBuilder.newApiWithMock();
         var api = mock.api;
         var args = argsBuilder({accessToken: token});
         api.hd_chatCreate(args, function(err) {
@@ -576,19 +557,8 @@ describe('API#hd_chatCreate', function() {
     });
 
     it('Chat must be created for application user', function(doneTest) {
-        var idForEntities = '500';
-        var uuid = {
-            newBigInt: function(done) {
-                done(null, idForEntities);
-            },
-            newGuid4: function(done) {
-                done(new Error('Not implemented'));
-            }
-        };
-
         var token = '302a1baa-78b0-4a4d-ae1f-ebb5a147c71a';
-
-        var mock = mockBuilder.newApiWithMock({uuid: uuid});
+        var mock = mockBuilder.newApiWithMock();
         var api = mock.api;
         var args = argsBuilder({accessToken: token});
         api.hd_chatCreate(args, function(err, chat) {
@@ -599,7 +569,7 @@ describe('API#hd_chatCreate', function() {
             }
 
             var matchChat = {
-                id: idForEntities,
+                id: '1000',
                 appId: args.appId,
                 userCreatorId: '2',
                 userCreatorType: domain.userTypes.APP_USER,
@@ -626,8 +596,8 @@ describe('API#hd_chatCreate', function() {
             };
 
             var matchMessage = {
-                id: idForEntities,
-                chatId: idForEntities,
+                id: '1000',
+                chatId: '1000',
                 userCreatorId: '2',
                 userCreatorType: domain.userTypes.APP_USER,
                 created: new Date('2014-05-15 00:00:00 +00:00'),
@@ -645,19 +615,9 @@ describe('API#hd_chatCreate', function() {
     });
 
     it('Message must be created in storage', function(doneTest) {
-        var idForMessage = '500';
-        var uuid = {
-            newBigInt: function(done) {
-                done(null, idForMessage);
-            },
-            newGuid4: function(done) {
-                done(new Error('Not implemented'));
-            }
-        };
-
         var token = '302a1baa-78b0-4a4d-ae1f-ebb5a147c71a';
 
-        var mock = mockBuilder.newApiWithMock({uuid: uuid});
+        var mock = mockBuilder.newApiWithMock();
         var api = mock.api;
         var args = argsBuilder({accessToken: token});
         api.hd_chatCreate(args, function(err, chat) {
@@ -681,27 +641,8 @@ describe('API#hd_chatCreate', function() {
     });
 
     it('New message must be unread for another user', function(doneTest) {
-        var currentTime = new Date('2014-05-20 00:00:00 +00:00');
-        var idForMessage = '500';
-
-        var currentTimeProvider = {
-            getCurrentTime: function(done) {
-                done(null, currentTime);
-            }
-        };
-
-        var uuid = {
-            newBigInt: function(done) {
-                done(null, idForMessage);
-            },
-            newGuid4: function(done) {
-                done(new Error('Not implemented'));
-            }
-        };
-
         var token = '302a1baa-78b0-4a4d-ae1f-ebb5a147c71a';
-
-        var mock = mockBuilder.newApiWithMock({currentTimeProvider: currentTimeProvider, uuid: uuid});
+        var mock = mockBuilder.newApiWithMock();
         var api = mock.api;
         var args = argsBuilder({accessToken: token});
         api.hd_chatCreate(args, function(err, chat) {
