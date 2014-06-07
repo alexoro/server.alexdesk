@@ -128,7 +128,7 @@ describe('API#hd_chatsList', function() {
                 api.hd_chatsList(argsBuilder({limit: -1}), invalidArgsCb(cb));
             },
             function(cb) {
-                api.hd_chatsList(argsBuilder({limit: 100}), invalidArgsCb(cb));
+                api.hd_chatsList(argsBuilder({limit: 200}), invalidArgsCb(cb));
             },
             function(cb) {
                 api.hd_chatsList(argsBuilder({limit: 1.2}), invalidArgsCb(cb));

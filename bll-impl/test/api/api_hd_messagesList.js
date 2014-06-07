@@ -154,7 +154,7 @@ describe('API#hd_messagesList', function() {
                 api.hd_messagesList(argsBuilder({limit: -1}), invalidArgsCb(cb));
             },
             function(cb) {
-                api.hd_messagesList(argsBuilder({limit: 100}), invalidArgsCb(cb));
+                api.hd_messagesList(argsBuilder({limit: 200}), invalidArgsCb(cb));
             },
             function(cb) {
                 api.hd_messagesList(argsBuilder({limit: 1.1}), invalidArgsCb(cb));

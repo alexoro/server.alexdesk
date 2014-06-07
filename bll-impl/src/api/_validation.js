@@ -25,12 +25,12 @@ var chatIdMax = new BigNumber('9223372036854775807');
 var chatsListOffsetMin = 0;
 var chatsListOffsetMax = 1000000;
 var chatsListLimitMin = 1;
-var chatsListLimitMax = 50;
+var chatsListLimitMax = 100;
 
-var messagesListOffsetMin = -100000;
-var messagesListOffsetMax =  100000;
+var messagesListOffsetMin = -1000;
+var messagesListOffsetMax =  1000;
 var messagesListLimitMin = 1;
-var messagesListLimitMax = 50;
+var messagesListLimitMax = 100;
 
 var messageMinLength = 2;
 var messageMaxLength = 2000;
@@ -138,13 +138,15 @@ module.exports = {
         return typeof value === 'string' && (value.length === 0 || value.length === 2);
     },
     apiAndroid: function(value) {
-        return typeof value === 'number' && value >= 1 && value <= 100;
+        return typeof value === 'number' && !isNaN(value) &&
+            value >= 1 && value <= 100;
     },
     apiAndroidTextValue: function(value) {
         return typeof value === 'string' && value.length >= 0 && value.length <= 40;
     },
     appBuild: function(value) {
-        return typeof value === 'number' && value >= 0 && value <= 100000;
+        return typeof value === 'number' && !isNaN(value) && value.toString().match(regexpInt) &&
+            value >= 0 && value <= 1000000;
     },
     appVersion: function(value) {
         return typeof value === 'string' && value.length >= 0 && value.length <= 20;
@@ -156,13 +158,16 @@ module.exports = {
         return typeof value === 'string' && value.length >= 0 && value.length <= 20;
     },
     deviceWidthPx: function(value) {
-        return typeof value === 'number' && value >= 0 && value <= 32767;
+        return typeof value === 'number' && !isNaN(value) && value.toString().match(regexpInt) &&
+            value >= 0 && value <= 32767;
     },
     deviceHeightPx: function(value) {
-        return typeof value === 'number' && value >= 0 && value <= 32767;
+        return typeof value === 'number' && !isNaN(value) && value.toString().match(regexpInt) &&
+            value >= 0 && value <= 32767;
     },
     deviceDensity: function(value) {
-        return typeof value === 'number' && value >= 0 && value <= 32767;
+        return typeof value === 'number' && !isNaN(value) && value.toString().match(regexpInt) &&
+            value >= 0 && value <= 32767;
     },
     isRooted: function(value) {
         return typeof value === 'boolean';
