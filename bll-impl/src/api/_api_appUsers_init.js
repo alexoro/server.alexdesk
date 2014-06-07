@@ -197,7 +197,7 @@ var fnUserGenerateIdIfNew = function (flow, cb) {
 };
 
 var fnGetCurrentTime = function (flow, cb) {
-    flow.env.configManager.getCurrentDateUtc(function(err, currentTime) {
+    flow.env.configProvider.getCurrentDateUtc(function(err, currentTime) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else {

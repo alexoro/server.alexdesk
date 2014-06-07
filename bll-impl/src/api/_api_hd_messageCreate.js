@@ -262,7 +262,7 @@ var fnMessageGenerateId = function (flow, cb) {
 };
 
 var fnMessageGenerateCreateDate = function (flow, cb) {
-    flow.env.configManager.getCurrentDateUtc(function(err, currentDate) {
+    flow.env.configProvider.getCurrentDateUtc(function(err, currentDate) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else if (!(currentDate instanceof Date)) {
