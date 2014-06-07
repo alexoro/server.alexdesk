@@ -35,6 +35,9 @@ var messagesListLimitMax = 50;
 var messageMinLength = 2;
 var messageMaxLength = 2000;
 
+var metaDataMinLength = 0;
+var metaDataMaxLength = 1000;
+
 
 module.exports = {
 
@@ -165,7 +168,7 @@ module.exports = {
         return typeof value === 'boolean';
     },
     metaData: function(value) {
-        return typeof value === 'string' && value.length >= 0 && value.length <= 1000;
+        return typeof value === 'string' && value.length >= metaDataMinLength && value.length <= metaDataMaxLength;
     },
 
     deviceUuid: function(value) {
