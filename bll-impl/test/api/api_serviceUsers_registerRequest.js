@@ -236,7 +236,7 @@ describe('API#serviceUsers_registerRequest', function() {
             }
         };
 
-        var api = mockBuilder.newApiWithMock({emailSender: Sender}).api;
+        var api = mockBuilder.newApiWithMock({notificationsManager: Sender}).api;
         var reqArgs = argsBuilder();
         api.serviceUsers_registerRequest(reqArgs, function(err) {
             if (err) {

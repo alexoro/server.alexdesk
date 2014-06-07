@@ -138,7 +138,7 @@ var fnConfirmSendToServiceUser = function (flow, cb) {
         id: flow.confirmId,
         expires: flow.confirmExpires
     };
-    flow.env.emailSender.sendServiceUserResetPasswordConfirmLink(reqArgs, function(err) {
+    flow.env.notificationsManager.sendServiceUserResetPasswordConfirmLink(reqArgs, function(err) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else {

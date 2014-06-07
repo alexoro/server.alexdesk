@@ -201,7 +201,7 @@ var fnConfirmSendToServiceUser = function (flow, cb) {
         expires: flow.confirmExpires,
         userId: flow.newUserId
     };
-    flow.env.emailSender.sendServiceUserRegistrationConfirmLink(reqArgs, function(err) {
+    flow.env.notificationsManager.sendServiceUserRegistrationConfirmLink(reqArgs, function(err) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else {

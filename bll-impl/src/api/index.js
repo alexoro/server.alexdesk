@@ -44,6 +44,9 @@ var Api = function(env) {
     if (typeof env.currentTimeProvider !== 'object' || !env.currentTimeProvider) {
         throw new Error('Current time provider is not defined or is null or is not a object');
     }
+    if (typeof env.notificationsManager !== 'object' || !env.notificationsManager) {
+        throw new Error('Notifications manager is not defined or is null or is not a object');
+    }
 
     this.env = env;
 };
