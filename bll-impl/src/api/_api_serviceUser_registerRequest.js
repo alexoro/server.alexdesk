@@ -127,7 +127,7 @@ var fnServiceUserGenerateRegistrationTime = function (flow, cb) {
 };
 
 var fnServiceUserHashPassword = function (flow, cb) {
-    flow.env.passwordManager.hashServiceUserPassword(flow.args.password, function(err, passwordHash) {
+    flow.env.securityManager.hashServiceUserPassword(flow.args.password, function(err, passwordHash) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else {
@@ -149,7 +149,7 @@ var fnConfirmGenerateId = function (flow, cb) {
 };
 
 var fnConfirmGenerateExpiresTime = function (flow, cb) {
-    flow.env.accessTokenConfig.getExpireTimeForRegister(function (err, expires) {
+    flow.env.securityManager.getExpireTimeForRegister(function (err, expires) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else {

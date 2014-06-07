@@ -38,11 +38,8 @@ var Api = function(env) {
     if (typeof env.uuid !== 'object' || !env.uuid) {
         throw new Error('UUID generator is not defined or is null or is not a object');
     }
-    if (typeof env.passwordManager !== 'object' || !env.passwordManager) {
-        throw new Error('Password manager is not defined or is null or is not a object');
-    }
-    if (typeof env.accessTokenConfig !== 'object' || !env.accessTokenConfig) {
-        throw new Error('Access token config is not defined or is null or is not a object');
+    if (typeof env.securityManager !== 'object' || !env.securityManager) {
+        throw new Error('Security manager is not defined or is null or is not a object');
     }
     if (typeof env.currentTimeProvider !== 'object' || !env.currentTimeProvider) {
         throw new Error('Current time provider is not defined or is null or is not a object');

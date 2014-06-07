@@ -371,11 +371,4 @@ function bit_rol(num, cnt) {
 }
 
 
-module.exports = function(value, next) {
-    try {
-        var md5 = hex_md5(value);
-        next(null, md5);
-    } catch (err) {
-        next(err);
-    }
-};
+module.exports = hex_md5;

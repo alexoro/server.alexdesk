@@ -89,7 +89,7 @@ var fnAppIsExists = function (flow, cb) {
 };
 
 var fnAppUserHashPassword = function (flow, cb) {
-    flow.env.passwordManager.hashAppUserPassword(flow.args.password, function (err, hashedPassword) {
+    flow.env.securityManager.hashAppUserPassword(flow.args.password, function (err, hashedPassword) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else {
@@ -130,7 +130,7 @@ var fnTokenGenerateId = function (flow, cb) {
 };
 
 var fnTokenGenerateExpireTime = function (flow, cb) {
-    flow.env.accessTokenConfig.getExpireTimeForAppUser(function(err, expires) {
+    flow.env.securityManager.getAccessTokenExpireTimeForAppUser(function(err, expires) {
         if (err) {
             cb(err);
         } else {

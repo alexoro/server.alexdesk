@@ -73,7 +73,7 @@ var fnValidate = function (flow, cb) {
 };
 
 var fnServiceUserHashPassword = function (flow, cb) {
-    flow.env.passwordManager.hashServiceUserPassword(flow.args.password, function(err, hashedPassword) {
+    flow.env.securityManager.hashServiceUserPassword(flow.args.password, function(err, hashedPassword) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else {
@@ -130,7 +130,7 @@ var fnTokenGenerateId = function (flow, cb) {
 };
 
 var fnTokenGenerateExpireTime = function (flow, cb) {
-    flow.env.accessTokenConfig.getExpireTimeForServiceUser(function(err, expires) {
+    flow.env.securityManager.getAccessTokenExpireTimeForServiceUser(function(err, expires) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else {

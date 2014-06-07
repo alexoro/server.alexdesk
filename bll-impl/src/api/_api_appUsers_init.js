@@ -146,7 +146,7 @@ var fnAppIsExists = function (flow, cb) {
 };
 
 var fnAppUserHashPassword = function (flow, cb) {
-    flow.env.passwordManager.hashAppUserPassword(flow.args.password, function(err, passwordHash) {
+    flow.env.securityManager.hashAppUserPassword(flow.args.password, function(err, passwordHash) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else {

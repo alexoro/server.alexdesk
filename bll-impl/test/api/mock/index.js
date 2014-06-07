@@ -11,10 +11,9 @@ var Api = bllDef.api;
 var Dal = require('./_dal');
 var dataBuilder = require('./_data');
 var Uuid = require('./_uuid');
-var AccessTokenConfig = require('./_accessTokenConfig');
-var PasswordManager = require('./_passwordManager');
 var CurrentTimeProvider = require('./_currentTimeProvider');
 var EmailSender = require('./_emailSender');
+var SecurityManager = require('./_securityManager');
 
 
 module.exports = {
@@ -27,27 +26,24 @@ module.exports = {
         var data = dataBuilder.getCopy();
         var dal = new Dal(data);
         var uuid = new Uuid();
-        var accessTokenConfig = new AccessTokenConfig();
-        var passwordManager = new PasswordManager();
         var currentTimeProvider = new CurrentTimeProvider();
         var emailSender = new EmailSender();
+        var securityManager = new SecurityManager();
 
         var env = {
             dal: override.dal || dal,
             uuid: override.uuid || uuid,
-            passwordManager: override.passwordManager || passwordManager,
-            accessTokenConfig: override.accessTokenConfig || accessTokenConfig,
             currentTimeProvider: override.currentTimeProvider || currentTimeProvider,
-            emailSender: override.emailSender || emailSender
+            emailSender: override.emailSender || emailSender,
+            securityManager: override.securityManager || securityManager
         };
         return {
             dal: env.dal,
             uuid: env.uuid,
             data: data,
-            passwordManager: env.passwordManager,
-            accessTokenConfig: env.accessTokenConfig,
             currentTimeProvider: env.currentTimeProvider,
             emailSender: env.emailSender,
+            securityManager: env.securityManager,
             api: new Api(env)
         };
     }

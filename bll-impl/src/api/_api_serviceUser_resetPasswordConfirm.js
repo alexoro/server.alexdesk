@@ -129,7 +129,7 @@ var fnConfirmIsNotExpired = function (flow, cb) {
 };
 
 var fnHashNewPassword = function (flow, cb) {
-    flow.env.passwordManager.hashServiceUserPassword(flow.args.newPassword, function (err, hashedPassword) {
+    flow.env.securityManager.hashServiceUserPassword(flow.args.newPassword, function (err, hashedPassword) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else if (typeof hashedPassword !== 'string') {

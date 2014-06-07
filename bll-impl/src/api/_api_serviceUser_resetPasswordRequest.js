@@ -108,7 +108,7 @@ var fnConfirmGenerateId = function (flow, cb) {
 };
 
 var fnConfirmGenerateExpireTime = function (flow, cb) {
-    flow.env.accessTokenConfig.getExpireTimeForPasswordReset(function (err, expires) {
+    flow.env.securityManager.getExpireTimeForPasswordReset(function (err, expires) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else {
