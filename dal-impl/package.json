@@ -4,8 +4,7 @@
     "main": "./src/index.js",
 
     "dependencies": {
-        "pg": "3.0.3",
-        "async": "0.7.0"
+        "pg": "3.3.0"
     },
     "devDependencies": {
         "chai": "^1.9.1",

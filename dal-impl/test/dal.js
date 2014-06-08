@@ -16,7 +16,7 @@ process.on('uncaughtException', function (err) {
 });
 
 
-describe('DAL API', function() {
+describe.skip('DAL API', function() {
     var qe = new qeFn(dsn);
 
     var schemaName = 'test';

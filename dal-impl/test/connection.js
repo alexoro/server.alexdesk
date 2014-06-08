@@ -9,7 +9,7 @@ var qeFn = require('../src/QueryExecutor');
 var dsn = require('./_cfg').dsn;
 
 
-describe('Connection logic', function() {
+describe.skip('Connection logic', function() {
     it('Check not-successful connection', function(done) {
         var qe = new qeFn("Invalid dsn");
         qe.execute(function(err, client, doneClient) {
