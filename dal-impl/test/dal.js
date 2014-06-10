@@ -7,7 +7,6 @@
 var fs = require('fs');
 var async = require('async');
 var assert = require('chai').assert;
-var qeFn = require('../src/QueryExecutor');
 var dsn = require('./_cfg').dsn;
 
 
@@ -17,8 +16,6 @@ process.on('uncaughtException', function (err) {
 
 
 describe.skip('DAL API', function() {
-    var qe = new qeFn(dsn);
-
     var schemaName = 'test';
 
     var createTestDatabase = function(doneFn) {

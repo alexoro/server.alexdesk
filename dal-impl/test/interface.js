@@ -6,7 +6,9 @@
 
 
 var assert = require('chai').assert;
+
 var Api = require('../').api;
+var mock = require('./mock');
 
 
 describe('API::Interface', function() {
@@ -16,14 +18,14 @@ describe('API::Interface', function() {
         assert.lengthOf(Api, 1, 'Constructor must accept 1 arguments');
 
         try {
-            var api = new Api();
+            var api = mock.newApiWithMock().api;
         } catch (err) {
             assert.fail('Constructor call failed with error: ' + err);
         }
     });
 
     it('Check all interface functions are exists', function() {
-        var api = new Api();
+        var api = mock.newApiWithMock().api;
 
         assert.isDefined(api.userGetIdByToken, 'userGetIdByToken function is not exists');
         assert.isFunction(api.userGetIdByToken, 'userGetIdByToken must be a function');
