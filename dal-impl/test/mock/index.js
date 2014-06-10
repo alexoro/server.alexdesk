@@ -41,17 +41,17 @@ module.exports = {
         var i;
         var fnStack = [];
         var dsn = 'postgres://' + this._config.user + ':' + this._config.password + '@' + this._config.host + ':' + this._config.port + '/' + this._config.db;
-        var sqlTables;
+        var sqlSchema;
         var sqlData;
 
         try {
-            sqlTables = fs.readFileSync(__dirname + '/_db_schema.sql').toString().split(';');
+            sqlSchema = fs.readFileSync(__dirname + '/_sql_schema.sql').toString().split(';');
         } catch (err) {
             return doneTask(err);
         }
 
         try {
-            sqlData = fs.readFileSync(__dirname + '/_db_test.sql').toString().split(';');
+            sqlData = fs.readFileSync(__dirname + '/_sql_data.sql').toString().split(';');
         } catch (err) {
             return doneTask(err);
         }
@@ -73,12 +73,12 @@ module.exports = {
             client.query('SET search_path TO ' + self._config.schema, fnDefaultCb(client, cb));
         });
 
-        for (i = 0; i < sqlTables.length; i++) {
+        for (i = 0; i < sqlSchema.length; i++) {
             (function(e) {
                 fnStack.push(function(client, cb) {
                     client.query(e, fnDefaultCb(client, cb));
                 });
-            })(sqlTables[i]);
+            })(sqlSchema[i]);
         }
         for (i = 0; i < sqlData.length; i++) {
             (function(e) {

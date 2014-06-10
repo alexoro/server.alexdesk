@@ -39,7 +39,7 @@ describe.skip('DAL API', function() {
         ];
 
         try {
-            var tablesSqls = fs.readFileSync(__dirname + '/_db_schema.sql').toString().split(';');
+            var tablesSqls = fs.readFileSync(__dirname + '/_sql_schema.sql').toString().split(';');
             tablesSqls.forEach(function(item) {
                 fnStack.push(function(cb) {
                     gClient.query(item, cb);
@@ -53,7 +53,7 @@ describe.skip('DAL API', function() {
         }
 
         try {
-            var testSqls = fs.readFileSync(__dirname + '/_db_test.sql').toString().split(';');
+            var testSqls = fs.readFileSync(__dirname + '/_sql_data.sql').toString().split(';');
             testSqls.forEach(function(item) {
                 fnStack.push(function(cb) {
                     gClient.query(item, cb);
