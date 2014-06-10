@@ -6,7 +6,7 @@
 
 
 var assert = require('chai').assert;
-var Api = require('../');
+var Api = require('../').api;
 
 
 describe('API::Interface', function() {
