@@ -1,40 +1,33 @@
-CREATE TABLE system_captchas (
-  id UUID NOT NULL,
-  created TIMESTAMPTZ NOT NULL,
-  type SMALLINT NOT NULL,
-  answer VARCHAR(10) NOT NULL,
-  PRIMARY KEY(id)
-);
-
 CREATE TABLE system_access_tokens (
   id UUID NOT NULL,
   user_type SMALLINT NOT NULL,
   user_id BIGINT NOT NULL,
-  expires TIMESTAMPTZ NOT NULL,
+  expires TIMESTAMP NOT NULL,
   PRIMARY KEY(id)
 );
 
 CREATE TABLE system_register_confirm (
   id UUID NOT NULL,
   service_user_id BIGINT NOT NULL,
-  expires TIMESTAMPTZ NOT NULL,
+  expires TIMESTAMP NOT NULL,
   PRIMARY KEY(id)
 );
 
 CREATE TABLE system_reset_password_confirm (
   id UUID NOT NULL,
   service_user_id BIGINT NOT NULL,
-  expires TIMESTAMPTZ NOT NULL,
+  expires TIMESTAMP NOT NULL,
   PRIMARY KEY(id)
 );
 
 CREATE TABLE users (
   id BIGINT NOT NULL,
-  email VARCHAR(100) NOT NULL,
-  password CHAR(32) NOT NULL,
+  login VARCHAR(100) NOT NULL,
+  password_hash CHAR(32) NOT NULL,
   name VARCHAR(40) NOT NULL,
   registered TIMESTAMPTZ NOT NULL,
   last_visit TIMESTAMPTZ NOT NULL,
+  is_confirmed BOOL NOT NULL,
   PRIMARY KEY(id)
 );
 
@@ -64,7 +57,7 @@ CREATE TABLE app_users (
   app_user_id BIGINT NOT NULL,
   app_id BIGINT NOT NULL,
   login VARCHAR(64) NOT NULL,
-  password CHAR(32) NOT NULL,
+  password_hash CHAR(32) NOT NULL,
   name VARCHAR(40) NOT NULL,
   registered TIMESTAMPTZ NOT NULL,
   last_visit TIMESTAMPTZ NOT NULL,
@@ -84,10 +77,10 @@ CREATE TABLE chats (
   app_id BIGINT NOT NULL,
   user_creator_id BIGINT NOT NULL,
   user_creator_type SMALLINT NOT NULL,
+  created TIMESTAMPTZ NOT NULL,
   title VARCHAR(40) NOT NULL,
   type SMALLINT NOT NULL,
   status SMALLINT NOT NULL,
-  created TIMESTAMPTZ NOT NULL,
   last_update TIMESTAMPTZ NOT NULL,
   PRIMARY KEY(id)
 );
@@ -113,8 +106,7 @@ CREATE TABLE chat_extra_android (
 CREATE TABLE chat_participants (
   chat_id BIGINT NOT NULL,
   user_type SMALLINT NOT NULL,
-  user_id BIGINT NOT NULL,
-  last_visit TIMESTAMPTZ NOT NULL
+  user_id BIGINT NOT NULL
 );
 
 CREATE TABLE chat_messages (
@@ -126,4 +118,13 @@ CREATE TABLE chat_messages (
   created TIMESTAMPTZ NOT NULL,
   content TEXT NOT NULL,
   PRIMARY KEY(id)
+);
+
+CREATE TABLE chat_messages_extra (
+  app_id BIGINT NOT NULL,
+  chat_id BIGINT NOT NULL,
+  message_id BIGINT NOT NULL,
+  user_id BIGINT NOT NULL,
+  user_type SMALLINT NOT NULL,
+  is_read BOOL NOT NULL
 );

@@ -431,7 +431,7 @@ var mock = {
         {messageId: '2', appId: '1', chatId: '1', userType: domain.userTypes.APP_USER, userId: '2', isRead: true},
 
         {messageId: '3', appId: '1', chatId: '2', userType: domain.userTypes.SERVICE_USER, userId: '1', isRead: true},
-        {messageId: '3', appId: '1', chatId: '2', userType: domain.userTypes.APP_USER, userId: '2', isRead: false},
+        {messageId: '3', appId: '1', chatId: '2', userType: domain.userTypes.APP_USER, userId: '2', isRead: true},
         {messageId: '4', appId: '1', chatId: '2', userType: domain.userTypes.SERVICE_USER, userId: '1', isRead: true},
         {messageId: '4', appId: '1', chatId: '2', userType: domain.userTypes.APP_USER, userId: '2', isRead: true},
         {messageId: '5', appId: '1', chatId: '2', userType: domain.userTypes.SERVICE_USER, userId: '1', isRead: true},
@@ -444,7 +444,7 @@ var mock = {
         {messageId: '8', appId: '1', chatId: '3', userType: domain.userTypes.SERVICE_USER, userId: '1', isRead: true},
         {messageId: '8', appId: '1', chatId: '3', userType: domain.userTypes.APP_USER, userId: '3', isRead: false},
 
-        {messageId: '9', appId: '2', chatId: '4', userType: '1', userId: '1', isRead: false},
+        {messageId: '9', appId: '2', chatId: '4', userType: domain.userTypes.SERVICE_USER, userId: '2', isRead: false},
         {messageId: '9', appId: '2', chatId: '4', userType: domain.userTypes.APP_USER, userId: '4', isRead: true}
     ]
 
