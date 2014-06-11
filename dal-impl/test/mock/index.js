@@ -67,6 +67,9 @@ module.exports = {
         };
 
         fnStack.push(function (client, cb) {
+            client.query('DROP SCHEMA IF EXISTS ' + self._config.schema + ' CASCADE', fnDefaultCb(client, cb));
+        });
+        fnStack.push(function (client, cb) {
             client.query('CREATE SCHEMA ' + self._config.schema, fnDefaultCb(client, cb));
         });
         fnStack.push(function (client, cb) {
@@ -114,7 +117,7 @@ module.exports = {
             async.waterfall(
                 fnStack,
                 function (errStack) {
-                    client.query('DROP SCHEMA ' + self._config.schema, function (errDrop) {
+                    client.query('DROP SCHEMA ' + self._config.schema + ' CASCADE', function (errDrop) {
                         doneClient();
                         if (errStack) {
                             doneTask(errStack);

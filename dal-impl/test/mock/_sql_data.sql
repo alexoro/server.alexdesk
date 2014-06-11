@@ -8,29 +8,29 @@ INSERT INTO users(id, login, password_hash, name, registered, last_visit, is_con
 	VALUES(3, '3@3.com', '317fe8b099749d32b8eea573565842d5', 'Test #3', TIMESTAMPTZ '2014-05-01 12:00:00 +04:00', TIMESTAMPTZ '2014-05-01 14:00:00 +04:00', FALSE);
 
 INSERT INTO system_access_tokens(id, user_type, user_id, expires)
-    VALUES('142b2b49-75f2-456f-9533-435bd0ef94c0', 1, 1, TIMESTAMPTZ '2020-01-01 00:00:00 +00:00');
+    VALUES('142b2b49-75f2-456f-9533-435bd0ef94c0', 1, 1, TIMESTAMP '2020-01-01 00:00:00 +00:00');
 INSERT INTO system_access_tokens(id, user_type, user_id, expires)
-    VALUES('b6e84344-74e0-43f3-83e0-6a16c3fe6b5d', 1, 3, TIMESTAMPTZ '2020-01-01 00:00:00 +00:00');
+    VALUES('b6e84344-74e0-43f3-83e0-6a16c3fe6b5d', 1, 3, TIMESTAMP '2020-01-01 00:00:00 +00:00');
 INSERT INTO system_access_tokens(id, user_type, user_id, expires)
-    VALUES('302a1baa-78b0-4a4d-ae1f-ebb5a147c71a', 2, 2, TIMESTAMPTZ '2020-01-01 00:00:00 +00:00');
+    VALUES('302a1baa-78b0-4a4d-ae1f-ebb5a147c71a', 2, 2, TIMESTAMP '2020-01-01 00:00:00 +00:00');
 INSERT INTO system_access_tokens(id, user_type, user_id, expires)
-    VALUES('390582c6-a59b-4ab2-a8e1-87fdbb291b97', 2, 3, TIMESTAMPTZ '1970-01-01 00:00:00 +00:00');
+    VALUES('390582c6-a59b-4ab2-a8e1-87fdbb291b97', 2, 3, TIMESTAMP '1970-01-01 00:00:00 +00:00');
 
 INSERT INTO system_register_confirm(id, service_user_id, expires)
-    VALUES('0cec4d47-d9a1-4984-8f23-10583b674123', 1, 1577836800);
+    VALUES('0cec4d47-d9a1-4984-8f23-10583b674123', 1, TIMESTAMP '2020-01-01 00:00:00');
 INSERT INTO system_register_confirm(id, service_user_id, expires)
-    VALUES('de72bca0-1c76-444d-9b1a-ad1f84d04dfb', 3,  946684800);
+    VALUES('de72bca0-1c76-444d-9b1a-ad1f84d04dfb', 3,  TIMESTAMP '2000-01-01 00:00:00 +00:00');
 INSERT INTO system_register_confirm(id, service_user_id, expires)
-    VALUES('5ece1f7a-c5d0-4a09-97b6-00e8d88a04a1', 3, 1577836800);
+    VALUES('5ece1f7a-c5d0-4a09-97b6-00e8d88a04a1', 3, TIMESTAMP '2020-01-01 00:00:00');
 
 INSERT INTO system_reset_password_confirm(id, service_user_id, expires)
-    VALUES('a1df4350-5fcb-4377-8bfb-6576801cda51', 1, 1577836800);
+    VALUES('a1df4350-5fcb-4377-8bfb-6576801cda51', 1, TIMESTAMP '2020-01-01 00:00:00');
 INSERT INTO system_reset_password_confirm(id, service_user_id, expires)
-    VALUES('86fb45f6-2bd4-4918-bd6b-887b6d51b0a9', 1,  946684800);
+    VALUES('86fb45f6-2bd4-4918-bd6b-887b6d51b0a9', 1,  TIMESTAMP '2000-01-01 00:00:00 +00:00');
 INSERT INTO system_reset_password_confirm(id, service_user_id, expires)
-    VALUES('d8463bf9-0af6-4db6-86b7-f9c366cc289e', 3, 1577836800);
+    VALUES('d8463bf9-0af6-4db6-86b7-f9c366cc289e', 3, TIMESTAMP '2020-01-01 00:00:00');
 INSERT INTO system_reset_password_confirm(id, service_user_id, expires)
-    VALUES('5e604462-4f09-4077-afe7-d84bcdb5004e', 100, 1577836800);
+    VALUES('5e604462-4f09-4077-afe7-d84bcdb5004e', 100, TIMESTAMP '2020-01-01 00:00:00');
 
 
 -- Apps
