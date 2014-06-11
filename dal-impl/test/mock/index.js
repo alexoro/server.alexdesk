@@ -14,7 +14,7 @@ var Api = require('../../src').api;
 
 module.exports = {
 
-    _config: {
+    _configPostgres: {
         host: '192.168.127.129',
         port: 5432,
         user: 'uas',
@@ -29,7 +29,7 @@ module.exports = {
         }
 
         var env = {
-            config: override.config || this._config
+            _configPostgres: override._configPostgres || this._configPostgres
         };
         return {
             api: new Api(env)
@@ -40,7 +40,7 @@ module.exports = {
         var self = this;
         var i;
         var fnStack = [];
-        var dsn = 'postgres://' + this._config.user + ':' + this._config.password + '@' + this._config.host + ':' + this._config.port + '/' + this._config.db;
+        var dsn = 'postgres://' + this._configPostgres.user + ':' + this._configPostgres.password + '@' + this._configPostgres.host + ':' + this._configPostgres.port + '/' + this._configPostgres.db;
         var sqlSchema;
         var sqlData;
 
@@ -67,13 +67,13 @@ module.exports = {
         };
 
         fnStack.push(function (client, cb) {
-            client.query('DROP SCHEMA IF EXISTS ' + self._config.schema + ' CASCADE', fnDefaultCb(client, cb));
+            client.query('DROP SCHEMA IF EXISTS ' + self._configPostgres.schema + ' CASCADE', fnDefaultCb(client, cb));
         });
         fnStack.push(function (client, cb) {
-            client.query('CREATE SCHEMA ' + self._config.schema, fnDefaultCb(client, cb));
+            client.query('CREATE SCHEMA ' + self._configPostgres.schema, fnDefaultCb(client, cb));
         });
         fnStack.push(function (client, cb) {
-            client.query('SET search_path TO ' + self._config.schema, fnDefaultCb(client, cb));
+            client.query('SET search_path TO ' + self._configPostgres.schema, fnDefaultCb(client, cb));
         });
 
         for (i = 0; i < sqlSchema.length; i++) {
@@ -117,7 +117,7 @@ module.exports = {
             async.waterfall(
                 fnStack,
                 function (errStack) {
-                    client.query('DROP SCHEMA ' + self._config.schema + ' CASCADE', function (errDrop) {
+                    client.query('DROP SCHEMA ' + self._configPostgres.schema + ' CASCADE', function (errDrop) {
                         doneClient();
                         if (errStack) {
                             doneTask(errStack);

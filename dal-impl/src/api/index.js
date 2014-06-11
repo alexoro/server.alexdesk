@@ -48,8 +48,8 @@ var DAL = function(env) {
     if (!env) {
         throw new Error('Environment is not defined');
     }
-    if (typeof env.config !== 'object' || !env.config) {
-        throw new Error('Config is not defined or is null or is not a object');
+    if (typeof env._configPostgres !== 'object' || !env._configPostgres) {
+        throw new Error('ConfigPostgres is not defined or is null or is not a object');
     }
 
     this.env = env;
