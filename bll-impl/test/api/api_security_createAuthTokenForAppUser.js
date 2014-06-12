@@ -185,7 +185,7 @@ describe('API#security_createAuthTokenForAppUser', function() {
 
             var matchToken = {
                 token: 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
-                expires: 1577836800000
+                expires: new Date('2020-01-01 00:00:00 +00:00')
             };
             assert.deepEqual(result, matchToken, 'Expected token and received are not match');
             doneTest();

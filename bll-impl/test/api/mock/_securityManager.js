@@ -13,19 +13,19 @@ var SecurityManager = function() {
 };
 
 SecurityManager.prototype.getAccessTokenExpireTimeForServiceUser = function(done) {
-    done(null, new Date('2020-01-01 00:00:00 +00:00').getTime());
+    done(null, new Date('2020-01-01 00:00:00 +00:00'));
 };
 
 SecurityManager.prototype.getAccessTokenExpireTimeForAppUser = function(done) {
-    done(null, new Date('2020-01-01 00:00:00 +00:00').getTime());
+    done(null, new Date('2020-01-01 00:00:00 +00:00'));
 };
 
 SecurityManager.prototype.getExpireTimeForRegister = function (done) {
-    done(null, new Date('2020-01-01 00:00:00 +00:00').getTime());
+    done(null, new Date('2020-01-01 00:00:00 +00:00'));
 };
 
 SecurityManager.prototype.getExpireTimeForPasswordReset = function (done) {
-    done(null, new Date('2020-01-01 00:00:00 +00:00').getTime());
+    done(null, new Date('2020-01-01 00:00:00 +00:00'));
 };
 
 SecurityManager.prototype.hashServiceUserPassword = function(password, done) {

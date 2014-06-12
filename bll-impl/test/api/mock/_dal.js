@@ -27,7 +27,7 @@ DAL.prototype.userGetIdByToken = function(args, done) {
     if (r) {
         var dateNow = new Date();
         var dateUser = r.expires;
-        if (dateNow.getTime() >= dateUser) {
+        if (dateNow.getTime() >= dateUser.getTime()) {
             return done(null, null);
         } else {
             var ret = {

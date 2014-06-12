@@ -45,25 +45,25 @@ var mock = {
             token: '142b2b49-75f2-456f-9533-435bd0ef94c0',
             userType: domain.userTypes.SERVICE_USER,
             userId: '1',
-            expires: new Date('2020-01-01 00:00:00 +00:00').getTime()
+            expires: new Date('2020-01-01 00:00:00 +00:00')
         },
         {
             token: 'b6e84344-74e0-43f3-83e0-6a16c3fe6b5d',
             userType: domain.userTypes.SERVICE_USER,
             userId: '3',
-            expires: new Date('2020-01-01 00:00:00 +00:00').getTime()
+            expires: new Date('2020-01-01 00:00:00 +00:00')
         },
         {
             token: '302a1baa-78b0-4a4d-ae1f-ebb5a147c71a',
             userType: domain.userTypes.APP_USER,
             userId: '2',
-            expires: new Date('2020-01-01 00:00:00 +00:00').getTime()
+            expires: new Date('2020-01-01 00:00:00 +00:00')
         },
         {
             token: '390582c6-a59b-4ab2-a8e1-87fdbb291b97',
             userType: domain.userTypes.APP_USER,
             userId: '3',
-            expires: new Date('1970-01-01 00:00:00 +00:00').getTime()
+            expires: new Date('1970-01-01 00:00:00 +00:00')
         }
     ],
 
@@ -71,17 +71,17 @@ var mock = {
         {
             id: '0cec4d47-d9a1-4984-8f23-10583b674123',
             serviceUserId: '1',
-            expires: new Date('2020-01-01 00:00:00 +00:00').getTime()
+            expires: new Date('2020-01-01 00:00:00 +00:00')
         },
         {
             id: 'de72bca0-1c76-444d-9b1a-ad1f84d04dfb',
             serviceUserId: '3',
-            expires: new Date('2000-01-01 00:00:00 +00:00').getTime()
+            expires: new Date('2000-01-01 00:00:00 +00:00')
         },
         {
             id: '5ece1f7a-c5d0-4a09-97b6-00e8d88a04a1',
             serviceUserId: '3',
-            expires: new Date('2020-01-01 00:00:00 +00:00').getTime()
+            expires: new Date('2020-01-01 00:00:00 +00:00')
         }
     ],
 
@@ -89,22 +89,22 @@ var mock = {
         {
             id: 'a1df4350-5fcb-4377-8bfb-6576801cda51',
             serviceUserId: '1',
-            expires: new Date('2020-01-01 00:00:00 +00:00').getTime()
+            expires: new Date('2020-01-01 00:00:00 +00:00')
         },
         {
             id: '86fb45f6-2bd4-4918-bd6b-887b6d51b0a9',
             serviceUserId: '1',
-            expires: new Date('2000-01-01 00:00:00 +00:00').getTime()
+            expires: new Date('2000-01-01 00:00:00 +00:00')
         },
         {
             id: 'd8463bf9-0af6-4db6-86b7-f9c366cc289e',
             serviceUserId: '3',
-            expires: new Date('2020-01-01 00:00:00 +00:00').getTime()
+            expires: new Date('2020-01-01 00:00:00 +00:00')
         },
         {
             id: '5e604462-4f09-4077-afe7-d84bcdb5004e',
             serviceUserId: '100',
-            expires: new Date('2020-01-01 00:00:00 +00:00').getTime()
+            expires: new Date('2020-01-01 00:00:00 +00:00')
         }
     ],
 

@@ -23,7 +23,7 @@ var fnExecute = function (env, args, next) {
                 passwordHash: null,
                 userId: null,
                 tokenId: null,
-                tokenExpires: null,
+                tokenExpiresDate: null,
                 result: null
             };
             cb(null, flow);
@@ -134,7 +134,7 @@ var fnTokenGenerateExpireTime = function (flow, cb) {
         if (err) {
             cb(err);
         } else {
-            flow.tokenExpires = expires;
+            flow.tokenExpiresDate = expires;
             cb(null, flow);
         }
     });
@@ -145,7 +145,7 @@ var fnTokenSave = function (flow, cb) {
         token: flow.tokenId,
         userType: domain.userTypes.APP_USER,
         userId: flow.userId,
-        expires: flow.tokenExpires
+        expires: flow.tokenExpiresDate
     };
     flow.env.dal.authTokenCreate(toSave, function(err) {
         if (err) {
@@ -159,7 +159,7 @@ var fnTokenSave = function (flow, cb) {
 var fnGenerateResult = function (flow, cb) {
     flow.result = {
         token: flow.tokenId,
-        expires: flow.tokenExpires
+        expires: flow.tokenExpiresDate
     };
     cb(null, flow);
 };

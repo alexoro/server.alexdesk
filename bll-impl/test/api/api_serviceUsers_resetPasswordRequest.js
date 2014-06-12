@@ -117,7 +117,7 @@ describe('API#serviceUsers_resetPasswordRequest', function() {
 
             var matchConfirmProperties = {
                 id: 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
-                expires: new Date('2020-01-01 00:00:00 +00:00').getTime()
+                expires: new Date('2020-01-01 00:00:00 +00:00')
             };
 
             assert.deepEqual(confirmProperties, matchConfirmProperties, 'Created confirm properties and expected are not match');

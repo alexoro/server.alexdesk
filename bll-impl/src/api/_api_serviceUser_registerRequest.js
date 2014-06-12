@@ -25,7 +25,7 @@ var fnExecute = function (env, args, next) {
                 currentTime: null,
                 createdUser: null,
                 confirmId: null,
-                confirmExpires: null,
+                confirmExpiresDate: null,
                 result: null
             };
             cb(null, flow);
@@ -153,7 +153,7 @@ var fnConfirmGenerateExpiresTime = function (flow, cb) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else {
-            flow.confirmExpires = expires;
+            flow.confirmExpiresDate = expires;
             cb(null, flow);
         }
     });
@@ -183,7 +183,7 @@ var fnServiceUserCreate = function (flow, cb) {
 var fnConfirmCreate = function (flow, cb) {
     var reqArgs = {
         id: flow.confirmId,
-        expires: flow.confirmExpires,
+        expires: flow.confirmExpiresDate,
         userId: flow.newUserId
     };
     flow.env.dal.serviceUserCreateRegisterConfirmData(reqArgs, function (err) {
@@ -198,7 +198,7 @@ var fnConfirmCreate = function (flow, cb) {
 var fnConfirmSendToServiceUser = function (flow, cb) {
     var reqArgs = {
         id: flow.confirmId,
-        expires: flow.confirmExpires,
+        expires: flow.confirmExpiresDate,
         userId: flow.newUserId
     };
     flow.env.notificationsManager.sendServiceUserRegistrationConfirmLink(reqArgs, function(err) {
@@ -213,11 +213,11 @@ var fnConfirmSendToServiceUser = function (flow, cb) {
 var fnGenerateResult = function (flow, cb) {
     flow.createdUser.isConfirmed = false;
     flow.result = {
-        "confirmation": {
-            "id": flow.confirmId,
-            "expires": flow.confirmExpires
+        confirmation: {
+            id: flow.confirmId,
+            expires: flow.confirmExpiresDate
         },
-        "user": flow.createdUser
+        user: flow.createdUser
     };
     cb(null, flow);
 };

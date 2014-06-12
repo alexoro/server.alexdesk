@@ -22,7 +22,7 @@ var fnExecute = function(env, args, next) {
                 env: env,
                 userId: null,
                 confirmId: null,
-                confirmExpires: null
+                confirmExpiresDate: null
             };
             cb(null, flow);
         },
@@ -112,7 +112,7 @@ var fnConfirmGenerateExpireTime = function (flow, cb) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else {
-            flow.confirmExpires = expires;
+            flow.confirmExpiresDate = expires;
             cb(null, flow);
         }
     });
@@ -122,7 +122,7 @@ var fnConfirmCreate = function (flow, cb) {
     var reqArgs = {
         id: flow.confirmId,
         userId: flow.userId,
-        expires: flow.confirmExpires
+        expires: flow.confirmExpiresDate
     };
     flow.env.dal.serviceUserCreateResetPasswordConfirmData(reqArgs, function (err) {
         if (err) {
@@ -136,7 +136,7 @@ var fnConfirmCreate = function (flow, cb) {
 var fnConfirmSendToServiceUser = function (flow, cb) {
     var reqArgs = {
         id: flow.confirmId,
-        expires: flow.confirmExpires
+        expires: flow.confirmExpiresDate
     };
     flow.env.notificationsManager.sendServiceUserResetPasswordConfirmLink(reqArgs, function(err) {
         if (err) {
@@ -150,7 +150,7 @@ var fnConfirmSendToServiceUser = function (flow, cb) {
 var fnGenerateResponse = function (flow, cb) {
     var r = {
         id: flow.confirmId,
-        expires: flow.confirmExpires
+        expires: flow.confirmExpiresDate
     };
     cb(null, r);
 };

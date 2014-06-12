@@ -181,7 +181,7 @@ describe('API#serviceUsers_registerRequest', function() {
             var matchUser = {
                 confirmation: {
                     id: 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
-                    expires: new Date('2020-01-01 00:00:00 +00:00').getTime()
+                    expires: new Date('2020-01-01 00:00:00 +00:00')
                 },
                 user: {
                     id: '1000',
