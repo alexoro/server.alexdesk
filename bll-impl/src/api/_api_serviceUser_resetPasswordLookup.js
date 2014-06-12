@@ -113,7 +113,9 @@ var fnGetCurrentTIme = function (flow, cb) {
 };
 
 var fnConfirmIsNotExpired = function (flow, cb) {
-    if (flow.currentTime.getTime() >= flow.confirmData.expires.getTime()) {
+    if (!(flow.confirmData.expires instanceof Date)) {
+        cb(errBuilder(dErr.INTERNAL_ERROR, 'Token expires is not a Date object'));
+    } else if (flow.currentTime.getTime() >= flow.confirmData.expires.getTime()) {
         cb(errBuilder(dErr.INVALID_OR_EXPIRED_TOKEN, 'Token is expired'));
     } else {
         cb(null, flow);
