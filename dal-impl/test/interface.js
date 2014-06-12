@@ -27,9 +27,9 @@ describe('API::Interface', function() {
     it('Check all interface functions are exists', function() {
         var api = mock.newApiWithMock().api;
 
-        assert.isDefined(api.userGetIdByToken, 'userGetIdByToken function is not exists');
-        assert.isFunction(api.userGetIdByToken, 'userGetIdByToken must be a function');
-        assert.equal(api.userGetIdByToken.length, 2, 'userGetIdByToken must receive 2 arguments only');
+        assert.isDefined(api.userGetInfoForToken, 'userGetInfoForToken function is not exists');
+        assert.isFunction(api.userGetInfoForToken, 'userGetInfoForToken must be a function');
+        assert.equal(api.userGetInfoForToken.length, 2, 'userGetInfoForToken must receive 2 arguments only');
 
         assert.isDefined(api.authTokenCreate, 'authTokenCreate function is not exists');
         assert.isFunction(api.authTokenCreate, 'authTokenCreate must be a function');

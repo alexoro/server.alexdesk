@@ -17,7 +17,7 @@ var DAL = function(mockData) {
 };
 
 
-DAL.prototype.userGetIdByToken = function(args, done) {
+DAL.prototype.userGetInfoForToken = function(args, done) {
     args = deepClone(args);
     var reqArgs = {
         token: args.token

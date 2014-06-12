@@ -5,7 +5,7 @@
 "use strict";
 
 
-var api_userGetIdByToken = require('./_api_userGetIdByToken');
+var api_userGetInfoForToken = require('./_api_userGetInfoForToken');
 var api_authTokenCreate = require('./_api_authTokenCreate');
 var api_serviceUserGetCreditionalsByLogin = require('./_api_serviceUserGetCreditionalsByLogin');
 var api_serviceUserGetProfileById = require('./_api_serviceUserGetProfileById');
@@ -64,8 +64,8 @@ DAL.prototype._before = function(fn, args, next) {
 };
 
 
-DAL.prototype.userGetIdByToken = function(args, next) {
-    this._before(api_userGetIdByToken, args, next);
+DAL.prototype.userGetInfoForToken = function(args, next) {
+    this._before(api_userGetInfoForToken, args, next);
 };
 
 DAL.prototype.authTokenCreate = function(args, next) {

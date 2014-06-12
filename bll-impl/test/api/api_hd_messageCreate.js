@@ -157,7 +157,7 @@ describe('API#hd_messageCreate', function() {
 
     it('Must return INTERNAL_ERROR in case of error in DAL', function(doneTest) {
         var mock = mockBuilder.newApiWithMock();
-        mock.dal.userGetIdByToken = function(args, done) {
+        mock.dal.userGetInfoForToken = function(args, done) {
             done(new Error('Not implemented yet'));
         };
 

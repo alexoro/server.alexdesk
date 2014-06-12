@@ -16,7 +16,7 @@ describe('DAL::appCreate', function () {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             api.appCreate({}, function (err) {
-                assert.isNull(err);
+                assert.isNotNull(err);
                 doneExecute();
             });
         }, doneTest);
