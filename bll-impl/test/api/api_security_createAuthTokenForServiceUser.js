@@ -197,7 +197,8 @@ describe('API#security_createAuthTokenForServiceUser', function() {
 
                 var matchUserMainInfo = {
                     id: '1',
-                    type: domain.userTypes.SERVICE_USER
+                    type: domain.userTypes.SERVICE_USER,
+                    expires: new Date('2020-01-01 00:00:00 +00:00')
                 };
                 assert.deepEqual(matchUserMainInfo, resultUser, 'Expected token and token in response are not match');
                 doneTest();

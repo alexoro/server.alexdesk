@@ -20,18 +20,19 @@ var fnExecute = function (env, args, next) {
             var flow = {
                 args: args,
                 env: env,
+                currentDate: null,
                 userType: null,
                 userId: null,
                 appId: null,
                 appOwnerServiceUserId: null,
                 newChatId: null,
                 newMessageId: null,
-                createDate: null,
                 result: null
             };
             cb(null, flow);
         },
         fnValidate,
+        fnGetCurrentDate,
         fnCheckThatOnlyAndroidUsersCanCallThisMethod,
         fnAppIsExists,
         fnUserGetInfoByToken,
@@ -40,7 +41,6 @@ var fnExecute = function (env, args, next) {
         fnAppGetOwner,
         fnChatGenerateId,
         fnMessageGenerateId,
-        fnGenerateCreateDate,
         fnChatCreateAndGenerateResult
     ];
 
@@ -184,6 +184,19 @@ var fnValidate = function (flow, cb) {
     return cb(null, flow);
 };
 
+var fnGetCurrentDate = function (flow, cb) {
+    flow.env.configProvider.getCurrentDateUtc(function(err, dateNow) {
+        if (err) {
+            cb(errBuilder(dErr.INTERNAL_ERROR, err));
+        } else if (!dateNow || !(dateNow instanceof Date)) {
+            cb(errBuilder(dErr.INTERNAL_ERROR, 'Current date is invalid object: ' + dateNow));
+        } else {
+            flow.currentDate = dateNow;
+            cb(null, flow);
+        }
+    });
+};
+
 var fnCheckThatOnlyAndroidUsersCanCallThisMethod = function (flow, cb) {
     if (flow.args.platform !== domain.platforms.ANDROID) {
         cb(errBuilder(dErr.LOGIC_ERROR, 'Only Android users can create chats'));
@@ -216,7 +229,7 @@ var fnUserGetInfoByToken = function (flow, cb) {
     flow.env.dal.userGetIdByToken(reqArgs, function(err, user) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
-        } else if (!user) {
+        } else if (!user || flow.currentDate.getTime() >= user.expires.getTime()) {
             cb(errBuilder(dErr.INVALID_OR_EXPIRED_TOKEN, 'Specified access token "' + flow.args.accessToken + '" is expired or invalid'));
         } else {
             flow.userType = user.type;
@@ -291,19 +304,6 @@ var fnMessageGenerateId = function (flow, cb) {
     });
 };
 
-var fnGenerateCreateDate = function (flow, cb) {
-    flow.env.configProvider.getCurrentDateUtc(function(err, dateNow) {
-        if (err) {
-            cb(errBuilder(dErr.INTERNAL_ERROR, err));
-        } else if (!dateNow || !(dateNow instanceof Date)) {
-            cb(errBuilder(dErr.INTERNAL_ERROR, 'Current date is invalid object: ' + dateNow));
-        } else {
-            flow.createDate = dateNow;
-            cb(null, flow);
-        }
-    });
-};
-
 var fnChatCreateAndGenerateResult = function (flow, cb) {
     var reqArgs = {};
 
@@ -312,7 +312,7 @@ var fnChatCreateAndGenerateResult = function (flow, cb) {
         appId: flow.args.appId,
         userCreatorId: flow.userId,
         userCreatorType: flow.userType,
-        created: flow.createDate,
+        created: flow.currentDate,
         title: '',
         type: domain.chatTypes.UNKNOWN,
         status: domain.chatStatuses.UNKNOWN,
@@ -348,7 +348,7 @@ var fnChatCreateAndGenerateResult = function (flow, cb) {
         chatId: flow.newChatId,
         userCreatorId: flow.userId,
         userCreatorType: flow.userType,
-        created: flow.createDate,
+        created: flow.currentDate,
         content: flow.args.message,
         isRead: [
             {

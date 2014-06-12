@@ -25,19 +25,14 @@ DAL.prototype.userGetIdByToken = function(args, done) {
 
     var r = _.findWhere(this.mock.system_access_tokens, reqArgs);
     if (r) {
-        var dateNow = new Date();
-        var dateUser = r.expires;
-        if (dateNow.getTime() >= dateUser.getTime()) {
-            return done(null, null);
-        } else {
-            var ret = {
-                type: r.userType,
-                id: r.userId
-            };
-            return done(null, ret);
-        }
+        var ret = {
+            type: r.userType,
+            id: r.userId,
+            expires: deepClone(r.expires)
+        };
+        done(null, ret);
     } else {
-        return done(null, null);
+        done(null, null);
     }
 };
 

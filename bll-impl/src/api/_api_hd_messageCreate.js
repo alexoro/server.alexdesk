@@ -20,19 +20,20 @@ var fnExecute = function (env, args, next) {
             var flow = {
                 args: args,
                 env: env,
+                currentDate: null,
                 userType: null,
                 userId: null,
                 appId: null,
                 appOwnerServiceUserId: null,
                 participantsInfo: null,
                 newMessageId: null,
-                newMessageCreateDate: null,
                 newMessage: null,
                 result: null
             };
             cb(null, flow);
         },
         fnValidate,
+        fnGetCurrentDate,
         fnUserGetInfoByToken,
         fnCheckServiceUserIsExistsAndConfirmed,
         fnChatIsExists,
@@ -42,7 +43,6 @@ var fnExecute = function (env, args, next) {
         fnAppGetOwner,
         fnChatGetParticipants,
         fnMessageGenerateId,
-        fnMessageGenerateCreateDate,
         fnMessageCreate,
         fnGenerateResult
     ];
@@ -91,6 +91,19 @@ var fnValidate = function (flow, cb) {
     return cb(null, flow);
 };
 
+var fnGetCurrentDate = function (flow, cb) {
+    flow.env.configProvider.getCurrentDateUtc(function(err, dateNow) {
+        if (err) {
+            cb(errBuilder(dErr.INTERNAL_ERROR, err));
+        } else if (!dateNow || !(dateNow instanceof Date)) {
+            cb(errBuilder(dErr.INTERNAL_ERROR, 'Current date is invalid object: ' + dateNow));
+        } else {
+            flow.currentDate = dateNow;
+            cb(null, flow);
+        }
+    });
+};
+
 var fnUserGetInfoByToken = function (flow, cb) {
     var reqArgs = {
         token: flow.args.accessToken
@@ -98,7 +111,7 @@ var fnUserGetInfoByToken = function (flow, cb) {
     flow.env.dal.userGetIdByToken(reqArgs, function(err, user) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
-        } else if (!user) {
+        } else if (!user || flow.currentDate.getTime() >= user.expires.getTime()) {
             cb(errBuilder(dErr.INVALID_OR_EXPIRED_TOKEN, 'Specified access token "' + flow.args.accessToken + '" is expired or invalid'));
         } else {
             flow.userType = user.type;
@@ -261,19 +274,6 @@ var fnMessageGenerateId = function (flow, cb) {
     });
 };
 
-var fnMessageGenerateCreateDate = function (flow, cb) {
-    flow.env.configProvider.getCurrentDateUtc(function(err, currentDate) {
-        if (err) {
-            cb(errBuilder(dErr.INTERNAL_ERROR, err));
-        } else if (!(currentDate instanceof Date)) {
-            cb(errBuilder(dErr.INTERNAL_ERROR, 'Current time is not a Date type: ' + currentDate));
-        } else {
-            flow.newMessageCreateDate = currentDate;
-            cb(null, flow);
-        }
-    });
-};
-
 var fnMessageCreate = function (flow, cb) {
     var isReadInfo = [];
     for (var i = 0; i < flow.participantsInfo.length; i++) {
@@ -289,7 +289,7 @@ var fnMessageCreate = function (flow, cb) {
         chatId: flow.args.chatId,
         userCreatorId: flow.userId,
         userCreatorType: flow.userType,
-        created: flow.newMessageCreateDate,
+        created: flow.currentDate,
         content: flow.args.message,
         isRead: isReadInfo
     };

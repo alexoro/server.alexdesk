@@ -20,6 +20,7 @@ var fnExecute = function (env, args, next) {
             var flow = {
                 args: args,
                 env: env,
+                currentDate: null,
                 userType: null,
                 userId: null,
                 appsMap: null,
@@ -29,6 +30,7 @@ var fnExecute = function (env, args, next) {
             cb(null, flow);
         },
         fnValidate,
+        fnGetCurrentDate,
         fnUserGetInfoByToken,
         fnCheckThatServiceUserIsCallingThisMethod,
         fnCheckServiceUserIsExistsAndConfirmed,
@@ -69,6 +71,19 @@ var fnValidate = function (flow, cb) {
     return cb(null, flow);
 };
 
+var fnGetCurrentDate = function (flow, cb) {
+    flow.env.configProvider.getCurrentDateUtc(function(err, dateNow) {
+        if (err) {
+            cb(errBuilder(dErr.INTERNAL_ERROR, err));
+        } else if (!dateNow || !(dateNow instanceof Date)) {
+            cb(errBuilder(dErr.INTERNAL_ERROR, 'Current date is invalid object: ' + dateNow));
+        } else {
+            flow.currentDate = dateNow;
+            cb(null, flow);
+        }
+    });
+};
+
 var fnUserGetInfoByToken = function (flow, cb) {
     var reqArgs = {
         token: flow.args.accessToken
@@ -76,7 +91,7 @@ var fnUserGetInfoByToken = function (flow, cb) {
     flow.env.dal.userGetIdByToken(reqArgs, function(err, user) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
-        } else if (!user) {
+        } else if (!user || flow.currentDate.getTime() >= user.expires.getTime()) {
             cb(errBuilder(dErr.INVALID_OR_EXPIRED_TOKEN, 'Specified access token "' + flow.args.accessToken + '" is expired or invalid'));
         } else {
             flow.userType = user.type;
