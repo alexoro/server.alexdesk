@@ -43,13 +43,13 @@ describe('DAL::appGetOwnerIdForAppById', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.appGetOwnerIdForAppById(argsBuilder({id: 1}), cb);
+                    api.appGetOwnerIdForAppById(argsBuilder({appId: 1}), cb);
                 },
                 function (cb) {
-                    api.appGetOwnerIdForAppById(argsBuilder({id: '-1'}), cb);
+                    api.appGetOwnerIdForAppById(argsBuilder({appId: '-1'}), cb);
                 },
                 function (cb) {
-                    api.appGetOwnerIdForAppById(argsBuilder({id: null}), cb);
+                    api.appGetOwnerIdForAppById(argsBuilder({appId: null}), cb);
                 }
             ];
             async.series(fnStack, invalidArgsCallback(doneExecute));

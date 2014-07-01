@@ -43,13 +43,13 @@ describe('DAL::appIsExists', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.appIsExists(argsBuilder({id: 1}), cb);
+                    api.appIsExists(argsBuilder({appId: 1}), cb);
                 },
                 function (cb) {
-                    api.appIsExists(argsBuilder({id: '-1'}), cb);
+                    api.appIsExists(argsBuilder({appId: '-1'}), cb);
                 },
                 function (cb) {
-                    api.appIsExists(argsBuilder({id: null}), cb);
+                    api.appIsExists(argsBuilder({appId: null}), cb);
                 }
             ];
             async.series(fnStack, invalidArgsCallback(doneExecute));

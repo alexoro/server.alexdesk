@@ -43,13 +43,13 @@ describe('DAL::appsGetListForServiceUser', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.appsGetListForServiceUser(argsBuilder({id: 1}), cb);
+                    api.appsGetListForServiceUser(argsBuilder({userId: 1}), cb);
                 },
                 function (cb) {
-                    api.appsGetListForServiceUser(argsBuilder({id: '-1'}), cb);
+                    api.appsGetListForServiceUser(argsBuilder({userId: '-1'}), cb);
                 },
                 function (cb) {
-                    api.appsGetListForServiceUser(argsBuilder({id: null}), cb);
+                    api.appsGetListForServiceUser(argsBuilder({userId: null}), cb);
                 }
             ];
             async.series(fnStack, invalidArgsCallback(doneExecute));
