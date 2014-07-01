@@ -56,7 +56,7 @@ describe('DAL::appsGetNumberOfMessages', function () {
                 },
                 function (cb) {
                     api.appsGetNumberOfMessages(argsBuilder({appIds: [null]}), cb);
-                },
+                }
             ];
             async.series(fnStack, invalidArgsCallback(doneExecute));
         }, doneTest);

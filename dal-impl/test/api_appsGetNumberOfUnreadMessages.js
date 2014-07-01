@@ -56,7 +56,7 @@ describe('DAL::appsGetNumberOfUnreadMessages', function () {
                 },
                 function (cb) {
                     api.appsGetNumberOfUnreadMessages(argsBuilder({appIds: [null]}), cb);
-                },
+                }
             ];
             async.series(fnStack, invalidArgsCallback(doneExecute));
         }, doneTest);

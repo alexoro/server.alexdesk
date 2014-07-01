@@ -56,7 +56,7 @@ describe('DAL::appsGetNumberOfChats', function () {
                 },
                 function (cb) {
                     api.appsGetNumberOfChats(argsBuilder({appIds: [null]}), cb);
-                },
+                }
             ];
             async.series(fnStack, invalidArgsCallback(doneExecute));
         }, doneTest);
