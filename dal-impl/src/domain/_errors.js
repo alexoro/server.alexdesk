@@ -7,6 +7,8 @@
 
 module.exports = {
 
-    INVALID_PARAMS: -32602
+    INVALID_PARAMS: -32602,
+
+    APP_IS_NOT_FOUND: 200
 
 };
