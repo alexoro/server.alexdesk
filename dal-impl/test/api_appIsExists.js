@@ -36,56 +36,52 @@ var invalidArgsCallback = function (done) {
 };
 
 
-describe('DAL::appGetOwnerIdForAppById', function () {
+describe('DAL::appIsExists', function () {
 
     it('Must not pass invalid appId', function (doneTest) {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.appGetOwnerIdForAppById(argsBuilder({id: 1}), cb);
+                    api.appIsExists(argsBuilder({id: 1}), cb);
                 },
                 function (cb) {
-                    api.appGetOwnerIdForAppById(argsBuilder({id: '-1'}), cb);
+                    api.appIsExists(argsBuilder({id: '-1'}), cb);
                 },
                 function (cb) {
-                    api.appGetOwnerIdForAppById(argsBuilder({id: null}), cb);
+                    api.appIsExists(argsBuilder({id: null}), cb);
                 }
             ];
             async.series(fnStack, invalidArgsCallback(doneExecute));
         }, doneTest);
     });
 
-    it('Must return error if application not exists', function (doneTest) {
+    it('Must return true if application exists', function (doneTest) {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
-            var reqArgs = argsBuilder({appId: 1000});
-            api.appGetOwnerIdForAppById(reqArgs, function (err) {
-                if (err && err.number === dErr.APP_IS_NOT_FOUND) {
-                    doneExecute();
-                } else if (err) {
-                    doneExecute(err);
+            var reqArgs = argsBuilder();
+            api.appIsExists(reqArgs, function (err, isExists) {
+                if (err) {
+                    return doneExecute(err);
                 } else {
-                    doneExecute(new Error('Method was successfully executed with not existing app'));
+                    assert.strictEqual(isExists, true, 'Existsing application is not found');
+                    doneExecute();
                 }
             });
         }, doneTest);
     });
 
-    it('Must return valid result', function (doneTest) {
+    it('Must return false if application not exists', function (doneTest) {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
-            var reqArgs = argsBuilder();
-            api.appGetOwnerIdForAppById(reqArgs, function (err, result) {
+            var reqArgs = argsBuilder({appId: '1000'});
+            api.appIsExists(reqArgs, function (err, isExists) {
                 if (err) {
                     return doneExecute(err);
+                } else {
+                    assert.strictEqual(isExists, false, 'Not existsing application is found');
+                    doneExecute();
                 }
-                var expected = {
-                    id: '1',
-                    type: 1
-                };
-                assert.deepEqual(result, expected, 'Expected and received results are not match');
-                doneExecute();
             });
         }, doneTest);
     });
