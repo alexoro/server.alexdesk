@@ -3,8 +3,9 @@
  */
 
 var api = require('./api/');
-
+var domain = require('./domain/');
 
 module.exports = {
-    api: api
+    api: api,
+    domain: domain
 };

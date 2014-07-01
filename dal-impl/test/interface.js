@@ -8,6 +8,8 @@
 var assert = require('chai').assert;
 
 var Api = require('../').api;
+var domain = require('../').domain;
+
 var mock = require('./mock');
 
 
@@ -168,6 +170,11 @@ describe('API::Interface', function() {
         assert.isDefined(api.messageCreate, 'messageCreate function is not exists');
         assert.isFunction(api.messageCreate, 'messageCreate must be a function');
         assert.equal(api.messageCreate.length, 2, 'messageCreate must receive 2 arguments only');
+    });
+
+    it('Check domain is exists', function () {
+        assert.isDefined(domain, 'Domain is not defined');
+        assert.isDefined(domain.errors, 'Domain errors are not defined');
     });
 
 });
