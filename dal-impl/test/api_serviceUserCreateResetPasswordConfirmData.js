@@ -19,7 +19,7 @@ var argsBuilder = function(override) {
         override = {};
     }
     return {
-        id: override.id === undefined ? '1000' : override.id,
+        id: override.id === undefined ? 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa' : override.id,
         userId: override.userId === undefined ? '1' : override.userId,
         expires: override.expires === undefined ? new Date('2020-01-01 00:00:00') : override.expires
     };

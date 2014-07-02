@@ -19,9 +19,8 @@ var argsBuilder = function(override) {
         override = {};
     }
     return {
-        id: override.id === undefined ? 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa' : override.id,
         userId: override.userId === undefined ? '1' : override.userId,
-        expires: override.expires === undefined ? new Date('2020-01-01 00:00:00') : override.expires
+        passwordHash: override.passwordHash === undefined ? '38fc19f11acfd8645b74def902ab5ffc' : override.passwordHash
     };
 };
 
@@ -38,62 +37,41 @@ var invalidArgsCallback = function (done) {
 };
 
 
-describe('DAL::serviceUserCreateRegisterConfirmData', function () {
-
-    it('Must not pass invalid id', function (doneTest) {
-        var api = mock.newApiWithMock().api;
-        mock.executeOnClearDb(function (doneExecute) {
-            var fnStack = [
-                function (cb) {
-                    api.serviceUserCreateRegisterConfirmData(argsBuilder({id: {}}), cb);
-                },
-                function (cb) {
-                    api.serviceUserCreateRegisterConfirmData(argsBuilder({id: null}), cb);
-                },
-                function (cb) {
-                    api.serviceUserCreateRegisterConfirmData(argsBuilder({id: 1}), cb);
-                },
-                function (cb) {
-                    api.serviceUserCreateRegisterConfirmData(argsBuilder({id: '0cec4d47-d9a1-4984-XXXX-10583b674123'}), cb);
-                }
-            ];
-            async.series(fnStack, invalidArgsCallback(doneExecute));
-        }, doneTest);
-    });
+describe('DAL::serviceUserUpdatePasswordHash', function () {
 
     it('Must not pass invalid userId', function (doneTest) {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.serviceUserCreateRegisterConfirmData(argsBuilder({userId: {}}), cb);
+                    api.serviceUserUpdatePasswordHash(argsBuilder({userId: {}}), cb);
                 },
                 function (cb) {
-                    api.serviceUserCreateRegisterConfirmData(argsBuilder({userId: null}), cb);
+                    api.serviceUserUpdatePasswordHash(argsBuilder({userId: null}), cb);
                 },
                 function (cb) {
-                    api.serviceUserCreateRegisterConfirmData(argsBuilder({userId: -1}), cb);
+                    api.serviceUserUpdatePasswordHash(argsBuilder({userId: -1}), cb);
                 },
                 function (cb) {
-                    api.serviceUserCreateRegisterConfirmData(argsBuilder({userId: '-1'}), cb);
+                    api.serviceUserUpdatePasswordHash(argsBuilder({userId: '-1'}), cb);
                 }
             ];
             async.series(fnStack, invalidArgsCallback(doneExecute));
         }, doneTest);
     });
 
-    it('Must not pass invalid expires', function (doneTest) {
+    it('Must not pass invalid passwordHash', function (doneTest) {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.serviceUserCreateRegisterConfirmData(argsBuilder({expires: {}}), cb);
+                    api.serviceUserUpdatePasswordHash(argsBuilder({passwordHash: {}}), cb);
                 },
                 function (cb) {
-                    api.serviceUserCreateRegisterConfirmData(argsBuilder({expires: null}), cb);
+                    api.serviceUserUpdatePasswordHash(argsBuilder({passwordHash: null}), cb);
                 },
                 function (cb) {
-                    api.serviceUserCreateRegisterConfirmData(argsBuilder({expires: -1}), cb);
+                    api.serviceUserUpdatePasswordHash(argsBuilder({passwordHash: -1}), cb);
                 }
             ];
             async.series(fnStack, invalidArgsCallback(doneExecute));
@@ -104,7 +82,7 @@ describe('DAL::serviceUserCreateRegisterConfirmData', function () {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var reqArgs = argsBuilder();
-            api.serviceUserCreateRegisterConfirmData(reqArgs, function (err, result) {
+            api.serviceUserUpdatePasswordHash(reqArgs, function (err, result) {
                 if (err) {
                     return doneExecute(err);
                 }
@@ -114,24 +92,24 @@ describe('DAL::serviceUserCreateRegisterConfirmData', function () {
         }, doneTest);
     });
 
-    it('Created data must be accessible', function (doneTest) {
+    it('Must update passwordHash', function (doneTest) {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var reqArgsCreate = argsBuilder();
-            api.serviceUserCreateRegisterConfirmData(reqArgsCreate, function (err) {
+            api.serviceUserUpdatePasswordHash(reqArgsCreate, function (err) {
                 if (err) {
                     return doneExecute(err);
                 }
 
                 var reqArgsGet = {
-                    confirmToken: reqArgsCreate.id
+                    id: reqArgsCreate.userId
                 };
-                api.serviceUserGetRegisterConfirmData(reqArgsGet, function (err, data) {
+                api.serviceUserGetProfileById(reqArgsGet, function (err, profile) {
                     if (err) {
                         return doneExecute(err);
                     } else {
-                        assert.isNotNull(data, 'Just created data was not found');
-                        assert.deepEqual(data, reqArgsCreate, 'Expected result is not match w/ actual');
+                        assert.isNotNull(profile, 'Just updated data was not found');
+                        assert.strictEqual(profile.passwordHash, reqArgsCreate.passwordHash, 'Expected result is not match w/ actual');
                         return doneExecute();
                     }
                 });
