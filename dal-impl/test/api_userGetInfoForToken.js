@@ -19,7 +19,7 @@ var argsBuilder = function(override) {
         override = {};
     }
     return {
-        confirmToken: override.confirmToken === undefined ? '0cec4d47-d9a1-4984-8f23-10583b674123' : override.confirmToken
+        token: override.token === undefined ? '142b2b49-75f2-456f-9533-435bd0ef94c0' : override.token
     };
 };
 
@@ -36,23 +36,23 @@ var invalidArgsCallback = function (done) {
 };
 
 
-describe('DAL::serviceUserGetRegisterConfirmData', function () {
+describe('DAL::userGetInfoForToken', function () {
 
-    it('Must not pass invalid confirmToken', function (doneTest) {
+    it('Must not pass invalid token', function (doneTest) {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.serviceUserGetRegisterConfirmData(argsBuilder({confirmToken: {}}), cb);
+                    api.userGetInfoForToken(argsBuilder({token: {}}), cb);
                 },
                 function (cb) {
-                    api.serviceUserGetRegisterConfirmData(argsBuilder({confirmToken: null}), cb);
+                    api.userGetInfoForToken(argsBuilder({token: null}), cb);
                 },
                 function (cb) {
-                    api.serviceUserGetRegisterConfirmData(argsBuilder({confirmToken: 1}), cb);
+                    api.userGetInfoForToken(argsBuilder({token: 1}), cb);
                 },
                 function (cb) {
-                    api.serviceUserGetRegisterConfirmData(argsBuilder({confirmToken: '0cec4d47-d9a1-4984-XXXX-10583b674123'}), cb);
+                    api.userGetInfoForToken(argsBuilder({token: '0cec4d47-d9a1-4984-XXXX-10583b674123'}), cb);
                 }
             ];
             async.series(fnStack, invalidArgsCallback(doneExecute));
@@ -63,13 +63,13 @@ describe('DAL::serviceUserGetRegisterConfirmData', function () {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var reqArgs = argsBuilder();
-            api.serviceUserGetRegisterConfirmData(reqArgs, function (err, result) {
+            api.userGetInfoForToken(reqArgs, function (err, result) {
                 if (err) {
                     return doneExecute(err);
                 }
                 var expected = {
-                    id: '0cec4d47-d9a1-4984-8f23-10583b674123',
-                    userId: '1',
+                    type: 1,
+                    id: '1',
                     expires: new Date('2020-01-01 00:00:00')
                 };
                 assert.deepEqual(result, expected, 'Expected and actual values are not match');
@@ -82,7 +82,7 @@ describe('DAL::serviceUserGetRegisterConfirmData', function () {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var reqArgs = argsBuilder({confirmToken: '00ec4d47-d9a1-4984-8f23-10583b674123'});
-            api.serviceUserGetRegisterConfirmData(reqArgs, function (err, result) {
+            api.userGetInfoForToken(reqArgs, function (err, result) {
                 if (err) {
                     return doneExecute(err);
                 }

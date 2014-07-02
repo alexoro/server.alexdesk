@@ -19,7 +19,7 @@ var argsBuilder = function(override) {
         override = {};
     }
     return {
-        confirmToken: override.confirmToken === undefined ? '0cec4d47-d9a1-4984-8f23-10583b674123' : override.confirmToken
+        confirmToken: override.confirmToken === undefined ? 'a1df4350-5fcb-4377-8bfb-6576801cda51' : override.confirmToken
     };
 };
 
@@ -36,23 +36,23 @@ var invalidArgsCallback = function (done) {
 };
 
 
-describe('DAL::serviceUserGetRegisterConfirmData', function () {
+describe('DAL::serviceUserGetResetPasswordConfirmData', function () {
 
     it('Must not pass invalid confirmToken', function (doneTest) {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.serviceUserGetRegisterConfirmData(argsBuilder({confirmToken: {}}), cb);
+                    api.serviceUserGetResetPasswordConfirmData(argsBuilder({confirmToken: {}}), cb);
                 },
                 function (cb) {
-                    api.serviceUserGetRegisterConfirmData(argsBuilder({confirmToken: null}), cb);
+                    api.serviceUserGetResetPasswordConfirmData(argsBuilder({confirmToken: null}), cb);
                 },
                 function (cb) {
-                    api.serviceUserGetRegisterConfirmData(argsBuilder({confirmToken: 1}), cb);
+                    api.serviceUserGetResetPasswordConfirmData(argsBuilder({confirmToken: 1}), cb);
                 },
                 function (cb) {
-                    api.serviceUserGetRegisterConfirmData(argsBuilder({confirmToken: '0cec4d47-d9a1-4984-XXXX-10583b674123'}), cb);
+                    api.serviceUserGetResetPasswordConfirmData(argsBuilder({confirmToken: '0cec4d47-d9a1-4984-XXXX-10583b674123'}), cb);
                 }
             ];
             async.series(fnStack, invalidArgsCallback(doneExecute));
@@ -63,12 +63,12 @@ describe('DAL::serviceUserGetRegisterConfirmData', function () {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var reqArgs = argsBuilder();
-            api.serviceUserGetRegisterConfirmData(reqArgs, function (err, result) {
+            api.serviceUserGetResetPasswordConfirmData(reqArgs, function (err, result) {
                 if (err) {
                     return doneExecute(err);
                 }
                 var expected = {
-                    id: '0cec4d47-d9a1-4984-8f23-10583b674123',
+                    id: 'a1df4350-5fcb-4377-8bfb-6576801cda51',
                     userId: '1',
                     expires: new Date('2020-01-01 00:00:00')
                 };
@@ -82,7 +82,7 @@ describe('DAL::serviceUserGetRegisterConfirmData', function () {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var reqArgs = argsBuilder({confirmToken: '00ec4d47-d9a1-4984-8f23-10583b674123'});
-            api.serviceUserGetRegisterConfirmData(reqArgs, function (err, result) {
+            api.serviceUserGetResetPasswordConfirmData(reqArgs, function (err, result) {
                 if (err) {
                     return doneExecute(err);
                 }
