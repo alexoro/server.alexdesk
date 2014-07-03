@@ -47,7 +47,7 @@ var invalidArgsCallback = function (done) {
 };
 
 
-describe('DAL::appCreate', function () {
+describe.only('DAL::appCreate', function () {
 
     it('Must not pass invalid id', function (doneTest) {
         var api = mock.newApiWithMock().api;

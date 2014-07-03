@@ -7,6 +7,10 @@
 
 var async = require('async');
 
+var domain = require('../domain');
+var dErr = domain.errors;
+
+var errBuilder = require('./_errorBuilder');
 var validate = require('./_validation');
 
 
