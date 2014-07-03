@@ -221,4 +221,36 @@ describe('DAL::appCreate', function () {
         }, doneTest);
     });
 
+    it('Must create the application', function (doneTest) {
+        var api = mock.newApiWithMock().api;
+        mock.executeOnClearDb(function (doneExecute) {
+            var reqArgsCreate = argsBuilder();
+            api.appCreate(reqArgsCreate, function (err) {
+                if (err) {
+                    return doneExecute(err);
+                }
+
+                var reqArgsGet = {
+                    userId: reqArgsCreate.ownerUserId
+                };
+                api.appsGetListForServiceUser(reqArgsGet, function (err, apps) {
+                    if (err) {
+                        return doneExecute(err);
+                    }
+                    var found = false;
+                    for (var i = 0; i < apps.length; i++) {
+                        if (apps[i].id === reqArgsCreate.id) {
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        assert.fail('Just created application was not found in storage');
+                    }
+                    doneExecute();
+                });
+            });
+        }, doneTest);
+    });
+
 });
