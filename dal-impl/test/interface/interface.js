@@ -175,6 +175,7 @@ describe('API::Interface', function() {
     it('Check domain is exists', function () {
         assert.isDefined(domain, 'Domain is not defined');
         assert.isDefined(domain.errors, 'Domain errors are not defined');
+        assert.isDefined(domain.platforms, 'Domain platforms are not defined');
     });
 
 });

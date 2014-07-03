@@ -52,6 +52,13 @@ var DAL = function(env) {
         throw new Error('ConfigPostgres is not defined or is null or is not a object');
     }
 
+    env.pgConnectStr = 'postgres://' +
+        env._configPostgres.user + ':' +
+        env._configPostgres.password + '@' +
+        env._configPostgres.host + ':' +
+        env._configPostgres.port + '/' +
+        env._configPostgres.db;
+
     this.env = env;
 };
 

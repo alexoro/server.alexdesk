@@ -6,9 +6,11 @@
 
 
 var errors = require('./_errors');
+var platforms = require('./_platforms');
 
 module.exports = {
 
-    errors: errors
+    errors: errors,
+    platforms: platforms
 
 };
