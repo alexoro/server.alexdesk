@@ -25,7 +25,7 @@ var argsBuilder = function(override) {
 
 var invalidArgsCallback = function (done) {
     return function (err) {
-        if (err && err.type === dErr.INVALID_PARAMS) {
+        if (err && err.number === dErr.INVALID_PARAMS) {
             done();
         } else if (err) {
             done(err);
