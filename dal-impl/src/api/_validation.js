@@ -5,21 +5,19 @@
 "use strict";
 
 
-/*var BigNumber = require('bignumber.js');
+var BigNumber = require('bignumber.js');
 
-var regexpAppId = new RegExp("^[0-9]{1,19}$");
+var positiveBigIntRegexp = new RegExp("^[0-9]{1,19}$");
+var positiveBigIntMin = new BigNumber('0');
+var positiveBigIntMax = new BigNumber('9223372036854775807');
+
 var regexpChatId = new RegExp("^[0-9]{1,19}$");
 var regexpInt = new RegExp("^\\-?[0-9]{1,19}$");
 var regexpGuid = new RegExp("^[a-fA-F0-9]{8}\\-[a-fA-F0-9]{4}\\-[a-fA-F0-9]{4}\\-[a-fA-F0-9]{4}\\-[a-fA-F0-9]{12}$");
 var regexpEmail = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 var regexpHex = new RegExp("^[0-9a-f]{32}$");
 
-var appIdMin = new BigNumber('0');
-var appIdMax = new BigNumber('9223372036854775807');
-var chatIdMin = new BigNumber('0');
-var chatIdMax = new BigNumber('9223372036854775807');
-
-var chatsListOffsetMin = 0;
+/*var chatsListOffsetMin = 0;
 var chatsListOffsetMax = 1000000;
 var chatsListLimitMin = 1;
 var chatsListLimitMax = 100;
@@ -38,11 +36,11 @@ var metaDataMaxLength = 1000;*/
 
 module.exports = {
 
-    /*appId: function(value) {
+    positiveBigInt: function(value) {
         try {
-            if (typeof value === 'string' && value.match(regexpAppId)) {
+            if (typeof value === 'string' && value.match(positiveBigIntRegexp)) {
                 var val = new BigNumber(value);
-                return val.greaterThanOrEqualTo(appIdMin) && val.lessThanOrEqualTo(appIdMax);
+                return val.greaterThanOrEqualTo(positiveBigIntMin) && val.lessThanOrEqualTo(positiveBigIntMax);
             } else {
                 return false;
             }
@@ -51,7 +49,23 @@ module.exports = {
         }
     },
 
-    chatId: function(value) {
+    positiveSmallInt: function(value) {
+        return typeof value === 'number' && value >= 0 && value <= 65535;
+    },
+
+    varchar: function (value, min, max) {
+        return typeof value === 'string' && value.length >= min && value.length <= max;
+    },
+
+    date: function (value) {
+        return (value instanceof Date);
+    },
+
+    bool: function (value) {
+        return typeof value === 'boolean';
+    }
+
+    /*chatId: function(value) {
         try {
             if (typeof value === 'string' && value.match(regexpChatId)) {
                 var val = new BigNumber(value);

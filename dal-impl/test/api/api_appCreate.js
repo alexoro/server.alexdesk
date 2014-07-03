@@ -36,7 +36,7 @@ var argsBuilder = function(override) {
 
 var invalidArgsCallback = function (done) {
     return function (err) {
-        if (err && err.type === dErr.INVALID_PARAMS) {
+        if (err && err.number === dErr.INVALID_PARAMS) {
             done();
         } else if (err) {
             done(err);
@@ -47,7 +47,7 @@ var invalidArgsCallback = function (done) {
 };
 
 
-describe.only('DAL::appCreate', function () {
+describe('DAL::appCreate', function () {
 
     it('Must not pass invalid id', function (doneTest) {
         var api = mock.newApiWithMock().api;
