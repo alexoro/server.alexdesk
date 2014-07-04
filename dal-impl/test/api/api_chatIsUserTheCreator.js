@@ -25,14 +25,14 @@ var argsBuilder = function(override) {
     };
 };
 
-var invalidArgsCallback = function (done) {
+var invalidArgsCallbackEntry = function (cb) {
     return function (err) {
         if (err && err.number === dErr.INVALID_PARAMS) {
-            done();
+            cb();
         } else if (err) {
-            done(err);
+            cb(err);
         } else {
-            done(new Error('Application was created with invalid param'));
+            cb(new Error('Application was created with invalid param'));
         }
     };
 };
@@ -45,19 +45,19 @@ describe('DAL::chatIsUserTheCreator', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.chatIsUserTheCreator(argsBuilder({chatId: {}}), cb);
+                    api.chatIsUserTheCreator(argsBuilder({chatId: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatIsUserTheCreator(argsBuilder({chatId: null}), cb);
+                    api.chatIsUserTheCreator(argsBuilder({chatId: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatIsUserTheCreator(argsBuilder({chatId: '-1'}), cb);
+                    api.chatIsUserTheCreator(argsBuilder({chatId: '-1'}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatIsUserTheCreator(argsBuilder({chatId: 1}), cb);
+                    api.chatIsUserTheCreator(argsBuilder({chatId: 1}), invalidArgsCallbackEntry(cb));
                 }
             ];
-            async.series(fnStack, invalidArgsCallback(doneExecute));
+            async.series(fnStack, doneExecute);
         }, doneTest);
     });
 
@@ -66,19 +66,19 @@ describe('DAL::chatIsUserTheCreator', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.chatIsUserTheCreator(argsBuilder({userId: {}}), cb);
+                    api.chatIsUserTheCreator(argsBuilder({userId: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatIsUserTheCreator(argsBuilder({userId: null}), cb);
+                    api.chatIsUserTheCreator(argsBuilder({userId: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatIsUserTheCreator(argsBuilder({userId: '-1'}), cb);
+                    api.chatIsUserTheCreator(argsBuilder({userId: '-1'}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatIsUserTheCreator(argsBuilder({userId: 1}), cb);
+                    api.chatIsUserTheCreator(argsBuilder({userId: 1}), invalidArgsCallbackEntry(cb));
                 }
             ];
-            async.series(fnStack, invalidArgsCallback(doneExecute));
+            async.series(fnStack, doneExecute);
         }, doneTest);
     });
 
@@ -87,16 +87,16 @@ describe('DAL::chatIsUserTheCreator', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.chatIsUserTheCreator(argsBuilder({userType: {}}), cb);
+                    api.chatIsUserTheCreator(argsBuilder({userType: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatIsUserTheCreator(argsBuilder({userType: null}), cb);
+                    api.chatIsUserTheCreator(argsBuilder({userType: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatIsUserTheCreator(argsBuilder({userType: '-1'}), cb);
+                    api.chatIsUserTheCreator(argsBuilder({userType: '-1'}), invalidArgsCallbackEntry(cb));
                 }
             ];
-            async.series(fnStack, invalidArgsCallback(doneExecute));
+            async.series(fnStack, doneExecute);
         }, doneTest);
     });
 

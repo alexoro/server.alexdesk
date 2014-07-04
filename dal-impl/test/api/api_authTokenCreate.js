@@ -26,14 +26,14 @@ var argsBuilder = function(override) {
     };
 };
 
-var invalidArgsCallback = function (done) {
+var invalidArgsCallbackEntry = function (cb) {
     return function (err) {
         if (err && err.number === dErr.INVALID_PARAMS) {
-            done();
+            cb();
         } else if (err) {
-            done(err);
+            cb(err);
         } else {
-            done(new Error('Application was created with invalid param'));
+            cb(new Error('Application was created with invalid param'));
         }
     };
 };
@@ -46,22 +46,22 @@ describe('DAL::authTokenCreate', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.authTokenCreate(argsBuilder({token: {}}), cb);
+                    api.authTokenCreate(argsBuilder({token: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.authTokenCreate(argsBuilder({token: null}), cb);
+                    api.authTokenCreate(argsBuilder({token: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.authTokenCreate(argsBuilder({token: -1}), cb);
+                    api.authTokenCreate(argsBuilder({token: -1}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.authTokenCreate(argsBuilder({token: '-1'}), cb);
+                    api.authTokenCreate(argsBuilder({token: '-1'}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.authTokenCreate(argsBuilder({token: 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaZ'}), cb);
+                    api.authTokenCreate(argsBuilder({token: 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaZ'}), invalidArgsCallbackEntry(cb));
                 }
             ];
-            async.series(fnStack, invalidArgsCallback(doneExecute));
+            async.series(fnStack, doneExecute);
         }, doneTest);
     });
 
@@ -70,16 +70,16 @@ describe('DAL::authTokenCreate', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.authTokenCreate(argsBuilder({userType: {}}), cb);
+                    api.authTokenCreate(argsBuilder({userType: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.authTokenCreate(argsBuilder({userType: null}), cb);
+                    api.authTokenCreate(argsBuilder({userType: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.authTokenCreate(argsBuilder({userType: '-1'}), cb);
+                    api.authTokenCreate(argsBuilder({userType: '-1'}), invalidArgsCallbackEntry(cb));
                 }
             ];
-            async.series(fnStack, invalidArgsCallback(doneExecute));
+            async.series(fnStack, doneExecute);
         }, doneTest);
     });
 
@@ -88,19 +88,19 @@ describe('DAL::authTokenCreate', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.authTokenCreate(argsBuilder({userId: {}}), cb);
+                    api.authTokenCreate(argsBuilder({userId: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.authTokenCreate(argsBuilder({userId: null}), cb);
+                    api.authTokenCreate(argsBuilder({userId: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.authTokenCreate(argsBuilder({userId: '-1'}), cb);
+                    api.authTokenCreate(argsBuilder({userId: '-1'}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.authTokenCreate(argsBuilder({userId: 1}), cb);
+                    api.authTokenCreate(argsBuilder({userId: 1}), invalidArgsCallbackEntry(cb));
                 }
             ];
-            async.series(fnStack, invalidArgsCallback(doneExecute));
+            async.series(fnStack, doneExecute);
         }, doneTest);
     });
 
@@ -109,16 +109,16 @@ describe('DAL::authTokenCreate', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.authTokenCreate(argsBuilder({expires: {}}), cb);
+                    api.authTokenCreate(argsBuilder({expires: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.authTokenCreate(argsBuilder({expires: null}), cb);
+                    api.authTokenCreate(argsBuilder({expires: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.authTokenCreate(argsBuilder({expires: '-1'}), cb);
+                    api.authTokenCreate(argsBuilder({expires: '-1'}), invalidArgsCallbackEntry(cb));
                 }
             ];
-            async.series(fnStack, invalidArgsCallback(doneExecute));
+            async.series(fnStack, doneExecute);
         }, doneTest);
     });
 

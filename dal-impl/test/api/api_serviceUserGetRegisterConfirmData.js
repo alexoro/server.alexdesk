@@ -23,14 +23,14 @@ var argsBuilder = function(override) {
     };
 };
 
-var invalidArgsCallback = function (done) {
+var invalidArgsCallbackEntry = function (cb) {
     return function (err) {
         if (err && err.number === dErr.INVALID_PARAMS) {
-            done();
+            cb();
         } else if (err) {
-            done(err);
+            cb(err);
         } else {
-            done(new Error('Application was created with invalid param'));
+            cb(new Error('Application was created with invalid param'));
         }
     };
 };
@@ -43,19 +43,19 @@ describe('DAL::serviceUserGetRegisterConfirmData', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.serviceUserGetRegisterConfirmData(argsBuilder({confirmToken: {}}), cb);
+                    api.serviceUserGetRegisterConfirmData(argsBuilder({confirmToken: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.serviceUserGetRegisterConfirmData(argsBuilder({confirmToken: null}), cb);
+                    api.serviceUserGetRegisterConfirmData(argsBuilder({confirmToken: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.serviceUserGetRegisterConfirmData(argsBuilder({confirmToken: 1}), cb);
+                    api.serviceUserGetRegisterConfirmData(argsBuilder({confirmToken: 1}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.serviceUserGetRegisterConfirmData(argsBuilder({confirmToken: '0cec4d47-d9a1-4984-XXXX-10583b674123'}), cb);
+                    api.serviceUserGetRegisterConfirmData(argsBuilder({confirmToken: '0cec4d47-d9a1-4984-XXXX-10583b674123'}), invalidArgsCallbackEntry(cb));
                 }
             ];
-            async.series(fnStack, invalidArgsCallback(doneExecute));
+            async.series(fnStack, doneExecute);
         }, doneTest);
     });
 

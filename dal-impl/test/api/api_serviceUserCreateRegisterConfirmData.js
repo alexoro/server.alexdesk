@@ -25,14 +25,14 @@ var argsBuilder = function(override) {
     };
 };
 
-var invalidArgsCallback = function (done) {
+var invalidArgsCallbackEntry = function (cb) {
     return function (err) {
         if (err && err.number === dErr.INVALID_PARAMS) {
-            done();
+            cb();
         } else if (err) {
-            done(err);
+            cb(err);
         } else {
-            done(new Error('Application was created with invalid param'));
+            cb(new Error('Application was created with invalid param'));
         }
     };
 };
@@ -45,19 +45,19 @@ describe('DAL::serviceUserCreateRegisterConfirmData', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.serviceUserCreateRegisterConfirmData(argsBuilder({id: {}}), cb);
+                    api.serviceUserCreateRegisterConfirmData(argsBuilder({id: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.serviceUserCreateRegisterConfirmData(argsBuilder({id: null}), cb);
+                    api.serviceUserCreateRegisterConfirmData(argsBuilder({id: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.serviceUserCreateRegisterConfirmData(argsBuilder({id: 1}), cb);
+                    api.serviceUserCreateRegisterConfirmData(argsBuilder({id: 1}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.serviceUserCreateRegisterConfirmData(argsBuilder({id: '0cec4d47-d9a1-4984-XXXX-10583b674123'}), cb);
+                    api.serviceUserCreateRegisterConfirmData(argsBuilder({id: '0cec4d47-d9a1-4984-XXXX-10583b674123'}), invalidArgsCallbackEntry(cb));
                 }
             ];
-            async.series(fnStack, invalidArgsCallback(doneExecute));
+            async.series(fnStack, doneExecute);
         }, doneTest);
     });
 
@@ -66,19 +66,19 @@ describe('DAL::serviceUserCreateRegisterConfirmData', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.serviceUserCreateRegisterConfirmData(argsBuilder({userId: {}}), cb);
+                    api.serviceUserCreateRegisterConfirmData(argsBuilder({userId: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.serviceUserCreateRegisterConfirmData(argsBuilder({userId: null}), cb);
+                    api.serviceUserCreateRegisterConfirmData(argsBuilder({userId: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.serviceUserCreateRegisterConfirmData(argsBuilder({userId: -1}), cb);
+                    api.serviceUserCreateRegisterConfirmData(argsBuilder({userId: -1}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.serviceUserCreateRegisterConfirmData(argsBuilder({userId: '-1'}), cb);
+                    api.serviceUserCreateRegisterConfirmData(argsBuilder({userId: '-1'}), invalidArgsCallbackEntry(cb));
                 }
             ];
-            async.series(fnStack, invalidArgsCallback(doneExecute));
+            async.series(fnStack, doneExecute);
         }, doneTest);
     });
 
@@ -87,16 +87,16 @@ describe('DAL::serviceUserCreateRegisterConfirmData', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.serviceUserCreateRegisterConfirmData(argsBuilder({expires: {}}), cb);
+                    api.serviceUserCreateRegisterConfirmData(argsBuilder({expires: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.serviceUserCreateRegisterConfirmData(argsBuilder({expires: null}), cb);
+                    api.serviceUserCreateRegisterConfirmData(argsBuilder({expires: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.serviceUserCreateRegisterConfirmData(argsBuilder({expires: -1}), cb);
+                    api.serviceUserCreateRegisterConfirmData(argsBuilder({expires: -1}), invalidArgsCallbackEntry(cb));
                 }
             ];
-            async.series(fnStack, invalidArgsCallback(doneExecute));
+            async.series(fnStack, doneExecute);
         }, doneTest);
     });
 

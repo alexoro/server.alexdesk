@@ -24,14 +24,14 @@ var argsBuilder = function(override) {
     };
 };
 
-var invalidArgsCallback = function (done) {
+var invalidArgsCallbackEntry = function (cb) {
     return function (err) {
         if (err && err.number === dErr.INVALID_PARAMS) {
-            done();
+            cb();
         } else if (err) {
-            done(err);
+            cb(err);
         } else {
-            done(new Error('Application was created with invalid param'));
+            cb(new Error('Application was created with invalid param'));
         }
     };
 };
@@ -44,19 +44,19 @@ describe('DAL::appUserGetCreditionalsByLogin', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.appUserGetCreditionalsByLogin(argsBuilder({appId: {}}), cb);
+                    api.appUserGetCreditionalsByLogin(argsBuilder({appId: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.appUserGetCreditionalsByLogin(argsBuilder({appId: null}), cb);
+                    api.appUserGetCreditionalsByLogin(argsBuilder({appId: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.appUserGetCreditionalsByLogin(argsBuilder({appId: -1}), cb);
+                    api.appUserGetCreditionalsByLogin(argsBuilder({appId: -1}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.appUserGetCreditionalsByLogin(argsBuilder({appId: '-1'}), cb);
+                    api.appUserGetCreditionalsByLogin(argsBuilder({appId: '-1'}), invalidArgsCallbackEntry(cb));
                 },
             ];
-            async.series(fnStack, invalidArgsCallback(doneExecute));
+            async.series(fnStack, doneExecute);
         }, doneTest);
     });
 
@@ -65,16 +65,16 @@ describe('DAL::appUserGetCreditionalsByLogin', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.appUserGetCreditionalsByLogin(argsBuilder({login: {}}), cb);
+                    api.appUserGetCreditionalsByLogin(argsBuilder({login: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.appUserGetCreditionalsByLogin(argsBuilder({login: null}), cb);
+                    api.appUserGetCreditionalsByLogin(argsBuilder({login: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.appUserGetCreditionalsByLogin(argsBuilder({login: -1}), cb);
+                    api.appUserGetCreditionalsByLogin(argsBuilder({login: -1}), invalidArgsCallbackEntry(cb));
                 }
             ];
-            async.series(fnStack, invalidArgsCallback(doneExecute));
+            async.series(fnStack, doneExecute);
         }, doneTest);
     });
 

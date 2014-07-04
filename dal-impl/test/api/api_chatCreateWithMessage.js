@@ -75,14 +75,14 @@ var argsBuilder = function(override) {
     };
 };
 
-var invalidArgsCallback = function (done) {
+var invalidArgsCallbackEntry = function (cb) {
     return function (err) {
         if (err && err.number === dErr.INVALID_PARAMS) {
-            done();
+            cb();
         } else if (err) {
-            done(err);
+            cb(err);
         } else {
-            done(new Error('Application was created with invalid param'));
+            cb(new Error('Application was created with invalid param'));
         }
     };
 };
@@ -97,20 +97,20 @@ describe('DAL::chatCreateWithMessage', function () {
                 function (cb) {
                     var reqArgs = argsBuilder();
                     delete reqArgs.newChat;
-                    api.chatCreateWithMessage(reqArgs, cb);
+                    api.chatCreateWithMessage(reqArgs, invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
                     var reqArgs = argsBuilder();
                     reqArgs.newChat = null;
-                    api.chatCreateWithMessage(reqArgs, cb);
+                    api.chatCreateWithMessage(reqArgs, invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
                     var reqArgs = argsBuilder();
                     reqArgs.newChat = '1';
-                    api.chatCreateWithMessage(reqArgs, cb);
+                    api.chatCreateWithMessage(reqArgs, invalidArgsCallbackEntry(cb));
                 }
             ];
-            async.series(fnStack, invalidArgsCallback(doneExecute));
+            async.series(fnStack, doneExecute);
         }, doneTest);
     });
 
@@ -119,19 +119,19 @@ describe('DAL::chatCreateWithMessage', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({chatId: {}}), cb);
+                    api.chatCreateWithMessage(argsBuilder({chatId: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({chatId: null}), cb);
+                    api.chatCreateWithMessage(argsBuilder({chatId: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({chatId: -1}), cb);
+                    api.chatCreateWithMessage(argsBuilder({chatId: -1}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({chatId: '-1'}), cb);
+                    api.chatCreateWithMessage(argsBuilder({chatId: '-1'}), invalidArgsCallbackEntry(cb));
                 }
             ];
-            async.series(fnStack, invalidArgsCallback(doneExecute));
+            async.series(fnStack, doneExecute);
         }, doneTest);
     });
 
@@ -140,19 +140,19 @@ describe('DAL::chatCreateWithMessage', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({appId: {}}), cb);
+                    api.chatCreateWithMessage(argsBuilder({appId: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({appId: null}), cb);
+                    api.chatCreateWithMessage(argsBuilder({appId: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({appId: -1}), cb);
+                    api.chatCreateWithMessage(argsBuilder({appId: -1}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({appId: '-1'}), cb);
+                    api.chatCreateWithMessage(argsBuilder({appId: '-1'}), invalidArgsCallbackEntry(cb));
                 }
             ];
-            async.series(fnStack, invalidArgsCallback(doneExecute));
+            async.series(fnStack, doneExecute);
         }, doneTest);
     });
 
@@ -161,19 +161,19 @@ describe('DAL::chatCreateWithMessage', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({userCreatorId: {}}), cb);
+                    api.chatCreateWithMessage(argsBuilder({userCreatorId: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({userCreatorId: null}), cb);
+                    api.chatCreateWithMessage(argsBuilder({userCreatorId: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({userCreatorId: -1}), cb);
+                    api.chatCreateWithMessage(argsBuilder({userCreatorId: -1}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({userCreatorId: '-1'}), cb);
+                    api.chatCreateWithMessage(argsBuilder({userCreatorId: '-1'}), invalidArgsCallbackEntry(cb));
                 }
             ];
-            async.series(fnStack, invalidArgsCallback(doneExecute));
+            async.series(fnStack, doneExecute);
         }, doneTest);
     });
 
@@ -182,16 +182,16 @@ describe('DAL::chatCreateWithMessage', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({userCreatorType: {}}), cb);
+                    api.chatCreateWithMessage(argsBuilder({userCreatorType: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({userCreatorType: null}), cb);
+                    api.chatCreateWithMessage(argsBuilder({userCreatorType: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({userCreatorType: '-1'}), cb);
+                    api.chatCreateWithMessage(argsBuilder({userCreatorType: '-1'}), invalidArgsCallbackEntry(cb));
                 }
             ];
-            async.series(fnStack, invalidArgsCallback(doneExecute));
+            async.series(fnStack, doneExecute);
         }, doneTest);
     });
 
@@ -200,16 +200,16 @@ describe('DAL::chatCreateWithMessage', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({created: {}}), cb);
+                    api.chatCreateWithMessage(argsBuilder({created: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({created: null}), cb);
+                    api.chatCreateWithMessage(argsBuilder({created: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({created: '-1'}), cb);
+                    api.chatCreateWithMessage(argsBuilder({created: '-1'}), invalidArgsCallbackEntry(cb));
                 }
             ];
-            async.series(fnStack, invalidArgsCallback(doneExecute));
+            async.series(fnStack, doneExecute);
         }, doneTest);
     });
 
@@ -218,16 +218,16 @@ describe('DAL::chatCreateWithMessage', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({title: {}}), cb);
+                    api.chatCreateWithMessage(argsBuilder({title: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({title: null}), cb);
+                    api.chatCreateWithMessage(argsBuilder({title: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({title: 1}), cb);
+                    api.chatCreateWithMessage(argsBuilder({title: 1}), invalidArgsCallbackEntry(cb));
                 }
             ];
-            async.series(fnStack, invalidArgsCallback(doneExecute));
+            async.series(fnStack, doneExecute);
         }, doneTest);
     });
 
@@ -236,16 +236,16 @@ describe('DAL::chatCreateWithMessage', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({type: {}}), cb);
+                    api.chatCreateWithMessage(argsBuilder({type: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({type: null}), cb);
+                    api.chatCreateWithMessage(argsBuilder({type: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({type: '1'}), cb);
+                    api.chatCreateWithMessage(argsBuilder({type: '1'}), invalidArgsCallbackEntry(cb));
                 }
             ];
-            async.series(fnStack, invalidArgsCallback(doneExecute));
+            async.series(fnStack, doneExecute);
         }, doneTest);
     });
 
@@ -254,16 +254,16 @@ describe('DAL::chatCreateWithMessage', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({status: {}}), cb);
+                    api.chatCreateWithMessage(argsBuilder({status: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({status: null}), cb);
+                    api.chatCreateWithMessage(argsBuilder({status: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({status: '1'}), cb);
+                    api.chatCreateWithMessage(argsBuilder({status: '1'}), invalidArgsCallbackEntry(cb));
                 }
             ];
-            async.series(fnStack, invalidArgsCallback(doneExecute));
+            async.series(fnStack, doneExecute);
         }, doneTest);
     });
 
@@ -272,16 +272,16 @@ describe('DAL::chatCreateWithMessage', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({lastUpdate: {}}), cb);
+                    api.chatCreateWithMessage(argsBuilder({lastUpdate: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({lastUpdate: null}), cb);
+                    api.chatCreateWithMessage(argsBuilder({lastUpdate: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({lastUpdate: '-1'}), cb);
+                    api.chatCreateWithMessage(argsBuilder({lastUpdate: '-1'}), invalidArgsCallbackEntry(cb));
                 }
             ];
-            async.series(fnStack, invalidArgsCallback(doneExecute));
+            async.series(fnStack, doneExecute);
         }, doneTest);
     });
 
@@ -292,20 +292,20 @@ describe('DAL::chatCreateWithMessage', function () {
                 function (cb) {
                     var reqArgs = argsBuilder();
                     delete reqArgs.newChat.extra;
-                    api.chatCreateWithMessage(reqArgs, cb);
+                    api.chatCreateWithMessage(reqArgs, invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
                     var reqArgs = argsBuilder();
                     reqArgs.newChat.extra = null;
-                    api.chatCreateWithMessage(reqArgs, cb);
+                    api.chatCreateWithMessage(reqArgs, invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
                     var reqArgs = argsBuilder();
                     reqArgs.newChat.extra = '1';
-                    api.chatCreateWithMessage(reqArgs, cb);
+                    api.chatCreateWithMessage(reqArgs, invalidArgsCallbackEntry(cb));
                 }
             ];
-            async.series(fnStack, invalidArgsCallback(doneExecute));
+            async.series(fnStack, doneExecute);
         }, doneTest);
     });
 
@@ -314,16 +314,16 @@ describe('DAL::chatCreateWithMessage', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({countryId: {}}), cb);
+                    api.chatCreateWithMessage(argsBuilder({countryId: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({countryId: null}), cb);
+                    api.chatCreateWithMessage(argsBuilder({countryId: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({countryId: '-1'}), cb);
+                    api.chatCreateWithMessage(argsBuilder({countryId: '-1'}), invalidArgsCallbackEntry(cb));
                 }
             ];
-            async.series(fnStack, invalidArgsCallback(doneExecute));
+            async.series(fnStack, doneExecute);
         }, doneTest);
     });
 
@@ -332,16 +332,16 @@ describe('DAL::chatCreateWithMessage', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({langId: {}}), cb);
+                    api.chatCreateWithMessage(argsBuilder({langId: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({langId: null}), cb);
+                    api.chatCreateWithMessage(argsBuilder({langId: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({langId: '-1'}), cb);
+                    api.chatCreateWithMessage(argsBuilder({langId: '-1'}), invalidArgsCallbackEntry(cb));
                 }
             ];
-            async.series(fnStack, invalidArgsCallback(doneExecute));
+            async.series(fnStack, doneExecute);
         }, doneTest);
     });
 
@@ -350,16 +350,16 @@ describe('DAL::chatCreateWithMessage', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({api: {}}), cb);
+                    api.chatCreateWithMessage(argsBuilder({api: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({api: null}), cb);
+                    api.chatCreateWithMessage(argsBuilder({api: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({api: '-1'}), cb);
+                    api.chatCreateWithMessage(argsBuilder({api: '-1'}), invalidArgsCallbackEntry(cb));
                 }
             ];
-            async.series(fnStack, invalidArgsCallback(doneExecute));
+            async.series(fnStack, doneExecute);
         }, doneTest);
     });
 
@@ -368,16 +368,16 @@ describe('DAL::chatCreateWithMessage', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({apiTextValue: {}}), cb);
+                    api.chatCreateWithMessage(argsBuilder({apiTextValue: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({apiTextValue: null}), cb);
+                    api.chatCreateWithMessage(argsBuilder({apiTextValue: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({apiTextValue: -1}), cb);
+                    api.chatCreateWithMessage(argsBuilder({apiTextValue: -1}), invalidArgsCallbackEntry(cb));
                 }
             ];
-            async.series(fnStack, invalidArgsCallback(doneExecute));
+            async.series(fnStack, doneExecute);
         }, doneTest);
     });
 
@@ -386,16 +386,16 @@ describe('DAL::chatCreateWithMessage', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({appBuild: {}}), cb);
+                    api.chatCreateWithMessage(argsBuilder({appBuild: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({appBuild: null}), cb);
+                    api.chatCreateWithMessage(argsBuilder({appBuild: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({appBuild: '-1'}), cb);
+                    api.chatCreateWithMessage(argsBuilder({appBuild: '-1'}), invalidArgsCallbackEntry(cb));
                 }
             ];
-            async.series(fnStack, invalidArgsCallback(doneExecute));
+            async.series(fnStack, doneExecute);
         }, doneTest);
     });
 
@@ -404,16 +404,16 @@ describe('DAL::chatCreateWithMessage', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({appVersion: {}}), cb);
+                    api.chatCreateWithMessage(argsBuilder({appVersion: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({appVersion: null}), cb);
+                    api.chatCreateWithMessage(argsBuilder({appVersion: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({appVersion: -1}), cb);
+                    api.chatCreateWithMessage(argsBuilder({appVersion: -1}), invalidArgsCallbackEntry(cb));
                 }
             ];
-            async.series(fnStack, invalidArgsCallback(doneExecute));
+            async.series(fnStack, doneExecute);
         }, doneTest);
     });
 
@@ -422,16 +422,16 @@ describe('DAL::chatCreateWithMessage', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({deviceManufacturer: {}}), cb);
+                    api.chatCreateWithMessage(argsBuilder({deviceManufacturer: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({deviceManufacturer: null}), cb);
+                    api.chatCreateWithMessage(argsBuilder({deviceManufacturer: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({deviceManufacturer: -1}), cb);
+                    api.chatCreateWithMessage(argsBuilder({deviceManufacturer: -1}), invalidArgsCallbackEntry(cb));
                 }
             ];
-            async.series(fnStack, invalidArgsCallback(doneExecute));
+            async.series(fnStack, doneExecute);
         }, doneTest);
     });
 
@@ -440,16 +440,16 @@ describe('DAL::chatCreateWithMessage', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({deviceModel: {}}), cb);
+                    api.chatCreateWithMessage(argsBuilder({deviceModel: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({deviceModel: null}), cb);
+                    api.chatCreateWithMessage(argsBuilder({deviceModel: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({deviceModel: -1}), cb);
+                    api.chatCreateWithMessage(argsBuilder({deviceModel: -1}), invalidArgsCallbackEntry(cb));
                 }
             ];
-            async.series(fnStack, invalidArgsCallback(doneExecute));
+            async.series(fnStack, doneExecute);
         }, doneTest);
     });
 
@@ -458,19 +458,19 @@ describe('DAL::chatCreateWithMessage', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({deviceWidthPx: {}}), cb);
+                    api.chatCreateWithMessage(argsBuilder({deviceWidthPx: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({deviceWidthPx: null}), cb);
+                    api.chatCreateWithMessage(argsBuilder({deviceWidthPx: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({deviceWidthPx: '-1'}), cb);
+                    api.chatCreateWithMessage(argsBuilder({deviceWidthPx: '-1'}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({deviceWidthPx: 1000000}), cb);
+                    api.chatCreateWithMessage(argsBuilder({deviceWidthPx: 1000000}), invalidArgsCallbackEntry(cb));
                 }
             ];
-            async.series(fnStack, invalidArgsCallback(doneExecute));
+            async.series(fnStack, doneExecute);
         }, doneTest);
     });
 
@@ -479,19 +479,19 @@ describe('DAL::chatCreateWithMessage', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({deviceHeightPx: {}}), cb);
+                    api.chatCreateWithMessage(argsBuilder({deviceHeightPx: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({deviceHeightPx: null}), cb);
+                    api.chatCreateWithMessage(argsBuilder({deviceHeightPx: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({deviceHeightPx: '-1'}), cb);
+                    api.chatCreateWithMessage(argsBuilder({deviceHeightPx: '-1'}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({deviceHeightPx: 1000000}), cb);
+                    api.chatCreateWithMessage(argsBuilder({deviceHeightPx: 1000000}), invalidArgsCallbackEntry(cb));
                 }
             ];
-            async.series(fnStack, invalidArgsCallback(doneExecute));
+            async.series(fnStack, doneExecute);
         }, doneTest);
     });
 
@@ -500,19 +500,19 @@ describe('DAL::chatCreateWithMessage', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({deviceDensity: {}}), cb);
+                    api.chatCreateWithMessage(argsBuilder({deviceDensity: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({deviceDensity: null}), cb);
+                    api.chatCreateWithMessage(argsBuilder({deviceDensity: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({deviceDensity: '-1'}), cb);
+                    api.chatCreateWithMessage(argsBuilder({deviceDensity: '-1'}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({deviceDensity: 1000000}), cb);
+                    api.chatCreateWithMessage(argsBuilder({deviceDensity: 1000000}), invalidArgsCallbackEntry(cb));
                 }
             ];
-            async.series(fnStack, invalidArgsCallback(doneExecute));
+            async.series(fnStack, doneExecute);
         }, doneTest);
     });
 
@@ -521,19 +521,19 @@ describe('DAL::chatCreateWithMessage', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({isRooted: {}}), cb);
+                    api.chatCreateWithMessage(argsBuilder({isRooted: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({isRooted: null}), cb);
+                    api.chatCreateWithMessage(argsBuilder({isRooted: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({isRooted: '-1'}), cb);
+                    api.chatCreateWithMessage(argsBuilder({isRooted: '-1'}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({isRooted: 1000000}), cb);
+                    api.chatCreateWithMessage(argsBuilder({isRooted: 1000000}), invalidArgsCallbackEntry(cb));
                 }
             ];
-            async.series(fnStack, invalidArgsCallback(doneExecute));
+            async.series(fnStack, doneExecute);
         }, doneTest);
     });
 
@@ -542,16 +542,16 @@ describe('DAL::chatCreateWithMessage', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({metaData: {}}), cb);
+                    api.chatCreateWithMessage(argsBuilder({metaData: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({metaData: null}), cb);
+                    api.chatCreateWithMessage(argsBuilder({metaData: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({metaData: 1000000}), cb);
+                    api.chatCreateWithMessage(argsBuilder({metaData: 1000000}), invalidArgsCallbackEntry(cb));
                 }
             ];
-            async.series(fnStack, invalidArgsCallback(doneExecute));
+            async.series(fnStack, doneExecute);
         }, doneTest);
     });
 
@@ -562,20 +562,20 @@ describe('DAL::chatCreateWithMessage', function () {
                 function (cb) {
                     var reqArgs = argsBuilder();
                     delete reqArgs.newChat.participants;
-                    api.chatCreateWithMessage(reqArgs, cb);
+                    api.chatCreateWithMessage(reqArgs, invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
                     var reqArgs = argsBuilder();
                     reqArgs.newChat.participants = null;
-                    api.chatCreateWithMessage(reqArgs, cb);
+                    api.chatCreateWithMessage(reqArgs, invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
                     var reqArgs = argsBuilder();
                     reqArgs.newChat.participants = '1';
-                    api.chatCreateWithMessage(reqArgs, cb);
+                    api.chatCreateWithMessage(reqArgs, invalidArgsCallbackEntry(cb));
                 }
             ];
-            async.series(fnStack, invalidArgsCallback(doneExecute));
+            async.series(fnStack, doneExecute);
         }, doneTest);
     });
 
@@ -584,19 +584,19 @@ describe('DAL::chatCreateWithMessage', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({pUserId1: {}}), cb);
+                    api.chatCreateWithMessage(argsBuilder({pUserId1: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({pUserId1: null}), cb);
+                    api.chatCreateWithMessage(argsBuilder({pUserId1: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({pUserId1: -1}), cb);
+                    api.chatCreateWithMessage(argsBuilder({pUserId1: -1}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({pUserId1: '-1'}), cb);
+                    api.chatCreateWithMessage(argsBuilder({pUserId1: '-1'}), invalidArgsCallbackEntry(cb));
                 }
             ];
-            async.series(fnStack, invalidArgsCallback(doneExecute));
+            async.series(fnStack, doneExecute);
         }, doneTest);
     });
 
@@ -605,16 +605,16 @@ describe('DAL::chatCreateWithMessage', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({pUserType1: {}}), cb);
+                    api.chatCreateWithMessage(argsBuilder({pUserType1: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({pUserType1: null}), cb);
+                    api.chatCreateWithMessage(argsBuilder({pUserType1: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({pUserType1: '-1'}), cb);
+                    api.chatCreateWithMessage(argsBuilder({pUserType1: '-1'}), invalidArgsCallbackEntry(cb));
                 }
             ];
-            async.series(fnStack, invalidArgsCallback(doneExecute));
+            async.series(fnStack, doneExecute);
         }, doneTest);
     });
 
@@ -626,20 +626,20 @@ describe('DAL::chatCreateWithMessage', function () {
                 function (cb) {
                     var reqArgs = argsBuilder();
                     delete reqArgs.newMessage;
-                    api.chatCreateWithMessage(reqArgs, cb);
+                    api.chatCreateWithMessage(reqArgs, invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
                     var reqArgs = argsBuilder();
                     reqArgs.newMessage = null;
-                    api.chatCreateWithMessage(reqArgs, cb);
+                    api.chatCreateWithMessage(reqArgs, invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
                     var reqArgs = argsBuilder();
                     reqArgs.newMessage = '1';
-                    api.chatCreateWithMessage(reqArgs, cb);
+                    api.chatCreateWithMessage(reqArgs, invalidArgsCallbackEntry(cb));
                 }
             ];
-            async.series(fnStack, invalidArgsCallback(doneExecute));
+            async.series(fnStack, doneExecute);
         }, doneTest);
     });
 
@@ -648,19 +648,19 @@ describe('DAL::chatCreateWithMessage', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({messageId: {}}), cb);
+                    api.chatCreateWithMessage(argsBuilder({messageId: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({messageId: null}), cb);
+                    api.chatCreateWithMessage(argsBuilder({messageId: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({messageId: '-1'}), cb);
+                    api.chatCreateWithMessage(argsBuilder({messageId: '-1'}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({messageId: 1}), cb);
+                    api.chatCreateWithMessage(argsBuilder({messageId: 1}), invalidArgsCallbackEntry(cb));
                 }
             ];
-            async.series(fnStack, invalidArgsCallback(doneExecute));
+            async.series(fnStack, doneExecute);
         }, doneTest);
     });
 
@@ -669,16 +669,16 @@ describe('DAL::chatCreateWithMessage', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({created: {}}), cb);
+                    api.chatCreateWithMessage(argsBuilder({created: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({created: null}), cb);
+                    api.chatCreateWithMessage(argsBuilder({created: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({created: '-1'}), cb);
+                    api.chatCreateWithMessage(argsBuilder({created: '-1'}), invalidArgsCallbackEntry(cb));
                 }
             ];
-            async.series(fnStack, invalidArgsCallback(doneExecute));
+            async.series(fnStack, doneExecute);
         }, doneTest);
     });
 
@@ -687,16 +687,16 @@ describe('DAL::chatCreateWithMessage', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({content: {}}), cb);
+                    api.chatCreateWithMessage(argsBuilder({content: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({content: null}), cb);
+                    api.chatCreateWithMessage(argsBuilder({content: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({content: 1}), cb);
+                    api.chatCreateWithMessage(argsBuilder({content: 1}), invalidArgsCallbackEntry(cb));
                 }
             ];
-            async.series(fnStack, invalidArgsCallback(doneExecute));
+            async.series(fnStack, doneExecute);
         }, doneTest);
     });
 
@@ -707,20 +707,20 @@ describe('DAL::chatCreateWithMessage', function () {
                 function (cb) {
                     var reqArgs = argsBuilder();
                     delete reqArgs.newMessage.isRead;
-                    api.chatCreateWithMessage(reqArgs, cb);
+                    api.chatCreateWithMessage(reqArgs, invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
                     var reqArgs = argsBuilder();
                     reqArgs.newMessage.isRead = null;
-                    api.chatCreateWithMessage(reqArgs, cb);
+                    api.chatCreateWithMessage(reqArgs, invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
                     var reqArgs = argsBuilder();
                     reqArgs.newMessage.isRead = '1';
-                    api.chatCreateWithMessage(reqArgs, cb);
+                    api.chatCreateWithMessage(reqArgs, invalidArgsCallbackEntry(cb));
                 }
             ];
-            async.series(fnStack, invalidArgsCallback(doneExecute));
+            async.series(fnStack, doneExecute);
         }, doneTest);
     });
 
@@ -729,19 +729,19 @@ describe('DAL::chatCreateWithMessage', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({irUserId1: {}}), cb);
+                    api.chatCreateWithMessage(argsBuilder({irUserId1: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({irUserId1: null}), cb);
+                    api.chatCreateWithMessage(argsBuilder({irUserId1: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({irUserId1: -1}), cb);
+                    api.chatCreateWithMessage(argsBuilder({irUserId1: -1}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({irUserId1: '-1'}), cb);
+                    api.chatCreateWithMessage(argsBuilder({irUserId1: '-1'}), invalidArgsCallbackEntry(cb));
                 }
             ];
-            async.series(fnStack, invalidArgsCallback(doneExecute));
+            async.series(fnStack, doneExecute);
         }, doneTest);
     });
 
@@ -750,16 +750,16 @@ describe('DAL::chatCreateWithMessage', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({irUserType1: {}}), cb);
+                    api.chatCreateWithMessage(argsBuilder({irUserType1: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({irUserType1: null}), cb);
+                    api.chatCreateWithMessage(argsBuilder({irUserType1: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({irUserType1: '-1'}), cb);
+                    api.chatCreateWithMessage(argsBuilder({irUserType1: '-1'}), invalidArgsCallbackEntry(cb));
                 }
             ];
-            async.series(fnStack, invalidArgsCallback(doneExecute));
+            async.series(fnStack, doneExecute);
         }, doneTest);
     });
 
@@ -768,16 +768,16 @@ describe('DAL::chatCreateWithMessage', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({isRead: {}}), cb);
+                    api.chatCreateWithMessage(argsBuilder({isRead: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({isRead: null}), cb);
+                    api.chatCreateWithMessage(argsBuilder({isRead: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({isRead: '-1'}), cb);
+                    api.chatCreateWithMessage(argsBuilder({isRead: '-1'}), invalidArgsCallbackEntry(cb));
                 }
             ];
-            async.series(fnStack, invalidArgsCallback(doneExecute));
+            async.series(fnStack, doneExecute);
         }, doneTest);
     });
 

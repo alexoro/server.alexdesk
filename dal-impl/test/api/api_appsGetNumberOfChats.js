@@ -23,14 +23,14 @@ var argsBuilder = function(override) {
     };
 };
 
-var invalidArgsCallback = function (done) {
+var invalidArgsCallbackEntry = function (cb) {
     return function (err) {
         if (err && err.number === dErr.INVALID_PARAMS) {
-            done();
+            cb();
         } else if (err) {
-            done(err);
+            cb(err);
         } else {
-            done(new Error('Application was created with invalid param'));
+            cb(new Error('Application was created with invalid param'));
         }
     };
 };
@@ -43,22 +43,22 @@ describe('DAL::appsGetNumberOfChats', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.appsGetNumberOfChats(argsBuilder({appIds: {}}), cb);
+                    api.appsGetNumberOfChats(argsBuilder({appIds: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.appsGetNumberOfChats(argsBuilder({appIds: null}), cb);
+                    api.appsGetNumberOfChats(argsBuilder({appIds: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.appsGetNumberOfChats(argsBuilder({appIds: [-1]}), cb);
+                    api.appsGetNumberOfChats(argsBuilder({appIds: [-1]}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.appsGetNumberOfChats(argsBuilder({appIds: ['-1']}), cb);
+                    api.appsGetNumberOfChats(argsBuilder({appIds: ['-1']}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.appsGetNumberOfChats(argsBuilder({appIds: [null]}), cb);
+                    api.appsGetNumberOfChats(argsBuilder({appIds: [null]}), invalidArgsCallbackEntry(cb));
                 }
             ];
-            async.series(fnStack, invalidArgsCallback(doneExecute));
+            async.series(fnStack, doneExecute);
         }, doneTest);
     });
 

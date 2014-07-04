@@ -77,7 +77,7 @@ var fnValidate = function (flow, cb) {
     if (flow.args.ownerUserId === undefined) {
         return cb(errBuilder(dErr.INVALID_PARAMS, 'ownerUserId is not defined'), flow);
     }
-    if (flow.args.extra === undefined) {
+    if (flow.args.extra === undefined || !flow.args.extra) {
         return cb(errBuilder(dErr.INVALID_PARAMS, 'extra is not defined'), flow);
     }
     if (typeof flow.args.extra !== 'object') {

@@ -34,14 +34,14 @@ var argsBuilder = function(override) {
     };
 };
 
-var invalidArgsCallback = function (done) {
+var invalidArgsCallbackEntry = function (cb) {
     return function (err) {
         if (err && err.number === dErr.INVALID_PARAMS) {
-            done();
+            cb();
         } else if (err) {
-            done(err);
+            cb(err);
         } else {
-            done(new Error('Application was created with invalid param'));
+            cb(new Error('Application was created with invalid param'));
         }
     };
 };
@@ -54,16 +54,16 @@ describe('DAL::appCreate', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.appCreate(argsBuilder({id: 1}), cb);
+                    api.appCreate(argsBuilder({id: 1}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.appCreate(argsBuilder({id: '-1'}), cb);
+                    api.appCreate(argsBuilder({id: '-1'}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.appCreate(argsBuilder({id: null}), cb);
+                    api.appCreate(argsBuilder({id: null}), invalidArgsCallbackEntry(cb));
                 }
             ];
-            async.series(fnStack, invalidArgsCallback(doneExecute));
+            async.series(fnStack, doneExecute);
         }, doneTest);
     });
 
@@ -72,13 +72,13 @@ describe('DAL::appCreate', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.appCreate(argsBuilder({platform: '-1'}), cb);
+                    api.appCreate(argsBuilder({platform: '-1'}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.appCreate(argsBuilder({platform: null}), cb);
+                    api.appCreate(argsBuilder({platform: null}), invalidArgsCallbackEntry(cb));
                 }
             ];
-            async.series(fnStack, invalidArgsCallback(doneExecute));
+            async.series(fnStack, doneExecute);
         }, doneTest);
     });
 
@@ -87,13 +87,13 @@ describe('DAL::appCreate', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.appCreate(argsBuilder({title: 1}), cb);
+                    api.appCreate(argsBuilder({title: 1}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.appCreate(argsBuilder({title: null}), cb);
+                    api.appCreate(argsBuilder({title: null}), invalidArgsCallbackEntry(cb));
                 }
             ];
-            async.series(fnStack, invalidArgsCallback(doneExecute));
+            async.series(fnStack, doneExecute);
         }, doneTest);
     });
 
@@ -102,13 +102,13 @@ describe('DAL::appCreate', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.appCreate(argsBuilder({created: 1}), cb);
+                    api.appCreate(argsBuilder({created: 1}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.appCreate(argsBuilder({created: null}), cb);
+                    api.appCreate(argsBuilder({created: null}), invalidArgsCallbackEntry(cb));
                 }
             ];
-            async.series(fnStack, invalidArgsCallback(doneExecute));
+            async.series(fnStack, doneExecute);
         }, doneTest);
     });
 
@@ -117,13 +117,13 @@ describe('DAL::appCreate', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.appCreate(argsBuilder({isApproved: 1}), cb);
+                    api.appCreate(argsBuilder({isApproved: 1}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.appCreate(argsBuilder({isApproved: null}), cb);
+                    api.appCreate(argsBuilder({isApproved: null}), invalidArgsCallbackEntry(cb));
                 }
             ];
-            async.series(fnStack, invalidArgsCallback(doneExecute));
+            async.series(fnStack, doneExecute);
         }, doneTest);
     });
 
@@ -132,13 +132,13 @@ describe('DAL::appCreate', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.appCreate(argsBuilder({isBlocked: 1}), cb);
+                    api.appCreate(argsBuilder({isBlocked: 1}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.appCreate(argsBuilder({isBlocked: null}), cb);
+                    api.appCreate(argsBuilder({isBlocked: null}), invalidArgsCallbackEntry(cb));
                 }
             ];
-            async.series(fnStack, invalidArgsCallback(doneExecute));
+            async.series(fnStack, doneExecute);
         }, doneTest);
     });
 
@@ -147,13 +147,13 @@ describe('DAL::appCreate', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.appCreate(argsBuilder({isDeleted: 1}), cb);
+                    api.appCreate(argsBuilder({isDeleted: 1}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.appCreate(argsBuilder({isDeleted: null}), cb);
+                    api.appCreate(argsBuilder({isDeleted: null}), invalidArgsCallbackEntry(cb));
                 }
             ];
-            async.series(fnStack, invalidArgsCallback(doneExecute));
+            async.series(fnStack, doneExecute);
         }, doneTest);
     });
 
@@ -162,13 +162,13 @@ describe('DAL::appCreate', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.appCreate(argsBuilder({ownerUserId: 1}), cb);
+                    api.appCreate(argsBuilder({ownerUserId: 1}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.appCreate(argsBuilder({ownerUserId: null}), cb);
+                    api.appCreate(argsBuilder({ownerUserId: null}), invalidArgsCallbackEntry(cb));
                 }
             ];
-            async.series(fnStack, invalidArgsCallback(doneExecute));
+            async.series(fnStack, doneExecute);
         }, doneTest);
     });
 
@@ -179,20 +179,20 @@ describe('DAL::appCreate', function () {
                 function (cb) {
                     var reqArgs = argsBuilder();
                     delete reqArgs.extra;
-                    api.appCreate(reqArgs, cb);
+                    api.appCreate(reqArgs, invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
                     var reqArgs = argsBuilder();
                     reqArgs.extra = null;
-                    api.appCreate(reqArgs, cb);
+                    api.appCreate(reqArgs, invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
                     var reqArgs = argsBuilder();
                     reqArgs.extra = 'x';
-                    api.appCreate(reqArgs, cb);
+                    api.appCreate(reqArgs, invalidArgsCallbackEntry(cb));
                 }
             ];
-            async.series(fnStack, invalidArgsCallback(doneExecute));
+            async.series(fnStack, doneExecute);
         }, doneTest);
     });
 
@@ -201,13 +201,13 @@ describe('DAL::appCreate', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.appCreate(argsBuilder({package: 1}), cb);
+                    api.appCreate(argsBuilder({package: 1}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.appCreate(argsBuilder({package: null}), cb);
+                    api.appCreate(argsBuilder({package: null}), invalidArgsCallbackEntry(cb));
                 }
             ];
-            async.series(fnStack, invalidArgsCallback(doneExecute));
+            async.series(fnStack, doneExecute);
         }, doneTest);
     });
 

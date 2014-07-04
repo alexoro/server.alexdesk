@@ -49,6 +49,13 @@ var fnValidate = function (flow, cb) {
         return cb(new Error('Args is not a object'));
     }
 
+    if (flow.args.userId === undefined) {
+        return cb(errBuilder(dErr.INVALID_PARAMS, 'userId is not defined'), flow);
+    }
+    if (!validate.positiveBigInt(flow.args.userId)) {
+        return cb(errBuilder(dErr.INVALID_PARAMS, 'Incorrect userId value: ' + flow.args.userId), flow);
+    }
+
     return cb(null, flow);
 };
 

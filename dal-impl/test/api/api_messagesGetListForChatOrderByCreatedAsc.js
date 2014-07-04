@@ -25,14 +25,14 @@ var argsBuilder = function(override) {
     };
 };
 
-var invalidArgsCallback = function (done) {
+var invalidArgsCallbackEntry = function (cb) {
     return function (err) {
         if (err && err.number === dErr.INVALID_PARAMS) {
-            done();
+            cb();
         } else if (err) {
-            done(err);
+            cb(err);
         } else {
-            done(new Error('Application was created with invalid param'));
+            cb(new Error('Application was created with invalid param'));
         }
     };
 };
@@ -45,19 +45,19 @@ describe('DAL::messagesGetListForChatOrderByCreatedAsc', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.messagesGetListForChatOrderByCreatedAsc(argsBuilder({chatId: {}}), cb);
+                    api.messagesGetListForChatOrderByCreatedAsc(argsBuilder({chatId: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.messagesGetListForChatOrderByCreatedAsc(argsBuilder({chatId: null}), cb);
+                    api.messagesGetListForChatOrderByCreatedAsc(argsBuilder({chatId: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.messagesGetListForChatOrderByCreatedAsc(argsBuilder({chatId: '-1'}), cb);
+                    api.messagesGetListForChatOrderByCreatedAsc(argsBuilder({chatId: '-1'}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.messagesGetListForChatOrderByCreatedAsc(argsBuilder({chatId: 1}), cb);
+                    api.messagesGetListForChatOrderByCreatedAsc(argsBuilder({chatId: 1}), invalidArgsCallbackEntry(cb));
                 }
             ];
-            async.series(fnStack, invalidArgsCallback(doneExecute));
+            async.series(fnStack, doneExecute);
         }, doneTest);
     });
 
@@ -66,16 +66,16 @@ describe('DAL::messagesGetListForChatOrderByCreatedAsc', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.messagesGetListForChatOrderByCreatedAsc(argsBuilder({offset: {}}), cb);
+                    api.messagesGetListForChatOrderByCreatedAsc(argsBuilder({offset: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.messagesGetListForChatOrderByCreatedAsc(argsBuilder({offset: null}), cb);
+                    api.messagesGetListForChatOrderByCreatedAsc(argsBuilder({offset: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.messagesGetListForChatOrderByCreatedAsc(argsBuilder({offset: '1'}), cb);
+                    api.messagesGetListForChatOrderByCreatedAsc(argsBuilder({offset: '1'}), invalidArgsCallbackEntry(cb));
                 }
             ];
-            async.series(fnStack, invalidArgsCallback(doneExecute));
+            async.series(fnStack, doneExecute);
         }, doneTest);
     });
 
@@ -84,16 +84,16 @@ describe('DAL::messagesGetListForChatOrderByCreatedAsc', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.messagesGetListForChatOrderByCreatedAsc(argsBuilder({limit: {}}), cb);
+                    api.messagesGetListForChatOrderByCreatedAsc(argsBuilder({limit: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.messagesGetListForChatOrderByCreatedAsc(argsBuilder({limit: null}), cb);
+                    api.messagesGetListForChatOrderByCreatedAsc(argsBuilder({limit: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.messagesGetListForChatOrderByCreatedAsc(argsBuilder({limit: '1'}), cb);
+                    api.messagesGetListForChatOrderByCreatedAsc(argsBuilder({limit: '1'}), invalidArgsCallbackEntry(cb));
                 }
             ];
-            async.series(fnStack, invalidArgsCallback(doneExecute));
+            async.series(fnStack, doneExecute);
         }, doneTest);
     });
 
