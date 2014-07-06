@@ -62,18 +62,19 @@ describe('DAL::appsGetNumberOfUnreadMessages', function () {
         }, doneTest);
     });
 
-    it('Must return error if some application is not exists', function (doneTest) {
+    it('Must return 0 if some application is not exists', function (doneTest) {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var reqArgs = argsBuilder({appIds: ['1000']});
-            api.appsGetNumberOfUnreadMessages(reqArgs, function (err) {
-                if (err && err.number === dErr.APP_IS_NOT_FOUND) {
-                    doneExecute();
-                } else if (err) {
-                    doneExecute(err);
-                } else {
-                    doneExecute(new Error('Method was executed with not existing app'));
+            api.appsGetNumberOfUnreadMessages(reqArgs, function (err, result) {
+                if (err) {
+                    return doneExecute(err);
                 }
+                var expected = {
+                    '1000': 0
+                };
+                assert.deepEqual(result, expected, 'Expected and received results are not match');
+                doneExecute();
             });
         }, doneTest);
     });

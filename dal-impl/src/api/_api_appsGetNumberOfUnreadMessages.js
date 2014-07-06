@@ -6,6 +6,7 @@
 
 
 var async = require('async');
+var pg = require('pg');
 
 var domain = require('../domain');
 var dErr = domain.errors;
@@ -25,18 +26,13 @@ var fnExecute = function (env, args, next) {
             cb(null, flow);
         },
         fnValidate,
-        fnGenerateResult
+        fnDbConnect,
+        fnGetAndGenerateResult
     ];
 
     async.waterfall(
         fnStack,
-        function(err, flow) {
-            if (err) {
-                next(err);
-            } else {
-                next(null, flow.result);
-            }
-        }
+        fnTasksFinishProcessor(next)
     );
 };
 
@@ -49,13 +45,72 @@ var fnValidate = function (flow, cb) {
         return cb(new Error('Args is not a object'));
     }
 
+    if (flow.args.appIds === undefined) {
+        return cb(errBuilder(dErr.INVALID_PARAMS, 'appIds is not defined'), flow);
+    }
+    if (!(flow.args.appIds instanceof Array)) {
+        return cb(errBuilder(dErr.INVALID_PARAMS, 'appIds is not an array'), flow);
+    }
+
+    for (var i = 0; i < flow.args.appIds.length; i++) {
+        if (!validate.positiveBigInt(flow.args.appIds[i])) {
+            return cb(errBuilder(dErr.INVALID_PARAMS, 'Incorrect appId value: ' + flow.args.appIds[i]), flow);
+        }
+    }
+
     return cb(null, flow);
 };
 
-var fnGenerateResult = function (flow, cb) {
-    flow.result = null;
-//    cb(null, flow);
-    cb(new Error('Not implemented'));
+var fnDbConnect = function (flow, cb) {
+    pg.connect(flow.env.pgConnectStr, function (err, client, clientDone) {
+        if (err) {
+            return cb(errBuilder(dErr.DB_ERROR, err.message), flow);
+        }
+        flow.client = client;
+        flow.clientDone = clientDone;
+        cb(null, flow);
+    });
+};
+
+var fnGetAndGenerateResult = function (flow, cb) {
+    if (flow.args.appIds.length === 0) {
+        flow.result = {};
+        cb(null, flow);
+    } else {
+        var sql = 'SELECT app_id::text, COUNT(message_id) AS count ' +
+            'FROM public.chat_messages_extra ' +
+            'WHERE is_read = false AND app_id IN(' + flow.args.appIds.join(',') + ') ' +
+            'GROUP BY app_id';
+        flow.client.query(sql, function (err, result) {
+            if (err) {
+                cb(errBuilder(dErr.DB_ERROR, err.message), flow);
+            } else {
+                flow.result = {};
+                var i;
+                for (i = 0; i < flow.args.appIds.length; i++) {
+                    flow.result[flow.args.appIds[i]] = 0;
+                }
+                for (i = 0; i < result.rows.length; i++) {
+                    flow.result[result.rows[i].app_id] = parseInt(result.rows[i].count);
+                }
+                cb(null, flow);
+            }
+        });
+    }
+};
+
+var fnTasksFinishProcessor = function (next) {
+    return function(errFlow, flow) {
+        if (errFlow) {
+            if (flow.client) {
+                flow.clientDone();
+            }
+            next(errFlow);
+        } else {
+            flow.clientDone();
+            next(null, flow.result);
+        }
+    };
 };
 
 
