@@ -6,6 +6,7 @@
 
 
 var async = require('async');
+var pg = require('pg');
 
 var domain = require('../domain');
 var dErr = domain.errors;
