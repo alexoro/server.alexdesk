@@ -1,0 +1,5 @@
+1) appUserGetCreditionalsByLogin
+- Remove appId
+
+2) Naming
+- Rename all creditionals w/ credentials

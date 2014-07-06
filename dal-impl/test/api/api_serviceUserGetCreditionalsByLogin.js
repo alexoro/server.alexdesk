@@ -56,6 +56,20 @@ describe('DAL::serviceUserGetCreditionalsByLogin', function () {
         }, doneTest);
     });
 
+    it('Must return null if login not found', function (doneTest) {
+        var api = mock.newApiWithMock().api;
+        mock.executeOnClearDb(function (doneExecute) {
+            var reqArgs = argsBuilder({login: 'XXXXXXX'});
+            api.serviceUserGetCreditionalsByLogin(reqArgs, function (err, result) {
+                if (err) {
+                    return doneExecute(err);
+                }
+                assert.isNull(result, 'Expected and actual result are not match');
+                doneExecute();
+            });
+        }, doneTest);
+    });
+
     it('Must return valid result', function (doneTest) {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
@@ -71,20 +85,6 @@ describe('DAL::serviceUserGetCreditionalsByLogin', function () {
                     passwordHash: 'b642b4217b34b1e8d3bd915fc65c4452'
                 };
                 assert.deepEqual(result, expected, 'Expected and actual result are not match');
-                doneExecute();
-            });
-        }, doneTest);
-    });
-
-    it('Must return null if login not found', function (doneTest) {
-        var api = mock.newApiWithMock().api;
-        mock.executeOnClearDb(function (doneExecute) {
-            var reqArgs = argsBuilder({login: 'XXXXXXX'});
-            api.serviceUserGetCreditionalsByLogin(reqArgs, function (err, result) {
-                if (err) {
-                    return doneExecute(err);
-                }
-                assert.isNull(result, 'Expected and actual result are not match');
                 doneExecute();
             });
         }, doneTest);
