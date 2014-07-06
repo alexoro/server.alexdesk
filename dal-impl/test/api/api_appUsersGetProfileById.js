@@ -30,7 +30,7 @@ var invalidArgsCallbackEntry = function (cb) {
         } else if (err) {
             cb(err);
         } else {
-            cb(new Error('Application was created with invalid param'));
+            cb(new Error('Method was execute with invalid param'));
         }
     };
 };
@@ -43,16 +43,16 @@ describe('DAL::appUsersGetProfileById', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.appUsersGetProfileById(argsBuilder({appIds: {}}), invalidArgsCallbackEntry(cb));
+                    api.appUsersGetProfileById(argsBuilder({id: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.appUsersGetProfileById(argsBuilder({appIds: null}), invalidArgsCallbackEntry(cb));
+                    api.appUsersGetProfileById(argsBuilder({id: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.appUsersGetProfileById(argsBuilder({appIds: -1}), invalidArgsCallbackEntry(cb));
+                    api.appUsersGetProfileById(argsBuilder({id: -1}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.appUsersGetProfileById(argsBuilder({appIds: '-1'}), invalidArgsCallbackEntry(cb));
+                    api.appUsersGetProfileById(argsBuilder({id: '-1'}), invalidArgsCallbackEntry(cb));
                 }
             ];
             async.series(fnStack, doneExecute);
