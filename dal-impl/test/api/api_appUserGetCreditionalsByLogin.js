@@ -87,7 +87,7 @@ describe('DAL::appUserGetCreditionalsByLogin', function () {
                     return doneExecute(err);
                 }
                 var expected = {
-                    id: 2,
+                    id: "2",
                     login: 'test1',
                     passwordHash: '5a105e8b9d40e1329780d62ea2265d8a'
                 };
