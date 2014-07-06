@@ -31,7 +31,7 @@ module.exports = {
         }
 
         var env = {
-            _configPostgres: override._configPostgres || this._configPostgres
+            configPostgres: override.configPostgres || this._configPostgres
         };
         return {
             api: new Api(env)

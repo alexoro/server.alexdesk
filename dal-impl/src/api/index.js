@@ -48,16 +48,16 @@ var DAL = function(env) {
     if (!env) {
         throw new Error('Environment is not defined');
     }
-    if (typeof env._configPostgres !== 'object' || !env._configPostgres) {
+    if (typeof env.configPostgres !== 'object' || !env.configPostgres) {
         throw new Error('ConfigPostgres is not defined or is null or is not a object');
     }
 
     env.pgConnectStr = 'postgres://' +
-        env._configPostgres.user + ':' +
-        env._configPostgres.password + '@' +
-        env._configPostgres.host + ':' +
-        env._configPostgres.port + '/' +
-        env._configPostgres.db;
+        env.configPostgres.user + ':' +
+        env.configPostgres.password + '@' +
+        env.configPostgres.host + ':' +
+        env.configPostgres.port + '/' +
+        env.configPostgres.db;
 
     this.env = env;
 };
