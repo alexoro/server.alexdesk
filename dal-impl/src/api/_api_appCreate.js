@@ -47,10 +47,10 @@ var fnExecute = function (env, args, next) {
 
 var fnValidate = function (flow, cb) {
     if (!flow.args) {
-        return cb(new Error('Args is not a defined'), flow);
+        return cb(errBuilder(dErr.INVALID_PARAMS, 'Args is not a defined'), flow);
     }
     if (typeof flow.args !== 'object') {
-        return cb(new Error('Args is not a object'), flow);
+        return cb(errBuilder(dErr.INVALID_PARAMS, 'Args is not a object'), flow);
     }
 
     if (flow.args.id === undefined) {
@@ -200,7 +200,7 @@ var fnCreateAppExtra = function (flow, cb) {
             }
         });
     } else {
-        cb(new Error('Unsupported platform type is specified: ' + flow.args.platform), flow);
+        cb(errBuilder(dErr.LOGIC_ERROR, 'Unsupported platform type is specified: ' + flow.args.platform), flow);
     }
 };
 

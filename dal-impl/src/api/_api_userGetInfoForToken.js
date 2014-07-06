@@ -39,10 +39,10 @@ var fnExecute = function (env, args, next) {
 
 var fnValidate = function (flow, cb) {
     if (!flow.args) {
-        return cb(new Error('Args is not a defined'));
+        return cb(errBuilder(dErr.INVALID_PARAMS, 'Args is not a defined'), flow);
     }
     if (typeof flow.args !== 'object') {
-        return cb(new Error('Args is not a object'));
+        return cb(errBuilder(dErr.INVALID_PARAMS, 'Args is not a object'), flow);
     }
 
     if (flow.args.token === undefined) {
