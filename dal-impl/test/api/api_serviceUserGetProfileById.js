@@ -59,6 +59,20 @@ describe('DAL::serviceUserGetProfileById', function () {
         }, doneTest);
     });
 
+    it('Must return null if id not exists', function (doneTest) {
+        var api = mock.newApiWithMock().api;
+        mock.executeOnClearDb(function (doneExecute) {
+            var reqArgs = argsBuilder({id: '1000'});
+            api.serviceUserGetProfileById(reqArgs, function (err, profile) {
+                if (err) {
+                    return doneExecute(err);
+                }
+                assert.isNull(profile, 'Expected and actual results are not match');
+                doneExecute();
+            });
+        }, doneTest);
+    });
+
     it('Must return valid result', function (doneTest) {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
@@ -78,20 +92,6 @@ describe('DAL::serviceUserGetProfileById', function () {
                     isConfirmed: true
                 };
                 assert.deepEqual(profile, expected, 'Expected and actual results are not match');
-                doneExecute();
-            });
-        }, doneTest);
-    });
-
-    it('Must return null if id not exists', function (doneTest) {
-        var api = mock.newApiWithMock().api;
-        mock.executeOnClearDb(function (doneExecute) {
-            var reqArgs = argsBuilder({id: '1000'});
-            api.serviceUserGetProfileById(reqArgs, function (err, profile) {
-                if (err) {
-                    return doneExecute(err);
-                }
-                assert.isNull(profile, 'Expected and actual results are not match');
                 doneExecute();
             });
         }, doneTest);
