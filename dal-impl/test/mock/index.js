@@ -96,13 +96,17 @@ module.exports = {
         });
 
         fnStack.push(function (client, cb) {
-            task(function (err) {
-                if (err) {
-                    cb(err);
-                } else {
-                    cb(null, client);
-                }
-            });
+            try {
+                task(function (err) {
+                    if (err) {
+                        cb(err);
+                    } else {
+                        cb(null, client);
+                    }
+                });
+            } catch (err) {
+                cb(err);
+            }
         });
 
         pg.connect(dsn, function(err, client, doneClient) {

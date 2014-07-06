@@ -36,7 +36,7 @@ var invalidArgsCallbackEntry = function (cb) {
 };
 
 
-describe('DAL::appsGetListForServiceUser', function () {
+describe.only('DAL::appsGetListForServiceUser', function () {
 
     it('Must not pass invalid userId', function (doneTest) {
         var api = mock.newApiWithMock().api;
@@ -56,17 +56,16 @@ describe('DAL::appsGetListForServiceUser', function () {
         }, doneTest);
     });
 
-    it('Must not return error if user not found', function (doneTest) {
+    it('Must not return empty array if user not found', function (doneTest) {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var reqArgs = argsBuilder({userId: '1000'});
-            api.appsGetListForServiceUser(reqArgs, function (err) {
-                if (err && err.number === dErr.USER_NOT_FOUND) {
-                    doneExecute();
-                } else if (err) {
-                    doneExecute(err);
+            api.appsGetListForServiceUser(reqArgs, function (err, apps) {
+                if (err) {
+                    return doneExecute(err);
                 } else {
-                    doneExecute(new Error('Method returned result for not found user'));
+                    assert.lengthOf(apps, 0, 'Expected to receive 0 apps');
+                    doneExecute();
                 }
             });
         }, doneTest);
