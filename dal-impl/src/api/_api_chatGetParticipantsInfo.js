@@ -26,18 +26,13 @@ var fnExecute = function (env, args, next) {
             cb(null, flow);
         },
         fnValidate,
-        fnGenerateResult
+        fnDbConnect,
+        fnGetResultAndGenerateResult
     ];
 
     async.waterfall(
         fnStack,
-        function(err, flow) {
-            if (err) {
-                next(err);
-            } else {
-                next(null, flow.result);
-            }
-        }
+        fnTasksFinishProcessor(next)
     );
 };
 
@@ -50,14 +45,59 @@ var fnValidate = function (flow, cb) {
         return cb(errBuilder(dErr.INVALID_PARAMS, 'Args is not a object'), flow);
     }
 
+    if (flow.args.chatId === undefined) {
+        return cb(errBuilder(dErr.INVALID_PARAMS, 'chatId is not defined'), flow);
+    }
+    if (!validate.positiveBigInt(flow.args.chatId)) {
+        return cb(errBuilder(dErr.INVALID_PARAMS, 'Incorrect chatId value: ' + flow.args.chatId), flow);
+    }
+
     return cb(null, flow);
 };
 
-var fnGenerateResult = function (flow, cb) {
-    flow.result = null;
-//    cb(null, flow);
-    cb(new Error('Not implemented'));
+var fnDbConnect = function (flow, cb) {
+    pg.connect(flow.env.pgConnectStr, function (err, client, clientDone) {
+        if (err) {
+            return cb(errBuilder(dErr.DB_ERROR, err.message), flow);
+        }
+        flow.client = client;
+        flow.clientDone = clientDone;
+        cb(null, flow);
+    });
 };
 
+
+var preparedGetResult = 'SELECT user_type, user_id::text FROM public.chat_participants WHERE chat_id = $1';
+
+var fnGetResultAndGenerateResult = function (flow, cb) {
+    flow.client.query(preparedGetResult, [flow.args.chatId], function (err, result) {
+        if (err) {
+            cb(errBuilder(dErr.DB_ERROR, err.message), flow);
+        } else {
+            flow.result = [];
+            for (var i = 0; i < result.rows.length; i++) {
+                flow.result.push({
+                    id: result.rows[i].user_id,
+                    type: result.rows[i].user_type
+                });
+            }
+            cb(null, flow);
+        }
+    });
+};
+
+var fnTasksFinishProcessor = function (next) {
+    return function(errFlow, flow) {
+        if (errFlow) {
+            if (flow.client) {
+                flow.clientDone();
+            }
+            next(errFlow);
+        } else {
+            flow.clientDone();
+            next(null, flow.result);
+        }
+    };
+};
 
 module.exports = fnExecute;

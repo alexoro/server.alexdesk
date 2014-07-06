@@ -59,6 +59,20 @@ describe('DAL::chatGetParticipantsInfo', function () {
         }, doneTest);
     });
 
+    it('Must return empty array if no info is found', function (doneTest) {
+        var api = mock.newApiWithMock().api;
+        mock.executeOnClearDb(function (doneExecute) {
+            var reqArgs = argsBuilder({chatId: '1000'});
+            api.chatGetParticipantsInfo(reqArgs, function (err, participants) {
+                if (err) {
+                    return doneExecute(err);
+                }
+                assert.lengthOf(participants, 0, 'Expected and received result are not match');
+                doneExecute();
+            });
+        }, doneTest);
+    });
+
     it('Must return valid result', function (doneTest) {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
