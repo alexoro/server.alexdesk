@@ -81,7 +81,7 @@ describe('DAL::userGetInfoForToken', function () {
     it('Must return null for non-existing token', function (doneTest) {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
-            var reqArgs = argsBuilder({confirmToken: '00ec4d47-d9a1-4984-8f23-10583b674123'});
+            var reqArgs = argsBuilder({token: '00ec4d47-d9a1-4984-8f23-10583b674123'});
             api.userGetInfoForToken(reqArgs, function (err, result) {
                 if (err) {
                     return doneExecute(err);

@@ -10,12 +10,13 @@ var BigNumber = require('bignumber.js');
 var positiveBigIntRegexp = new RegExp("^[0-9]{1,19}$");
 var positiveBigIntMin = new BigNumber('0');
 var positiveBigIntMax = new BigNumber('9223372036854775807');
+var regexpGuid4 = new RegExp("^[a-fA-F0-9]{8}\\-[a-fA-F0-9]{4}\\-[a-fA-F0-9]{4}\\-[a-fA-F0-9]{4}\\-[a-fA-F0-9]{12}$");
 
-var regexpChatId = new RegExp("^[0-9]{1,19}$");
+/*var regexpChatId = new RegExp("^[0-9]{1,19}$");
 var regexpInt = new RegExp("^\\-?[0-9]{1,19}$");
 var regexpGuid = new RegExp("^[a-fA-F0-9]{8}\\-[a-fA-F0-9]{4}\\-[a-fA-F0-9]{4}\\-[a-fA-F0-9]{4}\\-[a-fA-F0-9]{12}$");
 var regexpEmail = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-var regexpHex = new RegExp("^[0-9a-f]{32}$");
+var regexpHex = new RegExp("^[0-9a-f]{32}$");*/
 
 /*var chatsListOffsetMin = 0;
 var chatsListOffsetMax = 1000000;
@@ -63,6 +64,10 @@ module.exports = {
 
     bool: function (value) {
         return typeof value === 'boolean';
+    },
+
+    guid4: function(value) {
+        return (typeof value === 'string') && value.match(regexpGuid4);
     }
 
     /*chatId: function(value) {

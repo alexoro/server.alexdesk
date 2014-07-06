@@ -6,6 +6,7 @@
 
 
 var async = require('async');
+var pg = require('pg');
 
 var domain = require('../domain');
 var dErr = domain.errors;
@@ -25,18 +26,13 @@ var fnExecute = function (env, args, next) {
             cb(null, flow);
         },
         fnValidate,
-        fnGenerateResult
+        fnDbConnect,
+        fnGetInfoByTokenAndGenerateResult
     ];
 
     async.waterfall(
         fnStack,
-        function(err, flow) {
-            if (err) {
-                next(err);
-            } else {
-                next(null, flow.result);
-            }
-        }
+        fnTasksFinishProcessor(next)
     );
 };
 
@@ -49,13 +45,62 @@ var fnValidate = function (flow, cb) {
         return cb(new Error('Args is not a object'));
     }
 
+    if (flow.args.token === undefined) {
+        return cb(errBuilder(dErr.INVALID_PARAMS, 'token is not defined'), flow);
+    }
+    if (!validate.guid4(flow.args.token)) {
+        return cb(errBuilder(dErr.INVALID_PARAMS, 'Incorrect token value: ' + flow.args.token), flow);
+    }
+
     return cb(null, flow);
 };
 
-var fnGenerateResult = function (flow, cb) {
-    flow.result = null;
-//    cb(null, flow);
-    cb(new Error('Not implemented'));
+var fnDbConnect = function (flow, cb) {
+    pg.connect(flow.env.pgConnectStr, function (err, client, clientDone) {
+        if (err) {
+            return cb(errBuilder(dErr.DB_ERROR, err.message), flow);
+        }
+        flow.client = client;
+        flow.clientDone = clientDone;
+        cb(null, flow);
+    });
+};
+
+
+var preparedGetInfoByToken = 'SELECT user_type, user_id::text, expires FROM public.system_access_tokens WHERE id = $1';
+
+var fnGetInfoByTokenAndGenerateResult = function (flow, cb) {
+    flow.client.query(preparedGetInfoByToken, [flow.args.token], function (err, result) {
+        if (err) {
+            cb(errBuilder(dErr.DB_ERROR, err.message), flow);
+        } else if (result.rows.length > 1) {
+            cb(errBuilder(dErr.LOGIC_ERROR, 'More than 1 rows is returned for token: ' + flow.args.token));
+        } else if (result.rows.length === 0) {
+            flow.result = null;
+            cb(null, flow);
+        } else {
+            flow.result = {
+                type: result.rows[0].user_type,
+                id: result.rows[0].user_id,
+                expires: result.rows[0].expires
+            };
+            cb(null, flow);
+        }
+    });
+};
+
+var fnTasksFinishProcessor = function (next) {
+    return function(errFlow, flow) {
+        if (errFlow) {
+            if (flow.client) {
+                flow.clientDone();
+            }
+            next(errFlow);
+        } else {
+            flow.clientDone();
+            next(null, flow.result);
+        }
+    };
 };
 
 

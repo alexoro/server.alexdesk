@@ -10,6 +10,7 @@ module.exports = {
     INVALID_PARAMS: -32602,
 
     DB_ERROR: 100,
+    LOGIC_ERROR: 101,
 
     APP_IS_NOT_FOUND: 200,
     USER_NOT_FOUND: 204,
