@@ -1,3 +1,5 @@
+BEGIN;
+
 -- Users
 
 INSERT INTO users(id, login, password_hash, name, registered, last_visit, is_confirmed)
@@ -158,3 +160,5 @@ INSERT INTO chat_messages_extra(message_id, app_id, chat_id, user_type, user_id,
     VALUES(9, 2, 4, 1, 1, FALSE);
 INSERT INTO chat_messages_extra(message_id, app_id, chat_id, user_type, user_id, is_read)
     VALUES(8, 1, 3, 2, 4, TRUE);
+
+COMMIT;

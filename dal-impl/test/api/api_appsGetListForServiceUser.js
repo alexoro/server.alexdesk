@@ -36,7 +36,7 @@ var invalidArgsCallbackEntry = function (cb) {
 };
 
 
-describe.only('DAL::appsGetListForServiceUser', function () {
+describe('DAL::appsGetListForServiceUser', function () {
 
     it('Must not pass invalid userId', function (doneTest) {
         var api = mock.newApiWithMock().api;

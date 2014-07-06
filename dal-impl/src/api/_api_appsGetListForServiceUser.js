@@ -74,7 +74,7 @@ var fnDbConnect = function (flow, cb) {
 };
 
 
-var preparedGetAppsIdsForUser = 'SELECT app_id::text FROM app_acl WHERE user_id = $1';
+var preparedGetAppsIdsForUser = 'SELECT app_id::text FROM public.app_acl WHERE user_id = $1';
 
 var fnGetAppsIdsForUser = function (flow, cb) {
     var args = [
@@ -99,7 +99,7 @@ var fnGetAppsInfo = function (flow, cb) {
 
     var sql =
         'SELECT id::text, platform_type, title, created, is_approved, is_blocked, is_deleted ' +
-        'FROM apps ' +
+        'FROM public.apps ' +
         'WHERE id IN (' + flow.appIds.join(',') + ')';
     var query = flow.client.query(sql);
     query.on('error', function (err) {
@@ -138,7 +138,7 @@ var fnGetAppsExtraAndroid = function (flow, cb) {
 
     var sql =
         'SELECT app_id, package ' +
-        'FROM app_info_extra_android ' +
+        'FROM public.app_info_extra_android ' +
         'WHERE app_id IN (' + androidAppsIds.join(',') + ')';
     flow.client.query(sql, function (err, result) {
         if (err) {

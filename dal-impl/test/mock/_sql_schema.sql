@@ -1,3 +1,7 @@
+SET search_path TO public;
+
+BEGIN;
+
 CREATE TABLE system_access_tokens (
   id UUID NOT NULL,
   user_type SMALLINT NOT NULL,
@@ -128,3 +132,5 @@ CREATE TABLE chat_messages_extra (
   user_type SMALLINT NOT NULL,
   is_read BOOL NOT NULL
 );
+
+COMMIT;

@@ -143,7 +143,7 @@ var fnTransactionBegin = function (flow, cb) {
 
 
 var preparedCreateApp =
-    'INSERT INTO apps(id, platform_type, title, created, is_approved, is_blocked, is_deleted) ' +
+    'INSERT INTO public.apps(id, platform_type, title, created, is_approved, is_blocked, is_deleted) ' +
     'VALUES ($1, $2, $3, $4, $5, $6, $7)';
 
 var fnCreateApp = function (flow, cb) {
@@ -166,7 +166,7 @@ var fnCreateApp = function (flow, cb) {
 };
 
 
-var preparedCreateAppAcl = 'INSERT INTO app_acl (app_id, user_id, is_owner) VALUES ($1, $2, $3)';
+var preparedCreateAppAcl = 'INSERT INTO public.app_acl (app_id, user_id, is_owner) VALUES ($1, $2, $3)';
 
 var fnCreateAppOwner = function (flow, cb) {
     var args = [
@@ -184,7 +184,7 @@ var fnCreateAppOwner = function (flow, cb) {
 };
 
 
-var preparedCreateAppExtraAndroid = 'INSERT INTO app_info_extra_android(app_id, package) VALUES ($1, $2)';
+var preparedCreateAppExtraAndroid = 'INSERT INTO public.app_info_extra_android(app_id, package) VALUES ($1, $2)';
 
 var fnCreateAppExtra = function (flow, cb) {
     if (flow.args.platform === domain.platforms.ANDROID) {

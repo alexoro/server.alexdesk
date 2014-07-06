@@ -11,6 +11,9 @@ var pg = require('pg');
 
 var Api = require('../../src').api;
 
+var dbClearCommands = fs.readFileSync(__dirname + '/_sql_clear.sql').toString().split(';');
+var dbMockDataCommnds = fs.readFileSync(__dirname + '/_sql_data.sql').toString().split(';');
+
 
 module.exports = {
 
@@ -19,8 +22,7 @@ module.exports = {
         port: 5432,
         user: 'uas',
         password: '488098',
-        db: 'test',
-        schema: 'test'
+        db: 'test'
     },
 
     newApiWithMock: function(override) {
@@ -37,25 +39,16 @@ module.exports = {
     },
 
     executeOnClearDb: function (task, doneTask) {
-        var self = this;
         var i;
         var fnStack = [];
-        var dsn = 'postgres://' + this._configPostgres.user + ':' + this._configPostgres.password + '@' + this._configPostgres.host + ':' + this._configPostgres.port + '/' + this._configPostgres.db;
-        var sqlSchema;
-        var sqlData;
+        var dsn = 'postgres://' +
+            this._configPostgres.user + ':' +
+            this._configPostgres.password + '@' +
+            this._configPostgres.host + ':' +
+            this._configPostgres.port + '/' +
+            this._configPostgres.db;
 
-        try {
-            sqlSchema = fs.readFileSync(__dirname + '/_sql_schema.sql').toString().split(';');
-        } catch (err) {
-            return doneTask(err);
-        }
-
-        try {
-            sqlData = fs.readFileSync(__dirname + '/_sql_data.sql').toString().split(';');
-        } catch (err) {
-            return doneTask(err);
-        }
-
+        // default callback for each sql-query
         var fnDefaultCb = function (client, cb) {
             return function (err) {
                 if (err) {
@@ -66,35 +59,25 @@ module.exports = {
             };
         };
 
-        fnStack.push(function (client, cb) {
-            client.query('DROP SCHEMA IF EXISTS ' + self._configPostgres.schema + ' CASCADE', fnDefaultCb(client, cb));
-        });
-        fnStack.push(function (client, cb) {
-            client.query('CREATE SCHEMA ' + self._configPostgres.schema, fnDefaultCb(client, cb));
-        });
-        fnStack.push(function (client, cb) {
-            client.query('SET search_path TO ' + self._configPostgres.schema, fnDefaultCb(client, cb));
-        });
-
-        for (i = 0; i < sqlSchema.length; i++) {
+        // truncate all tables and data
+        for (i = 0; i < dbClearCommands.length; i++) {
             (function(e) {
                 fnStack.push(function(client, cb) {
                     client.query(e, fnDefaultCb(client, cb));
                 });
-            })(sqlSchema[i]);
+            })(dbClearCommands[i]);
         }
-        for (i = 0; i < sqlData.length; i++) {
+
+        // create test data
+        for (i = 0; i < dbMockDataCommnds.length; i++) {
             (function(e) {
                 fnStack.push(function(client, cb) {
                     client.query(e, fnDefaultCb(client, cb));
                 });
-            })(sqlData[i]);
+            })(dbMockDataCommnds[i]);
         }
 
-        fnStack.push(function (client, cb) {
-            client.query('SET search_path TO public', fnDefaultCb(client, cb));
-        });
-
+        // put the test task after the test environment is created
         fnStack.push(function (client, cb) {
             try {
                 task(function (err) {
@@ -109,28 +92,43 @@ module.exports = {
             }
         });
 
+        // connect to db
         pg.connect(dsn, function(err, client, doneClient) {
             if (err) {
                 return doneTask(err);
             }
 
+            // put the waterfall initial task before all tasks
             fnStack.unshift(function (cb) {
                 cb(null, client);
             });
 
+            // execute the test
             async.waterfall(
                 fnStack,
-                function (errStack) {
-                    client.query('DROP SCHEMA ' + self._configPostgres.schema + ' CASCADE', function (errDrop) {
-                        doneClient();
-                        if (errStack) {
-                            doneTask(errStack);
-                        } else if (errDrop) {
-                            doneTask(errDrop);
-                        } else {
-                            doneTask();
+                function (errStack) { // callback after all commands
+                    // clear the test database
+                    fnStack = [
+                        function (cb) {
+                            cb(null, client);
                         }
-                    });
+                    ];
+                    for (i = 0; i < dbClearCommands.length; i++) {
+                        (function(e) {
+                            fnStack.push(function(client, cb) {
+                                client.query(e, fnDefaultCb(client, cb));
+                            });
+                        })(dbClearCommands[i]);
+                    }
+
+                    // clear all and return
+                    async.waterfall(
+                        fnStack,
+                        function (errClear) {
+                            doneClient();
+                            doneTask(errClear || errStack);
+                        }
+                    );
                 }
             );
         });
