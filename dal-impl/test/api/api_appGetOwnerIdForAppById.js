@@ -56,18 +56,16 @@ describe('DAL::appGetOwnerIdForAppById', function () {
         }, doneTest);
     });
 
-    it('Must return error if application not exists', function (doneTest) {
+    it('Must return null if owner is not found', function (doneTest) {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
-            var reqArgs = argsBuilder({appId: 1000});
-            api.appGetOwnerIdForAppById(reqArgs, function (err) {
-                if (err && err.number === dErr.APP_IS_NOT_FOUND) {
-                    doneExecute();
-                } else if (err) {
-                    doneExecute(err);
-                } else {
-                    doneExecute(new Error('Method was successfully executed with not existing app'));
+            var reqArgs = argsBuilder({appId: '1000'});
+            api.appGetOwnerIdForAppById(reqArgs, function (err, result) {
+                if (err) {
+                    return doneExecute(err);
                 }
+                assert.isNull(result, 'Expected and received results are not match');
+                doneExecute();
             });
         }, doneTest);
     });

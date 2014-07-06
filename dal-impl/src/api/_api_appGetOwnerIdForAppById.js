@@ -6,6 +6,7 @@
 
 
 var async = require('async');
+var pg = require('pg');
 
 var domain = require('../domain');
 var dErr = domain.errors;
@@ -25,18 +26,13 @@ var fnExecute = function (env, args, next) {
             cb(null, flow);
         },
         fnValidate,
-        fnGenerateResult
+        fnDbConnect,
+        fnGetResultAndGenerateResult
     ];
 
     async.waterfall(
         fnStack,
-        function(err, flow) {
-            if (err) {
-                next(err);
-            } else {
-                next(null, flow.result);
-            }
-        }
+        fnTasksFinishProcessor(next)
     );
 };
 
@@ -49,13 +45,61 @@ var fnValidate = function (flow, cb) {
         return cb(new Error('Args is not a object'));
     }
 
+    if (flow.args.appId === undefined) {
+        return cb(errBuilder(dErr.INVALID_PARAMS, 'appId is not defined'), flow);
+    }
+    if (!validate.positiveBigInt(flow.args.appId)) {
+        return cb(errBuilder(dErr.INVALID_PARAMS, 'Incorrect appId value: ' + flow.args.appId), flow);
+    }
+
     return cb(null, flow);
 };
 
-var fnGenerateResult = function (flow, cb) {
-    flow.result = null;
-//    cb(null, flow);
-    cb(new Error('Not implemented'));
+var fnDbConnect = function (flow, cb) {
+    pg.connect(flow.env.pgConnectStr, function (err, client, clientDone) {
+        if (err) {
+            return cb(errBuilder(dErr.DB_ERROR, err.message), flow);
+        }
+        flow.client = client;
+        flow.clientDone = clientDone;
+        cb(null, flow);
+    });
+};
+
+
+var preparedGetResult = 'SELECT user_id::text FROM public.app_acl WHERE app_id = $1 AND is_owner = true';
+
+var fnGetResultAndGenerateResult = function (flow, cb) {
+    flow.client.query(preparedGetResult, [flow.args.appId], function (err, result) {
+        if (err) {
+            cb(errBuilder(dErr.DB_ERROR, err.message), flow);
+        } else if (result.rows.length > 1) {
+            cb(errBuilder(dErr.LOGIC_ERROR, 'More than 1 rows is returned for appId: ' + flow.args.appId));
+        } else if (result.rows.length === 0) {
+            flow.result = null;
+            cb(null, flow);
+        } else {
+            flow.result = {
+                type: 1,
+                id: result.rows[0].user_id
+            };
+            cb(null, flow);
+        }
+    });
+};
+
+var fnTasksFinishProcessor = function (next) {
+    return function(errFlow, flow) {
+        if (errFlow) {
+            if (flow.client) {
+                flow.clientDone();
+            }
+            next(errFlow);
+        } else {
+            flow.clientDone();
+            next(null, flow.result);
+        }
+    };
 };
 
 
