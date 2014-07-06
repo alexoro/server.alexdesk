@@ -59,6 +59,20 @@ describe('DAL::chatGetAppId', function () {
         }, doneTest);
     });
 
+    it('Must return -1 if chat is not found', function (doneTest) {
+        var api = mock.newApiWithMock().api;
+        mock.executeOnClearDb(function (doneExecute) {
+            var reqArgs = argsBuilder({chatId: '1000'});
+            api.chatGetAppId(reqArgs, function (err, appId) {
+                if (err) {
+                    return doneExecute(err);
+                }
+                assert.strictEqual(appId, '-1', 'Expected and received result are not match');
+                doneExecute();
+            });
+        }, doneTest);
+    });
+
     it('Must return valid result', function (doneTest) {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
