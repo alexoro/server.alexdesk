@@ -30,7 +30,7 @@ var invalidArgsCallbackEntry = function (cb) {
         } else if (err) {
             cb(err);
         } else {
-            cb(new Error('Application was created with invalid param'));
+            cb(new Error('Method was executed with invalid params'));
         }
     };
 };
