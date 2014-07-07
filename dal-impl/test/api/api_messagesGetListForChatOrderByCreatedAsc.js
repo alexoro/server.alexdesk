@@ -91,6 +91,9 @@ describe('DAL::messagesGetListForChatOrderByCreatedAsc', function () {
                 },
                 function (cb) {
                     api.messagesGetListForChatOrderByCreatedAsc(argsBuilder({limit: '1'}), invalidArgsCallbackEntry(cb));
+                },
+                function (cb) {
+                    api.messagesGetListForChatOrderByCreatedAsc(argsBuilder({limit: -1}), invalidArgsCallbackEntry(cb));
                 }
             ];
             async.series(fnStack, doneExecute);
