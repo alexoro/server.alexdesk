@@ -66,6 +66,9 @@ DAL.prototype._before = function(fn, args, next) {
     try {
         fn(this.env, args, next);
     } catch (err) {
+        if (err.number === undefined) {
+            err.number = domain.errors.INTERNAL_ERROR;
+        }
         next(err);
     }
 };
