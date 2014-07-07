@@ -59,18 +59,19 @@ describe('DAL::chatsGetLastMessagePerChat', function () {
         }, doneTest);
     });
 
-    it('Must return error if some chat is not found', function (doneTest) {
+    it('Must return null if some chat is not found', function (doneTest) {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var reqArgs = argsBuilder({chatIds: ['1000']});
             api.chatsGetLastMessagePerChat(reqArgs, function (err, result) {
-                if (err && err.number === dErr.CHAT_NOT_FOUND) {
-                    doneExecute();
-                } else if (err) {
-                    doneExecute(err);
-                } else {
-                    doneExecute(new Error('The result was returned for non-existing chat'));
+                if (err) {
+                    return doneExecute(err);
                 }
+                assert.isObject(result, 'Return result must be the object');
+                assert.strictEqual(Object.keys(result).length, 1, 'Expected to receive 1 result');
+                assert.isDefined(result['1000'], 'Expected to chat #1000 be in result');
+                assert.isNull(result['1000'], 'Expected to receive null for non-existing chat or message');
+                doneExecute();
             });
         }, doneTest);
     });
