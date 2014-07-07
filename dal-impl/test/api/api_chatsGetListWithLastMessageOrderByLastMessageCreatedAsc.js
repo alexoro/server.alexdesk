@@ -119,18 +119,16 @@ describe('DAL::chatsGetListWithLastMessageOrderByLastMessageCreatedAsc', functio
         }, doneTest);
     });
 
-    it('Must return error if app is not found', function (doneTest) {
+    it('Must return empty array if app is not found', function (doneTest) {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var reqArgs = argsBuilder({appId: '1000'});
-            api.chatsGetListWithLastMessageOrderByLastMessageCreatedAsc(reqArgs, function (err, isCreator) {
-                if (err && err.number === dErr.APP_IS_NOT_FOUND) {
-                    doneExecute();
-                } else if (err) {
-                    doneExecute(err);
-                } else {
-                    doneExecute(new Error('Result was returned for non-existing app'));
+            api.chatsGetListWithLastMessageOrderByLastMessageCreatedAsc(reqArgs, function (err, result) {
+                if (err) {
+                    return doneExecute(err);
                 }
+                assert.lengthOf(result, 0, 'Expected to received 0 chats');
+                doneExecute();
             });
         }, doneTest);
     });

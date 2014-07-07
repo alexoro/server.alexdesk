@@ -5,3 +5,6 @@
 - Rename all creditionals w/ credentials
 - In tokens: replace confirmToken w/ token
 - In tokens: in return use token instead of id
+
+3) chatsGetListWithLastMessageOrderByLastMessageCreatedAsc
+- Specify userType in query

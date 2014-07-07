@@ -68,6 +68,10 @@ module.exports = {
 
     guid4: function(value) {
         return (typeof value === 'string') && value.match(regexpGuid4);
+    },
+
+    int: function (value, min, max) {
+        return typeof value === 'number' && value >= min && value <= max;
     }
 
     /*chatId: function(value) {
