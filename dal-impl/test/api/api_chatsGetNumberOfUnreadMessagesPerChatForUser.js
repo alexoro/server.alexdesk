@@ -100,18 +100,18 @@ describe('DAL::chatsGetNumberOfUnreadMessagesPerChatForUser', function () {
         }, doneTest);
     });
 
-    it('Must return error if chat is not exists', function (doneTest) {
+    it('Must return 0 if chat is not exists', function (doneTest) {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var reqArgs = argsBuilder({chatIds: ['1000']});
             api.chatsGetNumberOfUnreadMessagesPerChatForUser(reqArgs, function (err, result) {
-                if (err && err.number === dErr.CHAT_NOT_FOUND) {
-                    doneExecute();
-                } else if (err) {
-                    doneExecute(err);
-                } else {
-                    doneExecute(new Error('The result was returned for non-existing chat'));
+                if (err) {
+                    return doneExecute(err);
                 }
+                assert.lengthOf(Object.keys(result), 1, 'Expected to receive 1 result');
+                assert.isDefined(result['1000'], 'Expected to hold result in response');
+                assert.strictEqual(result['1000'], 0, 'Expected and received result are not match');
+                doneExecute();
             });
         }, doneTest);
     });
@@ -128,7 +128,7 @@ describe('DAL::chatsGetNumberOfUnreadMessagesPerChatForUser', function () {
                 if (err) {
                     return doneExecute(err);
                 }
-                assert.lengthOf(Object.keys(result).length, 2, 'Expected to receive 2 results');
+                assert.lengthOf(Object.keys(result), 2, 'Expected to receive 2 results');
                 assert.isDefined(result['1'], 'Expected to hold result in response');
                 assert.isDefined(result['2'], 'Expected to hold result in response');
                 assert.strictEqual(result['1'], 0, 'Expected and received result are not match');
@@ -146,7 +146,7 @@ describe('DAL::chatsGetNumberOfUnreadMessagesPerChatForUser', function () {
                 if (err) {
                     return doneExecute(err);
                 }
-                assert.lengthOf(Object.keys(result).length, 1, 'Expected to receive 1 result');
+                assert.lengthOf(Object.keys(result), 1, 'Expected to receive 1 result');
                 assert.isDefined(result['3'], 'Expected to hold result in response');
                 assert.strictEqual(result['3'], 1, 'Expected and received result are not match');
                 doneExecute();
@@ -166,7 +166,7 @@ describe('DAL::chatsGetNumberOfUnreadMessagesPerChatForUser', function () {
                 if (err) {
                     return doneExecute(err);
                 }
-                assert.lengthOf(Object.keys(result).length, 2, 'Expected to receive 2 results');
+                assert.lengthOf(Object.keys(result), 2, 'Expected to receive 2 results');
                 assert.isDefined(result['1'], 'Expected to hold result in response');
                 assert.isDefined(result['2'], 'Expected to hold result in response');
                 assert.strictEqual(result['1'], 0, 'Expected and received result are not match');
