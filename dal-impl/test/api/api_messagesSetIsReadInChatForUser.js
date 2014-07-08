@@ -100,22 +100,6 @@ describe('DAL::messagesSetIsReadInChatForUser', function () {
         }, doneTest);
     });
 
-    it('Must return error if chat not exists', function (doneTest) {
-        var api = mock.newApiWithMock().api;
-        mock.executeOnClearDb(function (doneExecute) {
-            var reqArgs = argsBuilder({chatId: '1000'});
-            api.messagesSetIsReadInChatForUser(reqArgs, function (err, result) {
-                if (err && err.number === dErr.CHAT_NOT_FOUND) {
-                    doneExecute();
-                } else if (err) {
-                    doneExecute(err);
-                } else {
-                    doneExecute(new Error('Method was executed successfully with non-existing chat'));
-                }
-            });
-        }, doneTest);
-    });
-
     it('Must return valid result', function (doneTest) {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
