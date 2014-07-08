@@ -38,7 +38,7 @@ var invalidArgsCallbackEntry = function (cb) {
 };
 
 
-describe.only('DAL::messagesGetListForChatOrderByCreatedAsc', function () {
+describe('DAL::messagesGetListForChatOrderByCreatedAsc', function () {
 
     it('Must not pass invalid chatId', function (doneTest) {
         var api = mock.newApiWithMock().api;
