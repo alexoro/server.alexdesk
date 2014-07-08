@@ -26,18 +26,13 @@ var fnExecute = function (env, args, next) {
             cb(null, flow);
         },
         fnValidate,
-        fnGenerateResult
+        fnDbConnect,
+        fnSetAndGenerateResult
     ];
 
     async.waterfall(
         fnStack,
-        function(err, flow) {
-            if (err) {
-                next(err);
-            } else {
-                next(null, flow.result);
-            }
-        }
+        fnTasksFinishProcessor(next)
     );
 };
 
@@ -50,13 +45,60 @@ var fnValidate = function (flow, cb) {
         return cb(errBuilder(dErr.INVALID_PARAMS, 'Args is not a object'), flow);
     }
 
+    if (flow.args.userId === undefined) {
+        return cb(errBuilder(dErr.INVALID_PARAMS, 'userId is not defined'), flow);
+    }
+    if (!validate.positiveBigInt(flow.args.userId)) {
+        return cb(errBuilder(dErr.INVALID_PARAMS, 'Incorrect userId value: ' + flow.args.userId), flow);
+    }
+
+    if (flow.args.passwordHash === undefined) {
+        return cb(errBuilder(dErr.INVALID_PARAMS, 'passwordHash is not defined'), flow);
+    }
+    if (!validate.varchar(flow.args.passwordHash, 32, 32)) {
+        return cb(errBuilder(dErr.INVALID_PARAMS, 'Incorrect passwordHash value: ' + flow.args.passwordHash), flow);
+    }
+
     return cb(null, flow);
 };
 
-var fnGenerateResult = function (flow, cb) {
-    flow.result = null;
-//    cb(null, flow);
-    cb(new Error('Not implemented'));
+var fnDbConnect = function (flow, cb) {
+    pg.connect(flow.env.pgConnectStr, function (err, client, clientDone) {
+        if (err) {
+            return cb(errBuilder(dErr.DB_ERROR, err.message), flow);
+        }
+        flow.client = client;
+        flow.clientDone = clientDone;
+        cb(null, flow);
+    });
+};
+
+
+var preparedSet = 'UPDATE public.users SET password_hash = $1 WHERE id = $2';
+
+var fnSetAndGenerateResult = function (flow, cb) {
+    flow.client.query(preparedSet, [flow.args.passwordHash, flow.args.userId], function (err, result) {
+        if (err) {
+            cb(errBuilder(dErr.DB_ERROR, err.message), flow);
+        } else {
+            flow.result = null;
+            cb(null, flow);
+        }
+    });
+};
+
+var fnTasksFinishProcessor = function (next) {
+    return function(errFlow, flow) {
+        if (errFlow) {
+            if (flow.client) {
+                flow.clientDone();
+            }
+            next(errFlow);
+        } else {
+            flow.clientDone();
+            next(null, flow.result);
+        }
+    };
 };
 
 
