@@ -109,11 +109,28 @@ describe('DAL::messagesGetIsReadPerMessageForUser', function () {
                     return doneExecute(err);
                 }
 
-                assert.lengthOf(Object.keys(result).length, 2, 'Expected to receive 2 results');
+                assert.lengthOf(Object.keys(result), 2, 'Expected to receive 2 results');
                 assert.isDefined(result['5'], 'Expected and received result are not match');
                 assert.isDefined(result['6'], 'Expected and received result are not match');
                 assert.strictEqual(result['5'], true, 'Expected and received result are not match');
                 assert.strictEqual(result['6'], false, 'Expected and received result are not match');
+                doneExecute();
+            });
+        }, doneTest);
+    });
+
+    it('Must return false for non-existingmessage', function (doneTest) {
+        var api = mock.newApiWithMock().api;
+        mock.executeOnClearDb(function (doneExecute) {
+            var reqArgs = argsBuilder({messageIds: ['1000']});
+            api.messagesGetIsReadPerMessageForUser(reqArgs, function (err, result) {
+                if (err) {
+                    return doneExecute(err);
+                }
+
+                assert.lengthOf(Object.keys(result), 1, 'Expected to receive 1 result');
+                assert.isDefined(result['1000'], 'Expected and received result are not match');
+                assert.strictEqual(result['1000'], false, 'Expected and received result are not match');
                 doneExecute();
             });
         }, doneTest);

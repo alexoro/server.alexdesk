@@ -55,24 +55,6 @@ var fnValidate = function (flow, cb) {
     return cb(null, flow);
 };
 
-var fnValidate = function (flow, cb) {
-    if (!flow.args) {
-        return cb(errBuilder(dErr.INVALID_PARAMS, 'Args is not a defined'), flow);
-    }
-    if (typeof flow.args !== 'object') {
-        return cb(errBuilder(dErr.INVALID_PARAMS, 'Args is not a object'), flow);
-    }
-
-    if (flow.args.chatId === undefined) {
-        return cb(errBuilder(dErr.INVALID_PARAMS, 'chatId is not defined'), flow);
-    }
-    if (!validate.positiveBigInt(flow.args.chatId)) {
-        return cb(errBuilder(dErr.INVALID_PARAMS, 'Incorrect chatId value: ' + flow.args.chatId), flow);
-    }
-
-    return cb(null, flow);
-};
-
 var fnDbConnect = function (flow, cb) {
     pg.connect(flow.env.pgConnectStr, function (err, client, clientDone) {
         if (err) {
