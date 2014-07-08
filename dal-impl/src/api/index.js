@@ -4,6 +4,8 @@
 
 "use strict";
 
+var domain = require('../domain');
+
 
 var api_userGetInfoForToken = require('./_api_userGetInfoForToken');
 var api_authTokenCreate = require('./_api_authTokenCreate');
