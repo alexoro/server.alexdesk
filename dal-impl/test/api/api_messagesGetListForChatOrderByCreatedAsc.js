@@ -38,7 +38,7 @@ var invalidArgsCallbackEntry = function (cb) {
 };
 
 
-describe('DAL::messagesGetListForChatOrderByCreatedAsc', function () {
+describe.only('DAL::messagesGetListForChatOrderByCreatedAsc', function () {
 
     it('Must not pass invalid chatId', function (doneTest) {
         var api = mock.newApiWithMock().api;
@@ -100,18 +100,16 @@ describe('DAL::messagesGetListForChatOrderByCreatedAsc', function () {
         }, doneTest);
     });
 
-    it('Must return error if chat not exists', function (doneTest) {
+    it('Must return empty array if chat not exists', function (doneTest) {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var reqArgs = argsBuilder({chatId: '1000'});
-            api.messagesGetListForChatOrderByCreatedAsc(reqArgs, function (err) {
-                if (err && err.number === dErr.CHAT_NOT_FOUND) {
-                    doneExecute();
-                } else if (err) {
-                    doneExecute(err);
-                } else {
-                    doneExecute(new Error('Method was executed successfully with non-existing chat'));
+            api.messagesGetListForChatOrderByCreatedAsc(reqArgs, function (err, messages) {
+                if (err) {
+                    return doneExecute(err);
                 }
+                assert.lengthOf(messages, 0, 'Expected to receive 0 results');
+                doneExecute();
             });
         }, doneTest);
     });
