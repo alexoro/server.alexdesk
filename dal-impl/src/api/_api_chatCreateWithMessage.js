@@ -179,7 +179,7 @@ var fnValidate = function (flow, cb) {
     }
     for (i = 0; i < flow.args.newMessage.isRead.length; i++) {
         if (typeof flow.args.newMessage.isRead[i] !== 'object' || flow.args.newMessage.isRead[i] === null) {
-            return cb(errBuilder(dErr.INVALID_PARAMS, 'Incorrect flow.args.newMessage.isRead['+i+'] value: ' + flow.args.newMessage.isRead[i]), flow);
+            return cb(errBuilder(dErr.INVALID_PARAMS, 'Incorrect newMessage.isRead['+i+'] value: ' + flow.args.newMessage.isRead[i]), flow);
         }
         if (!validate.positiveBigInt(flow.args.newMessage.isRead[i].userId)) {
             return cb(errBuilder(dErr.INVALID_PARAMS, 'Incorrect newMessage.isRead['+i+'].userId value: ' + flow.args.newMessage.isRead[i].userId), flow);

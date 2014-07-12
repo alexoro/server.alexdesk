@@ -22,19 +22,19 @@ var argsBuilder = function(override) {
         id: override.id === undefined ? '1000' : override.id,
         chatId: override.chatId === undefined ? '1' : override.chatId,
         userCreatorId: override.userCreatorId === undefined ? '1' : override.userCreatorId,
-        userCreatorType: override.userCreatorType === undefined ? '1' : override.userCreatorType,
-        created: override.created === undefined ? '1' : override.created,
+        userCreatorType: override.userCreatorType === undefined ? 1 : override.userCreatorType,
+        created: override.created === undefined ? new Date('2014-06-01 00:00:00') : override.created,
         content: override.content === undefined ? '1' : override.content,
         isRead: [
             {
-                userType: override.irUserType1 === undefined ? '1' : override.irUserType1,
+                userType: override.irUserType1 === undefined ? 1 : override.irUserType1,
                 userId: override.irUserId1 === undefined ? '1' : override.irUserId1,
-                isRead: override.irIsRead1 === undefined ? '1' : override.irIsRead1
+                isRead: override.irIsRead1 === undefined ? true : override.irIsRead1
             },
             {
-                userType: override.irUserType2 === undefined ? '1' : override.irUserType2,
-                userId: override.irUserId2 === undefined ? '1' : override.irUserId2,
-                isRead: override.irIsRead2 === undefined ? '1' : override.irIsRead2
+                userType: override.irUserType2 === undefined ? 1 : override.irUserType2,
+                userId: override.irUserId2 === undefined ? '2' : override.irUserId2,
+                isRead: override.irIsRead2 === undefined ? false : override.irIsRead2
             }
         ]
     };
@@ -243,13 +243,13 @@ describe('DAL::messageCreate', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.messageCreate(argsBuilder({isRead: {}}), invalidArgsCallbackEntry(cb));
+                    api.messageCreate(argsBuilder({irIsRead1: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.messageCreate(argsBuilder({isRead: null}), invalidArgsCallbackEntry(cb));
+                    api.messageCreate(argsBuilder({irIsRead1: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.messageCreate(argsBuilder({isRead: '-1'}), invalidArgsCallbackEntry(cb));
+                    api.messageCreate(argsBuilder({irIsRead1: '-1'}), invalidArgsCallbackEntry(cb));
                 }
             ];
             async.series(fnStack, doneExecute);
@@ -277,13 +277,40 @@ describe('DAL::messageCreate', function () {
     it('Must return valid result', function (doneTest) {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
-            var reqArgs = argsBuilder({chatId: '1000'});
+            var reqArgs = argsBuilder();
             api.messageCreate(reqArgs, function (err, result) {
                 if (err) {
                     return doneExecute(err);
                 }
                 assert.isNull(result, 'Expected and received result are not match');
                 doneExecute();
+            });
+        }, doneTest);
+    });
+
+    it('Created message must be accessible', function (doneTest) {
+        var api = mock.newApiWithMock().api;
+        mock.executeOnClearDb(function (doneExecute) {
+            var reqArgsCreate = argsBuilder();
+            api.messageCreate(reqArgsCreate, function (err, result) {
+                if (err) {
+                    return doneExecute(err);
+                }
+
+                var reqArgsGet = {
+                    chatId: reqArgsCreate.chatId,
+                    offset: -1,
+                    limit: 50
+                };
+                api.messagesGetListForChatOrderByCreatedAsc(reqArgsGet, function (errGet, messages) {
+                    if (errGet) {
+                        return doneExecute(errGet);
+                    } else {
+                        assert.lengthOf(messages, 1, 'It is expected to receive 1 result');
+                        assert.strictEqual(messages[0].id, reqArgsCreate.id, 'Expected and received result are not match');
+                        doneExecute();
+                    }
+                });
             });
         }, doneTest);
     });
