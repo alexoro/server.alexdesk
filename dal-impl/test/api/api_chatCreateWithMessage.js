@@ -768,13 +768,13 @@ describe('DAL::chatCreateWithMessage', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({isRead: {}}), invalidArgsCallbackEntry(cb));
+                    api.chatCreateWithMessage(argsBuilder({irIsRead1: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({isRead: null}), invalidArgsCallbackEntry(cb));
+                    api.chatCreateWithMessage(argsBuilder({irIsRead1: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatCreateWithMessage(argsBuilder({isRead: '-1'}), invalidArgsCallbackEntry(cb));
+                    api.chatCreateWithMessage(argsBuilder({irIsRead1: '-1'}), invalidArgsCallbackEntry(cb));
                 }
             ];
             async.series(fnStack, doneExecute);
@@ -807,8 +807,10 @@ describe('DAL::chatCreateWithMessage', function () {
                 }
 
                 var reqArgsGet = {
-                    appId: reqArgsCreate.appId,
-                    userCreatorId: reqArgsCreate.userCreatorId
+                    appId: reqArgsCreate.newChat.appId,
+                    userCreatorId: reqArgsCreate.newChat.userCreatorId,
+                    offset: -1,
+                    limit: 50
                 };
                 api.chatsGetListWithLastMessageOrderByLastMessageCreatedAsc(reqArgsGet, function (err, chats) {
                     if (err) {

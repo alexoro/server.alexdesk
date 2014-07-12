@@ -50,6 +50,10 @@ module.exports = {
         }
     },
 
+    positiveInt: function(value) {
+        return typeof value === 'number' && value >= 0 && value <= 2147483647;
+    },
+
     positiveSmallInt: function(value) {
         return typeof value === 'number' && value >= 0 && value <= 65535;
     },
