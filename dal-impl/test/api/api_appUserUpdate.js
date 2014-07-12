@@ -19,7 +19,7 @@ var argsBuilder = function(override) {
         override = {};
     }
     return {
-        id: override.id === undefined ? '1000' : override.id,
+        id: override.id === undefined ? '2' : override.id,
         appId: override.appId === undefined ? '1' : override.appId,
         login: override.login === undefined ? 'testLogin' : override.login,
         passwordHash: override.passwordHash === undefined ? '93134919a8fd95a216c9109b60bc6070' : override.passwordHash,
@@ -270,6 +270,7 @@ describe('DAL::appUserUpdate', function () {
                     if (err) {
                         return doneExecute(err);
                     } else {
+                        delete profile.platform;
                         assert.deepEqual(profile, reqArgsUpdate, 'Just updated user was not updated');
                         return doneExecute();
                     }
