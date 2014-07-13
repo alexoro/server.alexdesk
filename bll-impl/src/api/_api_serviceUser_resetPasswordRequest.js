@@ -124,7 +124,7 @@ var fnConfirmCreate = function (flow, cb) {
         userId: flow.userId,
         expires: flow.confirmExpiresDate
     };
-    flow.env.dal.serviceUserCreateResetPasswordConfirmData(reqArgs, function (err) {
+    flow.env.dal.serviceUserResetPasswordConfirmDataCreate(reqArgs, function (err) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else {

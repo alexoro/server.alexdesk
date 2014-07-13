@@ -164,7 +164,7 @@ DAL.prototype.serviceUserMarkAsConfirmed = function(args, done) {
 };
 
 
-DAL.prototype.serviceUserGetResetPasswordConfirmData = function(args, done) {
+DAL.prototype.serviceUserResetPasswordConfirmDataGet = function(args, done) {
     args = deepClone(args);
     var search = {
         id: args.token
@@ -183,7 +183,7 @@ DAL.prototype.serviceUserGetResetPasswordConfirmData = function(args, done) {
     }
 };
 
-DAL.prototype.serviceUserCreateResetPasswordConfirmData = function(args, done) {
+DAL.prototype.serviceUserResetPasswordConfirmDataCreate = function(args, done) {
     args = deepClone(args);
     var data = {
         id: args.token,

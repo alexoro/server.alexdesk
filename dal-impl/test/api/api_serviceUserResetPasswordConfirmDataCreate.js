@@ -38,23 +38,23 @@ var invalidArgsCallbackEntry = function (cb) {
 };
 
 
-describe('DAL::serviceUserCreateResetPasswordConfirmData', function () {
+describe('DAL::serviceUserResetPasswordConfirmDataCreate', function () {
 
     it('Must not pass invalid id', function (doneTest) {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.serviceUserCreateResetPasswordConfirmData(argsBuilder({token: {}}), invalidArgsCallbackEntry(cb));
+                    api.serviceUserResetPasswordConfirmDataCreate(argsBuilder({token: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.serviceUserCreateResetPasswordConfirmData(argsBuilder({token: null}), invalidArgsCallbackEntry(cb));
+                    api.serviceUserResetPasswordConfirmDataCreate(argsBuilder({token: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.serviceUserCreateResetPasswordConfirmData(argsBuilder({token: 1}), invalidArgsCallbackEntry(cb));
+                    api.serviceUserResetPasswordConfirmDataCreate(argsBuilder({token: 1}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.serviceUserCreateResetPasswordConfirmData(argsBuilder({token: '0cec4d47-d9a1-4984-XXXX-10583b674123'}), invalidArgsCallbackEntry(cb));
+                    api.serviceUserResetPasswordConfirmDataCreate(argsBuilder({token: '0cec4d47-d9a1-4984-XXXX-10583b674123'}), invalidArgsCallbackEntry(cb));
                 }
             ];
             async.series(fnStack, doneExecute);
@@ -66,16 +66,16 @@ describe('DAL::serviceUserCreateResetPasswordConfirmData', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.serviceUserCreateResetPasswordConfirmData(argsBuilder({userId: {}}), invalidArgsCallbackEntry(cb));
+                    api.serviceUserResetPasswordConfirmDataCreate(argsBuilder({userId: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.serviceUserCreateResetPasswordConfirmData(argsBuilder({userId: null}), invalidArgsCallbackEntry(cb));
+                    api.serviceUserResetPasswordConfirmDataCreate(argsBuilder({userId: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.serviceUserCreateResetPasswordConfirmData(argsBuilder({userId: -1}), invalidArgsCallbackEntry(cb));
+                    api.serviceUserResetPasswordConfirmDataCreate(argsBuilder({userId: -1}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.serviceUserCreateResetPasswordConfirmData(argsBuilder({userId: '-1'}), invalidArgsCallbackEntry(cb));
+                    api.serviceUserResetPasswordConfirmDataCreate(argsBuilder({userId: '-1'}), invalidArgsCallbackEntry(cb));
                 }
             ];
             async.series(fnStack, doneExecute);
@@ -87,13 +87,13 @@ describe('DAL::serviceUserCreateResetPasswordConfirmData', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.serviceUserCreateResetPasswordConfirmData(argsBuilder({expires: {}}), invalidArgsCallbackEntry(cb));
+                    api.serviceUserResetPasswordConfirmDataCreate(argsBuilder({expires: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.serviceUserCreateResetPasswordConfirmData(argsBuilder({expires: null}), invalidArgsCallbackEntry(cb));
+                    api.serviceUserResetPasswordConfirmDataCreate(argsBuilder({expires: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.serviceUserCreateResetPasswordConfirmData(argsBuilder({expires: -1}), invalidArgsCallbackEntry(cb));
+                    api.serviceUserResetPasswordConfirmDataCreate(argsBuilder({expires: -1}), invalidArgsCallbackEntry(cb));
                 }
             ];
             async.series(fnStack, doneExecute);
@@ -104,7 +104,7 @@ describe('DAL::serviceUserCreateResetPasswordConfirmData', function () {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var reqArgs = argsBuilder();
-            api.serviceUserCreateResetPasswordConfirmData(reqArgs, function (err, result) {
+            api.serviceUserResetPasswordConfirmDataCreate(reqArgs, function (err, result) {
                 if (err) {
                     return doneExecute(err);
                 }
@@ -118,7 +118,7 @@ describe('DAL::serviceUserCreateResetPasswordConfirmData', function () {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var reqArgsCreate = argsBuilder();
-            api.serviceUserCreateResetPasswordConfirmData(reqArgsCreate, function (err) {
+            api.serviceUserResetPasswordConfirmDataCreate(reqArgsCreate, function (err) {
                 if (err) {
                     return doneExecute(err);
                 }
@@ -126,7 +126,7 @@ describe('DAL::serviceUserCreateResetPasswordConfirmData', function () {
                 var reqArgsGet = {
                     token: reqArgsCreate.token
                 };
-                api.serviceUserGetResetPasswordConfirmData(reqArgsGet, function (err, data) {
+                api.serviceUserResetPasswordConfirmDataGet(reqArgsGet, function (err, data) {
                     if (err) {
                         return doneExecute(err);
                     } else {
