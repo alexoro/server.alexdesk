@@ -67,6 +67,13 @@ var fnValidate = function (flow, cb) {
         return cb(errBuilder(dErr.INVALID_PARAMS, 'Incorrect userCreatorId value: ' + flow.args.userCreatorId), flow);
     }
 
+    if (flow.args.userCreatorType === undefined) {
+        return cb(errBuilder(dErr.INVALID_PARAMS, 'userCreatorType is not defined'), flow);
+    }
+    if (flow.args.userCreatorId !== null && !validate.positiveSmallInt(flow.args.userCreatorType)) {
+        return cb(errBuilder(dErr.INVALID_PARAMS, 'Incorrect userCreatorType value: ' + flow.args.userCreatorType), flow);
+    }
+
     if (flow.args.limit === undefined) {
         return cb(errBuilder(dErr.INVALID_PARAMS, 'limit is not defined'), flow);
     }
@@ -147,7 +154,7 @@ var fnGetChatsInfo = function (flow, cb) {
             args = [
                 flow.args.appId,
                 flow.args.userCreatorId,
-                2,
+                flow.args.userCreatorType,
                 flow.args.limit,
                 flow.args.offset
             ];
@@ -156,7 +163,7 @@ var fnGetChatsInfo = function (flow, cb) {
             args = [
                 flow.args.appId,
                 flow.args.userCreatorId,
-                2,
+                flow.args.userCreatorType,
                 -flow.args.offset > flow.args.limit ? flow.args.limit : -flow.args.offset,
                 Math.max(0, -flow.args.offset - flow.args.limit)
             ];

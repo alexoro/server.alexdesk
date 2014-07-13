@@ -809,6 +809,7 @@ describe('DAL::chatCreateWithMessage', function () {
                 var reqArgsGet = {
                     appId: reqArgsCreate.newChat.appId,
                     userCreatorId: reqArgsCreate.newChat.userCreatorId,
+                    userCreatorType: reqArgsCreate.newChat.userCreatorType,
                     offset: -1,
                     limit: 50
                 };

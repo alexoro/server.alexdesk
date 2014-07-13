@@ -21,6 +21,7 @@ var argsBuilder = function(override) {
     return {
         appId: override.appId === undefined ? '1' : override.appId,
         userCreatorId: override.userCreatorId === undefined ? '2' : override.userCreatorId,
+        userCreatorType: override.userCreatorType === undefined ? 2 : override.userCreatorType,
         limit: override.limit === undefined ? 50 : override.limit,
         offset: override.offset === undefined ? 0 : override.offset
     };
@@ -74,6 +75,27 @@ describe('DAL::chatsGetListWithLastMessageOrderByLastMessageCreatedAsc', functio
                 },
                 function (cb) {
                     api.chatsGetListWithLastMessageOrderByLastMessageCreatedAsc(argsBuilder({userCreatorId: 1}), invalidArgsCallbackEntry(cb));
+                }
+            ];
+            async.series(fnStack, doneExecute);
+        }, doneTest);
+    });
+
+    it('Must not pass invalid userCreatorType', function (doneTest) {
+        var api = mock.newApiWithMock().api;
+        mock.executeOnClearDb(function (doneExecute) {
+            var fnStack = [
+                function (cb) {
+                    api.chatsGetListWithLastMessageOrderByLastMessageCreatedAsc(argsBuilder({userCreatorType: {}}), invalidArgsCallbackEntry(cb));
+                },
+                function (cb) {
+                    api.chatsGetListWithLastMessageOrderByLastMessageCreatedAsc(argsBuilder({userCreatorType: null}), invalidArgsCallbackEntry(cb));
+                },
+                function (cb) {
+                    api.chatsGetListWithLastMessageOrderByLastMessageCreatedAsc(argsBuilder({userCreatorType: -1}), invalidArgsCallbackEntry(cb));
+                },
+                function (cb) {
+                    api.chatsGetListWithLastMessageOrderByLastMessageCreatedAsc(argsBuilder({userCreatorType: '-1'}), invalidArgsCallbackEntry(cb));
                 }
             ];
             async.series(fnStack, doneExecute);
