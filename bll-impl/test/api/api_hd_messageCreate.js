@@ -176,7 +176,7 @@ describe('API#hd_messageCreate', function() {
 
     it('Must return INTERNAL_ERROR in case of invalid response from DAL', function(doneTest) {
         var mock = mockBuilder.newApiWithMock();
-        mock.dal.chatIsExists = function(args, done) {
+        mock.dal.chats_isExists = function(args, done) {
             done(null, null);
         };
 

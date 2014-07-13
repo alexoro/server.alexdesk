@@ -38,23 +38,23 @@ var invalidArgsCallbackEntry = function (cb) {
 };
 
 
-describe('DAL::chatIsUserTheCreator', function () {
+describe('DAL::chats_isUserTheCreator', function () {
 
     it('Must not pass invalid chatId', function (doneTest) {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.chatIsUserTheCreator(argsBuilder({chatId: {}}), invalidArgsCallbackEntry(cb));
+                    api.chats_isUserTheCreator(argsBuilder({chatId: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatIsUserTheCreator(argsBuilder({chatId: null}), invalidArgsCallbackEntry(cb));
+                    api.chats_isUserTheCreator(argsBuilder({chatId: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatIsUserTheCreator(argsBuilder({chatId: '-1'}), invalidArgsCallbackEntry(cb));
+                    api.chats_isUserTheCreator(argsBuilder({chatId: '-1'}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatIsUserTheCreator(argsBuilder({chatId: 1}), invalidArgsCallbackEntry(cb));
+                    api.chats_isUserTheCreator(argsBuilder({chatId: 1}), invalidArgsCallbackEntry(cb));
                 }
             ];
             async.series(fnStack, doneExecute);
@@ -66,16 +66,16 @@ describe('DAL::chatIsUserTheCreator', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.chatIsUserTheCreator(argsBuilder({userId: {}}), invalidArgsCallbackEntry(cb));
+                    api.chats_isUserTheCreator(argsBuilder({userId: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatIsUserTheCreator(argsBuilder({userId: null}), invalidArgsCallbackEntry(cb));
+                    api.chats_isUserTheCreator(argsBuilder({userId: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatIsUserTheCreator(argsBuilder({userId: '-1'}), invalidArgsCallbackEntry(cb));
+                    api.chats_isUserTheCreator(argsBuilder({userId: '-1'}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatIsUserTheCreator(argsBuilder({userId: 1}), invalidArgsCallbackEntry(cb));
+                    api.chats_isUserTheCreator(argsBuilder({userId: 1}), invalidArgsCallbackEntry(cb));
                 }
             ];
             async.series(fnStack, doneExecute);
@@ -87,13 +87,13 @@ describe('DAL::chatIsUserTheCreator', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.chatIsUserTheCreator(argsBuilder({userType: {}}), invalidArgsCallbackEntry(cb));
+                    api.chats_isUserTheCreator(argsBuilder({userType: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatIsUserTheCreator(argsBuilder({userType: null}), invalidArgsCallbackEntry(cb));
+                    api.chats_isUserTheCreator(argsBuilder({userType: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatIsUserTheCreator(argsBuilder({userType: '-1'}), invalidArgsCallbackEntry(cb));
+                    api.chats_isUserTheCreator(argsBuilder({userType: '-1'}), invalidArgsCallbackEntry(cb));
                 }
             ];
             async.series(fnStack, doneExecute);
@@ -104,7 +104,7 @@ describe('DAL::chatIsUserTheCreator', function () {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var reqArgs = argsBuilder();
-            api.chatIsUserTheCreator(reqArgs, function (err, isCreator) {
+            api.chats_isUserTheCreator(reqArgs, function (err, isCreator) {
                 if (err) {
                     return doneExecute(err);
                 }
@@ -118,7 +118,7 @@ describe('DAL::chatIsUserTheCreator', function () {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var reqArgs = argsBuilder({userId: '1000'});
-            api.chatIsUserTheCreator(reqArgs, function (err, isCreator) {
+            api.chats_isUserTheCreator(reqArgs, function (err, isCreator) {
                 if (err) {
                     return doneExecute(err);
                 }

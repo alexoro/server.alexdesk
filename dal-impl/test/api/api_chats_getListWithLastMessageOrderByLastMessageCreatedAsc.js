@@ -40,23 +40,23 @@ var invalidArgsCallbackEntry = function (cb) {
 };
 
 
-describe('DAL::chatsGetListWithLastMessageOrderByLastMessageCreatedAsc', function () {
+describe('DAL::chats_getListWithLastMessageOrderByLastMessageCreatedAsc', function () {
 
     it('Must not pass invalid appId', function (doneTest) {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.chatsGetListWithLastMessageOrderByLastMessageCreatedAsc(argsBuilder({appId: {}}), invalidArgsCallbackEntry(cb));
+                    api.chats_getListWithLastMessageOrderByLastMessageCreatedAsc(argsBuilder({appId: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatsGetListWithLastMessageOrderByLastMessageCreatedAsc(argsBuilder({appId: null}), invalidArgsCallbackEntry(cb));
+                    api.chats_getListWithLastMessageOrderByLastMessageCreatedAsc(argsBuilder({appId: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatsGetListWithLastMessageOrderByLastMessageCreatedAsc(argsBuilder({appId: '-1'}), invalidArgsCallbackEntry(cb));
+                    api.chats_getListWithLastMessageOrderByLastMessageCreatedAsc(argsBuilder({appId: '-1'}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatsGetListWithLastMessageOrderByLastMessageCreatedAsc(argsBuilder({appId: 1}), invalidArgsCallbackEntry(cb));
+                    api.chats_getListWithLastMessageOrderByLastMessageCreatedAsc(argsBuilder({appId: 1}), invalidArgsCallbackEntry(cb));
                 }
             ];
             async.series(fnStack, doneExecute);
@@ -68,13 +68,13 @@ describe('DAL::chatsGetListWithLastMessageOrderByLastMessageCreatedAsc', functio
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.chatsGetListWithLastMessageOrderByLastMessageCreatedAsc(argsBuilder({userCreatorId: {}}), invalidArgsCallbackEntry(cb));
+                    api.chats_getListWithLastMessageOrderByLastMessageCreatedAsc(argsBuilder({userCreatorId: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatsGetListWithLastMessageOrderByLastMessageCreatedAsc(argsBuilder({userCreatorId: '-1'}), invalidArgsCallbackEntry(cb));
+                    api.chats_getListWithLastMessageOrderByLastMessageCreatedAsc(argsBuilder({userCreatorId: '-1'}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatsGetListWithLastMessageOrderByLastMessageCreatedAsc(argsBuilder({userCreatorId: 1}), invalidArgsCallbackEntry(cb));
+                    api.chats_getListWithLastMessageOrderByLastMessageCreatedAsc(argsBuilder({userCreatorId: 1}), invalidArgsCallbackEntry(cb));
                 }
             ];
             async.series(fnStack, doneExecute);
@@ -86,16 +86,16 @@ describe('DAL::chatsGetListWithLastMessageOrderByLastMessageCreatedAsc', functio
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.chatsGetListWithLastMessageOrderByLastMessageCreatedAsc(argsBuilder({userCreatorType: {}}), invalidArgsCallbackEntry(cb));
+                    api.chats_getListWithLastMessageOrderByLastMessageCreatedAsc(argsBuilder({userCreatorType: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatsGetListWithLastMessageOrderByLastMessageCreatedAsc(argsBuilder({userCreatorType: null}), invalidArgsCallbackEntry(cb));
+                    api.chats_getListWithLastMessageOrderByLastMessageCreatedAsc(argsBuilder({userCreatorType: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatsGetListWithLastMessageOrderByLastMessageCreatedAsc(argsBuilder({userCreatorType: -1}), invalidArgsCallbackEntry(cb));
+                    api.chats_getListWithLastMessageOrderByLastMessageCreatedAsc(argsBuilder({userCreatorType: -1}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatsGetListWithLastMessageOrderByLastMessageCreatedAsc(argsBuilder({userCreatorType: '-1'}), invalidArgsCallbackEntry(cb));
+                    api.chats_getListWithLastMessageOrderByLastMessageCreatedAsc(argsBuilder({userCreatorType: '-1'}), invalidArgsCallbackEntry(cb));
                 }
             ];
             async.series(fnStack, doneExecute);
@@ -107,16 +107,16 @@ describe('DAL::chatsGetListWithLastMessageOrderByLastMessageCreatedAsc', functio
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.chatsGetListWithLastMessageOrderByLastMessageCreatedAsc(argsBuilder({limit: {}}), invalidArgsCallbackEntry(cb));
+                    api.chats_getListWithLastMessageOrderByLastMessageCreatedAsc(argsBuilder({limit: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatsGetListWithLastMessageOrderByLastMessageCreatedAsc(argsBuilder({limit: null}), invalidArgsCallbackEntry(cb));
+                    api.chats_getListWithLastMessageOrderByLastMessageCreatedAsc(argsBuilder({limit: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatsGetListWithLastMessageOrderByLastMessageCreatedAsc(argsBuilder({limit: '-1'}), invalidArgsCallbackEntry(cb));
+                    api.chats_getListWithLastMessageOrderByLastMessageCreatedAsc(argsBuilder({limit: '-1'}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatsGetListWithLastMessageOrderByLastMessageCreatedAsc(argsBuilder({limit: -1}), invalidArgsCallbackEntry(cb));
+                    api.chats_getListWithLastMessageOrderByLastMessageCreatedAsc(argsBuilder({limit: -1}), invalidArgsCallbackEntry(cb));
                 }
             ];
             async.series(fnStack, doneExecute);
@@ -128,13 +128,13 @@ describe('DAL::chatsGetListWithLastMessageOrderByLastMessageCreatedAsc', functio
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.chatsGetListWithLastMessageOrderByLastMessageCreatedAsc(argsBuilder({offset: {}}), invalidArgsCallbackEntry(cb));
+                    api.chats_getListWithLastMessageOrderByLastMessageCreatedAsc(argsBuilder({offset: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatsGetListWithLastMessageOrderByLastMessageCreatedAsc(argsBuilder({offset: '-1'}), invalidArgsCallbackEntry(cb));
+                    api.chats_getListWithLastMessageOrderByLastMessageCreatedAsc(argsBuilder({offset: '-1'}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatsGetListWithLastMessageOrderByLastMessageCreatedAsc(argsBuilder({offset: null}), invalidArgsCallbackEntry(cb));
+                    api.chats_getListWithLastMessageOrderByLastMessageCreatedAsc(argsBuilder({offset: null}), invalidArgsCallbackEntry(cb));
                 }
             ];
             async.series(fnStack, doneExecute);
@@ -145,7 +145,7 @@ describe('DAL::chatsGetListWithLastMessageOrderByLastMessageCreatedAsc', functio
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var reqArgs = argsBuilder({appId: '1000'});
-            api.chatsGetListWithLastMessageOrderByLastMessageCreatedAsc(reqArgs, function (err, result) {
+            api.chats_getListWithLastMessageOrderByLastMessageCreatedAsc(reqArgs, function (err, result) {
                 if (err) {
                     return doneExecute(err);
                 }
@@ -159,7 +159,7 @@ describe('DAL::chatsGetListWithLastMessageOrderByLastMessageCreatedAsc', functio
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var reqArgs = argsBuilder({userCreatorId: null});
-            api.chatsGetListWithLastMessageOrderByLastMessageCreatedAsc(reqArgs, function (err, chats) {
+            api.chats_getListWithLastMessageOrderByLastMessageCreatedAsc(reqArgs, function (err, chats) {
                 if (err) {
                     return doneExecute(err);
                 }
@@ -209,7 +209,7 @@ describe('DAL::chatsGetListWithLastMessageOrderByLastMessageCreatedAsc', functio
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var reqArgs = argsBuilder();
-            api.chatsGetListWithLastMessageOrderByLastMessageCreatedAsc(reqArgs, function (err, chats) {
+            api.chats_getListWithLastMessageOrderByLastMessageCreatedAsc(reqArgs, function (err, chats) {
                 if (err) {
                     return doneExecute(err);
                 }
@@ -259,7 +259,7 @@ describe('DAL::chatsGetListWithLastMessageOrderByLastMessageCreatedAsc', functio
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var reqArgs = argsBuilder({userCreatorId: null, limit: 1});
-            api.chatsGetListWithLastMessageOrderByLastMessageCreatedAsc(reqArgs, function (err, chats) {
+            api.chats_getListWithLastMessageOrderByLastMessageCreatedAsc(reqArgs, function (err, chats) {
                 if (err) {
                     return doneExecute(err);
                 }
@@ -275,7 +275,7 @@ describe('DAL::chatsGetListWithLastMessageOrderByLastMessageCreatedAsc', functio
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var reqArgs = argsBuilder({userCreatorId: null, offset: 1});
-            api.chatsGetListWithLastMessageOrderByLastMessageCreatedAsc(reqArgs, function (err, chats) {
+            api.chats_getListWithLastMessageOrderByLastMessageCreatedAsc(reqArgs, function (err, chats) {
                 if (err) {
                     return doneExecute(err);
                 }
@@ -291,7 +291,7 @@ describe('DAL::chatsGetListWithLastMessageOrderByLastMessageCreatedAsc', functio
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var reqArgs = argsBuilder({userCreatorId: null, offset: 1, limit: 1});
-            api.chatsGetListWithLastMessageOrderByLastMessageCreatedAsc(reqArgs, function (err, chats) {
+            api.chats_getListWithLastMessageOrderByLastMessageCreatedAsc(reqArgs, function (err, chats) {
                 if (err) {
                     return doneExecute(err);
                 }
@@ -307,7 +307,7 @@ describe('DAL::chatsGetListWithLastMessageOrderByLastMessageCreatedAsc', functio
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var reqArgs = argsBuilder({userCreatorId: null, offset: -1});
-            api.chatsGetListWithLastMessageOrderByLastMessageCreatedAsc(reqArgs, function (err, chats) {
+            api.chats_getListWithLastMessageOrderByLastMessageCreatedAsc(reqArgs, function (err, chats) {
                 if (err) {
                     return doneExecute(err);
                 }

@@ -122,37 +122,37 @@ describe('API::Interface', function() {
         assert.isFunction(api.appUsers_update, 'appUsers_update must be a function');
         assert.equal(api.appUsers_update.length, 2, 'appUsers_update must receive 2 arguments only');
 
-        assert.isDefined(api.chatsGetListWithLastMessageOrderByLastMessageCreatedAsc, 'chatsGetListWithLastMessageOrderByLastMessageCreatedAsc function is not exists');
-        assert.isFunction(api.chatsGetListWithLastMessageOrderByLastMessageCreatedAsc, 'chatsGetListWithLastMessageOrderByLastMessageCreatedAsc must be a function');
-        assert.equal(api.chatsGetListWithLastMessageOrderByLastMessageCreatedAsc.length, 2, 'chatsGetListWithLastMessageOrderByLastMessageCreatedAsc must receive 2 arguments only');
+        assert.isDefined(api.chats_getListWithLastMessageOrderByLastMessageCreatedAsc, 'chats_getListWithLastMessageOrderByLastMessageCreatedAsc function is not exists');
+        assert.isFunction(api.chats_getListWithLastMessageOrderByLastMessageCreatedAsc, 'chats_getListWithLastMessageOrderByLastMessageCreatedAsc must be a function');
+        assert.equal(api.chats_getListWithLastMessageOrderByLastMessageCreatedAsc.length, 2, 'chats_getListWithLastMessageOrderByLastMessageCreatedAsc must receive 2 arguments only');
 
-        assert.isDefined(api.chatIsExists, 'chatIsExists function is not exists');
-        assert.isFunction(api.chatIsExists, 'chatIsExists must be a function');
-        assert.equal(api.chatIsExists.length, 2, 'chatIsExists must receive 2 arguments only');
+        assert.isDefined(api.chats_isExists, 'chats_isExists function is not exists');
+        assert.isFunction(api.chats_isExists, 'chats_isExists must be a function');
+        assert.equal(api.chats_isExists.length, 2, 'chats_isExists must receive 2 arguments only');
 
-        assert.isDefined(api.chatGetAppId, 'chatGetAppId function is not exists');
-        assert.isFunction(api.chatGetAppId, 'chatGetAppId must be a function');
-        assert.equal(api.chatGetAppId.length, 2, 'chatGetAppId must receive 2 arguments only');
+        assert.isDefined(api.chats_getAppId, 'chats_getAppId function is not exists');
+        assert.isFunction(api.chats_getAppId, 'chats_getAppId must be a function');
+        assert.equal(api.chats_getAppId.length, 2, 'chats_getAppId must receive 2 arguments only');
 
-        assert.isDefined(api.chatIsUserTheCreator, 'chatIsUserTheCreator function is not exists');
-        assert.isFunction(api.chatIsUserTheCreator, 'chatIsUserTheCreator must be a function');
-        assert.equal(api.chatIsUserTheCreator.length, 2, 'chatIsUserTheCreator must receive 2 arguments only');
+        assert.isDefined(api.chats_isUserTheCreator, 'chats_isUserTheCreator function is not exists');
+        assert.isFunction(api.chats_isUserTheCreator, 'chats_isUserTheCreator must be a function');
+        assert.equal(api.chats_isUserTheCreator.length, 2, 'chats_isUserTheCreator must receive 2 arguments only');
 
-        assert.isDefined(api.chatsGetNumberOfUnreadMessagesPerChatForUser, 'chatsGetNumberOfUnreadMessagesPerChatForUser function is not exists');
-        assert.isFunction(api.chatsGetNumberOfUnreadMessagesPerChatForUser, 'chatsGetNumberOfUnreadMessagesPerChatForUser must be a function');
-        assert.equal(api.chatsGetNumberOfUnreadMessagesPerChatForUser.length, 2, 'chatsGetNumberOfUnreadMessagesPerChatForUser must receive 2 arguments only');
+        assert.isDefined(api.chats_getNumberOfUnreadMessagesPerChatForUser, 'chats_getNumberOfUnreadMessagesPerChatForUser function is not exists');
+        assert.isFunction(api.chats_getNumberOfUnreadMessagesPerChatForUser, 'chats_getNumberOfUnreadMessagesPerChatForUser must be a function');
+        assert.equal(api.chats_getNumberOfUnreadMessagesPerChatForUser.length, 2, 'chats_getNumberOfUnreadMessagesPerChatForUser must receive 2 arguments only');
 
-        assert.isDefined(api.chatsGetLastMessagePerChat, 'chatsGetLastMessagePerChat function is not exists');
-        assert.isFunction(api.chatsGetLastMessagePerChat, 'chatsGetLastMessagePerChat must be a function');
-        assert.equal(api.chatsGetLastMessagePerChat.length, 2, 'chatsGetLastMessagePerChat must receive 2 arguments only');
+        assert.isDefined(api.chats_getLastMessagePerChat, 'chats_getLastMessagePerChat function is not exists');
+        assert.isFunction(api.chats_getLastMessagePerChat, 'chats_getLastMessagePerChat must be a function');
+        assert.equal(api.chats_getLastMessagePerChat.length, 2, 'chats_getLastMessagePerChat must receive 2 arguments only');
 
-        assert.isDefined(api.chatGetParticipantsInfo, 'chatGetParticipantsInfo function is not exists');
-        assert.isFunction(api.chatGetParticipantsInfo, 'chatGetParticipantsInfo must be a function');
-        assert.equal(api.chatGetParticipantsInfo.length, 2, 'chatGetParticipantsInfo must receive 2 arguments only');
+        assert.isDefined(api.chats_getParticipantsInfo, 'chats_getParticipantsInfo function is not exists');
+        assert.isFunction(api.chats_getParticipantsInfo, 'chats_getParticipantsInfo must be a function');
+        assert.equal(api.chats_getParticipantsInfo.length, 2, 'chats_getParticipantsInfo must receive 2 arguments only');
 
-        assert.isDefined(api.chatCreateWithMessage, 'chatCreateWithMessage function is not exists');
-        assert.isFunction(api.chatCreateWithMessage, 'chatCreateWithMessage must be a function');
-        assert.equal(api.chatCreateWithMessage.length, 2, 'chatCreateWithMessage must receive 2 arguments only');
+        assert.isDefined(api.chats_createWithMessage, 'chats_createWithMessage function is not exists');
+        assert.isFunction(api.chats_createWithMessage, 'chats_createWithMessage must be a function');
+        assert.equal(api.chats_createWithMessage.length, 2, 'chats_createWithMessage must receive 2 arguments only');
 
 
         assert.isDefined(api.messagesGetListForChatOrderByCreatedAsc, 'messagesGetListForChatOrderByCreatedAsc function is not exists');

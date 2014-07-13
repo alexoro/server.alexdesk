@@ -36,23 +36,23 @@ var invalidArgsCallbackEntry = function (cb) {
 };
 
 
-describe('DAL::chatsGetLastMessagePerChat', function () {
+describe('DAL::chats_getLastMessagePerChat', function () {
 
     it('Must not pass invalid chatIds', function (doneTest) {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.chatsGetLastMessagePerChat(argsBuilder({chatIds: {}}), invalidArgsCallbackEntry(cb));
+                    api.chats_getLastMessagePerChat(argsBuilder({chatIds: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatsGetLastMessagePerChat(argsBuilder({chatIds: null}), invalidArgsCallbackEntry(cb));
+                    api.chats_getLastMessagePerChat(argsBuilder({chatIds: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatsGetLastMessagePerChat(argsBuilder({chatIds: ['-1']}), invalidArgsCallbackEntry(cb));
+                    api.chats_getLastMessagePerChat(argsBuilder({chatIds: ['-1']}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatsGetLastMessagePerChat(argsBuilder({chatIds: [1]}), invalidArgsCallbackEntry(cb));
+                    api.chats_getLastMessagePerChat(argsBuilder({chatIds: [1]}), invalidArgsCallbackEntry(cb));
                 }
             ];
             async.series(fnStack, doneExecute);
@@ -63,7 +63,7 @@ describe('DAL::chatsGetLastMessagePerChat', function () {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var reqArgs = argsBuilder({chatIds: ['1000']});
-            api.chatsGetLastMessagePerChat(reqArgs, function (err, result) {
+            api.chats_getLastMessagePerChat(reqArgs, function (err, result) {
                 if (err) {
                     return doneExecute(err);
                 }
@@ -80,7 +80,7 @@ describe('DAL::chatsGetLastMessagePerChat', function () {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var reqArgs = argsBuilder();
-            api.chatsGetLastMessagePerChat(reqArgs, function (err, result) {
+            api.chats_getLastMessagePerChat(reqArgs, function (err, result) {
                 if (err) {
                     return doneExecute(err);
                 }

@@ -146,7 +146,7 @@ var fnChatIsExists = function (flow, cb) {
     var reqArgs = {
         chatId: flow.args.chatId
     };
-    flow.env.dal.chatIsExists(reqArgs, function(err, result) {
+    flow.env.dal.chats_isExists(reqArgs, function(err, result) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else if (typeof result !== 'boolean') {
@@ -163,7 +163,7 @@ var fnChatGetAppIdItBelongsTo = function (flow, cb) {
     var reqArgs = {
         chatId: flow.args.chatId
     };
-    flow.env.dal.chatGetAppId(reqArgs, function(err, appId) {
+    flow.env.dal.chats_getAppId(reqArgs, function(err, appId) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else if (typeof appId !== 'string') {
@@ -217,7 +217,7 @@ var fnAppUserIsCreatorOfChat = function (flow, cb) {
             userType: flow.userType,
             userId: flow.userId
         };
-        flow.env.dal.chatIsUserTheCreator(reqArgs, function(err, isCreator) {
+        flow.env.dal.chats_isUserTheCreator(reqArgs, function(err, isCreator) {
             if (err) {
                 cb(errBuilder(dErr.INTERNAL_ERROR, err));
             } else if (typeof isCreator !== 'boolean') {
@@ -251,7 +251,7 @@ var fnChatGetParticipants = function (flow, cb) {
     var reqArgs = {
         chatId: flow.args.chatId
     };
-    flow.env.dal.chatGetParticipantsInfo(reqArgs, function (err, participants) {
+    flow.env.dal.chats_getParticipantsInfo(reqArgs, function (err, participants) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else {

@@ -36,52 +36,52 @@ var invalidArgsCallbackEntry = function (cb) {
 };
 
 
-describe('DAL::chatIsExists', function () {
+describe('DAL::chats_getAppId', function () {
 
     it('Must not pass invalid chatId', function (doneTest) {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.chatIsExists(argsBuilder({chatId: {}}), invalidArgsCallbackEntry(cb));
+                    api.chats_getAppId(argsBuilder({chatId: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatIsExists(argsBuilder({chatId: null}), invalidArgsCallbackEntry(cb));
+                    api.chats_getAppId(argsBuilder({chatId: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatIsExists(argsBuilder({chatId: '-1'}), invalidArgsCallbackEntry(cb));
+                    api.chats_getAppId(argsBuilder({chatId: '-1'}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatIsExists(argsBuilder({chatId: 1}), invalidArgsCallbackEntry(cb));
+                    api.chats_getAppId(argsBuilder({chatId: 1}), invalidArgsCallbackEntry(cb));
                 }
             ];
             async.series(fnStack, doneExecute);
         }, doneTest);
     });
 
-    it('Must return true if chat exists', function (doneTest) {
+    it('Must return -1 if chat is not found', function (doneTest) {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
-            var reqArgs = argsBuilder();
-            api.chatIsExists(reqArgs, function (err, isExists) {
+            var reqArgs = argsBuilder({chatId: '1000'});
+            api.chats_getAppId(reqArgs, function (err, appId) {
                 if (err) {
                     return doneExecute(err);
                 }
-                assert.strictEqual(isExists, true, 'Expected and received result are not match');
+                assert.strictEqual(appId, '-1', 'Expected and received result are not match');
                 doneExecute();
             });
         }, doneTest);
     });
 
-    it('Must return false if chat not exists', function (doneTest) {
+    it('Must return valid result', function (doneTest) {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
-            var reqArgs = argsBuilder({chatId: '1000'});
-            api.chatIsExists(reqArgs, function (err, isExists) {
+            var reqArgs = argsBuilder();
+            api.chats_getAppId(reqArgs, function (err, appId) {
                 if (err) {
                     return doneExecute(err);
                 }
-                assert.strictEqual(isExists, false, 'Expected and received result are not match');
+                assert.strictEqual(appId, '1', 'Expected and received result are not match');
                 doneExecute();
             });
         }, doneTest);

@@ -432,7 +432,7 @@ DAL.prototype.appUsers_update = function(args, done) {
     done(null);
 };
 
-DAL.prototype.chatsGetListWithLastMessageOrderByLastMessageCreatedAsc = function(args, done) {
+DAL.prototype.chats_getListWithLastMessageOrderByLastMessageCreatedAsc = function(args, done) {
     args = deepClone(args);
     var i;
 
@@ -508,12 +508,12 @@ DAL.prototype.chatsGetListWithLastMessageOrderByLastMessageCreatedAsc = function
     done(null, ret);
 };
 
-DAL.prototype.chatIsExists = function(args, done) {
+DAL.prototype.chats_isExists = function(args, done) {
     args = deepClone(args);
     done(null, !!_.findWhere(this.mock.chats, {id: args.chatId}));
 };
 
-DAL.prototype.chatGetAppId = function(args, done) {
+DAL.prototype.chats_getAppId = function(args, done) {
     args = deepClone(args);
     var chat = _.findWhere(this.mock.chats, {id: args.chatId});
     if (!chat) {
@@ -523,7 +523,7 @@ DAL.prototype.chatGetAppId = function(args, done) {
     }
 };
 
-DAL.prototype.chatIsUserTheCreator = function(args, done) {
+DAL.prototype.chats_isUserTheCreator = function(args, done) {
     args = deepClone(args);
     var search = {
         id: args.chatId,
@@ -533,7 +533,7 @@ DAL.prototype.chatIsUserTheCreator = function(args, done) {
     done(null, !!_.findWhere(this.mock.chats, search));
 };
 
-DAL.prototype.chatsGetNumberOfUnreadMessagesPerChatForUser = function(args, done) {
+DAL.prototype.chats_getNumberOfUnreadMessagesPerChatForUser = function(args, done) {
     args = deepClone(args);
     var r = {};
     for (var i = 0; i < args.chatIds.length; i++) {
@@ -549,7 +549,7 @@ DAL.prototype.chatsGetNumberOfUnreadMessagesPerChatForUser = function(args, done
     done(null, r);
 };
 
-DAL.prototype.chatsGetLastMessagePerChat = function(args, done) {
+DAL.prototype.chats_getLastMessagePerChat = function(args, done) {
     args = deepClone(args);
 
     var r = {};
@@ -570,7 +570,7 @@ DAL.prototype.chatsGetLastMessagePerChat = function(args, done) {
     done(null, r);
 };
 
-DAL.prototype.chatGetParticipantsInfo = function (args, done) {
+DAL.prototype.chats_getParticipantsInfo = function (args, done) {
     args = deepClone(args);
     var collection = _.where(this.mock.chat_participants, {chatId: args.chatId});
     var r = [];
@@ -583,7 +583,7 @@ DAL.prototype.chatGetParticipantsInfo = function (args, done) {
     done(null, r);
 };
 
-DAL.prototype.chatCreateWithMessage = function(args, done) {
+DAL.prototype.chats_createWithMessage = function(args, done) {
     args = deepClone(args);
     var argsNewChat = deepClone(args.newChat);
     var argsNewMessage = deepClone(args.newMessage);

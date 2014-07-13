@@ -364,7 +364,7 @@ var fnChatCreateAndGenerateResult = function (flow, cb) {
         ]
     };
 
-    flow.env.dal.chatCreateWithMessage(reqArgs, function(err) {
+    flow.env.dal.chats_createWithMessage(reqArgs, function(err) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else {

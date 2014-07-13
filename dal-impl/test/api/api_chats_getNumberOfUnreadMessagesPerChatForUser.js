@@ -38,23 +38,23 @@ var invalidArgsCallbackEntry = function (cb) {
 };
 
 
-describe('DAL::chatsGetNumberOfUnreadMessagesPerChatForUser', function () {
+describe('DAL::chats_getNumberOfUnreadMessagesPerChatForUser', function () {
 
     it('Must not pass invalid chatId', function (doneTest) {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.chatsGetNumberOfUnreadMessagesPerChatForUser(argsBuilder({chatIds: {}}), invalidArgsCallbackEntry(cb));
+                    api.chats_getNumberOfUnreadMessagesPerChatForUser(argsBuilder({chatIds: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatsGetNumberOfUnreadMessagesPerChatForUser(argsBuilder({chatIds: null}), invalidArgsCallbackEntry(cb));
+                    api.chats_getNumberOfUnreadMessagesPerChatForUser(argsBuilder({chatIds: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatsGetNumberOfUnreadMessagesPerChatForUser(argsBuilder({chatIds: ['-1']}), invalidArgsCallbackEntry(cb));
+                    api.chats_getNumberOfUnreadMessagesPerChatForUser(argsBuilder({chatIds: ['-1']}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatsGetNumberOfUnreadMessagesPerChatForUser(argsBuilder({chatIds: [1]}), invalidArgsCallbackEntry(cb));
+                    api.chats_getNumberOfUnreadMessagesPerChatForUser(argsBuilder({chatIds: [1]}), invalidArgsCallbackEntry(cb));
                 }
             ];
             async.series(fnStack, doneExecute);
@@ -66,16 +66,16 @@ describe('DAL::chatsGetNumberOfUnreadMessagesPerChatForUser', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.chatsGetNumberOfUnreadMessagesPerChatForUser(argsBuilder({userId: {}}), invalidArgsCallbackEntry(cb));
+                    api.chats_getNumberOfUnreadMessagesPerChatForUser(argsBuilder({userId: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatsGetNumberOfUnreadMessagesPerChatForUser(argsBuilder({userId: null}), invalidArgsCallbackEntry(cb));
+                    api.chats_getNumberOfUnreadMessagesPerChatForUser(argsBuilder({userId: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatsGetNumberOfUnreadMessagesPerChatForUser(argsBuilder({userId: '-1'}), invalidArgsCallbackEntry(cb));
+                    api.chats_getNumberOfUnreadMessagesPerChatForUser(argsBuilder({userId: '-1'}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatsGetNumberOfUnreadMessagesPerChatForUser(argsBuilder({userId: 1}), invalidArgsCallbackEntry(cb));
+                    api.chats_getNumberOfUnreadMessagesPerChatForUser(argsBuilder({userId: 1}), invalidArgsCallbackEntry(cb));
                 }
             ];
             async.series(fnStack, doneExecute);
@@ -87,13 +87,13 @@ describe('DAL::chatsGetNumberOfUnreadMessagesPerChatForUser', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.chatsGetNumberOfUnreadMessagesPerChatForUser(argsBuilder({userType: {}}), invalidArgsCallbackEntry(cb));
+                    api.chats_getNumberOfUnreadMessagesPerChatForUser(argsBuilder({userType: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatsGetNumberOfUnreadMessagesPerChatForUser(argsBuilder({userType: null}), invalidArgsCallbackEntry(cb));
+                    api.chats_getNumberOfUnreadMessagesPerChatForUser(argsBuilder({userType: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatsGetNumberOfUnreadMessagesPerChatForUser(argsBuilder({userType: '-1'}), invalidArgsCallbackEntry(cb));
+                    api.chats_getNumberOfUnreadMessagesPerChatForUser(argsBuilder({userType: '-1'}), invalidArgsCallbackEntry(cb));
                 }
             ];
             async.series(fnStack, doneExecute);
@@ -104,7 +104,7 @@ describe('DAL::chatsGetNumberOfUnreadMessagesPerChatForUser', function () {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var reqArgs = argsBuilder({chatIds: ['1000']});
-            api.chatsGetNumberOfUnreadMessagesPerChatForUser(reqArgs, function (err, result) {
+            api.chats_getNumberOfUnreadMessagesPerChatForUser(reqArgs, function (err, result) {
                 if (err) {
                     return doneExecute(err);
                 }
@@ -124,7 +124,7 @@ describe('DAL::chatsGetNumberOfUnreadMessagesPerChatForUser', function () {
                 userId: '2',
                 userType: 2
             });
-            api.chatsGetNumberOfUnreadMessagesPerChatForUser(reqArgs, function (err, result) {
+            api.chats_getNumberOfUnreadMessagesPerChatForUser(reqArgs, function (err, result) {
                 if (err) {
                     return doneExecute(err);
                 }
@@ -142,7 +142,7 @@ describe('DAL::chatsGetNumberOfUnreadMessagesPerChatForUser', function () {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var reqArgs = argsBuilder();
-            api.chatsGetNumberOfUnreadMessagesPerChatForUser(reqArgs, function (err, result) {
+            api.chats_getNumberOfUnreadMessagesPerChatForUser(reqArgs, function (err, result) {
                 if (err) {
                     return doneExecute(err);
                 }
@@ -162,7 +162,7 @@ describe('DAL::chatsGetNumberOfUnreadMessagesPerChatForUser', function () {
                 userId: '1',
                 userType: 1
             });
-            api.chatsGetNumberOfUnreadMessagesPerChatForUser(reqArgs, function (err, result) {
+            api.chats_getNumberOfUnreadMessagesPerChatForUser(reqArgs, function (err, result) {
                 if (err) {
                     return doneExecute(err);
                 }

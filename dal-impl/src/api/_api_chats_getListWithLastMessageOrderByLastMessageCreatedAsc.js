@@ -13,7 +13,7 @@ var dErr = domain.errors;
 
 var errBuilder = require('./_errorBuilder');
 var validate = require('./_validation');
-var api_chatsGetLastMessagePerChat = require('./_api_chatsGetLastMessagePerChat');
+var api_chatsGetLastMessagePerChat = require('./_api_chats_getLastMessagePerChat');
 
 
 var fnExecute = function (env, args, next) {

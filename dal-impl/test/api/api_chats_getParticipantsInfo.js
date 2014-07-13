@@ -36,38 +36,38 @@ var invalidArgsCallbackEntry = function (cb) {
 };
 
 
-describe('DAL::chatGetAppId', function () {
+describe('DAL::chats_getParticipantsInfo', function () {
 
     it('Must not pass invalid chatId', function (doneTest) {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.chatGetAppId(argsBuilder({chatId: {}}), invalidArgsCallbackEntry(cb));
+                    api.chats_getParticipantsInfo(argsBuilder({chatId: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatGetAppId(argsBuilder({chatId: null}), invalidArgsCallbackEntry(cb));
+                    api.chats_getParticipantsInfo(argsBuilder({chatId: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatGetAppId(argsBuilder({chatId: '-1'}), invalidArgsCallbackEntry(cb));
+                    api.chats_getParticipantsInfo(argsBuilder({chatId: '-1'}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.chatGetAppId(argsBuilder({chatId: 1}), invalidArgsCallbackEntry(cb));
+                    api.chats_getParticipantsInfo(argsBuilder({chatId: 1}), invalidArgsCallbackEntry(cb));
                 }
             ];
             async.series(fnStack, doneExecute);
         }, doneTest);
     });
 
-    it('Must return -1 if chat is not found', function (doneTest) {
+    it('Must return empty array if no info is found', function (doneTest) {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var reqArgs = argsBuilder({chatId: '1000'});
-            api.chatGetAppId(reqArgs, function (err, appId) {
+            api.chats_getParticipantsInfo(reqArgs, function (err, participants) {
                 if (err) {
                     return doneExecute(err);
                 }
-                assert.strictEqual(appId, '-1', 'Expected and received result are not match');
+                assert.lengthOf(participants, 0, 'Expected and received result are not match');
                 doneExecute();
             });
         }, doneTest);
@@ -77,11 +77,21 @@ describe('DAL::chatGetAppId', function () {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var reqArgs = argsBuilder();
-            api.chatGetAppId(reqArgs, function (err, appId) {
+            api.chats_getParticipantsInfo(reqArgs, function (err, participants) {
                 if (err) {
                     return doneExecute(err);
                 }
-                assert.strictEqual(appId, '1', 'Expected and received result are not match');
+                var expected = [
+                    {
+                        id: '1',
+                        type: 1
+                    },
+                    {
+                        id: '2',
+                        type: 2
+                    }
+                ];
+                assert.deepEqual(expected, participants, 'Expected and received result are not match');
                 doneExecute();
             });
         }, doneTest);

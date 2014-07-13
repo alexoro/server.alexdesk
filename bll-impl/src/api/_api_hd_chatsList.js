@@ -203,7 +203,7 @@ var fnChatsGetListWithLastMessageOrderByLastMessageDesc = function (flow, cb) {
         offset: flow.args.offset,
         limit: flow.args.limit
     };
-    flow.env.dal.chatsGetListWithLastMessageOrderByLastMessageCreatedAsc(reqArgs, function(err, chats) {
+    flow.env.dal.chats_getListWithLastMessageOrderByLastMessageCreatedAsc(reqArgs, function(err, chats) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else if (!(chats instanceof Array)) {
@@ -225,7 +225,7 @@ var fnChatsSetNumberOfUnreadMessages = function (flow, cb) {
         userType: flow.userType,
         userId: flow.userId
     };
-    flow.env.dal.chatsGetNumberOfUnreadMessagesPerChatForUser(reqArgs, function(err, result) {
+    flow.env.dal.chats_getNumberOfUnreadMessagesPerChatForUser(reqArgs, function(err, result) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else {

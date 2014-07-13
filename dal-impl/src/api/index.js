@@ -29,14 +29,14 @@ var api_appUsers_getCredentialsByLogin = require('./_api_appUsers_getCredentials
 var api_appUsers_getProfileById = require('./_api_appUsers_getProfileById');
 var api_appUsers_create= require('./_api_appUsers_create');
 var api_appUsers_update = require('./_api_appUsers_update');
-var api_chatsGetListWithLastMessageOrderByLastMessageCreatedAsc = require('./_api_chatsGetListWithLastMessageOrderByLastMessageCreatedAsc');
-var api_chatIsExists = require('./_api_chatIsExists');
-var api_chatGetAppId = require('./_api_chatGetAppId');
-var api_chatIsUserTheCreator = require('./_api_chatIsUserTheCreator');
-var api_chatsGetNumberOfUnreadMessagesPerChatForUser = require('./_api_chatsGetNumberOfUnreadMessagesPerChatForUser');
-var api_chatsGetLastMessagePerChat = require('./_api_chatsGetLastMessagePerChat');
-var api_chatGetParticipantsInfo = require('./_api_chatGetParticipantsInfo');
-var api_chatCreateWithMessage = require('./_api_chatCreateWithMessage');
+var api_chats_getListWithLastMessageOrderByLastMessageCreatedAsc = require('./_api_chats_getListWithLastMessageOrderByLastMessageCreatedAsc');
+var api_chats_isExists = require('./_api_chats_isExists');
+var api_chats_getAppId = require('./_api_chats_getAppId');
+var api_chats_isUserTheCreator = require('./_api_chats_isUserTheCreator');
+var api_chats_getNumberOfUnreadMessagesPerChatForUser = require('./_api_chats_getNumberOfUnreadMessagesPerChatForUser');
+var api_chats_getLastMessagePerChat = require('./_api_chats_getLastMessagePerChat');
+var api_chats_getParticipantsInfo = require('./_api_chats_getParticipantsInfo');
+var api_chats_createWithMessage = require('./_api_chats_createWithMessage');
 var api_messagesGetListForChatOrderByCreatedAsc = require('./_api_messagesGetListForChatOrderByCreatedAsc');
 var api_messagesGetIsReadPerMessageForUser = require('./_api_messagesGetIsReadPerMessageForUser');
 var api_messagesSetIsReadInChatForUser = require('./_api_messagesSetIsReadInChatForUser');
@@ -169,36 +169,36 @@ DAL.prototype.appUsers_update = function(args, next) {
     this._before(api_appUsers_update, args, next);
 };
 
-DAL.prototype.chatsGetListWithLastMessageOrderByLastMessageCreatedAsc = function(args, next) {
-    this._before(api_chatsGetListWithLastMessageOrderByLastMessageCreatedAsc, args, next);
+DAL.prototype.chats_getListWithLastMessageOrderByLastMessageCreatedAsc = function(args, next) {
+    this._before(api_chats_getListWithLastMessageOrderByLastMessageCreatedAsc, args, next);
 };
 
-DAL.prototype.chatIsExists = function(args, next) {
-    this._before(api_chatIsExists, args, next);
+DAL.prototype.chats_isExists = function(args, next) {
+    this._before(api_chats_isExists, args, next);
 };
 
-DAL.prototype.chatGetAppId = function(args, next) {
-    this._before(api_chatGetAppId, args, next);
+DAL.prototype.chats_getAppId = function(args, next) {
+    this._before(api_chats_getAppId, args, next);
 };
 
-DAL.prototype.chatIsUserTheCreator = function(args, next) {
-    this._before(api_chatIsUserTheCreator, args, next);
+DAL.prototype.chats_isUserTheCreator = function(args, next) {
+    this._before(api_chats_isUserTheCreator, args, next);
 };
 
-DAL.prototype.chatsGetNumberOfUnreadMessagesPerChatForUser = function(args, next) {
-    this._before(api_chatsGetNumberOfUnreadMessagesPerChatForUser, args, next);
+DAL.prototype.chats_getNumberOfUnreadMessagesPerChatForUser = function(args, next) {
+    this._before(api_chats_getNumberOfUnreadMessagesPerChatForUser, args, next);
 };
 
-DAL.prototype.chatsGetLastMessagePerChat = function(args, next) {
-    this._before(api_chatsGetLastMessagePerChat, args, next);
+DAL.prototype.chats_getLastMessagePerChat = function(args, next) {
+    this._before(api_chats_getLastMessagePerChat, args, next);
 };
 
-DAL.prototype.chatGetParticipantsInfo = function (args, next) {
-    this._before(api_chatGetParticipantsInfo, args, next);
+DAL.prototype.chats_getParticipantsInfo = function (args, next) {
+    this._before(api_chats_getParticipantsInfo, args, next);
 };
 
-DAL.prototype.chatCreateWithMessage = function(args, next) {
-    this._before(api_chatCreateWithMessage, args, next);
+DAL.prototype.chats_createWithMessage = function(args, next) {
+    this._before(api_chats_createWithMessage, args, next);
 };
 
 
