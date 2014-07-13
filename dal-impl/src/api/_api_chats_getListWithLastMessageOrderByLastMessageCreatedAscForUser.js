@@ -63,14 +63,14 @@ var fnValidate = function (flow, cb) {
     if (flow.args.userCreatorId === undefined) {
         return cb(errBuilder(dErr.INVALID_PARAMS, 'userCreatorId is not defined'), flow);
     }
-    if (flow.args.userCreatorId !== null && !validate.positiveBigInt(flow.args.userCreatorId)) {
+    if (!validate.positiveBigInt(flow.args.userCreatorId)) {
         return cb(errBuilder(dErr.INVALID_PARAMS, 'Incorrect userCreatorId value: ' + flow.args.userCreatorId), flow);
     }
 
     if (flow.args.userCreatorType === undefined) {
         return cb(errBuilder(dErr.INVALID_PARAMS, 'userCreatorType is not defined'), flow);
     }
-    if (flow.args.userCreatorId !== null && !validate.positiveSmallInt(flow.args.userCreatorType)) {
+    if (!validate.positiveSmallInt(flow.args.userCreatorType)) {
         return cb(errBuilder(dErr.INVALID_PARAMS, 'Incorrect userCreatorType value: ' + flow.args.userCreatorType), flow);
     }
 
@@ -103,25 +103,12 @@ var fnDbConnect = function (flow, cb) {
 };
 
 
-var preparedGetChatsInfoForAppPositiveOffset =
-    'SELECT id::text, app_id::text, user_creator_id::text, user_creator_type, created, title, type, status, last_update ' +
-    'FROM public.chats ' +
-    'WHERE app_id = $1 ' +
-    'ORDER BY last_update ASC ' +
-    'LIMIT $2 OFFSET $3';
 var preparedGetChatsInfoForAppAndUserPositiveOffset =
     'SELECT id::text, app_id::text, user_creator_id::text, user_creator_type, created, title, type, status, last_update ' +
     'FROM public.chats ' +
     'WHERE app_id = $1 AND user_creator_id = $2 AND user_creator_type = $3 ' +
     'ORDER BY last_update ASC ' +
     'LIMIT $4 OFFSET $5';
-
-var preparedGetChatsInfoForAppNegativeOffset =
-    'SELECT id::text, app_id::text, user_creator_id::text, user_creator_type, created, title, type, status, last_update ' +
-    'FROM public.chats ' +
-    'WHERE app_id = $1 ' +
-    'ORDER BY last_update DESC ' + // change of ASC to DESC
-    'LIMIT $2 OFFSET $3';
 var preparedGetChatsInfoForAppAndUserNegativeOffset =
     'SELECT id::text, app_id::text, user_creator_id::text, user_creator_type, created, title, type, status, last_update ' +
     'FROM public.chats ' +
@@ -132,42 +119,25 @@ var preparedGetChatsInfoForAppAndUserNegativeOffset =
 var fnGetChatsInfo = function (flow, cb) {
     var query;
     var args;
-    if (flow.args.userCreatorId === null) {
-        if (flow.args.offset >= 0) {
-            query = preparedGetChatsInfoForAppPositiveOffset;
-            args = [
-                flow.args.appId,
-                flow.args.limit,
-                flow.args.offset
-            ];
-        } else {
-            query = preparedGetChatsInfoForAppNegativeOffset;
-            args = [
-                flow.args.appId,
-                -flow.args.offset > flow.args.limit ? flow.args.limit : -flow.args.offset,
-                Math.max(0, -flow.args.offset - flow.args.limit)
-            ];
-        }
+
+    if (flow.args.offset >= 0) {
+        query = preparedGetChatsInfoForAppAndUserPositiveOffset;
+        args = [
+            flow.args.appId,
+            flow.args.userCreatorId,
+            flow.args.userCreatorType,
+            flow.args.limit,
+            flow.args.offset
+        ];
     } else {
-        if (flow.args.offset >= 0) {
-            query = preparedGetChatsInfoForAppAndUserPositiveOffset;
-            args = [
-                flow.args.appId,
-                flow.args.userCreatorId,
-                flow.args.userCreatorType,
-                flow.args.limit,
-                flow.args.offset
-            ];
-        } else {
-            query = preparedGetChatsInfoForAppAndUserNegativeOffset;
-            args = [
-                flow.args.appId,
-                flow.args.userCreatorId,
-                flow.args.userCreatorType,
+        query = preparedGetChatsInfoForAppAndUserNegativeOffset;
+        args = [
+            flow.args.appId,
+            flow.args.userCreatorId,
+            flow.args.userCreatorType,
                 -flow.args.offset > flow.args.limit ? flow.args.limit : -flow.args.offset,
-                Math.max(0, -flow.args.offset - flow.args.limit)
-            ];
-        }
+            Math.max(0, -flow.args.offset - flow.args.limit)
+        ];
     }
 
     flow.client.query(query, args, function (err, result) {
