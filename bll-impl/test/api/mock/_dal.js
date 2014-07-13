@@ -437,7 +437,7 @@ DAL.prototype.chatsGetListWithLastMessageOrderByLastMessageCreatedAsc = function
     var i;
 
     var chats = !!args.userCreatorId ?
-        _.where(this.mock.chats, {appId: args.appId, userCreatorId: args.userCreatorId})
+        _.where(this.mock.chats, {appId: args.appId, userCreatorId: args.userCreatorId, userCreatorType: args.userCreatorType})
         : _.where(this.mock.chats, {appId: args.appId});
 
     chats = chats.sort(function(a, b) {

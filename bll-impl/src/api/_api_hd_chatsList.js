@@ -199,6 +199,7 @@ var fnChatsGetListWithLastMessageOrderByLastMessageDesc = function (flow, cb) {
     var reqArgs = {
         appId: flow.args.appId,
         userCreatorId: flow.userType === domain.userTypes.SERVICE_USER ? null : flow.userId,
+        userCreatorType: flow.userType,
         offset: flow.args.offset,
         limit: flow.args.limit
     };
