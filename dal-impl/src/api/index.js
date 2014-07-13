@@ -13,8 +13,8 @@ var api_serviceUserGetCredentialsByLogin = require('./_api_serviceUserGetCredent
 var api_serviceUserGetProfileById = require('./_api_serviceUserGetProfileById');
 var api_serviceUserCreate = require('./_api_serviceUserCreate');
 var api_serviceUserUpdatePasswordHash = require('./_api_serviceUserUpdatePasswordHash');
-var api_serviceUserGetRegisterConfirmData = require('./_api_serviceUserGetRegisterConfirmData');
-var api_serviceUserCreateRegisterConfirmData = require('./_api_serviceUserCreateRegisterConfirmData');
+var api_serviceUserRegisterConfirmDataGet = require('./_api_serviceUserRegisterConfirmDataGet');
+var api_serviceUserRegisterConfirmDataCreate = require('./_api_serviceUserRegisterConfirmDataCreate');
 var api_serviceUserMarkAsConfirmed = require('./_api_serviceUserMarkAsConfirmed');
 var api_serviceUserGetResetPasswordConfirmData = require('./_api_serviceUserGetResetPasswordConfirmData');
 var api_serviceUserCreateResetPasswordConfirmData = require('./_api_serviceUserCreateResetPasswordConfirmData');
@@ -102,12 +102,12 @@ DAL.prototype.serviceUserUpdatePasswordHash = function (args, next) {
 };
 
 
-DAL.prototype.serviceUserGetRegisterConfirmData = function(args, next) {
-    this._before(api_serviceUserGetRegisterConfirmData, args, next);
+DAL.prototype.serviceUserRegisterConfirmDataGet = function(args, next) {
+    this._before(api_serviceUserRegisterConfirmDataGet, args, next);
 };
 
-DAL.prototype.serviceUserCreateRegisterConfirmData = function(args, next) {
-    this._before(api_serviceUserCreateRegisterConfirmData, args, next);
+DAL.prototype.serviceUserRegisterConfirmDataCreate = function(args, next) {
+    this._before(api_serviceUserRegisterConfirmDataCreate, args, next);
 };
 
 DAL.prototype.serviceUserMarkAsConfirmed = function(args, next) {

@@ -38,23 +38,23 @@ var invalidArgsCallbackEntry = function (cb) {
 };
 
 
-describe('DAL::serviceUserCreateRegisterConfirmData', function () {
+describe('DAL::serviceUserRegisterConfirmDataCreate', function () {
 
     it('Must not pass invalid token', function (doneTest) {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.serviceUserCreateRegisterConfirmData(argsBuilder({token: {}}), invalidArgsCallbackEntry(cb));
+                    api.serviceUserRegisterConfirmDataCreate(argsBuilder({token: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.serviceUserCreateRegisterConfirmData(argsBuilder({token: null}), invalidArgsCallbackEntry(cb));
+                    api.serviceUserRegisterConfirmDataCreate(argsBuilder({token: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.serviceUserCreateRegisterConfirmData(argsBuilder({token: 1}), invalidArgsCallbackEntry(cb));
+                    api.serviceUserRegisterConfirmDataCreate(argsBuilder({token: 1}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.serviceUserCreateRegisterConfirmData(argsBuilder({token: '0cec4d47-d9a1-4984-XXXX-10583b674123'}), invalidArgsCallbackEntry(cb));
+                    api.serviceUserRegisterConfirmDataCreate(argsBuilder({token: '0cec4d47-d9a1-4984-XXXX-10583b674123'}), invalidArgsCallbackEntry(cb));
                 }
             ];
             async.series(fnStack, doneExecute);
@@ -66,16 +66,16 @@ describe('DAL::serviceUserCreateRegisterConfirmData', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.serviceUserCreateRegisterConfirmData(argsBuilder({userId: {}}), invalidArgsCallbackEntry(cb));
+                    api.serviceUserRegisterConfirmDataCreate(argsBuilder({userId: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.serviceUserCreateRegisterConfirmData(argsBuilder({userId: null}), invalidArgsCallbackEntry(cb));
+                    api.serviceUserRegisterConfirmDataCreate(argsBuilder({userId: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.serviceUserCreateRegisterConfirmData(argsBuilder({userId: -1}), invalidArgsCallbackEntry(cb));
+                    api.serviceUserRegisterConfirmDataCreate(argsBuilder({userId: -1}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.serviceUserCreateRegisterConfirmData(argsBuilder({userId: '-1'}), invalidArgsCallbackEntry(cb));
+                    api.serviceUserRegisterConfirmDataCreate(argsBuilder({userId: '-1'}), invalidArgsCallbackEntry(cb));
                 }
             ];
             async.series(fnStack, doneExecute);
@@ -87,13 +87,13 @@ describe('DAL::serviceUserCreateRegisterConfirmData', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.serviceUserCreateRegisterConfirmData(argsBuilder({expires: {}}), invalidArgsCallbackEntry(cb));
+                    api.serviceUserRegisterConfirmDataCreate(argsBuilder({expires: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.serviceUserCreateRegisterConfirmData(argsBuilder({expires: null}), invalidArgsCallbackEntry(cb));
+                    api.serviceUserRegisterConfirmDataCreate(argsBuilder({expires: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.serviceUserCreateRegisterConfirmData(argsBuilder({expires: -1}), invalidArgsCallbackEntry(cb));
+                    api.serviceUserRegisterConfirmDataCreate(argsBuilder({expires: -1}), invalidArgsCallbackEntry(cb));
                 }
             ];
             async.series(fnStack, doneExecute);
@@ -104,7 +104,7 @@ describe('DAL::serviceUserCreateRegisterConfirmData', function () {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var reqArgs = argsBuilder();
-            api.serviceUserCreateRegisterConfirmData(reqArgs, function (err, result) {
+            api.serviceUserRegisterConfirmDataCreate(reqArgs, function (err, result) {
                 if (err) {
                     return doneExecute(err);
                 }
@@ -118,7 +118,7 @@ describe('DAL::serviceUserCreateRegisterConfirmData', function () {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var reqArgsCreate = argsBuilder();
-            api.serviceUserCreateRegisterConfirmData(reqArgsCreate, function (err) {
+            api.serviceUserRegisterConfirmDataCreate(reqArgsCreate, function (err) {
                 if (err) {
                     return doneExecute(err);
                 }
@@ -126,7 +126,7 @@ describe('DAL::serviceUserCreateRegisterConfirmData', function () {
                 var reqArgsGet = {
                     token: reqArgsCreate.token
                 };
-                api.serviceUserGetRegisterConfirmData(reqArgsGet, function (err, data) {
+                api.serviceUserRegisterConfirmDataGet(reqArgsGet, function (err, data) {
                     if (err) {
                         return doneExecute(err);
                     } else {

@@ -118,7 +118,7 @@ DAL.prototype.serviceUserUpdatePasswordHash = function (args, done) {
 };
 
 
-DAL.prototype.serviceUserGetRegisterConfirmData = function(args, done) {
+DAL.prototype.serviceUserRegisterConfirmDataGet = function(args, done) {
     args = deepClone(args);
     var reqArgs = {
         id: args.token
@@ -137,7 +137,7 @@ DAL.prototype.serviceUserGetRegisterConfirmData = function(args, done) {
     }
 };
 
-DAL.prototype.serviceUserCreateRegisterConfirmData = function(args, done) {
+DAL.prototype.serviceUserRegisterConfirmDataCreate = function(args, done) {
     args = deepClone(args);
     var data = {
         token: args.token,
