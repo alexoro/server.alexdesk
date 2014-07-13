@@ -30,7 +30,7 @@ var fnExecute = function (env, args, next) {
         },
         fnValidate,
         fnServiceUserHashPassword,
-        fnServiceUserGetIdByCreditionalsAndCheckPassword,
+        fnServiceUserGetIdByCredentialsAndCheckPassword,
         fnCheckServiceUserIsExistsAndConfirmed,
         fnTokenGenerateId,
         fnTokenGenerateExpireTime,
@@ -83,7 +83,7 @@ var fnServiceUserHashPassword = function (flow, cb) {
     });
 };
 
-var fnServiceUserGetIdByCreditionalsAndCheckPassword = function (flow, cb) {
+var fnServiceUserGetIdByCredentialsAndCheckPassword = function (flow, cb) {
     var reqArgs = {
         login: flow.args.login
     };

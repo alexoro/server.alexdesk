@@ -31,7 +31,7 @@ var fnExecute = function (env, args, next) {
         fnValidate,
         fnAppIsExists,
         fnAppUserHashPassword,
-        fnAppUserGetIdByCreditionals,
+        fnAppUserGetIdByCredentials,
         fnTokenGenerateId,
         fnTokenGenerateExpireTime,
         fnTokenSave,
@@ -99,7 +99,7 @@ var fnAppUserHashPassword = function (flow, cb) {
     });
 };
 
-var fnAppUserGetIdByCreditionals = function (flow, cb) {
+var fnAppUserGetIdByCredentials = function (flow, cb) {
     var reqArgs = {
         appId: flow.args.appId,
         login: flow.args.login
