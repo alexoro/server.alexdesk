@@ -508,6 +508,158 @@ DAL.prototype.chats_getListWithLastMessageOrderByLastMessageCreatedAsc = functio
     done(null, ret);
 };
 
+DAL.prototype.chats_getListWithLastMessageOrderByLastMessageCreatedAscForApp = function(args, done) {
+    args = deepClone(args);
+    var i;
+
+    var chats = !!args.userCreatorId ?
+        _.where(this.mock.chats, {appId: args.appId, userCreatorId: args.userCreatorId, userCreatorType: args.userCreatorType})
+        : _.where(this.mock.chats, {appId: args.appId});
+
+    chats = chats.sort(function(a, b) {
+        return a.lastUpdate.getTime() - b.lastUpdate.getTime();
+    });
+    chats = chats.slice(args.offset).splice(0, args.limit);
+
+    var app = _.findWhere(this.mock.apps, {id: args.appId});
+    if (!app) {
+        return done(new Error('Application is not found. Given id: ' + args.appId));
+    }
+
+    var ret = [];
+    for (i = 0; i < chats.length; i++) {
+        var chat = {
+            id: chats[i].id,
+            appId: chats[i].appId,
+            userCreatorId: chats[i].userCreatorId,
+            userCreatorType: chats[i].userCreatorType,
+            created: deepClone(chats[i].created),
+            title: chats[i].title,
+            type: chats[i].type,
+            status: chats[i].status,
+            extra: {}
+        };
+
+        if (app.platformType === domain.platforms.ANDROID) {
+            var extra = _.findWhere(this.mock.chat_extra_android, {chatId: chats[i].id});
+            if (!extra) {
+                return done(new Error('No extra information is found for Android application and chat: ' + chats[i].id));
+            } else {
+                chat.extra = {
+                    countryId: extra.countryId,
+                    langId: extra.langId,
+                    api: extra.api,
+                    apiTextValue: extra.apiTextValue,
+                    appBuild: extra.appBuild,
+                    appVersion: extra.appVersion,
+                    deviceManufacturer: extra.deviceManufacturer,
+                    deviceModel: extra.deviceModel,
+                    deviceWidthPx: extra.deviceWidthPx,
+                    deviceHeightPx: extra.deviceHeightPx,
+                    deviceDensity: extra.deviceDensity,
+                    isRooted: extra.isRooted,
+                    metaData: extra.metaData
+                };
+            }
+        }
+        ret.push(chat);
+    }
+
+    for (i = 0; i < ret.length; i++) {
+        for (var j = 0; j < this.mock.chat_messages.length; j++) {
+            var msg = this.mock.chat_messages[j];
+            if (msg.chatId === ret[i].id) {
+                ret[i].lastMessage = {
+                    id: msg.id,
+                    chatId: msg.chatId,
+                    userCreatorId: msg.userCreatorId,
+                    userCreatorType: msg.userCreatorType,
+                    created: deepClone(msg.created),
+                    content: msg.content
+                };
+            }
+        }
+    }
+
+    done(null, ret);
+};
+
+DAL.prototype.chats_getListWithLastMessageOrderByLastMessageCreatedAscForUser = function(args, done) {
+    args = deepClone(args);
+    var i;
+
+    var chats = !!args.userCreatorId ?
+        _.where(this.mock.chats, {appId: args.appId, userCreatorId: args.userCreatorId, userCreatorType: args.userCreatorType})
+        : _.where(this.mock.chats, {appId: args.appId});
+
+    chats = chats.sort(function(a, b) {
+        return a.lastUpdate.getTime() - b.lastUpdate.getTime();
+    });
+    chats = chats.slice(args.offset).splice(0, args.limit);
+
+    var app = _.findWhere(this.mock.apps, {id: args.appId});
+    if (!app) {
+        return done(new Error('Application is not found. Given id: ' + args.appId));
+    }
+
+    var ret = [];
+    for (i = 0; i < chats.length; i++) {
+        var chat = {
+            id: chats[i].id,
+            appId: chats[i].appId,
+            userCreatorId: chats[i].userCreatorId,
+            userCreatorType: chats[i].userCreatorType,
+            created: deepClone(chats[i].created),
+            title: chats[i].title,
+            type: chats[i].type,
+            status: chats[i].status,
+            extra: {}
+        };
+
+        if (app.platformType === domain.platforms.ANDROID) {
+            var extra = _.findWhere(this.mock.chat_extra_android, {chatId: chats[i].id});
+            if (!extra) {
+                return done(new Error('No extra information is found for Android application and chat: ' + chats[i].id));
+            } else {
+                chat.extra = {
+                    countryId: extra.countryId,
+                    langId: extra.langId,
+                    api: extra.api,
+                    apiTextValue: extra.apiTextValue,
+                    appBuild: extra.appBuild,
+                    appVersion: extra.appVersion,
+                    deviceManufacturer: extra.deviceManufacturer,
+                    deviceModel: extra.deviceModel,
+                    deviceWidthPx: extra.deviceWidthPx,
+                    deviceHeightPx: extra.deviceHeightPx,
+                    deviceDensity: extra.deviceDensity,
+                    isRooted: extra.isRooted,
+                    metaData: extra.metaData
+                };
+            }
+        }
+        ret.push(chat);
+    }
+
+    for (i = 0; i < ret.length; i++) {
+        for (var j = 0; j < this.mock.chat_messages.length; j++) {
+            var msg = this.mock.chat_messages[j];
+            if (msg.chatId === ret[i].id) {
+                ret[i].lastMessage = {
+                    id: msg.id,
+                    chatId: msg.chatId,
+                    userCreatorId: msg.userCreatorId,
+                    userCreatorType: msg.userCreatorType,
+                    created: deepClone(msg.created),
+                    content: msg.content
+                };
+            }
+        }
+    }
+
+    done(null, ret);
+};
+
 DAL.prototype.chats_isExists = function(args, done) {
     args = deepClone(args);
     done(null, !!_.findWhere(this.mock.chats, {id: args.chatId}));
