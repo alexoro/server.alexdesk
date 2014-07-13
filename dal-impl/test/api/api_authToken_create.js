@@ -39,26 +39,26 @@ var invalidArgsCallbackEntry = function (cb) {
 };
 
 
-describe('DAL::authTokenCreate', function () {
+describe('DAL::authToken_create', function () {
 
     it('Must not pass invalid token', function (doneTest) {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.authTokenCreate(argsBuilder({token: {}}), invalidArgsCallbackEntry(cb));
+                    api.authToken_create(argsBuilder({token: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.authTokenCreate(argsBuilder({token: null}), invalidArgsCallbackEntry(cb));
+                    api.authToken_create(argsBuilder({token: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.authTokenCreate(argsBuilder({token: -1}), invalidArgsCallbackEntry(cb));
+                    api.authToken_create(argsBuilder({token: -1}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.authTokenCreate(argsBuilder({token: '-1'}), invalidArgsCallbackEntry(cb));
+                    api.authToken_create(argsBuilder({token: '-1'}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.authTokenCreate(argsBuilder({token: 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaZ'}), invalidArgsCallbackEntry(cb));
+                    api.authToken_create(argsBuilder({token: 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaZ'}), invalidArgsCallbackEntry(cb));
                 }
             ];
             async.series(fnStack, doneExecute);
@@ -70,13 +70,13 @@ describe('DAL::authTokenCreate', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.authTokenCreate(argsBuilder({userType: {}}), invalidArgsCallbackEntry(cb));
+                    api.authToken_create(argsBuilder({userType: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.authTokenCreate(argsBuilder({userType: null}), invalidArgsCallbackEntry(cb));
+                    api.authToken_create(argsBuilder({userType: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.authTokenCreate(argsBuilder({userType: '-1'}), invalidArgsCallbackEntry(cb));
+                    api.authToken_create(argsBuilder({userType: '-1'}), invalidArgsCallbackEntry(cb));
                 }
             ];
             async.series(fnStack, doneExecute);
@@ -88,16 +88,16 @@ describe('DAL::authTokenCreate', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.authTokenCreate(argsBuilder({userId: {}}), invalidArgsCallbackEntry(cb));
+                    api.authToken_create(argsBuilder({userId: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.authTokenCreate(argsBuilder({userId: null}), invalidArgsCallbackEntry(cb));
+                    api.authToken_create(argsBuilder({userId: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.authTokenCreate(argsBuilder({userId: '-1'}), invalidArgsCallbackEntry(cb));
+                    api.authToken_create(argsBuilder({userId: '-1'}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.authTokenCreate(argsBuilder({userId: 1}), invalidArgsCallbackEntry(cb));
+                    api.authToken_create(argsBuilder({userId: 1}), invalidArgsCallbackEntry(cb));
                 }
             ];
             async.series(fnStack, doneExecute);
@@ -109,13 +109,13 @@ describe('DAL::authTokenCreate', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.authTokenCreate(argsBuilder({expires: {}}), invalidArgsCallbackEntry(cb));
+                    api.authToken_create(argsBuilder({expires: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.authTokenCreate(argsBuilder({expires: null}), invalidArgsCallbackEntry(cb));
+                    api.authToken_create(argsBuilder({expires: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.authTokenCreate(argsBuilder({expires: '-1'}), invalidArgsCallbackEntry(cb));
+                    api.authToken_create(argsBuilder({expires: '-1'}), invalidArgsCallbackEntry(cb));
                 }
             ];
             async.series(fnStack, doneExecute);
@@ -126,7 +126,7 @@ describe('DAL::authTokenCreate', function () {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var reqArgs = argsBuilder();
-            api.authTokenCreate(reqArgs, function (err, result) {
+            api.authToken_create(reqArgs, function (err, result) {
                 if (err) {
                     return doneExecute(err);
                 }
@@ -140,7 +140,7 @@ describe('DAL::authTokenCreate', function () {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var reqArgsCreate = argsBuilder();
-            api.authTokenCreate(reqArgsCreate, function (err) {
+            api.authToken_create(reqArgsCreate, function (err) {
                 if (err) {
                     return doneExecute(err);
                 }
@@ -148,7 +148,7 @@ describe('DAL::authTokenCreate', function () {
                 var reqArgsGet = {
                     token: reqArgsCreate.token
                 };
-                api.authTokenGetUserInfoByToken(reqArgsGet, function (err, info) {
+                api.authToken_getUserInfoByToken(reqArgsGet, function (err, info) {
                     if (err) {
                         return doneExecute(err);
                     }

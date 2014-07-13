@@ -17,7 +17,7 @@ var DAL = function(mockData) {
 };
 
 
-DAL.prototype.authTokenGetUserInfoByToken = function(args, done) {
+DAL.prototype.authToken_getUserInfoByToken = function(args, done) {
     args = deepClone(args);
     var reqArgs = {
         token: args.token
@@ -36,7 +36,7 @@ DAL.prototype.authTokenGetUserInfoByToken = function(args, done) {
     }
 };
 
-DAL.prototype.authTokenCreate = function(args, done) {
+DAL.prototype.authToken_create = function(args, done) {
     args = deepClone(args);
     var data = {
         token: args.token,

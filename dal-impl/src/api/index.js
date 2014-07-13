@@ -7,8 +7,8 @@
 var domain = require('../domain');
 
 
-var api_authTokenGetUserInfoByToken = require('./_api_authTokenGetUserInfoByToken');
-var api_authTokenCreate = require('./_api_authTokenCreate');
+var api_authToken_getUserInfoByToken = require('./_api_authToken_getUserInfoByToken');
+var api_authToken_create = require('./_api_authToken_create');
 var api_serviceUserGetCredentialsByLogin = require('./_api_serviceUserGetCredentialsByLogin');
 var api_serviceUserGetProfileById = require('./_api_serviceUserGetProfileById');
 var api_serviceUserCreate = require('./_api_serviceUserCreate');
@@ -76,12 +76,12 @@ DAL.prototype._before = function(fn, args, next) {
 };
 
 
-DAL.prototype.authTokenGetUserInfoByToken = function(args, next) {
-    this._before(api_authTokenGetUserInfoByToken, args, next);
+DAL.prototype.authToken_getUserInfoByToken = function(args, next) {
+    this._before(api_authToken_getUserInfoByToken, args, next);
 };
 
-DAL.prototype.authTokenCreate = function(args, next) {
-    this._before(api_authTokenCreate, args, next);
+DAL.prototype.authToken_create = function(args, next) {
+    this._before(api_authToken_create, args, next);
 };
 
 

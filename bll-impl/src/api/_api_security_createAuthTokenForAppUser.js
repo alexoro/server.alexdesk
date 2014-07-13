@@ -147,7 +147,7 @@ var fnTokenSave = function (flow, cb) {
         userId: flow.userId,
         expires: flow.tokenExpiresDate
     };
-    flow.env.dal.authTokenCreate(toSave, function(err) {
+    flow.env.dal.authToken_create(toSave, function(err) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else {

@@ -29,13 +29,13 @@ describe('API::Interface', function() {
     it('Check all interface functions are exists', function() {
         var api = mock.newApiWithMock().api;
 
-        assert.isDefined(api.authTokenGetUserInfoByToken, 'authTokenGetUserInfoByToken function is not exists');
-        assert.isFunction(api.authTokenGetUserInfoByToken, 'authTokenGetUserInfoByToken must be a function');
-        assert.equal(api.authTokenGetUserInfoByToken.length, 2, 'authTokenGetUserInfoByToken must receive 2 arguments only');
+        assert.isDefined(api.authToken_getUserInfoByToken, 'authToken_getUserInfoByToken function is not exists');
+        assert.isFunction(api.authToken_getUserInfoByToken, 'authToken_getUserInfoByToken must be a function');
+        assert.equal(api.authToken_getUserInfoByToken.length, 2, 'authToken_getUserInfoByToken must receive 2 arguments only');
 
-        assert.isDefined(api.authTokenCreate, 'authTokenCreate function is not exists');
-        assert.isFunction(api.authTokenCreate, 'authTokenCreate must be a function');
-        assert.equal(api.authTokenCreate.length, 2, 'authTokenCreate must receive 2 arguments only');
+        assert.isDefined(api.authToken_create, 'authToken_create function is not exists');
+        assert.isFunction(api.authToken_create, 'authToken_create must be a function');
+        assert.equal(api.authToken_create.length, 2, 'authToken_create must receive 2 arguments only');
 
 
         assert.isDefined(api.serviceUserGetCredentialsByLogin, 'serviceUserGetCredentialsByLogin function is not exists');
