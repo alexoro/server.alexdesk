@@ -19,7 +19,7 @@ var argsBuilder = function(override) {
         override = {};
     }
     return {
-        id: override.id === undefined ? '2' : override.id,
+        id: override.id === undefined ? '1000' : override.id,
         appId: override.appId === undefined ? '1' : override.appId,
         login: override.login === undefined ? 'testLogin' : override.login,
         passwordHash: override.passwordHash === undefined ? '93134919a8fd95a216c9109b60bc6070' : override.passwordHash,
@@ -46,23 +46,23 @@ var invalidArgsCallbackEntry = function (cb) {
 };
 
 
-describe('DAL::appUserUpdate', function () {
+describe('DAL::appUsers_create', function () {
 
     it('Must not pass invalid id', function (doneTest) {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.appUserUpdate(argsBuilder({id: {}}), invalidArgsCallbackEntry(cb));
+                    api.appUsers_create(argsBuilder({id: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.appUserUpdate(argsBuilder({id: null}), invalidArgsCallbackEntry(cb));
+                    api.appUsers_create(argsBuilder({id: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.appUserUpdate(argsBuilder({id: -1}), invalidArgsCallbackEntry(cb));
+                    api.appUsers_create(argsBuilder({id: -1}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.appUserUpdate(argsBuilder({id: '-1'}), invalidArgsCallbackEntry(cb));
+                    api.appUsers_create(argsBuilder({id: '-1'}), invalidArgsCallbackEntry(cb));
                 }
             ];
             async.series(fnStack, doneExecute);
@@ -74,16 +74,16 @@ describe('DAL::appUserUpdate', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.appUserUpdate(argsBuilder({appId: {}}), invalidArgsCallbackEntry(cb));
+                    api.appUsers_create(argsBuilder({appId: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.appUserUpdate(argsBuilder({appId: null}), invalidArgsCallbackEntry(cb));
+                    api.appUsers_create(argsBuilder({appId: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.appUserUpdate(argsBuilder({appId: -1}), invalidArgsCallbackEntry(cb));
+                    api.appUsers_create(argsBuilder({appId: -1}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.appUserUpdate(argsBuilder({appId: '-1'}), invalidArgsCallbackEntry(cb));
+                    api.appUsers_create(argsBuilder({appId: '-1'}), invalidArgsCallbackEntry(cb));
                 }
             ];
             async.series(fnStack, doneExecute);
@@ -95,13 +95,13 @@ describe('DAL::appUserUpdate', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.appUserUpdate(argsBuilder({login: {}}), invalidArgsCallbackEntry(cb));
+                    api.appUsers_create(argsBuilder({login: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.appUserUpdate(argsBuilder({login: null}), invalidArgsCallbackEntry(cb));
+                    api.appUsers_create(argsBuilder({login: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.appUserUpdate(argsBuilder({login: -1}), invalidArgsCallbackEntry(cb));
+                    api.appUsers_create(argsBuilder({login: -1}), invalidArgsCallbackEntry(cb));
                 }
             ];
             async.series(fnStack, doneExecute);
@@ -113,13 +113,13 @@ describe('DAL::appUserUpdate', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.appUserUpdate(argsBuilder({passwordHash: {}}), invalidArgsCallbackEntry(cb));
+                    api.appUsers_create(argsBuilder({passwordHash: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.appUserUpdate(argsBuilder({passwordHash: null}), invalidArgsCallbackEntry(cb));
+                    api.appUsers_create(argsBuilder({passwordHash: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.appUserUpdate(argsBuilder({passwordHash: -1}), invalidArgsCallbackEntry(cb));
+                    api.appUsers_create(argsBuilder({passwordHash: -1}), invalidArgsCallbackEntry(cb));
                 }
             ];
             async.series(fnStack, doneExecute);
@@ -131,13 +131,13 @@ describe('DAL::appUserUpdate', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.appUserUpdate(argsBuilder({name: {}}), invalidArgsCallbackEntry(cb));
+                    api.appUsers_create(argsBuilder({name: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.appUserUpdate(argsBuilder({name: null}), invalidArgsCallbackEntry(cb));
+                    api.appUsers_create(argsBuilder({name: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.appUserUpdate(argsBuilder({name: -1}), invalidArgsCallbackEntry(cb));
+                    api.appUsers_create(argsBuilder({name: -1}), invalidArgsCallbackEntry(cb));
                 }
             ];
             async.series(fnStack, doneExecute);
@@ -149,13 +149,13 @@ describe('DAL::appUserUpdate', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.appUserUpdate(argsBuilder({registered: {}}), invalidArgsCallbackEntry(cb));
+                    api.appUsers_create(argsBuilder({registered: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.appUserUpdate(argsBuilder({registered: null}), invalidArgsCallbackEntry(cb));
+                    api.appUsers_create(argsBuilder({registered: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.appUserUpdate(argsBuilder({registered: -1}), invalidArgsCallbackEntry(cb));
+                    api.appUsers_create(argsBuilder({registered: -1}), invalidArgsCallbackEntry(cb));
                 }
             ];
             async.series(fnStack, doneExecute);
@@ -167,13 +167,13 @@ describe('DAL::appUserUpdate', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.appUserUpdate(argsBuilder({lastVisit: {}}), invalidArgsCallbackEntry(cb));
+                    api.appUsers_create(argsBuilder({lastVisit: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.appUserUpdate(argsBuilder({lastVisit: null}), invalidArgsCallbackEntry(cb));
+                    api.appUsers_create(argsBuilder({lastVisit: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.appUserUpdate(argsBuilder({lastVisit: -1}), invalidArgsCallbackEntry(cb));
+                    api.appUsers_create(argsBuilder({lastVisit: -1}), invalidArgsCallbackEntry(cb));
                 }
             ];
             async.series(fnStack, doneExecute);
@@ -187,17 +187,17 @@ describe('DAL::appUserUpdate', function () {
                 function (cb) {
                     var reqArgs = argsBuilder();
                     delete reqArgs.extra;
-                    api.appUserUpdate(reqArgs, invalidArgsCallbackEntry(cb));
+                    api.appUsers_create(reqArgs, invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
                     var reqArgs = argsBuilder();
                     reqArgs.extra = null;
-                    api.appUserUpdate(reqArgs, invalidArgsCallbackEntry(cb));
+                    api.appUsers_create(reqArgs, invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
                     var reqArgs = argsBuilder();
                     reqArgs.extra = 'x';
-                    api.appUserUpdate(reqArgs, invalidArgsCallbackEntry(cb));
+                    api.appUsers_create(reqArgs, invalidArgsCallbackEntry(cb));
                 }
             ];
             async.series(fnStack, doneExecute);
@@ -209,13 +209,13 @@ describe('DAL::appUserUpdate', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.appUserUpdate(argsBuilder({deviceUuid: {}}), invalidArgsCallbackEntry(cb));
+                    api.appUsers_create(argsBuilder({deviceUuid: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.appUserUpdate(argsBuilder({deviceUuid: null}), invalidArgsCallbackEntry(cb));
+                    api.appUsers_create(argsBuilder({deviceUuid: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.appUserUpdate(argsBuilder({deviceUuid: -1}), invalidArgsCallbackEntry(cb));
+                    api.appUsers_create(argsBuilder({deviceUuid: -1}), invalidArgsCallbackEntry(cb));
                 }
             ];
             async.series(fnStack, doneExecute);
@@ -227,13 +227,13 @@ describe('DAL::appUserUpdate', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.appUserUpdate(argsBuilder({gcmToken: {}}), invalidArgsCallbackEntry(cb));
+                    api.appUsers_create(argsBuilder({gcmToken: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.appUserUpdate(argsBuilder({gcmToken: null}), invalidArgsCallbackEntry(cb));
+                    api.appUsers_create(argsBuilder({gcmToken: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.appUserUpdate(argsBuilder({gcmToken: -1}), invalidArgsCallbackEntry(cb));
+                    api.appUsers_create(argsBuilder({gcmToken: -1}), invalidArgsCallbackEntry(cb));
                 }
             ];
             async.series(fnStack, doneExecute);
@@ -244,7 +244,7 @@ describe('DAL::appUserUpdate', function () {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var reqArgs = argsBuilder();
-            api.appUserUpdate(reqArgs, function (err, result) {
+            api.appUsers_create(reqArgs, function (err, result) {
                 if (err) {
                     return doneExecute(err);
                 }
@@ -254,24 +254,24 @@ describe('DAL::appUserUpdate', function () {
         }, doneTest);
     });
 
-    it('Updated user must be equal to given', function (doneTest) {
+    it('Created user must be accessible', function (doneTest) {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
-            var reqArgsUpdate = argsBuilder();
-            api.appUserUpdate(reqArgsUpdate, function (err) {
+            var reqArgsCreate = argsBuilder();
+            api.appUsers_create(reqArgsCreate, function (err) {
                 if (err) {
                     return doneExecute(err);
                 }
 
-                var reqArgsGetProfileById = {
-                    id: reqArgsUpdate.id
+                var reqArgsGet = {
+                    appId: argsBuilder().appId,
+                    login: argsBuilder().login
                 };
-                api.appUsersGetProfileById(reqArgsGetProfileById, function (err, profile) {
+                api.appUsers_getCredentialsByLogin(reqArgsGet, function (err, credentials) {
                     if (err) {
                         return doneExecute(err);
                     } else {
-                        delete profile.platform;
-                        assert.deepEqual(profile, reqArgsUpdate, 'Just updated user was not updated');
+                        assert.isNotNull(credentials, 'Just created user was not found');
                         return doneExecute();
                     }
                 });

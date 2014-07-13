@@ -25,10 +25,10 @@ var api_apps_create = require('./_api_apps_create');
 var api_apps_getNumberOfChats = require('./_api_apps_getNumberOfChats');
 var api_apps_getNumberOfMessages = require('./_api_apps_getNumberOfMessages');
 var api_apps_getNumberOfUnreadMessages = require('./_api_apps_getNumberOfUnreadMessages');
-var api_appUserGetCredentialsByLogin = require('./_api_appUserGetCredentialsByLogin');
-var api_appUsersGetProfileById = require('./_api_appUsersGetProfileById');
-var api_appUsersCreate= require('./_api_appUsersCreate');
-var api_appUserUpdate = require('./_api_appUserUpdate');
+var api_appUsers_getCredentialsByLogin = require('./_api_appUsers_getCredentialsByLogin');
+var api_appUsers_getProfileById = require('./_api_appUsers_getProfileById');
+var api_appUsers_create= require('./_api_appUsers_create');
+var api_appUsers_update = require('./_api_appUsers_update');
 var api_chatsGetListWithLastMessageOrderByLastMessageCreatedAsc = require('./_api_chatsGetListWithLastMessageOrderByLastMessageCreatedAsc');
 var api_chatIsExists = require('./_api_chatIsExists');
 var api_chatGetAppId = require('./_api_chatGetAppId');
@@ -153,20 +153,20 @@ DAL.prototype.apps_getNumberOfUnreadMessages = function(args, next) {
 };
 
 
-DAL.prototype.appUserGetCredentialsByLogin = function(args, next) {
-    this._before(api_appUserGetCredentialsByLogin, args, next);
+DAL.prototype.appUsers_getCredentialsByLogin = function(args, next) {
+    this._before(api_appUsers_getCredentialsByLogin, args, next);
 };
 
-DAL.prototype.appUsersGetProfileById = function(args, next) {
-    this._before(api_appUsersGetProfileById, args, next);
+DAL.prototype.appUsers_getProfileById = function(args, next) {
+    this._before(api_appUsers_getProfileById, args, next);
 };
 
-DAL.prototype.appUsersCreate = function(args, next) {
-    this._before(api_appUsersCreate, args, next);
+DAL.prototype.appUsers_create = function(args, next) {
+    this._before(api_appUsers_create, args, next);
 };
 
-DAL.prototype.appUserUpdate = function(args, next) {
-    this._before(api_appUserUpdate, args, next);
+DAL.prototype.appUsers_update = function(args, next) {
+    this._before(api_appUsers_update, args, next);
 };
 
 DAL.prototype.chatsGetListWithLastMessageOrderByLastMessageCreatedAsc = function(args, next) {

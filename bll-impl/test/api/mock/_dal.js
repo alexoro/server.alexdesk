@@ -325,7 +325,7 @@ DAL.prototype.apps_getNumberOfUnreadMessages = function(args, done) {
 };
 
 
-DAL.prototype.appUserGetCredentialsByLogin = function(args, done) {
+DAL.prototype.appUsers_getCredentialsByLogin = function(args, done) {
     args = deepClone(args);
     var r = _.findWhere(this.mock.app_users, {appId: args.appId, login: args.login});
     if (!r) {
@@ -340,7 +340,7 @@ DAL.prototype.appUserGetCredentialsByLogin = function(args, done) {
     }
 };
 
-DAL.prototype.appUsersGetProfileById = function(args, done) {
+DAL.prototype.appUsers_getProfileById = function(args, done) {
     args = deepClone(args);
     var user = _.findWhere(this.mock.app_users, {appUserId: args.id});
     if (!user) {
@@ -368,7 +368,7 @@ DAL.prototype.appUsersGetProfileById = function(args, done) {
     }
 };
 
-DAL.prototype.appUsersCreate = function(args, done) {
+DAL.prototype.appUsers_create = function(args, done) {
     args = deepClone(args);
     var profile = {
         appUserId: args.id,
@@ -394,7 +394,7 @@ DAL.prototype.appUsersCreate = function(args, done) {
     done(null);
 };
 
-DAL.prototype.appUserUpdate = function(args, done) {
+DAL.prototype.appUsers_update = function(args, done) {
     args = deepClone(args);
     var i;
 

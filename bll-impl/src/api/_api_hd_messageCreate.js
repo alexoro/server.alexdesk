@@ -183,7 +183,7 @@ var fnUserIsAssociatedWithApp = function (flow, cb) {
         reqArgs = {
             id: flow.userId
         };
-        flow.env.dal.appUsersGetProfileById(reqArgs, function (err, userProfile) {
+        flow.env.dal.appUsers_getProfileById(reqArgs, function (err, userProfile) {
             if (err) {
                 cb(errBuilder(dErr.INTERNAL_ERROR, err));
             } else if (!userProfile || userProfile.appId !== flow.appId) {

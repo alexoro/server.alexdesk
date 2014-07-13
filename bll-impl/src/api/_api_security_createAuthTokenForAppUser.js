@@ -104,7 +104,7 @@ var fnAppUserGetIdByCredentials = function (flow, cb) {
         appId: flow.args.appId,
         login: flow.args.login
     };
-    flow.env.dal.appUserGetCredentialsByLogin(reqArgs, function (err, creditionals) {
+    flow.env.dal.appUsers_getCredentialsByLogin(reqArgs, function (err, creditionals) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else if (!creditionals) {

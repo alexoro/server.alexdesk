@@ -36,23 +36,23 @@ var invalidArgsCallbackEntry = function (cb) {
 };
 
 
-describe('DAL::appUsersGetProfileById', function () {
+describe('DAL::appUsers_getProfileById', function () {
 
     it('Must not pass invalid id', function (doneTest) {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.appUsersGetProfileById(argsBuilder({id: {}}), invalidArgsCallbackEntry(cb));
+                    api.appUsers_getProfileById(argsBuilder({id: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.appUsersGetProfileById(argsBuilder({id: null}), invalidArgsCallbackEntry(cb));
+                    api.appUsers_getProfileById(argsBuilder({id: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.appUsersGetProfileById(argsBuilder({id: -1}), invalidArgsCallbackEntry(cb));
+                    api.appUsers_getProfileById(argsBuilder({id: -1}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.appUsersGetProfileById(argsBuilder({id: '-1'}), invalidArgsCallbackEntry(cb));
+                    api.appUsers_getProfileById(argsBuilder({id: '-1'}), invalidArgsCallbackEntry(cb));
                 }
             ];
             async.series(fnStack, doneExecute);
@@ -63,7 +63,7 @@ describe('DAL::appUsersGetProfileById', function () {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var reqArgs = argsBuilder();
-            api.appUsersGetProfileById(reqArgs, function (err, result) {
+            api.appUsers_getProfileById(reqArgs, function (err, result) {
                 if (err) {
                     return doneExecute(err);
                 }
@@ -91,7 +91,7 @@ describe('DAL::appUsersGetProfileById', function () {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var reqArgs = argsBuilder({id: '1000'});
-            api.appUsersGetProfileById(reqArgs, function (err, result) {
+            api.appUsers_getProfileById(reqArgs, function (err, result) {
                 if (err) {
                     return doneExecute(err);
                 }

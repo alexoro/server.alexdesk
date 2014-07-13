@@ -106,21 +106,21 @@ describe('API::Interface', function() {
         assert.equal(api.apps_getNumberOfUnreadMessages.length, 2, 'apps_getNumberOfUnreadMessages must receive 2 arguments only');
 
 
-        assert.isDefined(api.appUserGetCredentialsByLogin, 'appUserGetCredentialsByLogin function is not exists');
-        assert.isFunction(api.appUserGetCredentialsByLogin, 'appUserGetCredentialsByLogin must be a function');
-        assert.equal(api.appUserGetCredentialsByLogin.length, 2, 'appUserGetCredentialsByLogin must receive 2 arguments only');
+        assert.isDefined(api.appUsers_getCredentialsByLogin, 'appUsers_getCredentialsByLogin function is not exists');
+        assert.isFunction(api.appUsers_getCredentialsByLogin, 'appUsers_getCredentialsByLogin must be a function');
+        assert.equal(api.appUsers_getCredentialsByLogin.length, 2, 'appUsers_getCredentialsByLogin must receive 2 arguments only');
 
-        assert.isDefined(api.appUsersGetProfileById, 'appUsersGetProfileById function is not exists');
-        assert.isFunction(api.appUsersGetProfileById, 'appUsersGetProfileById must be a function');
-        assert.equal(api.appUsersGetProfileById.length, 2, 'appUsersGetProfileById must receive 2 arguments only');
+        assert.isDefined(api.appUsers_getProfileById, 'appUsers_getProfileById function is not exists');
+        assert.isFunction(api.appUsers_getProfileById, 'appUsers_getProfileById must be a function');
+        assert.equal(api.appUsers_getProfileById.length, 2, 'appUsers_getProfileById must receive 2 arguments only');
 
-        assert.isDefined(api.appUsersCreate, 'appUsersCreate function is not exists');
-        assert.isFunction(api.appUsersCreate, 'appUsersCreate must be a function');
-        assert.equal(api.appUsersCreate.length, 2, 'appUsersCreate must receive 2 arguments only');
+        assert.isDefined(api.appUsers_create, 'appUsers_create function is not exists');
+        assert.isFunction(api.appUsers_create, 'appUsers_create must be a function');
+        assert.equal(api.appUsers_create.length, 2, 'appUsers_create must receive 2 arguments only');
 
-        assert.isDefined(api.appUserUpdate, 'appUserUpdate function is not exists');
-        assert.isFunction(api.appUserUpdate, 'appUserUpdate must be a function');
-        assert.equal(api.appUserUpdate.length, 2, 'appUserUpdate must receive 2 arguments only');
+        assert.isDefined(api.appUsers_update, 'appUsers_update function is not exists');
+        assert.isFunction(api.appUsers_update, 'appUsers_update must be a function');
+        assert.equal(api.appUsers_update.length, 2, 'appUsers_update must receive 2 arguments only');
 
         assert.isDefined(api.chatsGetListWithLastMessageOrderByLastMessageCreatedAsc, 'chatsGetListWithLastMessageOrderByLastMessageCreatedAsc function is not exists');
         assert.isFunction(api.chatsGetListWithLastMessageOrderByLastMessageCreatedAsc, 'chatsGetListWithLastMessageOrderByLastMessageCreatedAsc must be a function');

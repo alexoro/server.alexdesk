@@ -161,7 +161,7 @@ var fnFindUserAndDetectMode = function (flow, cb) {
         appId: flow.args.appId,
         login: flow.args.login
     };
-    flow.env.dal.appUserGetCredentialsByLogin(reqArgs, function(err, creditionals) {
+    flow.env.dal.appUsers_getCredentialsByLogin(reqArgs, function(err, creditionals) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else if (creditionals === null) {
@@ -212,7 +212,7 @@ var fnUserGetProfileIfUpdateMode = function (flow, cb) {
         var reqArgs = {
             id: flow.userId
         };
-        flow.env.dal.appUsersGetProfileById(reqArgs, function(err, profile) {
+        flow.env.dal.appUsers_getProfileById(reqArgs, function(err, profile) {
             if (err) {
                 cb(errBuilder(dErr.INTERNAL_ERROR, err));
             } else if (profile === null) {
@@ -245,7 +245,7 @@ var fnUserCreateOrUpdate = function (flow, cb) {
                 gcmToken: flow.args.extra.gcmToken
             }
         };
-        flow.env.dal.appUsersCreate(newUserProfile, function(err) {
+        flow.env.dal.appUsers_create(newUserProfile, function(err) {
             if (err) {
                 cb(errBuilder(dErr.INTERNAL_ERROR, err));
             } else {
@@ -260,7 +260,7 @@ var fnUserCreateOrUpdate = function (flow, cb) {
         newUserProfile.extra.deviceUuid = flow.args.extra.deviceUuid;
         newUserProfile.extra.gcmToken = flow.args.extra.gcmToken;
 
-        flow.env.dal.appUserUpdate(newUserProfile, function(err) {
+        flow.env.dal.appUsers_update(newUserProfile, function(err) {
             if (err) {
                 cb(errBuilder(dErr.INTERNAL_ERROR, err));
             } else {
