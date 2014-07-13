@@ -196,27 +196,51 @@ var fnUserIsAssociatedWithApp = function (flow, cb) {
 };
 
 var fnChatsGetListWithLastMessageOrderByLastMessageDesc = function (flow, cb) {
-    var reqArgs = {
-        appId: flow.args.appId,
-        userCreatorId: flow.userType === domain.userTypes.SERVICE_USER ? null : flow.userId,
-        userCreatorType: flow.userType,
-        offset: flow.args.offset,
-        limit: flow.args.limit
-    };
-    flow.env.dal.chats_getListWithLastMessageOrderByLastMessageCreatedAsc(reqArgs, function(err, chats) {
-        if (err) {
-            cb(errBuilder(dErr.INTERNAL_ERROR, err));
-        } else if (!(chats instanceof Array)) {
-            cb(errBuilder(dErr.INTERNAL_ERROR, 'It is expected that #getChatsList will be an array. Received: ' + chats));
-        } else {
-            flow.chatsList = chats;
-            flow.chatIds = [];
-            for (var i = 0; i < flow.chatsList.length; i++) {
-                flow.chatIds.push(flow.chatsList[i].id);
+    var reqArgs;
+
+    if (flow.userType === domain.userTypes.SERVICE_USER) {
+        reqArgs = {
+            appId: flow.args.appId,
+            offset: flow.args.offset,
+            limit: flow.args.limit
+        };
+        flow.env.dal.chats_getListWithLastMessageOrderByLastMessageCreatedAscForApp(reqArgs, function(err, chats) {
+            if (err) {
+                cb(errBuilder(dErr.INTERNAL_ERROR, err));
+            } else if (!(chats instanceof Array)) {
+                cb(errBuilder(dErr.INTERNAL_ERROR, 'It is expected that #getChatsList will be an array. Received: ' + chats));
+            } else {
+                flow.chatsList = chats;
+                flow.chatIds = [];
+                for (var i = 0; i < flow.chatsList.length; i++) {
+                    flow.chatIds.push(flow.chatsList[i].id);
+                }
+                cb(null, flow);
             }
-            cb(null, flow);
-        }
-    });
+        });
+    } else {
+        reqArgs = {
+            appId: flow.args.appId,
+            userCreatorId: flow.userId,
+            userCreatorType: flow.userType,
+            offset: flow.args.offset,
+            limit: flow.args.limit
+        };
+        flow.env.dal.chats_getListWithLastMessageOrderByLastMessageCreatedAscForUser(reqArgs, function(err, chats) {
+            if (err) {
+                cb(errBuilder(dErr.INTERNAL_ERROR, err));
+            } else if (!(chats instanceof Array)) {
+                cb(errBuilder(dErr.INTERNAL_ERROR, 'It is expected that #getChatsList will be an array. Received: ' + chats));
+            } else {
+                flow.chatsList = chats;
+                flow.chatIds = [];
+                for (var i = 0; i < flow.chatsList.length; i++) {
+                    flow.chatIds.push(flow.chatsList[i].id);
+                }
+                cb(null, flow);
+            }
+        });
+    }
 };
 
 var fnChatsSetNumberOfUnreadMessages = function (flow, cb) {
