@@ -155,7 +155,7 @@ describe('API#serviceUsers_resetPasswordConfirm', function() {
             var reqArgs = {
                 login: 'test@test.com'
             };
-            dal.serviceUserGetCredentialsByLogin(reqArgs, function (err, creditionals) {
+            dal.serviceUsers_getCredentialsByLogin(reqArgs, function (err, creditionals) {
                 if (err) {
                     doneTest(err);
                 } else if (!creditionals) {

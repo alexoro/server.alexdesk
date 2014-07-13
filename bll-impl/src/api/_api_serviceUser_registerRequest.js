@@ -91,7 +91,7 @@ var fnServiceUserGetCreditionalsByLogin = function (flow, cb) {
     var reqArgs = {
         login: flow.args.login
     };
-    flow.env.dal.serviceUserGetCredentialsByLogin(reqArgs, function(err, creditionals) {
+    flow.env.dal.serviceUsers_getCredentialsByLogin(reqArgs, function(err, creditionals) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else if (creditionals === null) {
@@ -169,7 +169,7 @@ var fnServiceUserCreate = function (flow, cb) {
         lastVisit: flow.currentTime
     };
 
-    flow.env.dal.serviceUserCreate(reqArgs, function(err) {
+    flow.env.dal.serviceUsers_create(reqArgs, function(err) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else {

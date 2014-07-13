@@ -110,7 +110,7 @@ describe('API#serviceUsers_registerConfirm', function() {
             if (errBll) {
                 return doneTest(errBll);
             }
-            dal.serviceUserGetProfileById({id: '3'}, function(err, userProfile) {
+            dal.serviceUsers_getProfileById({id: '3'}, function(err, userProfile) {
                 if (err) {
                     return doneTest(err);
                 }

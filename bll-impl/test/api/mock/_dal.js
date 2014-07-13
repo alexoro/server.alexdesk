@@ -49,7 +49,7 @@ DAL.prototype.authToken_create = function(args, done) {
 };
 
 
-DAL.prototype.serviceUserGetCredentialsByLogin = function(args, done) {
+DAL.prototype.serviceUsers_getCredentialsByLogin = function(args, done) {
     args = deepClone(args);
     var reqArgs = {
         login: args.login
@@ -68,7 +68,7 @@ DAL.prototype.serviceUserGetCredentialsByLogin = function(args, done) {
     }
 };
 
-DAL.prototype.serviceUserGetProfileById = function (args, done) {
+DAL.prototype.serviceUsers_getProfileById = function (args, done) {
     args = deepClone(args);
     var reqArgs = {
         id: args.id
@@ -91,7 +91,7 @@ DAL.prototype.serviceUserGetProfileById = function (args, done) {
     }
 };
 
-DAL.prototype.serviceUserCreate = function(args, done) {
+DAL.prototype.serviceUsers_create = function(args, done) {
     args = deepClone(args);
     var data = {
         id: args.id,

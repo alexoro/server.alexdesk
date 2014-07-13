@@ -87,7 +87,7 @@ var fnServiceUserGetIdByCredentialsAndCheckPassword = function (flow, cb) {
     var reqArgs = {
         login: flow.args.login
     };
-    flow.env.dal.serviceUserGetCredentialsByLogin(reqArgs, function(err, creditionals) {
+    flow.env.dal.serviceUsers_getCredentialsByLogin(reqArgs, function(err, creditionals) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else if (!creditionals) {
@@ -105,7 +105,7 @@ var fnCheckServiceUserIsExistsAndConfirmed = function (flow, cb) {
     var reqArgs = {
         id: flow.userId
     };
-    flow.env.dal.serviceUserGetProfileById(reqArgs, function (err, userProfile) {
+    flow.env.dal.serviceUsers_getProfileById(reqArgs, function (err, userProfile) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else if (!userProfile) {

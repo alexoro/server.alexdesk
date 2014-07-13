@@ -9,9 +9,9 @@ var domain = require('../domain');
 
 var api_authToken_getUserInfoByToken = require('./_api_authToken_getUserInfoByToken');
 var api_authToken_create = require('./_api_authToken_create');
-var api_serviceUserGetCredentialsByLogin = require('./_api_serviceUserGetCredentialsByLogin');
-var api_serviceUserGetProfileById = require('./_api_serviceUserGetProfileById');
-var api_serviceUserCreate = require('./_api_serviceUserCreate');
+var api_serviceUsers_getCredentialsByLogin = require('./_api_serviceUsers_getCredentialsByLogin');
+var api_serviceUsers_getProfileById = require('./_api_serviceUsers_getProfileById');
+var api_serviceUsers_create = require('./_api_serviceUsers_create');
 var api_serviceUsers_updatePasswordHash = require('./_api_serviceUsers_updatePasswordHash');
 var api_serviceUsers_registerConfirmDataGet = require('./_api_serviceUsers_registerConfirmDataGet');
 var api_serviceUsers_registerConfirmDataCreate = require('./_api_serviceUsers_registerConfirmDataCreate');
@@ -85,16 +85,16 @@ DAL.prototype.authToken_create = function(args, next) {
 };
 
 
-DAL.prototype.serviceUserGetCredentialsByLogin = function(args, next) {
-    this._before(api_serviceUserGetCredentialsByLogin, args, next);
+DAL.prototype.serviceUsers_getCredentialsByLogin = function(args, next) {
+    this._before(api_serviceUsers_getCredentialsByLogin, args, next);
 };
 
-DAL.prototype.serviceUserGetProfileById = function (args, next) {
-    this._before(api_serviceUserGetProfileById, args, next);
+DAL.prototype.serviceUsers_getProfileById = function (args, next) {
+    this._before(api_serviceUsers_getProfileById, args, next);
 };
 
-DAL.prototype.serviceUserCreate = function(args, next) {
-    this._before(api_serviceUserCreate, args, next);
+DAL.prototype.serviceUsers_create = function(args, next) {
+    this._before(api_serviceUsers_create, args, next);
 };
 
 DAL.prototype.serviceUserUpdatePasswordHash = function (args, next) {

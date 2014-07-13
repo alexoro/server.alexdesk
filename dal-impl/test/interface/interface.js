@@ -38,17 +38,17 @@ describe('API::Interface', function() {
         assert.equal(api.authToken_create.length, 2, 'authToken_create must receive 2 arguments only');
 
 
-        assert.isDefined(api.serviceUserGetCredentialsByLogin, 'serviceUserGetCredentialsByLogin function is not exists');
-        assert.isFunction(api.serviceUserGetCredentialsByLogin, 'serviceUserGetCredentialsByLogin must be a function');
-        assert.equal(api.serviceUserGetCredentialsByLogin.length, 2, 'serviceUserGetCredentialsByLogin must receive 2 arguments only');
+        assert.isDefined(api.serviceUsers_getCredentialsByLogin, 'serviceUsers_getCredentialsByLogin function is not exists');
+        assert.isFunction(api.serviceUsers_getCredentialsByLogin, 'serviceUsers_getCredentialsByLogin must be a function');
+        assert.equal(api.serviceUsers_getCredentialsByLogin.length, 2, 'serviceUsers_getCredentialsByLogin must receive 2 arguments only');
 
-        assert.isDefined(api.serviceUserGetProfileById, 'serviceUserGetProfileById function is not exists');
-        assert.isFunction(api.serviceUserGetProfileById, 'serviceUserGetProfileById must be a function');
-        assert.equal(api.serviceUserGetProfileById.length, 2, 'serviceUserGetProfileById must receive 2 arguments only');
+        assert.isDefined(api.serviceUsers_getProfileById, 'serviceUsers_getProfileById function is not exists');
+        assert.isFunction(api.serviceUsers_getProfileById, 'serviceUsers_getProfileById must be a function');
+        assert.equal(api.serviceUsers_getProfileById.length, 2, 'serviceUsers_getProfileById must receive 2 arguments only');
 
-        assert.isDefined(api.serviceUserCreate, 'serviceUserCreate function is not exists');
-        assert.isFunction(api.serviceUserCreate, 'serviceUserCreate must be a function');
-        assert.equal(api.serviceUserCreate.length, 2, 'serviceUserCreate must receive 2 arguments only');
+        assert.isDefined(api.serviceUsers_create, 'serviceUsers_create function is not exists');
+        assert.isFunction(api.serviceUsers_create, 'serviceUsers_create must be a function');
+        assert.equal(api.serviceUsers_create.length, 2, 'serviceUsers_create must receive 2 arguments only');
 
         assert.isDefined(api.serviceUserUpdatePasswordHash, 'serviceUserUpdatePasswordHash function is not exists');
         assert.isFunction(api.serviceUserUpdatePasswordHash, 'serviceUserUpdatePasswordHash must be a function');

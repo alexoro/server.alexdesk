@@ -42,23 +42,23 @@ var invalidArgsCallbackEntry = function (cb) {
 };
 
 
-describe('DAL::serviceUserCreate', function () {
+describe('DAL::serviceUsers_create', function () {
 
     it('Must not pass invalid id', function (doneTest) {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.serviceUserCreate(argsBuilder({id: {}}), invalidArgsCallbackEntry(cb));
+                    api.serviceUsers_create(argsBuilder({id: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.serviceUserCreate(argsBuilder({id: null}), invalidArgsCallbackEntry(cb));
+                    api.serviceUsers_create(argsBuilder({id: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.serviceUserCreate(argsBuilder({id: -1}), invalidArgsCallbackEntry(cb));
+                    api.serviceUsers_create(argsBuilder({id: -1}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.serviceUserCreate(argsBuilder({id: '-1'}), invalidArgsCallbackEntry(cb));
+                    api.serviceUsers_create(argsBuilder({id: '-1'}), invalidArgsCallbackEntry(cb));
                 }
             ];
             async.series(fnStack, doneExecute);
@@ -70,13 +70,13 @@ describe('DAL::serviceUserCreate', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.serviceUserCreate(argsBuilder({login: {}}), invalidArgsCallbackEntry(cb));
+                    api.serviceUsers_create(argsBuilder({login: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.serviceUserCreate(argsBuilder({login: null}), invalidArgsCallbackEntry(cb));
+                    api.serviceUsers_create(argsBuilder({login: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.serviceUserCreate(argsBuilder({login: -1}), invalidArgsCallbackEntry(cb));
+                    api.serviceUsers_create(argsBuilder({login: -1}), invalidArgsCallbackEntry(cb));
                 }
             ];
             async.series(fnStack, doneExecute);
@@ -88,13 +88,13 @@ describe('DAL::serviceUserCreate', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.serviceUserCreate(argsBuilder({passwordHash: {}}), invalidArgsCallbackEntry(cb));
+                    api.serviceUsers_create(argsBuilder({passwordHash: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.serviceUserCreate(argsBuilder({passwordHash: null}), invalidArgsCallbackEntry(cb));
+                    api.serviceUsers_create(argsBuilder({passwordHash: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.serviceUserCreate(argsBuilder({passwordHash: -1}), invalidArgsCallbackEntry(cb));
+                    api.serviceUsers_create(argsBuilder({passwordHash: -1}), invalidArgsCallbackEntry(cb));
                 }
             ];
             async.series(fnStack, doneExecute);
@@ -106,13 +106,13 @@ describe('DAL::serviceUserCreate', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.serviceUserCreate(argsBuilder({name: {}}), invalidArgsCallbackEntry(cb));
+                    api.serviceUsers_create(argsBuilder({name: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.serviceUserCreate(argsBuilder({name: null}), invalidArgsCallbackEntry(cb));
+                    api.serviceUsers_create(argsBuilder({name: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.serviceUserCreate(argsBuilder({name: -1}), invalidArgsCallbackEntry(cb));
+                    api.serviceUsers_create(argsBuilder({name: -1}), invalidArgsCallbackEntry(cb));
                 }
             ];
             async.series(fnStack, doneExecute);
@@ -124,13 +124,13 @@ describe('DAL::serviceUserCreate', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.serviceUserCreate(argsBuilder({registered: {}}), invalidArgsCallbackEntry(cb));
+                    api.serviceUsers_create(argsBuilder({registered: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.serviceUserCreate(argsBuilder({registered: null}), invalidArgsCallbackEntry(cb));
+                    api.serviceUsers_create(argsBuilder({registered: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.serviceUserCreate(argsBuilder({registered: -1}), invalidArgsCallbackEntry(cb));
+                    api.serviceUsers_create(argsBuilder({registered: -1}), invalidArgsCallbackEntry(cb));
                 }
             ];
             async.series(fnStack, doneExecute);
@@ -142,13 +142,13 @@ describe('DAL::serviceUserCreate', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.serviceUserCreate(argsBuilder({lastVisit: {}}), invalidArgsCallbackEntry(cb));
+                    api.serviceUsers_create(argsBuilder({lastVisit: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.serviceUserCreate(argsBuilder({lastVisit: null}), invalidArgsCallbackEntry(cb));
+                    api.serviceUsers_create(argsBuilder({lastVisit: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.serviceUserCreate(argsBuilder({lastVisit: -1}), invalidArgsCallbackEntry(cb));
+                    api.serviceUsers_create(argsBuilder({lastVisit: -1}), invalidArgsCallbackEntry(cb));
                 }
             ];
             async.series(fnStack, doneExecute);
@@ -160,13 +160,13 @@ describe('DAL::serviceUserCreate', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.serviceUserCreate(argsBuilder({isConfirmed: {}}), invalidArgsCallbackEntry(cb));
+                    api.serviceUsers_create(argsBuilder({isConfirmed: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.serviceUserCreate(argsBuilder({isConfirmed: null}), invalidArgsCallbackEntry(cb));
+                    api.serviceUsers_create(argsBuilder({isConfirmed: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.serviceUserCreate(argsBuilder({isConfirmed: 1}), invalidArgsCallbackEntry(cb));
+                    api.serviceUsers_create(argsBuilder({isConfirmed: 1}), invalidArgsCallbackEntry(cb));
                 }
             ];
             async.series(fnStack, doneExecute);
@@ -177,7 +177,7 @@ describe('DAL::serviceUserCreate', function () {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var reqArgs = argsBuilder();
-            api.serviceUserCreate(reqArgs, function (err, result) {
+            api.serviceUsers_create(reqArgs, function (err, result) {
                 if (err) {
                     return doneExecute(err);
                 }
@@ -191,7 +191,7 @@ describe('DAL::serviceUserCreate', function () {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var reqArgsCreate = argsBuilder();
-            api.serviceUserCreate(reqArgsCreate, function (err) {
+            api.serviceUsers_create(reqArgsCreate, function (err) {
                 if (err) {
                     return doneExecute(err);
                 }
@@ -199,7 +199,7 @@ describe('DAL::serviceUserCreate', function () {
                 var reqArgsGet = {
                     id: reqArgsCreate.id
                 };
-                api.serviceUserGetProfileById(reqArgsGet, function (err, profile) {
+                api.serviceUsers_getProfileById(reqArgsGet, function (err, profile) {
                     if (err) {
                         return doneExecute(err);
                     } else {

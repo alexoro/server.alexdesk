@@ -86,7 +86,7 @@ var fnCheckServiceUserIsExistsAndNotConfirmed = function (flow, cb) {
     var reqArgs = {
         id: flow.confirmData.userId
     };
-    flow.env.dal.serviceUserGetProfileById(reqArgs, function (err, userProfile) {
+    flow.env.dal.serviceUsers_getProfileById(reqArgs, function (err, userProfile) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else if (!userProfile) {

@@ -85,7 +85,7 @@ describe('DAL::serviceUsers_markAsConfirmed', function () {
                 var reqArgsGet = {
                     id: reqArgsCreate.userId
                 };
-                api.serviceUserGetProfileById(reqArgsGet, function (err, profile) {
+                api.serviceUsers_getProfileById(reqArgsGet, function (err, profile) {
                     if (err) {
                         return doneExecute(err);
                     } else {

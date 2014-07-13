@@ -19,7 +19,7 @@ var argsBuilder = function(override) {
         override = {};
     }
     return {
-        login: override.login === undefined ? 'test@test.com' : override.login
+        id: override.id === undefined ? '1' : override.id
     };
 };
 
@@ -36,35 +36,38 @@ var invalidArgsCallbackEntry = function (cb) {
 };
 
 
-describe('DAL::serviceUserGetCredentialsByLogin', function () {
+describe('DAL::serviceUsers_getProfileById', function () {
 
-    it('Must not pass invalid login', function (doneTest) {
+    it('Must not pass invalid id', function (doneTest) {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.serviceUserGetCredentialsByLogin(argsBuilder({login: {}}), invalidArgsCallbackEntry(cb));
+                    api.serviceUsers_getProfileById(argsBuilder({id: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.serviceUserGetCredentialsByLogin(argsBuilder({login: null}), invalidArgsCallbackEntry(cb));
+                    api.serviceUsers_getProfileById(argsBuilder({id: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.serviceUserGetCredentialsByLogin(argsBuilder({login: -1}), invalidArgsCallbackEntry(cb));
+                    api.serviceUsers_getProfileById(argsBuilder({id: -1}), invalidArgsCallbackEntry(cb));
+                },
+                function (cb) {
+                    api.serviceUsers_getProfileById(argsBuilder({id: '-1'}), invalidArgsCallbackEntry(cb));
                 }
             ];
             async.series(fnStack, doneExecute);
         }, doneTest);
     });
 
-    it('Must return null if login not found', function (doneTest) {
+    it('Must return null if id not exists', function (doneTest) {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
-            var reqArgs = argsBuilder({login: 'XXXXXXX'});
-            api.serviceUserGetCredentialsByLogin(reqArgs, function (err, result) {
+            var reqArgs = argsBuilder({id: '1000'});
+            api.serviceUsers_getProfileById(reqArgs, function (err, profile) {
                 if (err) {
                     return doneExecute(err);
                 }
-                assert.isNull(result, 'Expected and actual result are not match');
+                assert.isNull(profile, 'Expected and actual results are not match');
                 doneExecute();
             });
         }, doneTest);
@@ -74,7 +77,7 @@ describe('DAL::serviceUserGetCredentialsByLogin', function () {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var reqArgs = argsBuilder();
-            api.serviceUserGetCredentialsByLogin(reqArgs, function (err, result) {
+            api.serviceUsers_getProfileById(reqArgs, function (err, profile) {
                 if (err) {
                     return doneExecute(err);
                 }
@@ -82,9 +85,13 @@ describe('DAL::serviceUserGetCredentialsByLogin', function () {
                 var expected = {
                     id: '1',
                     login: 'test@test.com',
-                    passwordHash: 'b642b4217b34b1e8d3bd915fc65c4452'
+                    passwordHash: 'b642b4217b34b1e8d3bd915fc65c4452',
+                    name: 'Test',
+                    registered: new Date('2014-05-01 12:00:00 +04:00'),
+                    lastVisit: new Date('2014-05-01 14:00:00 +04:00'),
+                    isConfirmed: true
                 };
-                assert.deepEqual(result, expected, 'Expected and actual result are not match');
+                assert.deepEqual(profile, expected, 'Expected and actual results are not match');
                 doneExecute();
             });
         }, doneTest);

@@ -67,7 +67,7 @@ var fnValidate = function (flow, cb) {
 };
 
 var fnServiceUserInfoGetByLogin = function (flow, cb) {
-    flow.env.dal.serviceUserGetCredentialsByLogin({login: flow.args.login}, function (err, creditionals) {
+    flow.env.dal.serviceUsers_getCredentialsByLogin({login: flow.args.login}, function (err, creditionals) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else if (!creditionals) {
@@ -83,7 +83,7 @@ var fnCheckServiceUserIsExistsAndConfirmed = function (flow, cb) {
     var reqArgs = {
         id: flow.userId
     };
-    flow.env.dal.serviceUserGetProfileById(reqArgs, function (err, userProfile) {
+    flow.env.dal.serviceUsers_getProfileById(reqArgs, function (err, userProfile) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else if (!userProfile) {
