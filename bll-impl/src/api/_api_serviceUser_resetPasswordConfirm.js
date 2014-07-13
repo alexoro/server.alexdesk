@@ -78,7 +78,7 @@ var fnServiceUserGetResetPasswordConfirmData = function (flow, cb) {
     var reqArgs = {
         token: flow.args.confirmToken
     };
-    flow.env.dal.serviceUserResetPasswordConfirmDataGet(reqArgs, function(err, confirmData) {
+    flow.env.dal.serviceUsers_resetPasswordConfirmDataGet(reqArgs, function(err, confirmData) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else if (!confirmData) {

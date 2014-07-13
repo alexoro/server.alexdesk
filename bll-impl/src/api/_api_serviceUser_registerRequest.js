@@ -186,7 +186,7 @@ var fnConfirmCreate = function (flow, cb) {
         expires: flow.confirmExpiresDate,
         userId: flow.newUserId
     };
-    flow.env.dal.serviceUserRegisterConfirmDataCreate(reqArgs, function (err) {
+    flow.env.dal.serviceUsers_registerConfirmDataCreate(reqArgs, function (err) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else {

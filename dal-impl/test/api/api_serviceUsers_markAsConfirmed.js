@@ -19,7 +19,7 @@ var argsBuilder = function(override) {
         override = {};
     }
     return {
-        token: override.token === undefined ? 'a1df4350-5fcb-4377-8bfb-6576801cda51' : override.token
+        userId: override.userId === undefined ? '3' : override.userId
     };
 };
 
@@ -36,23 +36,23 @@ var invalidArgsCallbackEntry = function (cb) {
 };
 
 
-describe('DAL::serviceUserResetPasswordConfirmDataGet', function () {
+describe('DAL::serviceUsers_markAsConfirmed', function () {
 
-    it('Must not pass invalid token', function (doneTest) {
+    it('Must not pass invalid userId', function (doneTest) {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.serviceUserResetPasswordConfirmDataGet(argsBuilder({token: {}}), invalidArgsCallbackEntry(cb));
+                    api.serviceUsers_markAsConfirmed(argsBuilder({userId: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.serviceUserResetPasswordConfirmDataGet(argsBuilder({token: null}), invalidArgsCallbackEntry(cb));
+                    api.serviceUsers_markAsConfirmed(argsBuilder({userId: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.serviceUserResetPasswordConfirmDataGet(argsBuilder({token: 1}), invalidArgsCallbackEntry(cb));
+                    api.serviceUsers_markAsConfirmed(argsBuilder({userId: -1}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.serviceUserResetPasswordConfirmDataGet(argsBuilder({token: '0cec4d47-d9a1-4984-XXXX-10583b674123'}), invalidArgsCallbackEntry(cb));
+                    api.serviceUsers_markAsConfirmed(argsBuilder({userId: '-1'}), invalidArgsCallbackEntry(cb));
                 }
             ];
             async.series(fnStack, doneExecute);
@@ -63,31 +63,37 @@ describe('DAL::serviceUserResetPasswordConfirmDataGet', function () {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var reqArgs = argsBuilder();
-            api.serviceUserResetPasswordConfirmDataGet(reqArgs, function (err, result) {
+            api.serviceUsers_markAsConfirmed(reqArgs, function (err, result) {
                 if (err) {
                     return doneExecute(err);
                 }
-                var expected = {
-                    token: 'a1df4350-5fcb-4377-8bfb-6576801cda51',
-                    userId: '1',
-                    expires: new Date('2020-01-01 00:00:00')
-                };
-                assert.deepEqual(result, expected, 'Expected and actual values are not match');
+                assert.isNull(result);
                 doneExecute();
             });
         }, doneTest);
     });
 
-    it('Must return null for non-existing token', function (doneTest) {
+    it('Must update confirm flag', function (doneTest) {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
-            var reqArgs = argsBuilder({token: '00ec4d47-d9a1-4984-8f23-10583b674123'});
-            api.serviceUserResetPasswordConfirmDataGet(reqArgs, function (err, result) {
+            var reqArgsCreate = argsBuilder();
+            api.serviceUsers_markAsConfirmed(reqArgsCreate, function (err) {
                 if (err) {
                     return doneExecute(err);
                 }
-                assert.isNull(result, 'Expected and actual values are not match');
-                doneExecute();
+
+                var reqArgsGet = {
+                    id: reqArgsCreate.userId
+                };
+                api.serviceUserGetProfileById(reqArgsGet, function (err, profile) {
+                    if (err) {
+                        return doneExecute(err);
+                    } else {
+                        assert.isNotNull(profile, 'Just updated data was not found');
+                        assert.strictEqual(profile.isConfirmed, true, 'Expected result is not match w/ actual');
+                        return doneExecute();
+                    }
+                });
             });
         }, doneTest);
     });

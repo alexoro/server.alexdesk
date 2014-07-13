@@ -70,7 +70,7 @@ var fnServiceUserGetRegisterConfirmData = function (flow, cb) {
     var reqArgs = {
         token: flow.args.confirmToken
     };
-    flow.env.dal.serviceUserRegisterConfirmDataGet(reqArgs, function(err, confirmData) {
+    flow.env.dal.serviceUsers_registerConfirmDataGet(reqArgs, function(err, confirmData) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else if (!confirmData) {
@@ -126,7 +126,7 @@ var fnServiceUserMarkAsConfirmed = function (flow, cb) {
     var reqArgs = {
         userId: flow.confirmData.userId
     };
-    flow.env.dal.serviceUserMarkAsConfirmed(reqArgs, function(err) {
+    flow.env.dal.serviceUsers_markAsConfirmed(reqArgs, function(err) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else {

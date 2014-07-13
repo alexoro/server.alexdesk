@@ -55,26 +55,26 @@ describe('API::Interface', function() {
         assert.equal(api.serviceUserUpdatePasswordHash.length, 2, 'serviceUserUpdatePasswordHash must receive 2 arguments only');
 
 
-        assert.isDefined(api.serviceUserRegisterConfirmDataGet, 'serviceUserRegisterConfirmDataGet function is not exists');
-        assert.isFunction(api.serviceUserRegisterConfirmDataGet, 'serviceUserRegisterConfirmDataGet must be a function');
-        assert.equal(api.serviceUserRegisterConfirmDataGet.length, 2, 'serviceUserRegisterConfirmDataGet must receive 2 arguments only');
+        assert.isDefined(api.serviceUsers_registerConfirmDataGet, 'serviceUsers_registerConfirmDataGet function is not exists');
+        assert.isFunction(api.serviceUsers_registerConfirmDataGet, 'serviceUsers_registerConfirmDataGet must be a function');
+        assert.equal(api.serviceUsers_registerConfirmDataGet.length, 2, 'serviceUsers_registerConfirmDataGet must receive 2 arguments only');
 
-        assert.isDefined(api.serviceUserRegisterConfirmDataCreate, 'serviceUserRegisterConfirmDataCreate function is not exists');
-        assert.isFunction(api.serviceUserRegisterConfirmDataCreate, 'serviceUserRegisterConfirmDataCreate must be a function');
-        assert.equal(api.serviceUserRegisterConfirmDataCreate.length, 2, 'serviceUserRegisterConfirmDataCreate must receive 2 arguments only');
+        assert.isDefined(api.serviceUsers_registerConfirmDataCreate, 'serviceUsers_registerConfirmDataCreate function is not exists');
+        assert.isFunction(api.serviceUsers_registerConfirmDataCreate, 'serviceUsers_registerConfirmDataCreate must be a function');
+        assert.equal(api.serviceUsers_registerConfirmDataCreate.length, 2, 'serviceUsers_registerConfirmDataCreate must receive 2 arguments only');
 
-        assert.isDefined(api.serviceUserMarkAsConfirmed, 'serviceUserMarkAsConfirmed function is not exists');
-        assert.isFunction(api.serviceUserMarkAsConfirmed, 'serviceUserMarkAsConfirmed must be a function');
-        assert.equal(api.serviceUserMarkAsConfirmed.length, 2, 'serviceUserMarkAsConfirmed must receive 2 arguments only');
+        assert.isDefined(api.serviceUsers_markAsConfirmed, 'serviceUsers_markAsConfirmed function is not exists');
+        assert.isFunction(api.serviceUsers_markAsConfirmed, 'serviceUsers_markAsConfirmed must be a function');
+        assert.equal(api.serviceUsers_markAsConfirmed.length, 2, 'serviceUsers_markAsConfirmed must receive 2 arguments only');
 
 
-        assert.isDefined(api.serviceUserResetPasswordConfirmDataGet, 'serviceUserResetPasswordConfirmDataGet function is not exists');
-        assert.isFunction(api.serviceUserResetPasswordConfirmDataGet, 'serviceUserResetPasswordConfirmDataGet must be a function');
-        assert.equal(api.serviceUserResetPasswordConfirmDataGet.length, 2, 'serviceUserResetPasswordConfirmDataGet must receive 2 arguments only');
+        assert.isDefined(api.serviceUsers_resetPasswordConfirmDataGet, 'serviceUsers_resetPasswordConfirmDataGet function is not exists');
+        assert.isFunction(api.serviceUsers_resetPasswordConfirmDataGet, 'serviceUsers_resetPasswordConfirmDataGet must be a function');
+        assert.equal(api.serviceUsers_resetPasswordConfirmDataGet.length, 2, 'serviceUsers_resetPasswordConfirmDataGet must receive 2 arguments only');
 
-        assert.isDefined(api.serviceUserResetPasswordConfirmDataCreate, 'serviceUserResetPasswordConfirmDataCreate function is not exists');
-        assert.isFunction(api.serviceUserResetPasswordConfirmDataCreate, 'serviceUserResetPasswordConfirmDataCreate must be a function');
-        assert.equal(api.serviceUserResetPasswordConfirmDataCreate.length, 2, 'serviceUserResetPasswordConfirmDataCreate must receive 2 arguments only');
+        assert.isDefined(api.serviceUsers_resetPasswordConfirmDataCreate, 'serviceUsers_resetPasswordConfirmDataCreate function is not exists');
+        assert.isFunction(api.serviceUsers_resetPasswordConfirmDataCreate, 'serviceUsers_resetPasswordConfirmDataCreate must be a function');
+        assert.equal(api.serviceUsers_resetPasswordConfirmDataCreate.length, 2, 'serviceUsers_resetPasswordConfirmDataCreate must receive 2 arguments only');
 
 
         assert.isDefined(api.apps_getListForServiceUser, 'apps_getListForServiceUser function is not exists');
