@@ -38,23 +38,23 @@ var invalidArgsCallbackEntry = function (cb) {
 };
 
 
-describe('DAL::messagesGetListForChatOrderByCreatedAsc', function () {
+describe('DAL::messages_getListForChatOrderByCreatedAsc', function () {
 
     it('Must not pass invalid chatId', function (doneTest) {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.messagesGetListForChatOrderByCreatedAsc(argsBuilder({chatId: {}}), invalidArgsCallbackEntry(cb));
+                    api.messages_getListForChatOrderByCreatedAsc(argsBuilder({chatId: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.messagesGetListForChatOrderByCreatedAsc(argsBuilder({chatId: null}), invalidArgsCallbackEntry(cb));
+                    api.messages_getListForChatOrderByCreatedAsc(argsBuilder({chatId: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.messagesGetListForChatOrderByCreatedAsc(argsBuilder({chatId: '-1'}), invalidArgsCallbackEntry(cb));
+                    api.messages_getListForChatOrderByCreatedAsc(argsBuilder({chatId: '-1'}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.messagesGetListForChatOrderByCreatedAsc(argsBuilder({chatId: 1}), invalidArgsCallbackEntry(cb));
+                    api.messages_getListForChatOrderByCreatedAsc(argsBuilder({chatId: 1}), invalidArgsCallbackEntry(cb));
                 }
             ];
             async.series(fnStack, doneExecute);
@@ -66,13 +66,13 @@ describe('DAL::messagesGetListForChatOrderByCreatedAsc', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.messagesGetListForChatOrderByCreatedAsc(argsBuilder({offset: {}}), invalidArgsCallbackEntry(cb));
+                    api.messages_getListForChatOrderByCreatedAsc(argsBuilder({offset: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.messagesGetListForChatOrderByCreatedAsc(argsBuilder({offset: null}), invalidArgsCallbackEntry(cb));
+                    api.messages_getListForChatOrderByCreatedAsc(argsBuilder({offset: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.messagesGetListForChatOrderByCreatedAsc(argsBuilder({offset: '1'}), invalidArgsCallbackEntry(cb));
+                    api.messages_getListForChatOrderByCreatedAsc(argsBuilder({offset: '1'}), invalidArgsCallbackEntry(cb));
                 }
             ];
             async.series(fnStack, doneExecute);
@@ -84,16 +84,16 @@ describe('DAL::messagesGetListForChatOrderByCreatedAsc', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.messagesGetListForChatOrderByCreatedAsc(argsBuilder({limit: {}}), invalidArgsCallbackEntry(cb));
+                    api.messages_getListForChatOrderByCreatedAsc(argsBuilder({limit: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.messagesGetListForChatOrderByCreatedAsc(argsBuilder({limit: null}), invalidArgsCallbackEntry(cb));
+                    api.messages_getListForChatOrderByCreatedAsc(argsBuilder({limit: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.messagesGetListForChatOrderByCreatedAsc(argsBuilder({limit: '1'}), invalidArgsCallbackEntry(cb));
+                    api.messages_getListForChatOrderByCreatedAsc(argsBuilder({limit: '1'}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.messagesGetListForChatOrderByCreatedAsc(argsBuilder({limit: -1}), invalidArgsCallbackEntry(cb));
+                    api.messages_getListForChatOrderByCreatedAsc(argsBuilder({limit: -1}), invalidArgsCallbackEntry(cb));
                 }
             ];
             async.series(fnStack, doneExecute);
@@ -104,7 +104,7 @@ describe('DAL::messagesGetListForChatOrderByCreatedAsc', function () {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var reqArgs = argsBuilder({chatId: '1000'});
-            api.messagesGetListForChatOrderByCreatedAsc(reqArgs, function (err, messages) {
+            api.messages_getListForChatOrderByCreatedAsc(reqArgs, function (err, messages) {
                 if (err) {
                     return doneExecute(err);
                 }
@@ -118,7 +118,7 @@ describe('DAL::messagesGetListForChatOrderByCreatedAsc', function () {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var reqArgs = argsBuilder();
-            api.messagesGetListForChatOrderByCreatedAsc(reqArgs, function (err, messages) {
+            api.messages_getListForChatOrderByCreatedAsc(reqArgs, function (err, messages) {
                 if (err) {
                     return doneExecute(err);
                 }
@@ -143,7 +143,7 @@ describe('DAL::messagesGetListForChatOrderByCreatedAsc', function () {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var reqArgs = argsBuilder({offset: 1});
-            api.messagesGetListForChatOrderByCreatedAsc(reqArgs, function (err, messages) {
+            api.messages_getListForChatOrderByCreatedAsc(reqArgs, function (err, messages) {
                 if (err) {
                     return doneExecute(err);
                 }
@@ -157,7 +157,7 @@ describe('DAL::messagesGetListForChatOrderByCreatedAsc', function () {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var reqArgs = argsBuilder({offset: -1});
-            api.messagesGetListForChatOrderByCreatedAsc(reqArgs, function (err, messages) {
+            api.messages_getListForChatOrderByCreatedAsc(reqArgs, function (err, messages) {
                 if (err) {
                     return doneExecute(err);
                 }
@@ -171,7 +171,7 @@ describe('DAL::messagesGetListForChatOrderByCreatedAsc', function () {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var reqArgs = argsBuilder({limit: 1});
-            api.messagesGetListForChatOrderByCreatedAsc(reqArgs, function (err, messages) {
+            api.messages_getListForChatOrderByCreatedAsc(reqArgs, function (err, messages) {
                 if (err) {
                     return doneExecute(err);
                 }

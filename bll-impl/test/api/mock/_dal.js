@@ -672,7 +672,7 @@ DAL.prototype.chats_createWithMessage = function(args, done) {
 };
 
 
-DAL.prototype.messagesGetListForChatOrderByCreatedAsc = function(args, done) {
+DAL.prototype.messages_getListForChatOrderByCreatedAsc = function(args, done) {
     args = deepClone(args);
     var chatId = args.chatId;
     var offset = args.offset;
@@ -700,7 +700,7 @@ DAL.prototype.messagesGetListForChatOrderByCreatedAsc = function(args, done) {
     done(null, ret);
 };
 
-DAL.prototype.messagesGetIsReadPerMessageForUser = function (args, done) {
+DAL.prototype.messages_getIsReadPerMessageForUser = function (args, done) {
     args = deepClone(args);
     var r = {};
     for (var i = 0; i < args.messageIds.length; i++) {
@@ -719,7 +719,7 @@ DAL.prototype.messagesGetIsReadPerMessageForUser = function (args, done) {
     done(null, r);
 };
 
-DAL.prototype.messagesSetIsReadInChatForUser = function (args, done) {
+DAL.prototype.messages_setIsReadInChatForUser = function (args, done) {
     args = deepClone(args);
     var search = {
         chatId: args.chatId,
@@ -733,7 +733,7 @@ DAL.prototype.messagesSetIsReadInChatForUser = function (args, done) {
     done(null);
 };
 
-DAL.prototype.messageCreate = function(args, done) {
+DAL.prototype.messages_create = function(args, done) {
     var copy = deepClone(args);
 
     var chat = _.findWhere(this.mock.chats, {id: copy.chatId});

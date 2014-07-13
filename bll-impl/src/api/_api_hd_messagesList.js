@@ -244,11 +244,11 @@ var fnChatGetMessagesList = function (flow, cb) {
         offset: flow.args.offset,
         limit: flow.args.limit
     };
-    flow.env.dal.messagesGetListForChatOrderByCreatedAsc(reqArgs, function(err, messages) {
+    flow.env.dal.messages_getListForChatOrderByCreatedAsc(reqArgs, function(err, messages) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else if (!(messages instanceof Array)) {
-            cb(errBuilder(dErr.INTERNAL_ERROR, 'The result of messagesGetListForChatOrderByCreatedAsc() is not a Array type: ' + messages));
+            cb(errBuilder(dErr.INTERNAL_ERROR, 'The result of messages_getListForChatOrderByCreatedAsc() is not a Array type: ' + messages));
         } else {
             flow.messages = messages;
             cb(null, flow);
@@ -267,11 +267,11 @@ var fnMessagesSetIsReadStatus = function (flow, cb) {
         userType: flow.userType,
         userId: flow.userId
     };
-    flow.env.dal.messagesGetIsReadPerMessageForUser(reqArgs, function (err, data) {
+    flow.env.dal.messages_getIsReadPerMessageForUser(reqArgs, function (err, data) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else if (!(data instanceof Object)) {
-            cb(errBuilder(dErr.INTERNAL_ERROR, 'The result of messagesGetIsReadPerMessageForUser() is not a Object type: ' + data));
+            cb(errBuilder(dErr.INTERNAL_ERROR, 'The result of messages_getIsReadPerMessageForUser() is not a Object type: ' + data));
         } else {
             for (var i = 0; i < flow.messages.length; i++) {
                 flow.messages[i].isRead = data[flow.messages[i].id];
@@ -287,7 +287,7 @@ var fnMessagesSetIsReadForAllMessagesInChatForUser = function (flow, cb) {
         userType: flow.userType,
         userId: flow.userId
     };
-    flow.env.dal.messagesSetIsReadInChatForUser(reqArgs, function (err) {
+    flow.env.dal.messages_setIsReadInChatForUser(reqArgs, function (err) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else {

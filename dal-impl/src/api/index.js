@@ -37,10 +37,10 @@ var api_chats_getNumberOfUnreadMessagesPerChatForUser = require('./_api_chats_ge
 var api_chats_getLastMessagePerChat = require('./_api_chats_getLastMessagePerChat');
 var api_chats_getParticipantsInfo = require('./_api_chats_getParticipantsInfo');
 var api_chats_createWithMessage = require('./_api_chats_createWithMessage');
-var api_messagesGetListForChatOrderByCreatedAsc = require('./_api_messagesGetListForChatOrderByCreatedAsc');
-var api_messagesGetIsReadPerMessageForUser = require('./_api_messagesGetIsReadPerMessageForUser');
-var api_messagesSetIsReadInChatForUser = require('./_api_messagesSetIsReadInChatForUser');
-var api_messageCreate = require('./_api_messageCreate');
+var api_messages_getListForChatOrderByCreatedAsc = require('./_api_messages_getListForChatOrderByCreatedAsc');
+var api_messages_getIsReadPerMessageForUser = require('./_api_messages_getIsReadPerMessageForUser');
+var api_messages_setIsReadInChatForUser = require('./_api_messages_setIsReadInChatForUser');
+var api_messages_create = require('./_api_messages_create');
 
 
 var DAL = function(env) {
@@ -202,20 +202,20 @@ DAL.prototype.chats_createWithMessage = function(args, next) {
 };
 
 
-DAL.prototype.messagesGetListForChatOrderByCreatedAsc = function(args, next) {
-    this._before(api_messagesGetListForChatOrderByCreatedAsc, args, next);
+DAL.prototype.messages_getListForChatOrderByCreatedAsc = function(args, next) {
+    this._before(api_messages_getListForChatOrderByCreatedAsc, args, next);
 };
 
-DAL.prototype.messagesGetIsReadPerMessageForUser = function (args, next) {
-    this._before(api_messagesGetIsReadPerMessageForUser, args, next);
+DAL.prototype.messages_getIsReadPerMessageForUser = function (args, next) {
+    this._before(api_messages_getIsReadPerMessageForUser, args, next);
 };
 
-DAL.prototype.messagesSetIsReadInChatForUser = function (args, next) {
-    this._before(api_messagesSetIsReadInChatForUser, args, next);
+DAL.prototype.messages_setIsReadInChatForUser = function (args, next) {
+    this._before(api_messages_setIsReadInChatForUser, args, next);
 };
 
-DAL.prototype.messageCreate = function(args, next) {
-    this._before(api_messageCreate, args, next);
+DAL.prototype.messages_create = function(args, next) {
+    this._before(api_messages_create, args, next);
 };
 
 

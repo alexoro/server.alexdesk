@@ -53,23 +53,23 @@ var invalidArgsCallbackEntry = function (cb) {
 };
 
 
-describe('DAL::messageCreate', function () {
+describe('DAL::messages_create', function () {
 
     it('Must not pass invalid id', function (doneTest) {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.messageCreate(argsBuilder({id: {}}), invalidArgsCallbackEntry(cb));
+                    api.messages_create(argsBuilder({id: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.messageCreate(argsBuilder({id: null}), invalidArgsCallbackEntry(cb));
+                    api.messages_create(argsBuilder({id: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.messageCreate(argsBuilder({id: '-1'}), invalidArgsCallbackEntry(cb));
+                    api.messages_create(argsBuilder({id: '-1'}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.messageCreate(argsBuilder({id: 1}), invalidArgsCallbackEntry(cb));
+                    api.messages_create(argsBuilder({id: 1}), invalidArgsCallbackEntry(cb));
                 }
             ];
             async.series(fnStack, doneExecute);
@@ -81,16 +81,16 @@ describe('DAL::messageCreate', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.messageCreate(argsBuilder({chatId: {}}), invalidArgsCallbackEntry(cb));
+                    api.messages_create(argsBuilder({chatId: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.messageCreate(argsBuilder({chatId: null}), invalidArgsCallbackEntry(cb));
+                    api.messages_create(argsBuilder({chatId: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.messageCreate(argsBuilder({chatId: '-1'}), invalidArgsCallbackEntry(cb));
+                    api.messages_create(argsBuilder({chatId: '-1'}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.messageCreate(argsBuilder({chatId: 1}), invalidArgsCallbackEntry(cb));
+                    api.messages_create(argsBuilder({chatId: 1}), invalidArgsCallbackEntry(cb));
                 }
             ];
             async.series(fnStack, doneExecute);
@@ -102,16 +102,16 @@ describe('DAL::messageCreate', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.messageCreate(argsBuilder({userCreatorId: {}}), invalidArgsCallbackEntry(cb));
+                    api.messages_create(argsBuilder({userCreatorId: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.messageCreate(argsBuilder({userCreatorId: null}), invalidArgsCallbackEntry(cb));
+                    api.messages_create(argsBuilder({userCreatorId: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.messageCreate(argsBuilder({userCreatorId: '-1'}), invalidArgsCallbackEntry(cb));
+                    api.messages_create(argsBuilder({userCreatorId: '-1'}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.messageCreate(argsBuilder({userCreatorId: 1}), invalidArgsCallbackEntry(cb));
+                    api.messages_create(argsBuilder({userCreatorId: 1}), invalidArgsCallbackEntry(cb));
                 }
             ];
             async.series(fnStack, doneExecute);
@@ -123,16 +123,16 @@ describe('DAL::messageCreate', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.messageCreate(argsBuilder({userCreatorType: {}}), invalidArgsCallbackEntry(cb));
+                    api.messages_create(argsBuilder({userCreatorType: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.messageCreate(argsBuilder({userCreatorType: null}), invalidArgsCallbackEntry(cb));
+                    api.messages_create(argsBuilder({userCreatorType: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.messageCreate(argsBuilder({userCreatorType: '-1'}), invalidArgsCallbackEntry(cb));
+                    api.messages_create(argsBuilder({userCreatorType: '-1'}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.messageCreate(argsBuilder({userCreatorType: -1}), invalidArgsCallbackEntry(cb));
+                    api.messages_create(argsBuilder({userCreatorType: -1}), invalidArgsCallbackEntry(cb));
                 }
             ];
             async.series(fnStack, doneExecute);
@@ -144,13 +144,13 @@ describe('DAL::messageCreate', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.messageCreate(argsBuilder({created: {}}), invalidArgsCallbackEntry(cb));
+                    api.messages_create(argsBuilder({created: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.messageCreate(argsBuilder({created: null}), invalidArgsCallbackEntry(cb));
+                    api.messages_create(argsBuilder({created: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.messageCreate(argsBuilder({created: '-1'}), invalidArgsCallbackEntry(cb));
+                    api.messages_create(argsBuilder({created: '-1'}), invalidArgsCallbackEntry(cb));
                 }
             ];
             async.series(fnStack, doneExecute);
@@ -162,13 +162,13 @@ describe('DAL::messageCreate', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.messageCreate(argsBuilder({content: {}}), invalidArgsCallbackEntry(cb));
+                    api.messages_create(argsBuilder({content: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.messageCreate(argsBuilder({content: null}), invalidArgsCallbackEntry(cb));
+                    api.messages_create(argsBuilder({content: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.messageCreate(argsBuilder({content: 1}), invalidArgsCallbackEntry(cb));
+                    api.messages_create(argsBuilder({content: 1}), invalidArgsCallbackEntry(cb));
                 }
             ];
             async.series(fnStack, doneExecute);
@@ -182,17 +182,17 @@ describe('DAL::messageCreate', function () {
                 function (cb) {
                     var reqArgs = argsBuilder();
                     delete reqArgs.isRead;
-                    api.messageCreate(reqArgs, invalidArgsCallbackEntry(cb));
+                    api.messages_create(reqArgs, invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
                     var reqArgs = argsBuilder();
                     reqArgs.isRead = null;
-                    api.messageCreate(reqArgs, invalidArgsCallbackEntry(cb));
+                    api.messages_create(reqArgs, invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
                     var reqArgs = argsBuilder();
                     reqArgs.isRead = '1';
-                    api.messageCreate(reqArgs, invalidArgsCallbackEntry(cb));
+                    api.messages_create(reqArgs, invalidArgsCallbackEntry(cb));
                 }
             ];
             async.series(fnStack, doneExecute);
@@ -204,16 +204,16 @@ describe('DAL::messageCreate', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.messageCreate(argsBuilder({irUserId1: {}}), invalidArgsCallbackEntry(cb));
+                    api.messages_create(argsBuilder({irUserId1: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.messageCreate(argsBuilder({irUserId1: null}), invalidArgsCallbackEntry(cb));
+                    api.messages_create(argsBuilder({irUserId1: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.messageCreate(argsBuilder({irUserId1: -1}), invalidArgsCallbackEntry(cb));
+                    api.messages_create(argsBuilder({irUserId1: -1}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.messageCreate(argsBuilder({irUserId1: '-1'}), invalidArgsCallbackEntry(cb));
+                    api.messages_create(argsBuilder({irUserId1: '-1'}), invalidArgsCallbackEntry(cb));
                 }
             ];
             async.series(fnStack, doneExecute);
@@ -225,13 +225,13 @@ describe('DAL::messageCreate', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.messageCreate(argsBuilder({irUserType1: {}}), invalidArgsCallbackEntry(cb));
+                    api.messages_create(argsBuilder({irUserType1: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.messageCreate(argsBuilder({irUserType1: null}), invalidArgsCallbackEntry(cb));
+                    api.messages_create(argsBuilder({irUserType1: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.messageCreate(argsBuilder({irUserType1: '-1'}), invalidArgsCallbackEntry(cb));
+                    api.messages_create(argsBuilder({irUserType1: '-1'}), invalidArgsCallbackEntry(cb));
                 }
             ];
             async.series(fnStack, doneExecute);
@@ -243,13 +243,13 @@ describe('DAL::messageCreate', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.messageCreate(argsBuilder({irIsRead1: {}}), invalidArgsCallbackEntry(cb));
+                    api.messages_create(argsBuilder({irIsRead1: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.messageCreate(argsBuilder({irIsRead1: null}), invalidArgsCallbackEntry(cb));
+                    api.messages_create(argsBuilder({irIsRead1: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.messageCreate(argsBuilder({irIsRead1: '-1'}), invalidArgsCallbackEntry(cb));
+                    api.messages_create(argsBuilder({irIsRead1: '-1'}), invalidArgsCallbackEntry(cb));
                 }
             ];
             async.series(fnStack, doneExecute);
@@ -262,7 +262,7 @@ describe('DAL::messageCreate', function () {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var reqArgs = argsBuilder({chatId: '1000'});
-            api.messageCreate(reqArgs, function (err, result) {
+            api.messages_create(reqArgs, function (err, result) {
                 if (err && err.number === dErr.CHAT_NOT_FOUND) {
                     doneExecute();
                 } else if (err) {
@@ -278,7 +278,7 @@ describe('DAL::messageCreate', function () {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var reqArgs = argsBuilder();
-            api.messageCreate(reqArgs, function (err, result) {
+            api.messages_create(reqArgs, function (err, result) {
                 if (err) {
                     return doneExecute(err);
                 }
@@ -292,7 +292,7 @@ describe('DAL::messageCreate', function () {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var reqArgsCreate = argsBuilder();
-            api.messageCreate(reqArgsCreate, function (err, result) {
+            api.messages_create(reqArgsCreate, function (err, result) {
                 if (err) {
                     return doneExecute(err);
                 }
@@ -302,7 +302,7 @@ describe('DAL::messageCreate', function () {
                     offset: -1,
                     limit: 50
                 };
-                api.messagesGetListForChatOrderByCreatedAsc(reqArgsGet, function (errGet, messages) {
+                api.messages_getListForChatOrderByCreatedAsc(reqArgsGet, function (errGet, messages) {
                     if (errGet) {
                         return doneExecute(errGet);
                     } else {

@@ -38,23 +38,23 @@ var invalidArgsCallbackEntry = function (cb) {
 };
 
 
-describe('DAL::messagesSetIsReadInChatForUser', function () {
+describe('DAL::messages_setIsReadInChatForUser', function () {
 
     it('Must not pass invalid chatId', function (doneTest) {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.messagesSetIsReadInChatForUser(argsBuilder({chatId: {}}), invalidArgsCallbackEntry(cb));
+                    api.messages_setIsReadInChatForUser(argsBuilder({chatId: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.messagesSetIsReadInChatForUser(argsBuilder({chatId: null}), invalidArgsCallbackEntry(cb));
+                    api.messages_setIsReadInChatForUser(argsBuilder({chatId: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.messagesSetIsReadInChatForUser(argsBuilder({chatId: '-1'}), invalidArgsCallbackEntry(cb));
+                    api.messages_setIsReadInChatForUser(argsBuilder({chatId: '-1'}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.messagesSetIsReadInChatForUser(argsBuilder({chatId: 1}), invalidArgsCallbackEntry(cb));
+                    api.messages_setIsReadInChatForUser(argsBuilder({chatId: 1}), invalidArgsCallbackEntry(cb));
                 }
             ];
             async.series(fnStack, doneExecute);
@@ -66,13 +66,13 @@ describe('DAL::messagesSetIsReadInChatForUser', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.messagesSetIsReadInChatForUser(argsBuilder({userType: {}}), invalidArgsCallbackEntry(cb));
+                    api.messages_setIsReadInChatForUser(argsBuilder({userType: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.messagesSetIsReadInChatForUser(argsBuilder({userType: null}), invalidArgsCallbackEntry(cb));
+                    api.messages_setIsReadInChatForUser(argsBuilder({userType: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.messagesSetIsReadInChatForUser(argsBuilder({userType: '1'}), invalidArgsCallbackEntry(cb));
+                    api.messages_setIsReadInChatForUser(argsBuilder({userType: '1'}), invalidArgsCallbackEntry(cb));
                 }
             ];
             async.series(fnStack, doneExecute);
@@ -84,16 +84,16 @@ describe('DAL::messagesSetIsReadInChatForUser', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.messagesSetIsReadInChatForUser(argsBuilder({userId: {}}), invalidArgsCallbackEntry(cb));
+                    api.messages_setIsReadInChatForUser(argsBuilder({userId: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.messagesSetIsReadInChatForUser(argsBuilder({userId: null}), invalidArgsCallbackEntry(cb));
+                    api.messages_setIsReadInChatForUser(argsBuilder({userId: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.messagesSetIsReadInChatForUser(argsBuilder({userId: '-1'}), invalidArgsCallbackEntry(cb));
+                    api.messages_setIsReadInChatForUser(argsBuilder({userId: '-1'}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.messagesSetIsReadInChatForUser(argsBuilder({userId: 1}), invalidArgsCallbackEntry(cb));
+                    api.messages_setIsReadInChatForUser(argsBuilder({userId: 1}), invalidArgsCallbackEntry(cb));
                 }
             ];
             async.series(fnStack, doneExecute);
@@ -104,7 +104,7 @@ describe('DAL::messagesSetIsReadInChatForUser', function () {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var reqArgs = argsBuilder();
-            api.messagesSetIsReadInChatForUser(reqArgs, function (err, result) {
+            api.messages_setIsReadInChatForUser(reqArgs, function (err, result) {
                 if (err) {
                     return doneExecute(err);
                 }

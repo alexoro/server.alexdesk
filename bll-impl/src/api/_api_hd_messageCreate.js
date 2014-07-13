@@ -294,7 +294,7 @@ var fnMessageCreate = function (flow, cb) {
         isRead: isReadInfo
     };
 
-    flow.env.dal.messageCreate(newMessage, function(err) {
+    flow.env.dal.messages_create(newMessage, function(err) {
         if (err) {
             cb(err);
         } else {

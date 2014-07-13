@@ -155,21 +155,21 @@ describe('API::Interface', function() {
         assert.equal(api.chats_createWithMessage.length, 2, 'chats_createWithMessage must receive 2 arguments only');
 
 
-        assert.isDefined(api.messagesGetListForChatOrderByCreatedAsc, 'messagesGetListForChatOrderByCreatedAsc function is not exists');
-        assert.isFunction(api.messagesGetListForChatOrderByCreatedAsc, 'messagesGetListForChatOrderByCreatedAsc must be a function');
-        assert.equal(api.messagesGetListForChatOrderByCreatedAsc.length, 2, 'messagesGetListForChatOrderByCreatedAsc must receive 2 arguments only');
+        assert.isDefined(api.messages_getListForChatOrderByCreatedAsc, 'messages_getListForChatOrderByCreatedAsc function is not exists');
+        assert.isFunction(api.messages_getListForChatOrderByCreatedAsc, 'messages_getListForChatOrderByCreatedAsc must be a function');
+        assert.equal(api.messages_getListForChatOrderByCreatedAsc.length, 2, 'messages_getListForChatOrderByCreatedAsc must receive 2 arguments only');
 
-        assert.isDefined(api.messagesGetIsReadPerMessageForUser, 'messagesGetIsReadPerMessageForUser function is not exists');
-        assert.isFunction(api.messagesGetIsReadPerMessageForUser, 'messagesGetIsReadPerMessageForUser must be a function');
-        assert.equal(api.messagesGetIsReadPerMessageForUser.length, 2, 'messagesGetIsReadPerMessageForUser must receive 2 arguments only');
+        assert.isDefined(api.messages_getIsReadPerMessageForUser, 'messages_getIsReadPerMessageForUser function is not exists');
+        assert.isFunction(api.messages_getIsReadPerMessageForUser, 'messages_getIsReadPerMessageForUser must be a function');
+        assert.equal(api.messages_getIsReadPerMessageForUser.length, 2, 'messages_getIsReadPerMessageForUser must receive 2 arguments only');
 
-        assert.isDefined(api.messagesSetIsReadInChatForUser, 'messagesSetIsReadInChatForUser function is not exists');
-        assert.isFunction(api.messagesSetIsReadInChatForUser, 'messagesSetIsReadInChatForUser must be a function');
-        assert.equal(api.messagesSetIsReadInChatForUser.length, 2, 'messagesSetIsReadInChatForUser must receive 2 arguments only');
+        assert.isDefined(api.messages_setIsReadInChatForUser, 'messages_setIsReadInChatForUser function is not exists');
+        assert.isFunction(api.messages_setIsReadInChatForUser, 'messages_setIsReadInChatForUser must be a function');
+        assert.equal(api.messages_setIsReadInChatForUser.length, 2, 'messages_setIsReadInChatForUser must receive 2 arguments only');
 
-        assert.isDefined(api.messageCreate, 'messageCreate function is not exists');
-        assert.isFunction(api.messageCreate, 'messageCreate must be a function');
-        assert.equal(api.messageCreate.length, 2, 'messageCreate must receive 2 arguments only');
+        assert.isDefined(api.messages_create, 'messages_create function is not exists');
+        assert.isFunction(api.messages_create, 'messages_create must be a function');
+        assert.equal(api.messages_create.length, 2, 'messages_create must receive 2 arguments only');
     });
 
     it('Check domain is exists', function () {

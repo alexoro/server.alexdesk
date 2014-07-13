@@ -38,23 +38,23 @@ var invalidArgsCallbackEntry = function (cb) {
 };
 
 
-describe('DAL::messagesGetIsReadPerMessageForUser', function () {
+describe('DAL::messages_getIsReadPerMessageForUser', function () {
 
     it('Must not pass invalid messageIds', function (doneTest) {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.messagesGetIsReadPerMessageForUser(argsBuilder({messageIds: {}}), invalidArgsCallbackEntry(cb));
+                    api.messages_getIsReadPerMessageForUser(argsBuilder({messageIds: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.messagesGetIsReadPerMessageForUser(argsBuilder({messageIds: null}), invalidArgsCallbackEntry(cb));
+                    api.messages_getIsReadPerMessageForUser(argsBuilder({messageIds: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.messagesGetIsReadPerMessageForUser(argsBuilder({messageIds: ['-1']}), invalidArgsCallbackEntry(cb));
+                    api.messages_getIsReadPerMessageForUser(argsBuilder({messageIds: ['-1']}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.messagesGetIsReadPerMessageForUser(argsBuilder({messageIds: [1]}), invalidArgsCallbackEntry(cb));
+                    api.messages_getIsReadPerMessageForUser(argsBuilder({messageIds: [1]}), invalidArgsCallbackEntry(cb));
                 }
             ];
             async.series(fnStack, doneExecute);
@@ -66,13 +66,13 @@ describe('DAL::messagesGetIsReadPerMessageForUser', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.messagesGetIsReadPerMessageForUser(argsBuilder({userType: {}}), invalidArgsCallbackEntry(cb));
+                    api.messages_getIsReadPerMessageForUser(argsBuilder({userType: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.messagesGetIsReadPerMessageForUser(argsBuilder({userType: null}), invalidArgsCallbackEntry(cb));
+                    api.messages_getIsReadPerMessageForUser(argsBuilder({userType: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.messagesGetIsReadPerMessageForUser(argsBuilder({userType: '1'}), invalidArgsCallbackEntry(cb));
+                    api.messages_getIsReadPerMessageForUser(argsBuilder({userType: '1'}), invalidArgsCallbackEntry(cb));
                 }
             ];
             async.series(fnStack, doneExecute);
@@ -84,16 +84,16 @@ describe('DAL::messagesGetIsReadPerMessageForUser', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.messagesGetIsReadPerMessageForUser(argsBuilder({userId: {}}), invalidArgsCallbackEntry(cb));
+                    api.messages_getIsReadPerMessageForUser(argsBuilder({userId: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.messagesGetIsReadPerMessageForUser(argsBuilder({userId: null}), invalidArgsCallbackEntry(cb));
+                    api.messages_getIsReadPerMessageForUser(argsBuilder({userId: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.messagesGetIsReadPerMessageForUser(argsBuilder({userId: '-1'}), invalidArgsCallbackEntry(cb));
+                    api.messages_getIsReadPerMessageForUser(argsBuilder({userId: '-1'}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.messagesGetIsReadPerMessageForUser(argsBuilder({userId: 1}), invalidArgsCallbackEntry(cb));
+                    api.messages_getIsReadPerMessageForUser(argsBuilder({userId: 1}), invalidArgsCallbackEntry(cb));
                 }
             ];
             async.series(fnStack, doneExecute);
@@ -104,7 +104,7 @@ describe('DAL::messagesGetIsReadPerMessageForUser', function () {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var reqArgs = argsBuilder();
-            api.messagesGetIsReadPerMessageForUser(reqArgs, function (err, result) {
+            api.messages_getIsReadPerMessageForUser(reqArgs, function (err, result) {
                 if (err) {
                     return doneExecute(err);
                 }
@@ -123,7 +123,7 @@ describe('DAL::messagesGetIsReadPerMessageForUser', function () {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var reqArgs = argsBuilder({messageIds: ['1000']});
-            api.messagesGetIsReadPerMessageForUser(reqArgs, function (err, result) {
+            api.messages_getIsReadPerMessageForUser(reqArgs, function (err, result) {
                 if (err) {
                     return doneExecute(err);
                 }
