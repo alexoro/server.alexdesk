@@ -38,9 +38,9 @@ describe('API::Interface', function() {
         assert.equal(api.authTokenCreate.length, 2, 'authTokenCreate must receive 2 arguments only');
 
 
-        assert.isDefined(api.serviceUserGetCreditionalsByLogin, 'serviceUserGetCreditionalsByLogin function is not exists');
-        assert.isFunction(api.serviceUserGetCreditionalsByLogin, 'serviceUserGetCreditionalsByLogin must be a function');
-        assert.equal(api.serviceUserGetCreditionalsByLogin.length, 2, 'serviceUserGetCreditionalsByLogin must receive 2 arguments only');
+        assert.isDefined(api.serviceUserGetCredentialsByLogin, 'serviceUserGetCredentialsByLogin function is not exists');
+        assert.isFunction(api.serviceUserGetCredentialsByLogin, 'serviceUserGetCredentialsByLogin must be a function');
+        assert.equal(api.serviceUserGetCredentialsByLogin.length, 2, 'serviceUserGetCredentialsByLogin must receive 2 arguments only');
 
         assert.isDefined(api.serviceUserGetProfileById, 'serviceUserGetProfileById function is not exists');
         assert.isFunction(api.serviceUserGetProfileById, 'serviceUserGetProfileById must be a function');
@@ -106,9 +106,9 @@ describe('API::Interface', function() {
         assert.equal(api.appsGetNumberOfUnreadMessages.length, 2, 'appsGetNumberOfUnreadMessages must receive 2 arguments only');
 
 
-        assert.isDefined(api.appUserGetCreditionalsByLogin, 'appUserGetCreditionalsByLogin function is not exists');
-        assert.isFunction(api.appUserGetCreditionalsByLogin, 'appUserGetCreditionalsByLogin must be a function');
-        assert.equal(api.appUserGetCreditionalsByLogin.length, 2, 'appUserGetCreditionalsByLogin must receive 2 arguments only');
+        assert.isDefined(api.appUserGetCredentialsByLogin, 'appUserGetCredentialsByLogin function is not exists');
+        assert.isFunction(api.appUserGetCredentialsByLogin, 'appUserGetCredentialsByLogin must be a function');
+        assert.equal(api.appUserGetCredentialsByLogin.length, 2, 'appUserGetCredentialsByLogin must receive 2 arguments only');
 
         assert.isDefined(api.appUsersGetProfileById, 'appUsersGetProfileById function is not exists');
         assert.isFunction(api.appUsersGetProfileById, 'appUsersGetProfileById must be a function');

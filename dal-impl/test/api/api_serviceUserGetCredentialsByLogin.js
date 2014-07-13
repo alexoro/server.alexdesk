@@ -36,20 +36,20 @@ var invalidArgsCallbackEntry = function (cb) {
 };
 
 
-describe('DAL::serviceUserGetCreditionalsByLogin', function () {
+describe('DAL::serviceUserGetCredentialsByLogin', function () {
 
     it('Must not pass invalid login', function (doneTest) {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.serviceUserGetCreditionalsByLogin(argsBuilder({login: {}}), invalidArgsCallbackEntry(cb));
+                    api.serviceUserGetCredentialsByLogin(argsBuilder({login: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.serviceUserGetCreditionalsByLogin(argsBuilder({login: null}), invalidArgsCallbackEntry(cb));
+                    api.serviceUserGetCredentialsByLogin(argsBuilder({login: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.serviceUserGetCreditionalsByLogin(argsBuilder({login: -1}), invalidArgsCallbackEntry(cb));
+                    api.serviceUserGetCredentialsByLogin(argsBuilder({login: -1}), invalidArgsCallbackEntry(cb));
                 }
             ];
             async.series(fnStack, doneExecute);
@@ -60,7 +60,7 @@ describe('DAL::serviceUserGetCreditionalsByLogin', function () {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var reqArgs = argsBuilder({login: 'XXXXXXX'});
-            api.serviceUserGetCreditionalsByLogin(reqArgs, function (err, result) {
+            api.serviceUserGetCredentialsByLogin(reqArgs, function (err, result) {
                 if (err) {
                     return doneExecute(err);
                 }
@@ -74,7 +74,7 @@ describe('DAL::serviceUserGetCreditionalsByLogin', function () {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var reqArgs = argsBuilder();
-            api.serviceUserGetCreditionalsByLogin(reqArgs, function (err, result) {
+            api.serviceUserGetCredentialsByLogin(reqArgs, function (err, result) {
                 if (err) {
                     return doneExecute(err);
                 }

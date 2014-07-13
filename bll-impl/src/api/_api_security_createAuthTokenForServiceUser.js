@@ -87,7 +87,7 @@ var fnServiceUserGetIdByCreditionalsAndCheckPassword = function (flow, cb) {
     var reqArgs = {
         login: flow.args.login
     };
-    flow.env.dal.serviceUserGetCreditionalsByLogin(reqArgs, function(err, creditionals) {
+    flow.env.dal.serviceUserGetCredentialsByLogin(reqArgs, function(err, creditionals) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else if (!creditionals) {

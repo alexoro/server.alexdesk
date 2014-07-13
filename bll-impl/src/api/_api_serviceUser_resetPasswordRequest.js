@@ -67,7 +67,7 @@ var fnValidate = function (flow, cb) {
 };
 
 var fnServiceUserInfoGetByLogin = function (flow, cb) {
-    flow.env.dal.serviceUserGetCreditionalsByLogin({login: flow.args.login}, function (err, creditionals) {
+    flow.env.dal.serviceUserGetCredentialsByLogin({login: flow.args.login}, function (err, creditionals) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else if (!creditionals) {

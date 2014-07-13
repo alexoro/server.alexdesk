@@ -267,7 +267,7 @@ describe('DAL::appUsersCreate', function () {
                     appId: argsBuilder().appId,
                     login: argsBuilder().login
                 };
-                api.appUserGetCreditionalsByLogin(reqArgsGet, function (err, credentials) {
+                api.appUserGetCredentialsByLogin(reqArgsGet, function (err, credentials) {
                     if (err) {
                         return doneExecute(err);
                     } else {

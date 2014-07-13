@@ -37,23 +37,23 @@ var invalidArgsCallbackEntry = function (cb) {
 };
 
 
-describe('DAL::appUserGetCreditionalsByLogin', function () {
+describe('DAL::appUserGetCredentialsByLogin', function () {
 
     it('Must not pass invalid appId', function (doneTest) {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.appUserGetCreditionalsByLogin(argsBuilder({appId: {}}), invalidArgsCallbackEntry(cb));
+                    api.appUserGetCredentialsByLogin(argsBuilder({appId: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.appUserGetCreditionalsByLogin(argsBuilder({appId: null}), invalidArgsCallbackEntry(cb));
+                    api.appUserGetCredentialsByLogin(argsBuilder({appId: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.appUserGetCreditionalsByLogin(argsBuilder({appId: -1}), invalidArgsCallbackEntry(cb));
+                    api.appUserGetCredentialsByLogin(argsBuilder({appId: -1}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.appUserGetCreditionalsByLogin(argsBuilder({appId: '-1'}), invalidArgsCallbackEntry(cb));
+                    api.appUserGetCredentialsByLogin(argsBuilder({appId: '-1'}), invalidArgsCallbackEntry(cb));
                 },
             ];
             async.series(fnStack, doneExecute);
@@ -65,13 +65,13 @@ describe('DAL::appUserGetCreditionalsByLogin', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.appUserGetCreditionalsByLogin(argsBuilder({login: {}}), invalidArgsCallbackEntry(cb));
+                    api.appUserGetCredentialsByLogin(argsBuilder({login: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.appUserGetCreditionalsByLogin(argsBuilder({login: null}), invalidArgsCallbackEntry(cb));
+                    api.appUserGetCredentialsByLogin(argsBuilder({login: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.appUserGetCreditionalsByLogin(argsBuilder({login: -1}), invalidArgsCallbackEntry(cb));
+                    api.appUserGetCredentialsByLogin(argsBuilder({login: -1}), invalidArgsCallbackEntry(cb));
                 }
             ];
             async.series(fnStack, doneExecute);
@@ -82,7 +82,7 @@ describe('DAL::appUserGetCreditionalsByLogin', function () {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var reqArgs = argsBuilder();
-            api.appUserGetCreditionalsByLogin(reqArgs, function (err, result) {
+            api.appUserGetCredentialsByLogin(reqArgs, function (err, result) {
                 if (err) {
                     return doneExecute(err);
                 }
@@ -102,7 +102,7 @@ describe('DAL::appUserGetCreditionalsByLogin', function () {
         mock.executeOnClearDb(function (doneExecute) {
             var reqArgs = argsBuilder();
             reqArgs.login = 'xxxxxxxxx';
-            api.appUserGetCreditionalsByLogin(reqArgs, function (err, result) {
+            api.appUserGetCredentialsByLogin(reqArgs, function (err, result) {
                 if (err) {
                     return doneExecute(err);
                 }

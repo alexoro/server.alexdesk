@@ -9,7 +9,7 @@ var domain = require('../domain');
 
 var api_userGetInfoForToken = require('./_api_userGetInfoForToken');
 var api_authTokenCreate = require('./_api_authTokenCreate');
-var api_serviceUserGetCreditionalsByLogin = require('./_api_serviceUserGetCreditionalsByLogin');
+var api_serviceUserGetCredentialsByLogin = require('./_api_serviceUserGetCredentialsByLogin');
 var api_serviceUserGetProfileById = require('./_api_serviceUserGetProfileById');
 var api_serviceUserCreate = require('./_api_serviceUserCreate');
 var api_serviceUserUpdatePasswordHash = require('./_api_serviceUserUpdatePasswordHash');
@@ -25,7 +25,7 @@ var api_appCreate = require('./_api_appCreate');
 var api_appsGetNumberOfChats = require('./_api_appsGetNumberOfChats');
 var api_appsGetNumberOfMessages = require('./_api_appsGetNumberOfMessages');
 var api_appsGetNumberOfUnreadMessages = require('./_api_appsGetNumberOfUnreadMessages');
-var api_appUserGetCreditionalsByLogin = require('./_api_appUserGetCreditionalsByLogin');
+var api_appUserGetCredentialsByLogin = require('./_api_appUserGetCredentialsByLogin');
 var api_appUsersGetProfileById = require('./_api_appUsersGetProfileById');
 var api_appUsersCreate= require('./_api_appUsersCreate');
 var api_appUserUpdate = require('./_api_appUserUpdate');
@@ -85,8 +85,8 @@ DAL.prototype.authTokenCreate = function(args, next) {
 };
 
 
-DAL.prototype.serviceUserGetCreditionalsByLogin = function(args, next) {
-    this._before(api_serviceUserGetCreditionalsByLogin, args, next);
+DAL.prototype.serviceUserGetCredentialsByLogin = function(args, next) {
+    this._before(api_serviceUserGetCredentialsByLogin, args, next);
 };
 
 DAL.prototype.serviceUserGetProfileById = function (args, next) {
@@ -153,8 +153,8 @@ DAL.prototype.appsGetNumberOfUnreadMessages = function(args, next) {
 };
 
 
-DAL.prototype.appUserGetCreditionalsByLogin = function(args, next) {
-    this._before(api_appUserGetCreditionalsByLogin, args, next);
+DAL.prototype.appUserGetCredentialsByLogin = function(args, next) {
+    this._before(api_appUserGetCredentialsByLogin, args, next);
 };
 
 DAL.prototype.appUsersGetProfileById = function(args, next) {

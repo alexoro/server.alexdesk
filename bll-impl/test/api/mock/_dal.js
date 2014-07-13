@@ -49,7 +49,7 @@ DAL.prototype.authTokenCreate = function(args, done) {
 };
 
 
-DAL.prototype.serviceUserGetCreditionalsByLogin = function(args, done) {
+DAL.prototype.serviceUserGetCredentialsByLogin = function(args, done) {
     args = deepClone(args);
     var reqArgs = {
         login: args.login
@@ -325,7 +325,7 @@ DAL.prototype.appsGetNumberOfUnreadMessages = function(args, done) {
 };
 
 
-DAL.prototype.appUserGetCreditionalsByLogin = function(args, done) {
+DAL.prototype.appUserGetCredentialsByLogin = function(args, done) {
     args = deepClone(args);
     var r = _.findWhere(this.mock.app_users, {appId: args.appId, login: args.login});
     if (!r) {
