@@ -148,7 +148,7 @@ describe('DAL::authTokenCreate', function () {
                 var reqArgsGet = {
                     token: reqArgsCreate.token
                 };
-                api.userGetInfoForToken(reqArgsGet, function (err, info) {
+                api.authTokenGetUserInfoByToken(reqArgsGet, function (err, info) {
                     if (err) {
                         return doneExecute(err);
                     }

@@ -36,23 +36,23 @@ var invalidArgsCallbackEntry = function (cb) {
 };
 
 
-describe('DAL::userGetInfoForToken', function () {
+describe('DAL::authTokenGetUserInfoByToken', function () {
 
     it('Must not pass invalid token', function (doneTest) {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.userGetInfoForToken(argsBuilder({token: {}}), invalidArgsCallbackEntry(cb));
+                    api.authTokenGetUserInfoByToken(argsBuilder({token: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.userGetInfoForToken(argsBuilder({token: null}), invalidArgsCallbackEntry(cb));
+                    api.authTokenGetUserInfoByToken(argsBuilder({token: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.userGetInfoForToken(argsBuilder({token: 1}), invalidArgsCallbackEntry(cb));
+                    api.authTokenGetUserInfoByToken(argsBuilder({token: 1}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.userGetInfoForToken(argsBuilder({token: '0cec4d47-d9a1-4984-XXXX-10583b674123'}), invalidArgsCallbackEntry(cb));
+                    api.authTokenGetUserInfoByToken(argsBuilder({token: '0cec4d47-d9a1-4984-XXXX-10583b674123'}), invalidArgsCallbackEntry(cb));
                 }
             ];
             async.series(fnStack, doneExecute);
@@ -63,7 +63,7 @@ describe('DAL::userGetInfoForToken', function () {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var reqArgs = argsBuilder();
-            api.userGetInfoForToken(reqArgs, function (err, result) {
+            api.authTokenGetUserInfoByToken(reqArgs, function (err, result) {
                 if (err) {
                     return doneExecute(err);
                 }
@@ -82,7 +82,7 @@ describe('DAL::userGetInfoForToken', function () {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var reqArgs = argsBuilder({token: '00ec4d47-d9a1-4984-8f23-10583b674123'});
-            api.userGetInfoForToken(reqArgs, function (err, result) {
+            api.authTokenGetUserInfoByToken(reqArgs, function (err, result) {
                 if (err) {
                     return doneExecute(err);
                 }

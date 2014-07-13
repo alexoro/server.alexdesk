@@ -190,7 +190,7 @@ describe('API#security_createAuthTokenForServiceUser', function() {
             var reqArgs = {
                 token: result.token
             };
-            mockApi.dal.userGetInfoForToken(reqArgs, function(errUser, resultUser) {
+            mockApi.dal.authTokenGetUserInfoByToken(reqArgs, function(errUser, resultUser) {
                 if (errUser) {
                     return doneTest(errUser);
                 }
