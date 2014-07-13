@@ -121,7 +121,7 @@ DAL.prototype.serviceUserUpdatePasswordHash = function (args, done) {
 DAL.prototype.serviceUserGetRegisterConfirmData = function(args, done) {
     args = deepClone(args);
     var reqArgs = {
-        id: args.confirmToken
+        id: args.token
     };
 
     var r = _.findWhere(this.mock.system_register_confirm, reqArgs);
@@ -129,7 +129,7 @@ DAL.prototype.serviceUserGetRegisterConfirmData = function(args, done) {
         done(null, null);
     } else {
         var ret = {
-            id: r.id,
+            token: r.token,
             userId: r.serviceUserId,
             expires: r.expires
         };
@@ -140,7 +140,7 @@ DAL.prototype.serviceUserGetRegisterConfirmData = function(args, done) {
 DAL.prototype.serviceUserCreateRegisterConfirmData = function(args, done) {
     args = deepClone(args);
     var data = {
-        id: args.id,
+        token: args.token,
         serviceUserId: args.userId,
         expires: args.expires
     };
@@ -167,7 +167,7 @@ DAL.prototype.serviceUserMarkAsConfirmed = function(args, done) {
 DAL.prototype.serviceUserGetResetPasswordConfirmData = function(args, done) {
     args = deepClone(args);
     var search = {
-        id: args.confirmToken
+        id: args.token
     };
 
     var r = _.findWhere(this.mock.system_reset_password_confirm, search);
@@ -175,7 +175,7 @@ DAL.prototype.serviceUserGetResetPasswordConfirmData = function(args, done) {
         done(null, null);
     } else {
         var ret = {
-            id: r.id,
+            token: r.token,
             userId: r.serviceUserId,
             expires: r.expires
         };
@@ -186,7 +186,7 @@ DAL.prototype.serviceUserGetResetPasswordConfirmData = function(args, done) {
 DAL.prototype.serviceUserCreateResetPasswordConfirmData = function(args, done) {
     args = deepClone(args);
     var data = {
-        id: args.id,
+        id: args.token,
         serviceUserId: args.userId,
         expires: args.expires
     };

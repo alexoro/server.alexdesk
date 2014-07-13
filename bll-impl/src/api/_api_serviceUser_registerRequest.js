@@ -182,7 +182,7 @@ var fnServiceUserCreate = function (flow, cb) {
 
 var fnConfirmCreate = function (flow, cb) {
     var reqArgs = {
-        id: flow.confirmId,
+        token: flow.token,
         expires: flow.confirmExpiresDate,
         userId: flow.newUserId
     };

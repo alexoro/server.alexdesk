@@ -67,7 +67,7 @@ var fnValidate = function (flow, cb) {
 
 var fnServiceUserGetResetPasswordConfirmData = function (flow, cb) {
     var reqArgs = {
-        confirmToken: flow.args.confirmToken
+        token: flow.args.confirmToken
     };
     flow.env.dal.serviceUserGetResetPasswordConfirmData(reqArgs, function(err, confirmData) {
         if (err) {

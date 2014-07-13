@@ -19,7 +19,7 @@ var argsBuilder = function(override) {
         override = {};
     }
     return {
-        id: override.id === undefined ? 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa' : override.id,
+        token: override.token === undefined ? 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa' : override.token,
         userId: override.userId === undefined ? '1' : override.userId,
         expires: override.expires === undefined ? new Date('2020-01-01 00:00:00') : override.expires
     };
@@ -40,21 +40,21 @@ var invalidArgsCallbackEntry = function (cb) {
 
 describe('DAL::serviceUserCreateRegisterConfirmData', function () {
 
-    it('Must not pass invalid id', function (doneTest) {
+    it('Must not pass invalid token', function (doneTest) {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.serviceUserCreateRegisterConfirmData(argsBuilder({id: {}}), invalidArgsCallbackEntry(cb));
+                    api.serviceUserCreateRegisterConfirmData(argsBuilder({token: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.serviceUserCreateRegisterConfirmData(argsBuilder({id: null}), invalidArgsCallbackEntry(cb));
+                    api.serviceUserCreateRegisterConfirmData(argsBuilder({token: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.serviceUserCreateRegisterConfirmData(argsBuilder({id: 1}), invalidArgsCallbackEntry(cb));
+                    api.serviceUserCreateRegisterConfirmData(argsBuilder({token: 1}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.serviceUserCreateRegisterConfirmData(argsBuilder({id: '0cec4d47-d9a1-4984-XXXX-10583b674123'}), invalidArgsCallbackEntry(cb));
+                    api.serviceUserCreateRegisterConfirmData(argsBuilder({token: '0cec4d47-d9a1-4984-XXXX-10583b674123'}), invalidArgsCallbackEntry(cb));
                 }
             ];
             async.series(fnStack, doneExecute);
@@ -124,7 +124,7 @@ describe('DAL::serviceUserCreateRegisterConfirmData', function () {
                 }
 
                 var reqArgsGet = {
-                    confirmToken: reqArgsCreate.id
+                    token: reqArgsCreate.token
                 };
                 api.serviceUserGetRegisterConfirmData(reqArgsGet, function (err, data) {
                     if (err) {

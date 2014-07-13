@@ -45,11 +45,11 @@ var fnValidate = function (flow, cb) {
         return cb(errBuilder(dErr.INVALID_PARAMS, 'Args is not a object'), flow);
     }
 
-    if (flow.args.id === undefined) {
-        return cb(errBuilder(dErr.INVALID_PARAMS, 'id is not defined'), flow);
+    if (flow.args.token === undefined) {
+        return cb(errBuilder(dErr.INVALID_PARAMS, 'token is not defined'), flow);
     }
-    if (!validate.guid4(flow.args.id)) {
-        return cb(errBuilder(dErr.INVALID_PARAMS, 'Incorrect id value: ' + flow.args.id), flow);
+    if (!validate.guid4(flow.args.token)) {
+        return cb(errBuilder(dErr.INVALID_PARAMS, 'Incorrect token value: ' + flow.args.token), flow);
     }
 
     if (flow.args.userId === undefined) {
@@ -84,7 +84,7 @@ var fnDbConnect = function (flow, cb) {
 var preparedSet = 'INSERT INTO public.system_reset_password_confirm(id, service_user_id, expires) VALUES($1, $2, $3)';
 
 var fnSetAndGenerateResult = function (flow, cb) {
-    flow.client.query(preparedSet, [flow.args.id, flow.args.userId, flow.args.expires], function (err, result) {
+    flow.client.query(preparedSet, [flow.args.token, flow.args.userId, flow.args.expires], function (err, result) {
         if (err) {
             cb(errBuilder(dErr.DB_ERROR, err.message), flow);
         } else {

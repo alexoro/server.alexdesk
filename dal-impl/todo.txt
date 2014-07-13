@@ -1,4 +1,2 @@
 2) Naming
 - Rename all creditionals w/ credentials
-- In tokens: replace confirmToken w/ token
-- In tokens: in return use token instead of id

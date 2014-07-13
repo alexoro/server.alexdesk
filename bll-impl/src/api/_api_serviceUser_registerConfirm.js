@@ -68,7 +68,7 @@ var fnValidate = function (flow, cb) {
 
 var fnServiceUserGetRegisterConfirmData = function (flow, cb) {
     var reqArgs = {
-        confirmToken: flow.args.confirmToken
+        token: flow.args.confirmToken
     };
     flow.env.dal.serviceUserGetRegisterConfirmData(reqArgs, function(err, confirmData) {
         if (err) {

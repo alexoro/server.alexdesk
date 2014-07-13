@@ -120,7 +120,7 @@ var fnConfirmGenerateExpireTime = function (flow, cb) {
 
 var fnConfirmCreate = function (flow, cb) {
     var reqArgs = {
-        id: flow.confirmId,
+        token: flow.confirmId,
         userId: flow.userId,
         expires: flow.confirmExpiresDate
     };
