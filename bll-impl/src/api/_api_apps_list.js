@@ -130,7 +130,7 @@ var fnAppsGetList = function (flow, cb) {
     var reqArgs = {
         userId: flow.userId
     };
-    flow.env.dal.appsGetListForServiceUser(reqArgs, function(err, result) {
+    flow.env.dal.apps_getListForServiceUser(reqArgs, function(err, result) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else {
@@ -149,7 +149,7 @@ var fnAppsSetNumberOfChats = function (flow, cb) {
     var reqArgs = {
         appIds: flow.appIds
     };
-    flow.env.dal.appsGetNumberOfChats(reqArgs, function(err, result) {
+    flow.env.dal.apps_getNumberOfChats(reqArgs, function(err, result) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else {
@@ -167,7 +167,7 @@ var fnAppsSetNumberOfAllMessages = function (flow, cb) {
     var reqArgs = {
         appIds: flow.appIds
     };
-    flow.env.dal.appsGetNumberOfMessages(reqArgs, function(err, result) {
+    flow.env.dal.apps_getNumberOfMessages(reqArgs, function(err, result) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else {
@@ -187,7 +187,7 @@ var fnAppsSetNumberOfUnreadMessages = function (flow, cb) {
         userType: flow.userType,
         userId: flow.userId
     };
-    flow.env.dal.appsGetNumberOfUnreadMessages(reqArgs, function(err, result) {
+    flow.env.dal.apps_getNumberOfUnreadMessages(reqArgs, function(err, result) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else {

@@ -188,7 +188,7 @@ var fnAppCreateAndGenerateResult = function (flow, cb) {
         ownerUserId: flow.userId
     };
 
-    flow.env.dal.appCreate(reqArgs, function(err) {
+    flow.env.dal.apps_create(reqArgs, function(err) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else {

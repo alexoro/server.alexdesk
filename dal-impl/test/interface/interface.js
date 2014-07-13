@@ -77,33 +77,33 @@ describe('API::Interface', function() {
         assert.equal(api.serviceUserResetPasswordConfirmDataCreate.length, 2, 'serviceUserResetPasswordConfirmDataCreate must receive 2 arguments only');
 
 
-        assert.isDefined(api.appsGetListForServiceUser, 'appsGetListForServiceUser function is not exists');
-        assert.isFunction(api.appsGetListForServiceUser, 'appsGetListForServiceUser must be a function');
-        assert.equal(api.appsGetListForServiceUser.length, 2, 'appsGetListForServiceUser must receive 2 arguments only');
+        assert.isDefined(api.apps_getListForServiceUser, 'apps_getListForServiceUser function is not exists');
+        assert.isFunction(api.apps_getListForServiceUser, 'apps_getListForServiceUser must be a function');
+        assert.equal(api.apps_getListForServiceUser.length, 2, 'apps_getListForServiceUser must receive 2 arguments only');
 
-        assert.isDefined(api.appIsExists, 'appIsExists function is not exists');
-        assert.isFunction(api.appIsExists, 'appIsExists must be a function');
-        assert.equal(api.appIsExists.length, 2, 'appIsExists must receive 2 arguments only');
+        assert.isDefined(api.apps_isExists, 'apps_isExists function is not exists');
+        assert.isFunction(api.apps_isExists, 'apps_isExists must be a function');
+        assert.equal(api.apps_isExists.length, 2, 'apps_isExists must receive 2 arguments only');
 
-        assert.isDefined(api.appGetOwnerIdForAppById, 'appGetOwnerIdForAppById function is not exists');
-        assert.isFunction(api.appGetOwnerIdForAppById, 'appGetOwnerIdForAppById must be a function');
-        assert.equal(api.appGetOwnerIdForAppById.length, 2, 'appGetOwnerIdForAppById must receive 2 arguments only');
+        assert.isDefined(api.apps_getOwnerIdForAppById, 'apps_getOwnerIdForAppById function is not exists');
+        assert.isFunction(api.apps_getOwnerIdForAppById, 'apps_getOwnerIdForAppById must be a function');
+        assert.equal(api.apps_getOwnerIdForAppById.length, 2, 'apps_getOwnerIdForAppById must receive 2 arguments only');
 
-        assert.isDefined(api.appCreate, 'appCreate function is not exists');
-        assert.isFunction(api.appCreate, 'appCreate must be a function');
-        assert.equal(api.appCreate.length, 2, 'appCreate must receive 2 arguments only');
+        assert.isDefined(api.apps_create, 'apps_create function is not exists');
+        assert.isFunction(api.apps_create, 'apps_create must be a function');
+        assert.equal(api.apps_create.length, 2, 'apps_create must receive 2 arguments only');
 
-        assert.isDefined(api.appsGetNumberOfChats, 'appsGetNumberOfChats function is not exists');
-        assert.isFunction(api.appsGetNumberOfChats, 'appsGetNumberOfChats must be a function');
-        assert.equal(api.appsGetNumberOfChats.length, 2, 'appsGetNumberOfChats must receive 2 arguments only');
+        assert.isDefined(api.apps_getNumberOfChats, 'apps_getNumberOfChats function is not exists');
+        assert.isFunction(api.apps_getNumberOfChats, 'apps_getNumberOfChats must be a function');
+        assert.equal(api.apps_getNumberOfChats.length, 2, 'apps_getNumberOfChats must receive 2 arguments only');
 
-        assert.isDefined(api.appsGetNumberOfMessages, 'appsGetNumberOfMessages function is not exists');
-        assert.isFunction(api.appsGetNumberOfMessages, 'appsGetNumberOfMessages must be a function');
-        assert.equal(api.appsGetNumberOfMessages.length, 2, 'appsGetNumberOfMessages must receive 2 arguments only');
+        assert.isDefined(api.apps_getNumberOfMessages, 'apps_getNumberOfMessages function is not exists');
+        assert.isFunction(api.apps_getNumberOfMessages, 'apps_getNumberOfMessages must be a function');
+        assert.equal(api.apps_getNumberOfMessages.length, 2, 'apps_getNumberOfMessages must receive 2 arguments only');
 
-        assert.isDefined(api.appsGetNumberOfUnreadMessages, 'appsGetNumberOfUnreadMessages function is not exists');
-        assert.isFunction(api.appsGetNumberOfUnreadMessages, 'appsGetNumberOfUnreadMessages must be a function');
-        assert.equal(api.appsGetNumberOfUnreadMessages.length, 2, 'appsGetNumberOfUnreadMessages must receive 2 arguments only');
+        assert.isDefined(api.apps_getNumberOfUnreadMessages, 'apps_getNumberOfUnreadMessages function is not exists');
+        assert.isFunction(api.apps_getNumberOfUnreadMessages, 'apps_getNumberOfUnreadMessages must be a function');
+        assert.equal(api.apps_getNumberOfUnreadMessages.length, 2, 'apps_getNumberOfUnreadMessages must receive 2 arguments only');
 
 
         assert.isDefined(api.appUserGetCredentialsByLogin, 'appUserGetCredentialsByLogin function is not exists');

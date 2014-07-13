@@ -79,7 +79,7 @@ var fnAppIsExists = function (flow, cb) {
     var reqArgs = {
         appId: flow.args.appId
     };
-    flow.env.dal.appIsExists(reqArgs, function(err, result) {
+    flow.env.dal.apps_isExists(reqArgs, function(err, result) {
         if (!result) {
             cb(errBuilder(dErr.APP_NOT_FOUND, 'Application not found. #ID: ' + flow.args.appId));
         } else {

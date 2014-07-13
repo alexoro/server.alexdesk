@@ -452,7 +452,7 @@ describe('API#hd_chatCreate', function() {
 
     it('Must return INTERNAL_ERROR in case of error in DAL', function(doneTest) {
         var mock = mockBuilder.newApiWithMock();
-        mock.dal.appIsExists = function(args, done) {
+        mock.dal.apps_isExists = function(args, done) {
             done(new Error('Not implemented yet'));
         };
 
@@ -472,7 +472,7 @@ describe('API#hd_chatCreate', function() {
 
     it('Must return INTERNAL_ERROR in case of invalid response from DAL', function(doneTest) {
         var mock = mockBuilder.newApiWithMock();
-        mock.dal.appIsExists = function(args, done) {
+        mock.dal.apps_isExists = function(args, done) {
             done(null, null);
         };
 

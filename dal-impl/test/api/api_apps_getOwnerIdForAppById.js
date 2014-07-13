@@ -19,7 +19,7 @@ var argsBuilder = function(override) {
         override = {};
     }
     return {
-        userId: override.userId === undefined ? '1' : override.userId
+        appId: override.appId === undefined ? '1' : override.appId
     };
 };
 
@@ -36,65 +36,53 @@ var invalidArgsCallbackEntry = function (cb) {
 };
 
 
-describe('DAL::appsGetListForServiceUser', function () {
+describe('DAL::apps_getOwnerIdForAppById', function () {
 
-    it('Must not pass invalid userId', function (doneTest) {
+    it('Must not pass invalid appId', function (doneTest) {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.appsGetListForServiceUser(argsBuilder({userId: 1}), invalidArgsCallbackEntry(cb));
+                    api.apps_getOwnerIdForAppById(argsBuilder({appId: 1}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.appsGetListForServiceUser(argsBuilder({userId: '-1'}), invalidArgsCallbackEntry(cb));
+                    api.apps_getOwnerIdForAppById(argsBuilder({appId: '-1'}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.appsGetListForServiceUser(argsBuilder({userId: null}), invalidArgsCallbackEntry(cb));
+                    api.apps_getOwnerIdForAppById(argsBuilder({appId: null}), invalidArgsCallbackEntry(cb));
                 }
             ];
             async.series(fnStack, doneExecute);
         }, doneTest);
     });
 
-    it('Must not return empty array if user not found', function (doneTest) {
+    it('Must return null if owner is not found', function (doneTest) {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
-            var reqArgs = argsBuilder({userId: '1000'});
-            api.appsGetListForServiceUser(reqArgs, function (err, apps) {
+            var reqArgs = argsBuilder({appId: '1000'});
+            api.apps_getOwnerIdForAppById(reqArgs, function (err, result) {
                 if (err) {
                     return doneExecute(err);
-                } else {
-                    assert.lengthOf(apps, 0, 'Expected to receive 0 apps');
-                    doneExecute();
                 }
+                assert.isNull(result, 'Expected and received results are not match');
+                doneExecute();
             });
         }, doneTest);
     });
 
-    it('Must return valid results', function (doneTest) {
+    it('Must return valid result', function (doneTest) {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var reqArgs = argsBuilder();
-            api.appsGetListForServiceUser(reqArgs, function (err, apps) {
+            api.apps_getOwnerIdForAppById(reqArgs, function (err, result) {
                 if (err) {
                     return doneExecute(err);
                 }
-
                 var expected = {
                     id: '1',
-                    platformType: 2,
-                    title: 'Test App',
-                    created: new Date('2014-05-01 13:00:00 +04:00'),
-                    isApproved: true,
-                    isBlocked: false,
-                    isDeleted: false,
-                    extra: {
-                        package: 'com.testapp'
-                    }
+                    type: 1
                 };
-
-                assert.lengthOf(apps, 1, 'Expected to get 1 application');
-                assert.deepEqual(apps[0], expected, 'Expected and received app are not match');
+                assert.deepEqual(result, expected, 'Expected and received results are not match');
                 doneExecute();
             });
         }, doneTest);

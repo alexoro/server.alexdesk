@@ -209,7 +209,7 @@ var fnAppIsExists = function (flow, cb) {
     var reqArgs = {
         appId: flow.args.appId
     };
-    flow.env.dal.appIsExists(reqArgs, function(err, exists) {
+    flow.env.dal.apps_isExists(reqArgs, function(err, exists) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else if (typeof exists !== 'boolean') {
@@ -266,7 +266,7 @@ var fnAppGetOwner = function (flow, cb) {
     var reqArgs = {
         appId: flow.args.appId
     };
-    flow.env.dal.appGetOwnerIdForAppById(reqArgs, function(err, appOwnerUser) {
+    flow.env.dal.apps_getOwnerIdForAppById(reqArgs, function(err, appOwnerUser) {
         if (err) {
             cb(errBuilder(dErr.INTERNAL_ERROR, err));
         } else if (!appOwnerUser) {

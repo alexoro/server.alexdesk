@@ -195,7 +195,7 @@ DAL.prototype.serviceUserResetPasswordConfirmDataCreate = function(args, done) {
 };
 
 
-DAL.prototype.appsGetListForServiceUser = function(args, done) {
+DAL.prototype.apps_getListForServiceUser = function(args, done) {
     var i;
     var app;
 
@@ -241,12 +241,12 @@ DAL.prototype.appsGetListForServiceUser = function(args, done) {
     return done(null, ret);
 };
 
-DAL.prototype.appIsExists = function(args, done) {
+DAL.prototype.apps_isExists = function(args, done) {
     args = deepClone(args);
     done(null, !!_.findWhere(this.mock.apps, {id: args.appId}));
 };
 
-DAL.prototype.appGetOwnerIdForAppById = function(args, done) {
+DAL.prototype.apps_getOwnerIdForAppById = function(args, done) {
     args = deepClone(args);
     var r = _.findWhere(this.mock.app_acl, {appId: args.appId, isOwner: true});
     if (r) {
@@ -260,7 +260,7 @@ DAL.prototype.appGetOwnerIdForAppById = function(args, done) {
     }
 };
 
-DAL.prototype.appCreate = function(args, done) {
+DAL.prototype.apps_create = function(args, done) {
     args = deepClone(args);
     var app = {
         id: args.id,
@@ -291,7 +291,7 @@ DAL.prototype.appCreate = function(args, done) {
     done(null);
 };
 
-DAL.prototype.appsGetNumberOfChats = function(args, done) {
+DAL.prototype.apps_getNumberOfChats = function(args, done) {
     args = deepClone(args);
     var r = {};
     for (var i = 0; i < args.appIds.length; i++) {
@@ -300,7 +300,7 @@ DAL.prototype.appsGetNumberOfChats = function(args, done) {
     done(null, r);
 };
 
-DAL.prototype.appsGetNumberOfMessages = function(args, done) {
+DAL.prototype.apps_getNumberOfMessages = function(args, done) {
     args = deepClone(args);
     var r = {};
     for (var i = 0; i < args.appIds.length; i++) {
@@ -309,7 +309,7 @@ DAL.prototype.appsGetNumberOfMessages = function(args, done) {
     done(null, r);
 };
 
-DAL.prototype.appsGetNumberOfUnreadMessages = function(args, done) {
+DAL.prototype.apps_getNumberOfUnreadMessages = function(args, done) {
     args = deepClone(args);
     var r = {};
     for (var i = 0; i < args.appIds.length; i++) {

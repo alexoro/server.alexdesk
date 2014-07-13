@@ -36,26 +36,26 @@ var invalidArgsCallbackEntry = function (cb) {
 };
 
 
-describe('DAL::appsGetNumberOfMessages', function () {
+describe('DAL::apps_getNumberOfChats', function () {
 
     it('Must not pass invalid id', function (doneTest) {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.appsGetNumberOfMessages(argsBuilder({appIds: {}}), invalidArgsCallbackEntry(cb));
+                    api.apps_getNumberOfChats(argsBuilder({appIds: {}}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.appsGetNumberOfMessages(argsBuilder({appIds: null}), invalidArgsCallbackEntry(cb));
+                    api.apps_getNumberOfChats(argsBuilder({appIds: null}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.appsGetNumberOfMessages(argsBuilder({appIds: [-1]}), invalidArgsCallbackEntry(cb));
+                    api.apps_getNumberOfChats(argsBuilder({appIds: [-1]}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.appsGetNumberOfMessages(argsBuilder({appIds: ['-1']}), invalidArgsCallbackEntry(cb));
+                    api.apps_getNumberOfChats(argsBuilder({appIds: ['-1']}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.appsGetNumberOfMessages(argsBuilder({appIds: [null]}), invalidArgsCallbackEntry(cb));
+                    api.apps_getNumberOfChats(argsBuilder({appIds: [null]}), invalidArgsCallbackEntry(cb));
                 }
             ];
             async.series(fnStack, doneExecute);
@@ -66,7 +66,7 @@ describe('DAL::appsGetNumberOfMessages', function () {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var reqArgs = argsBuilder({appIds: ['1000']});
-            api.appsGetNumberOfMessages(reqArgs, function (err, result) {
+            api.apps_getNumberOfChats(reqArgs, function (err, result) {
                 if (err) {
                     return doneExecute(err);
                 }
@@ -83,12 +83,12 @@ describe('DAL::appsGetNumberOfMessages', function () {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var reqArgs = argsBuilder();
-            api.appsGetNumberOfMessages(reqArgs, function (err, result) {
+            api.apps_getNumberOfChats(reqArgs, function (err, result) {
                 if (err) {
                     return doneExecute(err);
                 }
                 var expected = {
-                    '1': 8
+                    '1': 3
                 };
                 assert.deepEqual(result, expected, 'Expected and received results are not match');
                 doneExecute();

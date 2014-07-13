@@ -18,13 +18,13 @@ var api_serviceUserRegisterConfirmDataCreate = require('./_api_serviceUserRegist
 var api_serviceUserMarkAsConfirmed = require('./_api_serviceUserMarkAsConfirmed');
 var api_serviceUserResetPasswordConfirmDataGet = require('./_api_serviceUserResetPasswordConfirmDataGet');
 var api_serviceUserResetPasswordConfirmDataCreate = require('./_api_serviceUserResetPasswordConfirmDataCreate');
-var api_appsGetListForServiceUser = require('./_api_appsGetListForServiceUser');
-var api_appIsExists = require('./_api_appIsExists');
-var api_appGetOwnerIdForAppById = require('./_api_appGetOwnerIdForAppById');
-var api_appCreate = require('./_api_appCreate');
-var api_appsGetNumberOfChats = require('./_api_appsGetNumberOfChats');
-var api_appsGetNumberOfMessages = require('./_api_appsGetNumberOfMessages');
-var api_appsGetNumberOfUnreadMessages = require('./_api_appsGetNumberOfUnreadMessages');
+var api_apps_getListForServiceUser = require('./_api_apps_getListForServiceUser');
+var api_apps_isExists = require('./_api_apps_isExists');
+var api_apps_getOwnerIdForAppById = require('./_api_apps_getOwnerIdForAppById');
+var api_apps_create = require('./_api_apps_create');
+var api_apps_getNumberOfChats = require('./_api_apps_getNumberOfChats');
+var api_apps_getNumberOfMessages = require('./_api_apps_getNumberOfMessages');
+var api_apps_getNumberOfUnreadMessages = require('./_api_apps_getNumberOfUnreadMessages');
 var api_appUserGetCredentialsByLogin = require('./_api_appUserGetCredentialsByLogin');
 var api_appUsersGetProfileById = require('./_api_appUsersGetProfileById');
 var api_appUsersCreate= require('./_api_appUsersCreate');
@@ -124,32 +124,32 @@ DAL.prototype.serviceUserResetPasswordConfirmDataCreate = function(args, next) {
 };
 
 
-DAL.prototype.appsGetListForServiceUser = function(args, next) {
-    this._before(api_appsGetListForServiceUser, args, next);
+DAL.prototype.apps_getListForServiceUser = function(args, next) {
+    this._before(api_apps_getListForServiceUser, args, next);
 };
 
-DAL.prototype.appIsExists = function(args, next) {
-    this._before(api_appIsExists, args, next);
+DAL.prototype.apps_isExists = function(args, next) {
+    this._before(api_apps_isExists, args, next);
 };
 
-DAL.prototype.appGetOwnerIdForAppById = function(args, next) {
-    this._before(api_appGetOwnerIdForAppById, args, next);
+DAL.prototype.apps_getOwnerIdForAppById = function(args, next) {
+    this._before(api_apps_getOwnerIdForAppById, args, next);
 };
 
-DAL.prototype.appCreate = function(args, next) {
-    this._before(api_appCreate, args, next);
+DAL.prototype.apps_create = function(args, next) {
+    this._before(api_apps_create, args, next);
 };
 
-DAL.prototype.appsGetNumberOfChats = function(args, next) {
-    this._before(api_appsGetNumberOfChats, args, next);
+DAL.prototype.apps_getNumberOfChats = function(args, next) {
+    this._before(api_apps_getNumberOfChats, args, next);
 };
 
-DAL.prototype.appsGetNumberOfMessages = function(args, next) {
-    this._before(api_appsGetNumberOfMessages, args, next);
+DAL.prototype.apps_getNumberOfMessages = function(args, next) {
+    this._before(api_apps_getNumberOfMessages, args, next);
 };
 
-DAL.prototype.appsGetNumberOfUnreadMessages = function(args, next) {
-    this._before(api_appsGetNumberOfUnreadMessages, args, next);
+DAL.prototype.apps_getNumberOfUnreadMessages = function(args, next) {
+    this._before(api_apps_getNumberOfUnreadMessages, args, next);
 };
 
 

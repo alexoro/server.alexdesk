@@ -19,7 +19,7 @@ var argsBuilder = function(override) {
         override = {};
     }
     return {
-        appIds: override.appIds === undefined ? ['1'] : override.appIds
+        userId: override.userId === undefined ? '1' : override.userId
     };
 };
 
@@ -36,61 +36,65 @@ var invalidArgsCallbackEntry = function (cb) {
 };
 
 
-describe('DAL::appsGetNumberOfUnreadMessages', function () {
+describe('DAL::apps_getListForServiceUser', function () {
 
-    it('Must not pass invalid id', function (doneTest) {
+    it('Must not pass invalid userId', function (doneTest) {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var fnStack = [
                 function (cb) {
-                    api.appsGetNumberOfUnreadMessages(argsBuilder({appIds: {}}), invalidArgsCallbackEntry(cb));
+                    api.apps_getListForServiceUser(argsBuilder({userId: 1}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.appsGetNumberOfUnreadMessages(argsBuilder({appIds: null}), invalidArgsCallbackEntry(cb));
+                    api.apps_getListForServiceUser(argsBuilder({userId: '-1'}), invalidArgsCallbackEntry(cb));
                 },
                 function (cb) {
-                    api.appsGetNumberOfUnreadMessages(argsBuilder({appIds: [-1]}), invalidArgsCallbackEntry(cb));
-                },
-                function (cb) {
-                    api.appsGetNumberOfUnreadMessages(argsBuilder({appIds: ['-1']}), invalidArgsCallbackEntry(cb));
-                },
-                function (cb) {
-                    api.appsGetNumberOfUnreadMessages(argsBuilder({appIds: [null]}), invalidArgsCallbackEntry(cb));
+                    api.apps_getListForServiceUser(argsBuilder({userId: null}), invalidArgsCallbackEntry(cb));
                 }
             ];
             async.series(fnStack, doneExecute);
         }, doneTest);
     });
 
-    it('Must return 0 if some application is not exists', function (doneTest) {
+    it('Must not return empty array if user not found', function (doneTest) {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
-            var reqArgs = argsBuilder({appIds: ['1000']});
-            api.appsGetNumberOfUnreadMessages(reqArgs, function (err, result) {
+            var reqArgs = argsBuilder({userId: '1000'});
+            api.apps_getListForServiceUser(reqArgs, function (err, apps) {
                 if (err) {
                     return doneExecute(err);
+                } else {
+                    assert.lengthOf(apps, 0, 'Expected to receive 0 apps');
+                    doneExecute();
                 }
-                var expected = {
-                    '1000': 0
-                };
-                assert.deepEqual(result, expected, 'Expected and received results are not match');
-                doneExecute();
             });
         }, doneTest);
     });
 
-    it('Must return valid result', function (doneTest) {
+    it('Must return valid results', function (doneTest) {
         var api = mock.newApiWithMock().api;
         mock.executeOnClearDb(function (doneExecute) {
             var reqArgs = argsBuilder();
-            api.appsGetNumberOfUnreadMessages(reqArgs, function (err, result) {
+            api.apps_getListForServiceUser(reqArgs, function (err, apps) {
                 if (err) {
                     return doneExecute(err);
                 }
+
                 var expected = {
-                    '1': 2
+                    id: '1',
+                    platformType: 2,
+                    title: 'Test App',
+                    created: new Date('2014-05-01 13:00:00 +04:00'),
+                    isApproved: true,
+                    isBlocked: false,
+                    isDeleted: false,
+                    extra: {
+                        package: 'com.testapp'
+                    }
                 };
-                assert.deepEqual(result, expected, 'Expected and received results are not match');
+
+                assert.lengthOf(apps, 1, 'Expected to get 1 application');
+                assert.deepEqual(apps[0], expected, 'Expected and received app are not match');
                 doneExecute();
             });
         }, doneTest);
