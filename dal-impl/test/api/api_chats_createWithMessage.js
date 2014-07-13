@@ -813,7 +813,7 @@ describe('DAL::chats_createWithMessage', function () {
                     offset: -1,
                     limit: 50
                 };
-                api.chats_getListWithLastMessageOrderByLastMessageCreatedAsc(reqArgsGet, function (err, chats) {
+                api.chats_getListWithLastMessageOrderByLastMessageCreatedAscForUser(reqArgsGet, function (err, chats) {
                     if (err) {
                         return doneExecute(err);
                     }

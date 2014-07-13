@@ -122,10 +122,6 @@ describe('API::Interface', function() {
         assert.isFunction(api.appUsers_update, 'appUsers_update must be a function');
         assert.equal(api.appUsers_update.length, 2, 'appUsers_update must receive 2 arguments only');
 
-        assert.isDefined(api.chats_getListWithLastMessageOrderByLastMessageCreatedAsc, 'chats_getListWithLastMessageOrderByLastMessageCreatedAsc function is not exists');
-        assert.isFunction(api.chats_getListWithLastMessageOrderByLastMessageCreatedAsc, 'chats_getListWithLastMessageOrderByLastMessageCreatedAsc must be a function');
-        assert.equal(api.chats_getListWithLastMessageOrderByLastMessageCreatedAsc.length, 2, 'chats_getListWithLastMessageOrderByLastMessageCreatedAsc must receive 2 arguments only');
-
         assert.isDefined(api.chats_getListWithLastMessageOrderByLastMessageCreatedAscForApp, 'chats_getListWithLastMessageOrderByLastMessageCreatedAscForApp function is not exists');
         assert.isFunction(api.chats_getListWithLastMessageOrderByLastMessageCreatedAscForApp, 'chats_getListWithLastMessageOrderByLastMessageCreatedAscForApp must be a function');
         assert.equal(api.chats_getListWithLastMessageOrderByLastMessageCreatedAscForApp.length, 2, 'chats_getListWithLastMessageOrderByLastMessageCreatedAscForApp must receive 2 arguments only');
