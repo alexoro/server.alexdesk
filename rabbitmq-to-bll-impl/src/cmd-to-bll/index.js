@@ -18,6 +18,16 @@ Mapper.prototype.getBllForApiVersion = function (version) {
     return ret ? ret : null;
 };
 
+Mapper.prototype.getDeclaredBllVersions = function () {
+    var keys = [];
+    for (var key in this._ver2bll) {
+        if (this._ver2bll.hasOwnProperty(key)) {
+            keys.push(key);
+        }
+    }
+    return keys;
+};
+
 Mapper.prototype.executeBllMethodFromEncodedReturnEncoded = function (encoded, cb) {
     var json;
     try {

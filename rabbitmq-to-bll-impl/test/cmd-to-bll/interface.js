@@ -34,6 +34,10 @@ describe('API::Interface', function() {
         assert.isFunction(bll2cmd.getBllForApiVersion, 'getBllForApiVersion must be a function');
         assert.equal(bll2cmd.getBllForApiVersion.length, 1, 'getBllForApiVersion must receive 1 argument only');
 
+        assert.isDefined(bll2cmd.getDeclaredBllVersions, 'getDeclaredBllVersions function is not exists');
+        assert.isFunction(bll2cmd.getDeclaredBllVersions, 'getDeclaredBllVersions must be a function');
+        assert.equal(bll2cmd.getDeclaredBllVersions.length, 0, 'getDeclaredBllVersions must no argument');
+
         assert.isDefined(bll2cmd.executeBllMethodFromEncodedReturnEncoded, 'executeBllMethodFromEncodedReturnEncoded function is not exists');
         assert.isFunction(bll2cmd.executeBllMethodFromEncodedReturnEncoded, 'executeBllMethodFromEncodedReturnEncoded must be a function');
         assert.equal(bll2cmd.executeBllMethodFromEncodedReturnEncoded.length, 2, 'executeBllMethodFromEncodedReturnEncoded must receive 2 arguments only');
