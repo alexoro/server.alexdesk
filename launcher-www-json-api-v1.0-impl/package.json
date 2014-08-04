@@ -1,5 +1,5 @@
 {
-    "name": "api.alexdesk.com--launcher-client-api-v1.0-impl",
+    "name": "api.alexdesk.com--launcher-www-json-api-v1.0-impl",
     "version": "0.1.0",
     "main": "./src/index.js",
 
