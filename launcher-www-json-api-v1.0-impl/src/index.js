@@ -4,22 +4,14 @@
 
 "use strict";
 
-//var Bll = require('../../bll-impl').api;
-//var Dal = require('../../dal-impl').api;
-//var Uuid = require('../../uuid-generator');
-//var JsonRpcServer = require('../../www-json-api-v1.0-impl');
-//
-//var jsonRpcServer1 = new JsonRpcServer({
-//    port: 3000,
-//    bll: null,
-//    log: null
-//});
 
-console.log('xxx');
+var Bll = require('../../bll-impl').api;
+var Dal = require('../../dal-impl').api;
+var Uuid = require('../../uuid-generator');
+var JsonRpcServer = require('../../www-json-api-v1.0-impl');
 
-//jsonRpcServer1.start();
 
-/*var bll = new Bll({
+var bll = new Bll({
     dal: new Dal({
         configPostgres: {
             user: '',
@@ -41,4 +33,4 @@ var jsonRpcServer = new JsonRpcServer({
     log: null
 });
 
-jsonRpcServer.start();*/
+jsonRpcServer.start();
