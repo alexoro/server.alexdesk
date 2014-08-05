@@ -18,7 +18,7 @@ var SecurityManager = require('./SecurityManager');
 var ConfigProvider = require('./ConfigProvider');
 var NotificationsManager = require('./NotificationsManager');
 
-
+var uuid = new Uuid();
 var bll = new Bll({
     dal: new Dal({
         configPostgres: {
@@ -29,7 +29,7 @@ var bll = new Bll({
             db: cfg.dbPostgres.db
         }
     }),
-    uuid: new Uuid(),
+    uuid: uuid,
     securityManager: new SecurityManager({
         accessTokenForServiceUserLifeTimeInMillis: cfg.accessTokenForServiceUserLifeTimeInMillis,
         accessTokenForAppUserLifeTimeInMillis: cfg.accessTokenForAppUserLifeTimeInMillis,
@@ -50,17 +50,26 @@ var jsonRpcServer = new JsonRpcServer({
 });
 
 
-if (cluster.isMaster) {
-    // Fork workers.
-    for (var i = 0; i < numCPUs; i++) {
-        cluster.fork();
+var uuidEpochBeginMillis = cfg.uuidEpochBeginDate.getTime();
+var uuidGetMillisFromEpoch = function (done) {
+    return done(null, Date.now() - uuidEpochBeginMillis);
+};
+uuid.init(cfg.uuidShardId, uuidGetMillisFromEpoch, function (err) {
+    if (err) {
+        console.log('Err uuid init: ' + err.message);
+    } else {
+        if (cluster.isMaster) {
+            // Fork workers.
+            for (var i = 0; i < numCPUs; i++) {
+                cluster.fork();
+            }
+            cluster.on('exit', function(worker, code, signal) {
+                console.log('worker ' + worker.process.pid + ' died');
+            });
+        } else {
+            // Workers can share any TCP connection
+            // In this case its a HTTP server
+            jsonRpcServer.start();
+        }
     }
-
-    cluster.on('exit', function(worker, code, signal) {
-        console.log('worker ' + worker.process.pid + ' died');
-    });
-} else {
-    // Workers can share any TCP connection
-    // In this case its a HTTP server
-    jsonRpcServer.start();
-}
+});

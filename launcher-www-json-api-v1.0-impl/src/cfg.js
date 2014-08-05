@@ -22,6 +22,9 @@ module.exports = {
 
     appAndServiceUserHashingAlgorithm: 'md5',
     saltForAppUserPasswordHash: ':V&f-_z*d5+e(Q3B-$;v6%R;3XYxOLkS',
-    saltForServiceUserPasswordHash: '{9-$Lx^j=SH)^"])U$?Kupv4[/$_ox&a'
+    saltForServiceUserPasswordHash: '{9-$Lx^j=SH)^"])U$?Kupv4[/$_ox&a',
+
+    uuidEpochBeginDate: new Date('2014-06-06 00:00:00 +00:00'),
+    uuidShardId: 0
 
 };
