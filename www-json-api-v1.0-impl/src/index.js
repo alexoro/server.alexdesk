@@ -22,20 +22,17 @@ var Client = function (args) {
 };
 
 Client.prototype.start = function () {
-    http.createServer(this._requestCallback)
-        .listen(this._port, '127.0.0.1');
-    this._log.info('Server is started at 127.0.0.1:' + this._port);
-};
-
-Client.prototype._requestCallback = function (req, res) {
     var self = this;
-    var body = "";
-    req.on('data', function (chunk) {
-        body += chunk;
-    });
-    req.on('end', function () {
-        self._parseAndCall(req, res, body);
-    });
+    http.createServer(function (req, res) {
+        var body = "";
+        req.on('data', function (chunk) {
+            body += chunk;
+        });
+        req.on('end', function () {
+            self._parseAndCall(req, body, res);
+        });
+    }).listen(this._port, '127.0.0.1');
+    this._log.info('Server is started at 127.0.0.1:' + this._port);
 };
 
 Client.prototype._parseAndCall = function (req, body, res) {
@@ -67,7 +64,7 @@ Client.prototype._parseAndCall = function (req, body, res) {
     }
 
     if (!this._bll[json.method] || typeof this._bll[json.method] !== 'function') {
-        return this._sendError(res, id, this.METHOD_NOT_FOUND, 'Method ' + json.method + 'is not found');
+        return this._sendError(res, id, this.METHOD_NOT_FOUND, 'Method ' + json.method + ' is not found');
     }
 
     var self = this;
@@ -81,24 +78,34 @@ Client.prototype._parseAndCall = function (req, body, res) {
 };
 
 Client.prototype._sendError = function (res, id, code, message) {
-    res.writeHead(200, {'content-type': 'application/json-rpc'});
-    res.end(JSON.stringify({
+    var responseBody = JSON.stringify({
         jsonrpc: '2.0',
         id: id,
         error: {
             code: code,
             message: message
         }
-    }));
+    });
+
+    res.writeHead(200, {
+        'content-type': 'application/json-rpc',
+        'content-length': Buffer.byteLength(responseBody, 'utf8')
+    });
+    res.end(responseBody);
 };
 
 Client.prototype._sendResult = function (res, id, result) {
-    res.writeHead(200, {'content-type': 'application/json-rpc'});
-    res.end(JSON.stringify({
+    var responseBody = JSON.stringify({
         jsonrpc: '2.0',
         id: id,
         result: result
-    }));
+    });
+
+    res.writeHead(200, {
+        'content-type': 'application/json-rpc',
+        'content-length': Buffer.byteLength(responseBody, 'utf8')
+    });
+    res.end(responseBody);
 };
 
 
