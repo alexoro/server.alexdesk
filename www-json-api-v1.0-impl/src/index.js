@@ -89,6 +89,7 @@ Client.prototype._sendError = function (res, id, code, message) {
 
     res.writeHead(200, {
         'content-type': 'application/json-rpc',
+        'allow': 'post',
         'content-length': Buffer.byteLength(responseBody, 'utf8')
     });
     res.end(responseBody);
@@ -103,6 +104,7 @@ Client.prototype._sendResult = function (res, id, result) {
 
     res.writeHead(200, {
         'content-type': 'application/json-rpc',
+        'allow': 'post',
         'content-length': Buffer.byteLength(responseBody, 'utf8')
     });
     res.end(responseBody);
