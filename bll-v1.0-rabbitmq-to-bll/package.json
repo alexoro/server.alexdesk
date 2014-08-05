@@ -1,12 +1,14 @@
 {
-    "name": "api.alexdesk.com--www-json-api-v1.0-impl",
+    "name": "api.alexdesk.com--bll-v1.0-rabbitmq-to-bll",
     "version": "0.1.0",
     "main": "./src/index.js",
 
     "dependencies": {
-
+        "async": "0.7.0",
+        "bignumber.js": "1.0.0"
     },
     "devDependencies": {
+        "async": "0.7.0",
         "chai": "^1.9.1",
         "mocha": "^1.18.2"
     },

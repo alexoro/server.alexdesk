@@ -8,10 +8,10 @@
 var cluster = require('cluster');
 var numCPUs = require('os').cpus().length;
 
-var Bll = require('../../bll-impl').api;
-var Dal = require('../../dal-impl').api;
-var Uuid = require('../../uuid-generator');
-var JsonRpcServer = require('../../www-json-api-v1.0-impl');
+var Bll = require('../../bll-v1.0-main').api;
+var Dal = require('../../bll-v1.0-dal').api;
+var Uuid = require('../../bll-v1.0-uuid-generator');
+var JsonRpcServer = require('../../server-jsonrpc-api-v1.0');
 
 var cfg = require('./cfg');
 var SecurityManager = require('./SecurityManager');

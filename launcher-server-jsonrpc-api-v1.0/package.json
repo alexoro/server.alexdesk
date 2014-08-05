@@ -1,11 +1,10 @@
 {
-    "name": "api.alexdesk.com--dal-impl",
+    "name": "api.alexdesk.com--launcher-server-jsonrpc-api-v1.0",
     "version": "0.1.0",
     "main": "./src/index.js",
 
     "dependencies": {
-        "pg": "3.3.0",
-        "bignumber.js": "1.0.0"
+
     },
     "devDependencies": {
         "chai": "^1.9.1",

@@ -1,14 +1,13 @@
 {
-    "name": "api.alexdesk.com--rabbitmq-to-bll-impl",
+    "name": "api.alexdesk.com--bll-v1.0-dal",
     "version": "0.1.0",
     "main": "./src/index.js",
 
     "dependencies": {
-        "async": "0.7.0",
+        "pg": "3.3.0",
         "bignumber.js": "1.0.0"
     },
     "devDependencies": {
-        "async": "0.7.0",
         "chai": "^1.9.1",
         "mocha": "^1.18.2"
     },
