@@ -2,6 +2,9 @@ SET search_path TO public;
 
 BEGIN;
 
+
+-- TABLES
+
 CREATE TABLE system_access_tokens (
   id UUID NOT NULL,
   user_type SMALLINT NOT NULL,
@@ -132,5 +135,34 @@ CREATE TABLE chat_messages_extra (
   user_type SMALLINT NOT NULL,
   is_read BOOL NOT NULL
 );
+
+
+-- INDEXES
+
+CREATE UNIQUE INDEX idx_users_login ON users (login);
+CREATE INDEX idx_users_registered ON users (registered);
+CREATE INDEX idx_users_last_visit ON users (last_visit);
+CREATE INDEX idx_apps_platform_type ON apps (platform_type);
+CREATE UNIQUE INDEX idx_app_info_extra_android_app_id ON app_info_extra_android (app_id);
+CREATE INDEX idx_app_acl_app_id ON app_acl (app_id);
+CREATE INDEX idx_app_acl_app_id_and_is_owner ON app_acl (app_id, is_owner);
+CREATE INDEX idx_app_users_app_id ON app_users (app_id);
+CREATE UNIQUE INDEX idx_app_users_app_id_and_login ON app_users (app_id, login);
+CREATE INDEX idx_app_users_registered ON app_users (registered);
+CREATE INDEX idx_app_users_last_visit ON app_users (last_visit);
+CREATE UNIQUE INDEX idx_app_users_extra_android ON app_users_extra_android (app_id, app_user_id);
+CREATE INDEX idx_chats_by_app_id ON chats(app_id);
+CREATE INDEX idx_chats_by_app_id_and_user ON chats(app_id, user_creator_id, user_creator_type);
+CREATE INDEX idx_chats_by_created ON chats(created);
+CREATE UNIQUE INDEX idx_chat_extra_android_by_chat_id ON chat_extra_android(chat_id);
+CREATE UNIQUE INDEX idx_chat_extra_android_by_app_id ON chat_extra_android(app_id);
+CREATE UNIQUE INDEX idx_chat_participants_by_chat_id ON chat_participants(chat_id);
+
+CREATE INDEX idx_chat_messages_by_chat_id ON chat_messages(chat_id);
+CREATE INDEX idx_chat_messages_by_app_id ON chat_messages(app_id);
+CREATE UNIQUE INDEX idx_chat_messages_extra_by_message_id ON chat_messages_extra(message_id);
+CREATE INDEX idx_chat_messages_extra_by_app_id ON chat_messages_extra(app_id);
+CREATE INDEX idx_chat_messages_extra_by_chat_id ON chat_messages_extra(chat_id);
+
 
 COMMIT;
