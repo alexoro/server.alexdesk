@@ -55,7 +55,7 @@ var uuidGetMillisFromEpoch = function (done) {
     return done(null, Date.now() - uuidEpochBeginMillis);
 };
 uuid.init(cfg.uuidShardId, uuidGetMillisFromEpoch, function (err) {
-    if (err) {
+    /*if (err) {
         console.log('Err uuid init: ' + err.message);
     } else {
         if (cluster.isMaster) {
@@ -71,5 +71,6 @@ uuid.init(cfg.uuidShardId, uuidGetMillisFromEpoch, function (err) {
             // In this case its a HTTP server
             jsonRpcServer.start();
         }
-    }
+    }*/
+    jsonRpcServer.start();
 });

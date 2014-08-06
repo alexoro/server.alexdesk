@@ -12,7 +12,7 @@ module.exports = {
         password: '488098',
         host: '192.168.127.129',
         port: '5432',
-        db: 'test'
+        db: 'alexdesk_test_longlive'
     },
 
     accessTokenForServiceUserLifeTimeInMillis: 30 * 24 * 60 * 60 * 1000,
