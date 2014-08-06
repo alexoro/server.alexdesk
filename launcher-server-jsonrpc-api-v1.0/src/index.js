@@ -17,6 +17,7 @@ var cfg = require('./cfg');
 var SecurityManager = require('./SecurityManager');
 var ConfigProvider = require('./ConfigProvider');
 var NotificationsManager = require('./NotificationsManager');
+var BllLogger = require('./BllLogger');
 
 var uuid = new Uuid();
 var bll = new Bll({
@@ -40,7 +41,8 @@ var bll = new Bll({
         saltForServiceUserPasswordHash: cfg.saltForServiceUserPasswordHash
     }),
     configProvider: new ConfigProvider(),
-    notificationsManager: new NotificationsManager()
+    notificationsManager: new NotificationsManager(),
+    logger: new BllLogger()
 });
 
 var jsonRpcServer = new JsonRpcServer({

@@ -47,6 +47,9 @@ var Api = function(env) {
     if (typeof env.notificationsManager !== 'object' || !env.notificationsManager) {
         throw new Error('Notifications manager is not defined or is null or is not a object');
     }
+    if (typeof env.logger !== 'object' || !env.logger) {
+        throw new Error('Logger is not defined or is null or is not a object');
+    }
 
     this.env = env;
 };

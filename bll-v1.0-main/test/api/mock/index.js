@@ -14,6 +14,7 @@ var Uuid = require('./_uuid');
 var ConfigProvider = require('./_configProvider');
 var NotificationsManager = require('./_notificationsManager');
 var SecurityManager = require('./_securityManager');
+var Logger = require('./_logger');
 
 
 module.exports = {
@@ -29,13 +30,15 @@ module.exports = {
         var configProvider = new ConfigProvider();
         var notificationsManager = new NotificationsManager();
         var securityManager = new SecurityManager();
+        var logger = new Logger();
 
         var env = {
             dal: override.dal || dal,
             uuid: override.uuid || uuid,
             configProvider: override.configProvider || configProvider,
             notificationsManager: override.notificationsManager || notificationsManager,
-            securityManager: override.securityManager || securityManager
+            securityManager: override.securityManager || securityManager,
+            logger: override.logger || logger
         };
         return {
             dal: env.dal,
@@ -44,6 +47,7 @@ module.exports = {
             configProvider: env.configProvider,
             notificationsManager: env.notificationsManager,
             securityManager: env.securityManager,
+            logger: env.logger,
             api: new Api(env)
         };
     }
