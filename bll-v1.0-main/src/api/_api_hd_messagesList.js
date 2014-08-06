@@ -93,7 +93,7 @@ var fnValidate = function (flow, cb) {
 };
 
 var fnSetDefaultsIfRequired = function (flow, cb) {
-    flow.args.offset = flow.args.offset || defaultOffset;
+    flow.args.offset = flow.args.offset === undefined ? defaultOffset : flow.args.offset;
     flow.args.limit = flow.args.limit || defaultLimit;
     cb(null, flow);
 };

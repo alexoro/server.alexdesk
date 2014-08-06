@@ -192,4 +192,34 @@ describe('DAL::messages_getListForChatOrderByCreatedAsc', function () {
         }, doneTest);
     });
 
+    it('Must return in valid order by offset >= 0', function (doneTest) {
+        var api = mock.newApiWithMock().api;
+        mock.executeOnClearDb(function (doneExecute) {
+            var reqArgs = argsBuilder({offset: 0});
+            api.messages_getListForChatOrderByCreatedAsc(reqArgs, function (err, messages) {
+                if (err) {
+                    return doneExecute(err);
+                }
+                assert.lengthOf(messages, 2, 'Expected to receive 2 results');
+                assert.operator(messages[0].created.getTime(), '<', messages[1].created.getTime(), 'Expected to first message be earlier than second message');
+                doneExecute();
+            });
+        }, doneTest);
+    });
+
+    it('Must return in valid order by negative offset', function (doneTest) {
+        var api = mock.newApiWithMock().api;
+        mock.executeOnClearDb(function (doneExecute) {
+            var reqArgs = argsBuilder({offset: -50});
+            api.messages_getListForChatOrderByCreatedAsc(reqArgs, function (err, messages) {
+                if (err) {
+                    return doneExecute(err);
+                }
+                assert.lengthOf(messages, 2, 'Expected to receive 2 results');
+                assert.operator(messages[0].created.getTime(), '<', messages[1].created.getTime(), 'Expected to first message be earlier than second message');
+                doneExecute();
+            });
+        }, doneTest);
+    });
+
 });

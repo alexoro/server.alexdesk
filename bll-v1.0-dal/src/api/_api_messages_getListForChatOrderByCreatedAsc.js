@@ -119,13 +119,14 @@ var fnGetMessagesAndGenerateResult = function (flow, cb) {
         } else {
             flow.result = [];
             for (var i = 0; i < result.rows.length; i++) {
+                var index = (flow.args.offset >= 0) ? i : result.rows.length - 1 - i;
                 flow.result.push({
-                    id: result.rows[i].id,
+                    id: result.rows[index].id,
                     chatId: flow.args.chatId,
-                    userCreatorId: result.rows[i].user_creator_id,
-                    userCreatorType: result.rows[i].user_creator_type,
-                    created: result.rows[i].created,
-                    content: result.rows[i].content
+                    userCreatorId: result.rows[index].user_creator_id,
+                    userCreatorType: result.rows[index].user_creator_type,
+                    created: result.rows[index].created,
+                    content: result.rows[index].content
                 });
             }
             cb(null, flow);
