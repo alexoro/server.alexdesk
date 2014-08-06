@@ -29,6 +29,7 @@ var fnExecute = function (env, args, next) {
         },
         fnValidate,
         fnDbConnect,
+        fnSetNames,
         fnGetAndGenerateResult
     ];
 
@@ -84,6 +85,12 @@ var fnDbConnect = function (flow, cb) {
         flow.client = client;
         flow.clientDone = clientDone;
         cb(null, flow);
+    });
+};
+
+var fnSetNames = function (flow, cb) {
+    flow.client.query("SET NAMES 'UTF8'", function (err) {
+        cb(err, flow);
     });
 };
 

@@ -30,6 +30,7 @@ var fnExecute = function (env, args, next) {
         },
         fnValidate,
         fnDbConnect,
+        fnSetNames,
         fnTransactionBegin,
         fnCreateApp,
         fnCreateAppOwner,
@@ -129,6 +130,13 @@ var fnDbConnect = function (flow, cb) {
         cb(null, flow);
     });
 };
+
+var fnSetNames = function (flow, cb) {
+    flow.client.query("SET NAMES 'UTF8'", function (err) {
+        cb(err, flow);
+    });
+};
+
 
 var fnTransactionBegin = function (flow, cb) {
     flow.client.query('BEGIN', function (err) {
